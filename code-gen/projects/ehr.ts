@@ -29,19 +29,19 @@ export default abstract class Client extends edu {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 智能人事
-     */
+         
+         */
     ehr = {
         /**
-         * 飞书人事（标准版)
+         * attachment
          */
         attachment: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=ehr&resource=attachment&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/attachment/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=ehr&resource=attachment&version=v1 document }
              *
-             * 下载附件
+             * 下载人员的附件
              *
              * 根据文件 token 下载文件。;;调用 「批量获取员工花名册信息」接口的返回值中，「文件」类型的字段 id，即是文件 token
              *
@@ -109,7 +109,7 @@ export default abstract class Client extends edu {
             },
         },
         /**
-         * 飞书人事（标准版)
+         * employee
          */
         employee: {
             listWithIterator: async (
@@ -374,11 +374,11 @@ export default abstract class Client extends edu {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=ehr&resource=employee&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=ehr&resource=employee&version=v1 document }
              *
              * 批量获取员工花名册信息
              *
-             * 根据员工飞书用户 ID / 员工状态 / 雇员类型等搜索条件 ，批量获取员工花名册字段信息。字段包括「系统标准字段 / system_fields」和「自定义字段 / custom_fields」
+             * 根据员工飞书用户 ID / 员工状态 / 雇员类型等搜索条件 ，批量获取员工花名册字段信息。字段包括「系统标准字段 / system_fields」和「自定义字段 / custom_fields」。
              */
             list: async (
                 payload?: {
@@ -593,15 +593,15 @@ export default abstract class Client extends edu {
         },
         v1: {
             /**
-             * 飞书人事（标准版)
+             * attachment
              */
             attachment: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=ehr&resource=attachment&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/attachment/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=ehr&resource=attachment&version=v1 document }
                  *
-                 * 下载附件
+                 * 下载人员的附件
                  *
                  * 根据文件 token 下载文件。;;调用 「批量获取员工花名册信息」接口的返回值中，「文件」类型的字段 id，即是文件 token
                  *
@@ -669,7 +669,7 @@ export default abstract class Client extends edu {
                 },
             },
             /**
-             * 飞书人事（标准版)
+             * employee
              */
             employee: {
                 listWithIterator: async (
@@ -936,11 +936,11 @@ export default abstract class Client extends edu {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=ehr&resource=employee&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/ehr/ehr-v1/employee/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=ehr&resource=employee&version=v1 document }
                  *
                  * 批量获取员工花名册信息
                  *
-                 * 根据员工飞书用户 ID / 员工状态 / 雇员类型等搜索条件 ，批量获取员工花名册字段信息。字段包括「系统标准字段 / system_fields」和「自定义字段 / custom_fields」
+                 * 根据员工飞书用户 ID / 员工状态 / 雇员类型等搜索条件 ，批量获取员工花名册字段信息。字段包括「系统标准字段 / system_fields」和「自定义字段 / custom_fields」。
                  */
                 list: async (
                     payload?: {

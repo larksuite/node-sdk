@@ -29,21 +29,21 @@ export default abstract class Client extends gtm_ai {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 服务台
-     */
+         
+         */
     helpdesk = {
         /**
-         * 客服
+         * agent
          */
         agent: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent&apiName=agent_email&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent/agent_email document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=agent_email&project=helpdesk&resource=agent&version=v1 document }
              *
-             * 获取客服邮箱地址
+             * 获取客服邮箱
              *
-             * 该接口用于获取客服邮箱地址
+             * 该接口用于获取客服邮箱地址。
              */
             agentEmail: async (payload?: {}, options?: IRequestOptions) => {
                 const { headers, params, data, path } =
@@ -77,11 +77,11 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent/patch document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=agent&version=v1 document }
              *
              * 更新客服信息
              *
-             * 更新客服状态等信息
+             * 更新客服状态等信息。
              */
             patch: async (
                 payload?: {
@@ -113,169 +113,19 @@ export default abstract class Client extends gtm_ai {
             },
         },
         /**
-         * 客服工作日程
-         */
-        agentSchedules: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent-schedules/delete document }
-             *
-             * 删除客服
-             *
-             * 该接口用于删除客服
-             */
-            delete: async (
-                payload?: {
-                    path?: { agent_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent-schedules/get document }
-             *
-             * 获取客服工作日程;
-             *
-             * 该接口用于获取客服信息
-             */
-            get: async (
-                payload?: {
-                    path: { agent_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                agent_schedule?: {
-                                    status?: number;
-                                    agent?: {
-                                        id?: string;
-                                        avatar_url?: string;
-                                        name?: string;
-                                        email?: string;
-                                        department?: string;
-                                        company_name?: string;
-                                    };
-                                    schedule?: Array<{
-                                        start_time?: string;
-                                        end_time?: string;
-                                        weekday?: number;
-                                    }>;
-                                    agent_skills?: Array<{
-                                        id?: string;
-                                        name?: string;
-                                        is_default?: boolean;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent-schedules/patch document }
-             *
-             * 更新客服日程
-             *
-             * 该接口用于更新客服的日程
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        agent_schedule?: {
-                            schedule?: Array<{
-                                start_time?: string;
-                                end_time?: string;
-                                weekday?: number;
-                            }>;
-                            agent_skill_ids?: Array<string>;
-                        };
-                    };
-                    path: { agent_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
          * agent_schedule
          */
         agentSchedule: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_schedule&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_schedule/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=agent_schedule&version=v1 document }
              *
-             * 创建客服
+             * 创建客服工作日程
              *
-             * 该接口用于创建客服
+             * 该接口用于创建客服日程。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
              */
             create: async (
                 payload?: {
@@ -317,11 +167,11 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_schedule&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_schedule/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=agent_schedule&version=v1 document }
              *
-             * 获取全部客服工作日程
+             * 查询全部客服工作日程
              *
-             * 该接口用于获取所有客服信息
+             * 该接口用于获取所有客服信息。
              */
             list: async (
                 payload?: {
@@ -381,17 +231,19 @@ export default abstract class Client extends gtm_ai {
             },
         },
         /**
-         * 客服技能
+         * agent_skill
          */
         agentSkill: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=agent_skill&version=v1 document }
              *
              * 创建客服技能
              *
-             * 该接口用于创建客服技能
+             * 该接口用于创建客服技能。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
              */
             create: async (
                 payload?: {
@@ -437,17 +289,32 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=delete&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=agent_skill&version=v1 document }
              *
-             * 删除客服技能
+             * 更新客服技能
              *
-             * 该接口用于删除客服技能
+             * 该接口用于更新客服技能。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
              */
-            delete: async (
+            patch: async (
                 payload?: {
-                    path?: { agent_skill_id?: string };
+                    data?: {
+                        agent_skill?: {
+                            name?: string;
+                            rules?: Array<{
+                                id?: string;
+                                selected_operator?: number;
+                                operator_options?: Array<number>;
+                                operand?: string;
+                            }>;
+                            agent_ids?: Array<string>;
+                            agent_skill_id?: string;
+                        };
+                    };
+                    path: { agent_skill_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -460,7 +327,7 @@ export default abstract class Client extends gtm_ai {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
                             path
                         ),
-                        method: "DELETE",
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -475,11 +342,11 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=agent_skill&version=v1 document }
              *
-             * 获取客服技能
+             * 查询指定客服技能
              *
-             * 该接口用于获取客服技能
+             * 该接口用于获取客服技能。
              */
             get: async (
                 payload?: {
@@ -537,13 +404,51 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=agent_skill&version=v1 document }
+             *
+             * 删除客服技能
+             *
+             * 该接口用于删除客服技能。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
+             */
+            delete: async (
+                payload?: {
+                    path?: { agent_skill_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=agent_skill&version=v1 document }
              *
-             * 获取全部客服技能
+             * 查询全部客服技能
              *
-             * 获取全部客服技能
+             * 获取全部客服技能。
              */
             list: async (payload?: {}, options?: IRequestOptions) => {
                 const { headers, params, data, path } =
@@ -582,64 +487,15 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/patch document }
-             *
-             * 更新客服技能
-             *
-             * 该接口用于更新客服技能
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        agent_skill?: {
-                            name?: string;
-                            rules?: Array<{
-                                id?: string;
-                                selected_operator?: number;
-                                operator_options?: Array<number>;
-                                operand?: string;
-                            }>;
-                            agent_ids?: Array<string>;
-                            agent_skill_id?: string;
-                        };
-                    };
-                    path: { agent_skill_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
         },
         /**
-         * 客服技能规则
+         * agent_skill_rule
          */
         agentSkillRule: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill_rule&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill_rule/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=agent_skill_rule&version=v1 document }
              *
              * 获取客服技能列表
              *
@@ -684,214 +540,15 @@ export default abstract class Client extends gtm_ai {
             },
         },
         /**
-         * 机器人消息
-         */
-        botMessage: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=bot.message&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/bot-message/create document }
-             *
-             * 服务台机器人发送消息
-             *
-             * 通过服务台机器人给指定用户的服务台专属群或私聊发送消息，支持文本、富文本、卡片、图片。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        msg_type: "text" | "post" | "image" | "interactive";
-                        content: string;
-                        receiver_id: string;
-                        receive_type?: "chat" | "user";
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { message_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/message`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 知识库分类
+         * category
          */
         category: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/create document }
-             *
-             * 创建知识库分类
-             *
-             * 该接口用于创建知识库分类。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        name: string;
-                        parent_id: string;
-                        language?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                category?: {
-                                    category_id: string;
-                                    id: string;
-                                    name: string;
-                                    parent_id: string;
-                                    helpdesk_id: string;
-                                    language?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/categories`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/delete document }
-             *
-             * 删除知识库分类详情
-             *
-             * 该接口用于删除知识库分类详情。
-             */
-            delete: async (
-                payload?: {
-                    path: { id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/get document }
-             *
-             * 获取知识库分类
-             *
-             * 该接口用于获取知识库分类。
-             */
-            get: async (
-                payload?: {
-                    path: { id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                category_id: string;
-                                id: string;
-                                name: string;
-                                helpdesk_id: string;
-                                language?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=category&version=v1 document }
              *
-             * 获取全部知识库分类 - meta
-             *
-             * 该接口用于获取服务台知识库所有分类
+             * list all categories
              */
             list: async (
                 payload?: {
@@ -941,13 +598,73 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=category&version=v1 document }
+             *
+             * 创建知识库分类
+             *
+             * 该接口用于创建知识库分类。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        parent_id: string;
+                        language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                category?: {
+                                    category_id: string;
+                                    id: string;
+                                    name: string;
+                                    parent_id: string;
+                                    helpdesk_id: string;
+                                    language?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/categories`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/patch document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=category&version=v1 document }
              *
              * 更新知识库分类详情
              *
              * 该接口用于更新知识库分类详情。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
              */
             patch: async (
                 payload?: {
@@ -977,19 +694,106 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=category&version=v1 document }
+             *
+             * 删除知识库分类详情
+             *
+             * 该接口用于删除知识库分类详情。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
+             */
+            delete: async (
+                payload?: {
+                    path: { id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=category&version=v1 document }
+             *
+             * 获取知识库分类
+             *
+             * 该接口用于获取知识库分类。
+             */
+            get: async (
+                payload?: {
+                    path: { id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                category_id: string;
+                                id: string;
+                                name: string;
+                                helpdesk_id: string;
+                                language?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
-         * 事件订阅
+         * event
          */
         event: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=event&apiName=subscribe&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/subscribe document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscribe&project=helpdesk&resource=event&version=v1 document }
              *
              * 订阅服务台事件
              *
-             * 用于订阅服务台事件
+             * 本接口用于订阅服务台事件。
              */
             subscribe: async (
                 payload?: {
@@ -1021,11 +825,11 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=event&apiName=unsubscribe&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/unsubscribe document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscribe&project=helpdesk&resource=event&version=v1 document }
              *
              * 取消订阅服务台事件
              *
-             * 用于取消订阅服务台事件
+             * 本接口用于取消订阅服务台事件。
              */
             unsubscribe: async (
                 payload?: {
@@ -1056,140 +860,13 @@ export default abstract class Client extends gtm_ai {
             },
         },
         /**
-         * 知识库
+         * faq
          */
         faq: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/create document }
-             *
-             * 创建知识库
-             *
-             * 该接口用于创建知识库。
-             */
-            create: async (
-                payload?: {
-                    data?: {
-                        faq?: {
-                            category_id?: string;
-                            question: string;
-                            answer?: string;
-                            answer_richtext?: string;
-                            tags?: Array<string>;
-                        };
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                faq?: {
-                                    faq_id?: string;
-                                    id?: string;
-                                    helpdesk_id?: string;
-                                    question?: string;
-                                    answer?: string;
-                                    answer_richtext?: Array<{
-                                        content?: string;
-                                        type?: string;
-                                    }>;
-                                    create_time?: number;
-                                    update_time?: number;
-                                    categories?: Array<{
-                                        category_id: string;
-                                        id: string;
-                                        name: string;
-                                        parent_id: string;
-                                        helpdesk_id: string;
-                                        language?: string;
-                                    }>;
-                                    tags?: Array<string>;
-                                    expire_time?: number;
-                                    update_user?: {
-                                        id?: string;
-                                        avatar_url?: string;
-                                        name?: string;
-                                        department?: string;
-                                        city?: string;
-                                        country?: string;
-                                    };
-                                    create_user?: {
-                                        id?: string;
-                                        avatar_url?: string;
-                                        name?: string;
-                                        department?: string;
-                                        city?: string;
-                                        country?: string;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/faqs`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/delete document }
-             *
-             * 删除知识库
-             *
-             * 该接口用于删除知识库。
-             */
-            delete: async (
-                payload?: {
-                    path?: { id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=faq_image&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/faq_image document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=faq_image&project=helpdesk&resource=faq&version=v1 document }
              *
              * 获取知识库图像
              *
@@ -1254,89 +931,6 @@ export default abstract class Client extends gtm_ai {
                     },
                     headers: res.headers,
                 };
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/get document }
-             *
-             * 获取知识库详情
-             *
-             * 该接口用于获取服务台知识库详情。
-             */
-            get: async (
-                payload?: {
-                    path?: { id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                faq?: {
-                                    faq_id?: string;
-                                    id?: string;
-                                    helpdesk_id?: string;
-                                    question?: string;
-                                    answer?: string;
-                                    answer_richtext?: Array<{
-                                        content?: string;
-                                        type?: string;
-                                    }>;
-                                    create_time?: number;
-                                    update_time?: number;
-                                    categories?: Array<{
-                                        category_id: string;
-                                        id: string;
-                                        name: string;
-                                        parent_id: string;
-                                        helpdesk_id: string;
-                                        language?: string;
-                                    }>;
-                                    tags?: Array<string>;
-                                    expire_time?: number;
-                                    update_user?: {
-                                        id?: string;
-                                        avatar_url?: string;
-                                        name?: string;
-                                        department?: string;
-                                        city?: string;
-                                        country?: string;
-                                    };
-                                    create_user?: {
-                                        id?: string;
-                                        avatar_url?: string;
-                                        name?: string;
-                                        department?: string;
-                                        city?: string;
-                                        country?: string;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
             },
             listWithIterator: async (
                 payload?: {
@@ -1471,7 +1065,7 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=faq&version=v1 document }
              *
              * 获取全部知识库详情
              *
@@ -1550,54 +1144,6 @@ export default abstract class Client extends gtm_ai {
                             path
                         ),
                         method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/patch document }
-             *
-             * 修改知识库
-             *
-             * 该接口用于修改知识库。
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        faq?: {
-                            category_id?: string;
-                            question: string;
-                            answer?: string;
-                            answer_richtext?: Array<{
-                                content?: string;
-                                type?: string;
-                            }>;
-                            tags?: Array<string>;
-                        };
-                    };
-                    path?: { id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
-                            path
-                        ),
-                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -1739,7 +1285,7 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=search&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/search document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=helpdesk&resource=faq&version=v1 document }
              *
              * 搜索知识库
              *
@@ -1826,137 +1372,27 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
-        },
-        /**
-         * 推送中心
-         */
-        notification: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_approve&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/cancel_approve document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=faq&version=v1 document }
              *
-             * 取消审核
+             * 创建知识库
              *
-             * 提交审核后，如果需要取消审核，则调用此接口
-             */
-            cancelApprove: async (
-                payload?: {
-                    path: { notification_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_approve`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_send&version=v1 click to debug }
+             * 该接口用于创建知识库。
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/cancel_send document }
-             *
-             * 取消推送
-             *
-             * 取消推送接口，审核通过后待调度可以调用，发送过程中可以调用（会撤回已发送的消息），发送完成后可以需要推送（会撤回所有已发送的消息）
-             */
-            cancelSend: async (
-                payload?: {
-                    data: { is_recall: boolean };
-                    path: { notification_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_send`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/create document }
-             *
-             * 创建推送
-             *
-             * 调用接口创建推送，创建成功后为草稿状态
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
              */
             create: async (
                 payload?: {
                     data?: {
-                        id?: string;
-                        job_name?: string;
-                        status?: number;
-                        create_user?: {
-                            user_id?: string;
-                            avatar_url?: string;
-                            name?: string;
+                        faq?: {
+                            category_id?: string;
+                            question: string;
+                            answer?: string;
+                            answer_richtext?: string;
+                            tags?: Array<string>;
                         };
-                        created_at?: string;
-                        update_user?: {
-                            user_id?: string;
-                            avatar_url?: string;
-                            name?: string;
-                        };
-                        updated_at?: string;
-                        target_user_count?: number;
-                        sent_user_count?: number;
-                        read_user_count?: number;
-                        send_at?: string;
-                        push_content?: string;
-                        push_type?: number;
-                        push_scope_type?: number;
-                        new_staff_scope_type?: number;
-                        new_staff_scope_department_list?: Array<{
-                            department_id?: string;
-                            name?: string;
-                        }>;
-                        user_list?: Array<{
-                            user_id?: string;
-                            avatar_url?: string;
-                            name?: string;
-                        }>;
-                        department_list?: Array<{
-                            department_id?: string;
-                            name?: string;
-                        }>;
-                        chat_list?: Array<{ chat_id?: string; name?: string }>;
-                        ext?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -1971,13 +1407,50 @@ export default abstract class Client extends gtm_ai {
                             code?: number;
                             msg?: string;
                             data?: {
-                                notification_id?: string;
-                                status?: number;
+                                faq?: {
+                                    faq_id?: string;
+                                    id?: string;
+                                    helpdesk_id?: string;
+                                    question?: string;
+                                    answer?: string;
+                                    answer_richtext?: Array<{
+                                        content?: string;
+                                        type?: string;
+                                    }>;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    categories?: Array<{
+                                        category_id: string;
+                                        id: string;
+                                        name: string;
+                                        parent_id: string;
+                                        helpdesk_id: string;
+                                        language?: string;
+                                    }>;
+                                    tags?: Array<string>;
+                                    expire_time?: number;
+                                    update_user?: {
+                                        id?: string;
+                                        avatar_url?: string;
+                                        name?: string;
+                                        department?: string;
+                                        city?: string;
+                                        country?: string;
+                                    };
+                                    create_user?: {
+                                        id?: string;
+                                        avatar_url?: string;
+                                        name?: string;
+                                        department?: string;
+                                        city?: string;
+                                        country?: string;
+                                    };
+                                };
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications`,
+                            `${this.domain}/open-apis/helpdesk/v1/faqs`,
                             path
                         ),
                         method: "POST",
@@ -1993,57 +1466,17 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=execute_send&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/execute_send document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=faq&version=v1 document }
              *
-             * 执行推送
+             * 获取指定知识库详情
              *
-             * 审核通过后调用此接口设置推送时间，等待调度系统调度，发送消息
-             */
-            executeSend: async (
-                payload?: {
-                    data: { send_at: string };
-                    path: { notification_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/execute_send`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/get document }
-             *
-             * 查询推送
-             *
-             * 查询推送详情
+             * 该接口用于获取服务台知识库详情。
              */
             get: async (
                 payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { notification_id: string };
+                    path?: { id?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2057,55 +1490,50 @@ export default abstract class Client extends gtm_ai {
                             code?: number;
                             msg?: string;
                             data?: {
-                                notification?: {
+                                faq?: {
+                                    faq_id?: string;
                                     id?: string;
-                                    job_name?: string;
-                                    status?: number;
-                                    create_user?: {
-                                        user_id?: string;
-                                        avatar_url?: string;
-                                        name?: string;
-                                    };
-                                    created_at?: string;
+                                    helpdesk_id?: string;
+                                    question?: string;
+                                    answer?: string;
+                                    answer_richtext?: Array<{
+                                        content?: string;
+                                        type?: string;
+                                    }>;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    categories?: Array<{
+                                        category_id: string;
+                                        id: string;
+                                        name: string;
+                                        parent_id: string;
+                                        helpdesk_id: string;
+                                        language?: string;
+                                    }>;
+                                    tags?: Array<string>;
+                                    expire_time?: number;
                                     update_user?: {
-                                        user_id?: string;
+                                        id?: string;
                                         avatar_url?: string;
                                         name?: string;
+                                        department?: string;
+                                        city?: string;
+                                        country?: string;
                                     };
-                                    updated_at?: string;
-                                    target_user_count?: number;
-                                    sent_user_count?: number;
-                                    read_user_count?: number;
-                                    send_at?: string;
-                                    push_content?: string;
-                                    push_type?: number;
-                                    push_scope_type?: number;
-                                    new_staff_scope_type?: number;
-                                    new_staff_scope_department_list?: Array<{
-                                        department_id?: string;
-                                        name?: string;
-                                    }>;
-                                    user_list?: Array<{
-                                        user_id?: string;
+                                    create_user?: {
+                                        id?: string;
                                         avatar_url?: string;
                                         name?: string;
-                                    }>;
-                                    department_list?: Array<{
-                                        department_id?: string;
-                                        name?: string;
-                                    }>;
-                                    chat_list?: Array<{
-                                        chat_id?: string;
-                                        name?: string;
-                                    }>;
-                                    ext?: string;
+                                        department?: string;
+                                        city?: string;
+                                        country?: string;
+                                    };
                                 };
-                                approval_app_link?: string;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                            `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
                             path
                         ),
                         method: "GET",
@@ -2121,60 +1549,19 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=patch&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/patch document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=faq&version=v1 document }
              *
-             * 更新推送
+             * 删除知识库
              *
-             * 更新推送信息，只有在草稿状态下才可以调用此接口进行更新
+             * 该接口用于删除知识库。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
              */
-            patch: async (
+            delete: async (
                 payload?: {
-                    data?: {
-                        id?: string;
-                        job_name?: string;
-                        status?: number;
-                        create_user?: {
-                            user_id?: string;
-                            avatar_url?: string;
-                            name?: string;
-                        };
-                        created_at?: string;
-                        update_user?: {
-                            user_id?: string;
-                            avatar_url?: string;
-                            name?: string;
-                        };
-                        updated_at?: string;
-                        target_user_count?: number;
-                        sent_user_count?: number;
-                        read_user_count?: number;
-                        send_at?: string;
-                        push_content?: string;
-                        push_type?: number;
-                        push_scope_type?: number;
-                        new_staff_scope_type?: number;
-                        new_staff_scope_department_list?: Array<{
-                            department_id?: string;
-                            name?: string;
-                        }>;
-                        user_list?: Array<{
-                            user_id?: string;
-                            avatar_url?: string;
-                            name?: string;
-                        }>;
-                        department_list?: Array<{
-                            department_id?: string;
-                            name?: string;
-                        }>;
-                        chat_list?: Array<{ chat_id?: string; name?: string }>;
-                        ext?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { notification_id: string };
+                    path?: { id?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2184,7 +1571,148 @@ export default abstract class Client extends gtm_ai {
                 return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                            `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=faq&version=v1 document }
+             *
+             * 修改知识库
+             *
+             * 该接口用于修改知识库。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        faq?: {
+                            category_id?: string;
+                            question: string;
+                            answer?: string;
+                            answer_richtext?: Array<{
+                                content?: string;
+                                type?: string;
+                            }>;
+                            tags?: Array<string>;
+                        };
+                    };
+                    path?: { id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * agent.schedules
+         */
+        agentSchedules: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=agent.schedules&version=v1 document }
+             *
+             * 删除客服工作日程
+             *
+             * 该接口用于删除客服日程。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
+             */
+            delete: async (
+                payload?: {
+                    path?: { agent_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=agent.schedules&version=v1 document }
+             *
+             * 更新客服工作日程
+             *
+             * 该接口用于更新客服的日程。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        agent_schedule?: {
+                            schedule?: Array<{
+                                start_time?: string;
+                                end_time?: string;
+                                weekday?: number;
+                            }>;
+                            agent_skill_ids?: Array<string>;
+                        };
+                    };
+                    path: { agent_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                             path
                         ),
                         method: "PATCH",
@@ -2200,54 +1728,17 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=preview&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/preview document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=agent.schedules&version=v1 document }
              *
-             * 预览推送内容
+             * 查询指定客服工作日程
              *
-             * 在正式执行推送之前是可以调用此接口预览设置的推送内容
+             * 该接口用于获取客服信息。
              */
-            preview: async (
+            get: async (
                 payload?: {
-                    path: { notification_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/preview`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=submit_approve&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/submit_approve document }
-             *
-             * 提交审核
-             *
-             * 正常情况下调用创建推送接口后，就可以调用提交审核接口，如果创建人是服务台owner则会自动审核通过，否则会通知服务台owner审核此推送信息
-             */
-            submitApprove: async (
-                payload?: {
-                    data: { reason: string };
-                    path: { notification_id: string };
+                    path: { agent_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2260,14 +1751,36 @@ export default abstract class Client extends gtm_ai {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { has_access?: boolean };
+                            data?: {
+                                agent_schedule?: {
+                                    status?: number;
+                                    agent?: {
+                                        id?: string;
+                                        avatar_url?: string;
+                                        name?: string;
+                                        email?: string;
+                                        department?: string;
+                                        company_name?: string;
+                                    };
+                                    schedule?: Array<{
+                                        start_time?: string;
+                                        end_time?: string;
+                                        weekday?: number;
+                                    }>;
+                                    agent_skills?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        is_default?: boolean;
+                                    }>;
+                                };
+                            };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/submit_approve`,
+                            `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                             path
                         ),
-                        method: "POST",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2281,55 +1794,15 @@ export default abstract class Client extends gtm_ai {
             },
         },
         /**
-         * 工单
+         * ticket
          */
         ticket: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=answer_user_query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/answer_user_query document }
-             *
-             * 回复用户提问结果至工单
-             *
-             * 该接口用于回复用户提问结果至工单，需要工单仍处于进行中且未接入人工状态。仅支持自建应用。
-             */
-            answerUserQuery: async (
-                payload?: {
-                    data: {
-                        event_id: string;
-                        faqs?: Array<{ id?: string; score?: number }>;
-                    };
-                    path: { ticket_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/answer_user_query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=customized_fields&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/customized_fields document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=customized_fields&project=helpdesk&resource=ticket&version=v1 document }
              *
-             * 获取服务台自定义字段详情
+             * 获取服务台自定义字段
              *
              * 该接口用于获取服务台自定义字段详情。
              */
@@ -2417,11 +1890,84 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=ticket_image&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ticket_image&project=helpdesk&resource=ticket&version=v1 document }
+             *
+             * 获取工单内图像
+             *
+             * 该接口用于获取服务台工单消息图象。仅支持自建应用。
+             */
+            ticketImage: async (
+                payload?: {
+                    params: {
+                        ticket_id: string;
+                        msg_id: string;
+                        index?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/ticket_images`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=ticket&version=v1 document }
              *
-             * 获取工单详情
+             * 查询指定工单详情
              *
              * 该接口用于获取单个服务台工单详情。仅支持自建应用。
              */
@@ -2554,9 +2100,9 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=ticket&version=v1 document }
              *
-             * 获取全部工单详情
+             * 查询全部工单详情
              *
              * 该接口用于获取全部工单详情。仅支持自建应用。
              */
@@ -2708,7 +2254,7 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=start_service&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/start_service document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=start_service&project=helpdesk&resource=ticket&version=v1 document }
              *
              * 创建服务台对话
              *
@@ -2754,86 +2300,15 @@ export default abstract class Client extends gtm_ai {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=ticket_image&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/ticket_image document }
-             *
-             * 获取服务台工单内消息图像
-             *
-             * 该接口用于获取服务台工单消息图象。仅支持自建应用。
-             */
-            ticketImage: async (
-                payload?: {
-                    params: {
-                        ticket_id: string;
-                        msg_id: string;
-                        index?: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/ticket_images`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=update&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/update document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=helpdesk&resource=ticket&version=v1 document }
              *
              * 更新工单详情
              *
              * 该接口用于更新服务台工单详情。只会更新数据，不会触发相关操作。如修改工单状态到关单，不会关闭聊天页面。仅支持自建应用。要更新的工单字段必须至少输入一项。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者有当前工单的权限，属于服务台的客服（并且具有该工单的权限）、管理员或所有者;</md-alert>;:::
              */
             update: async (
                 payload?: {
@@ -2875,144 +2350,22 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
-        },
-        /**
-         * 事件
-         */
-        ticketMessage: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=answer_user_query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket-message/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=answer_user_query&project=helpdesk&resource=ticket&version=v1 document }
              *
-             * 工单发送消息
+             * 回复用户在工单里的提问
              *
-             * 该接口用于工单发送消息。
+             * 该接口用于回复用户提问结果至工单，需要工单仍处于进行中且未接入人工状态。仅支持自建应用。
              */
-            create: async (
-                payload?: {
-                    data: { msg_type: string; content: string };
-                    path?: { ticket_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { message_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket-message/list document }
-             *
-             * 获取服务台工单消息详情
-             *
-             * 该接口用于获取服务台工单消息详情。
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        time_start?: number;
-                        time_end?: number;
-                        page?: number;
-                        page_size?: number;
-                    };
-                    path?: { ticket_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                messages?: Array<{
-                                    id?: string;
-                                    message_id?: string;
-                                    message_type: string;
-                                    created_at?: number;
-                                    content: string;
-                                    user_name?: string;
-                                    avatar_url?: string;
-                                    user_id?: string;
-                                }>;
-                                total?: number;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 工单自定义字段
-         */
-        ticketCustomizedField: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/create document }
-             *
-             * 创建工单自定义字段
-             *
-             * 该接口用于创建自定义字段
-             */
-            create: async (
+            answerUserQuery: async (
                 payload?: {
                     data: {
-                        helpdesk_id?: string;
-                        key_name: string;
-                        display_name: string;
-                        position: string;
-                        field_type: string;
-                        description: string;
-                        visible: boolean;
-                        editable?: boolean;
-                        required: boolean;
-                        dropdown_allow_multiple?: boolean;
+                        event_id: string;
+                        faqs?: Array<{ id?: string; score?: number }>;
                     };
+                    path: { ticket_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -3022,7 +2375,7 @@ export default abstract class Client extends gtm_ai {
                 return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
+                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/answer_user_query`,
                             path
                         ),
                         method: "POST",
@@ -3037,14 +2390,21 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
+        },
+        /**
+         * ticket_customized_field
+         */
+        ticketCustomizedField: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=ticket_customized_field&version=v1 document }
              *
              * 删除工单自定义字段
              *
              * 该接口用于删除工单自定义字段。
+             *
+             * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
              */
             delete: async (
                 payload?: {
@@ -3076,11 +2436,9 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=ticket_customized_field&version=v1 document }
              *
-             * 获取工单自定义字段
-             *
-             * 该接口用于获取工单自定义字段详情。
+             * get ticket customized field
              */
             get: async (
                 payload?: {
@@ -3268,11 +2626,9 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=ticket_customized_field&version=v1 document }
              *
-             * 获取全部工单自定义字段
-             *
-             * 该接口用于获取全部工单自定义字段。
+             * list the ticket customized fields
              */
             list: async (
                 payload?: {
@@ -3348,11 +2704,9 @@ export default abstract class Client extends gtm_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/patch document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=ticket_customized_field&version=v1 document }
              *
-             * 更新工单自定义字段
-             *
-             * 该接口用于更新自定义字段。
+             * update the ticket customized field
              */
             patch: async (
                 payload?: {
@@ -3388,20 +2742,686 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=ticket_customized_field&version=v1 document }
+             *
+             * create ticket customized field
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        helpdesk_id?: string;
+                        key_name: string;
+                        display_name: string;
+                        position: string;
+                        field_type: string;
+                        description: string;
+                        visible: boolean;
+                        editable?: boolean;
+                        required: boolean;
+                        dropdown_allow_multiple?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * notification
+         */
+        notification: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_approve&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel_approve&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 取消审核
+             *
+             * 提交审核后，如果需要取消审核，则调用此接口。
+             */
+            cancelApprove: async (
+                payload?: {
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_approve`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_send&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel_send&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 取消推送
+             *
+             * 取消推送接口，审核通过后待调度可以调用，发送过程中可以调用（会撤回已发送的消息），发送完成后可以需要推送（会撤回所有已发送的消息）。
+             */
+            cancelSend: async (
+                payload?: {
+                    data: { is_recall: boolean };
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_send`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 创建推送
+             *
+             * 调用接口创建推送，创建成功后为草稿状态。
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        id?: string;
+                        job_name?: string;
+                        status?: number;
+                        create_user?: {
+                            user_id?: string;
+                            avatar_url?: string;
+                            name?: string;
+                        };
+                        created_at?: string;
+                        update_user?: {
+                            user_id?: string;
+                            avatar_url?: string;
+                            name?: string;
+                        };
+                        updated_at?: string;
+                        target_user_count?: number;
+                        sent_user_count?: number;
+                        read_user_count?: number;
+                        send_at?: string;
+                        push_content?: string;
+                        push_type?: number;
+                        push_scope_type?: number;
+                        new_staff_scope_type?: number;
+                        new_staff_scope_department_list?: Array<{
+                            department_id?: string;
+                            name?: string;
+                        }>;
+                        user_list?: Array<{
+                            user_id?: string;
+                            avatar_url?: string;
+                            name?: string;
+                        }>;
+                        department_list?: Array<{
+                            department_id?: string;
+                            name?: string;
+                        }>;
+                        chat_list?: Array<{ chat_id?: string; name?: string }>;
+                        ext?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                notification_id?: string;
+                                status?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=execute_send&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=execute_send&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 执行推送
+             *
+             * 审核通过后调用此接口设置推送时间，等待调度系统调度，发送消息。
+             */
+            executeSend: async (
+                payload?: {
+                    data: { send_at: string };
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/execute_send`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 更新推送
+             *
+             * 更新推送信息，只有在草稿状态下才可以调用此接口进行更新。
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        id?: string;
+                        job_name?: string;
+                        status?: number;
+                        create_user?: {
+                            user_id?: string;
+                            avatar_url?: string;
+                            name?: string;
+                        };
+                        created_at?: string;
+                        update_user?: {
+                            user_id?: string;
+                            avatar_url?: string;
+                            name?: string;
+                        };
+                        updated_at?: string;
+                        target_user_count?: number;
+                        sent_user_count?: number;
+                        read_user_count?: number;
+                        send_at?: string;
+                        push_content?: string;
+                        push_type?: number;
+                        push_scope_type?: number;
+                        new_staff_scope_type?: number;
+                        new_staff_scope_department_list?: Array<{
+                            department_id?: string;
+                            name?: string;
+                        }>;
+                        user_list?: Array<{
+                            user_id?: string;
+                            avatar_url?: string;
+                            name?: string;
+                        }>;
+                        department_list?: Array<{
+                            department_id?: string;
+                            name?: string;
+                        }>;
+                        chat_list?: Array<{ chat_id?: string; name?: string }>;
+                        ext?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=preview&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 预览推送
+             *
+             * 在正式执行推送之前是可以调用此接口预览设置的推送内容。
+             */
+            preview: async (
+                payload?: {
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/preview`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=submit_approve&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=submit_approve&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 提交审核
+             *
+             * 正常情况下调用创建推送接口后，就可以调用提交审核接口，如果创建人是服务台owner则会自动审核通过，否则会通知服务台owner审核此推送信息。
+             */
+            submitApprove: async (
+                payload?: {
+                    data: { reason: string };
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { has_access?: boolean };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/submit_approve`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=notification&version=v1 document }
+             *
+             * 查询推送
+             *
+             * 查询推送详情。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { notification_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                notification?: {
+                                    id?: string;
+                                    job_name?: string;
+                                    status?: number;
+                                    create_user?: {
+                                        user_id?: string;
+                                        avatar_url?: string;
+                                        name?: string;
+                                    };
+                                    created_at?: string;
+                                    update_user?: {
+                                        user_id?: string;
+                                        avatar_url?: string;
+                                        name?: string;
+                                    };
+                                    updated_at?: string;
+                                    target_user_count?: number;
+                                    sent_user_count?: number;
+                                    read_user_count?: number;
+                                    send_at?: string;
+                                    push_content?: string;
+                                    push_type?: number;
+                                    push_scope_type?: number;
+                                    new_staff_scope_type?: number;
+                                    new_staff_scope_department_list?: Array<{
+                                        department_id?: string;
+                                        name?: string;
+                                    }>;
+                                    user_list?: Array<{
+                                        user_id?: string;
+                                        avatar_url?: string;
+                                        name?: string;
+                                    }>;
+                                    department_list?: Array<{
+                                        department_id?: string;
+                                        name?: string;
+                                    }>;
+                                    chat_list?: Array<{
+                                        chat_id?: string;
+                                        name?: string;
+                                    }>;
+                                    ext?: string;
+                                };
+                                approval_app_link?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * ticket_message
+         */
+        ticketMessage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=ticket.message&version=v1 document }
+             *
+             * 获取工单消息详情
+             *
+             * 该接口用于获取服务台工单消息详情。
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        time_start?: number;
+                        time_end?: number;
+                        page?: number;
+                        page_size?: number;
+                    };
+                    path?: { ticket_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                messages?: Array<{
+                                    id?: string;
+                                    message_id?: string;
+                                    message_type: string;
+                                    created_at?: number;
+                                    content: string;
+                                    user_name?: string;
+                                    avatar_url?: string;
+                                    user_id?: string;
+                                }>;
+                                total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=ticket.message&version=v1 document }
+             *
+             * 发送工单消息
+             *
+             * 该接口用于发送工单消息。
+             */
+            create: async (
+                payload?: {
+                    data: { msg_type: string; content: string };
+                    path?: { ticket_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { message_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * bot.message
+         */
+        botMessage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=bot.message&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=bot.message&version=v1 document }
+             *
+             * 服务台机器人向工单绑定的群内发送消息
+             *
+             * 通过服务台机器人给指定用户的服务台专属群或私聊发送消息，支持文本、富文本、卡片、图片。
+             *
+             * - 暂不支持新版卡片（ JSON 2.0 版本）。;- 暂不支持商店应用使用。;- 只支持向没有进行中工单的专属群中发送消息。;
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        msg_type: "text" | "post" | "image" | "interactive";
+                        content: string;
+                        receiver_id: string;
+                        receive_type?: "chat" | "user";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { message_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/message`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         v1: {
             /**
-             * 客服
+             * agent
              */
             agent: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent&apiName=agent_email&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent/agent_email document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=agent_email&project=helpdesk&resource=agent&version=v1 document }
                  *
-                 * 获取客服邮箱地址
+                 * 获取客服邮箱
                  *
-                 * 该接口用于获取客服邮箱地址
+                 * 该接口用于获取客服邮箱地址。
                  */
                 agentEmail: async (payload?: {}, options?: IRequestOptions) => {
                     const { headers, params, data, path } =
@@ -3435,11 +3455,11 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent/patch document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=agent&version=v1 document }
                  *
                  * 更新客服信息
                  *
-                 * 更新客服状态等信息
+                 * 更新客服状态等信息。
                  */
                 patch: async (
                     payload?: {
@@ -3474,175 +3494,19 @@ export default abstract class Client extends gtm_ai {
                 },
             },
             /**
-             * 客服工作日程
-             */
-            agentSchedules: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent-schedules/delete document }
-                 *
-                 * 删除客服
-                 *
-                 * 该接口用于删除客服
-                 */
-                delete: async (
-                    payload?: {
-                        path?: { agent_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent-schedules/get document }
-                 *
-                 * 获取客服工作日程;
-                 *
-                 * 该接口用于获取客服信息
-                 */
-                get: async (
-                    payload?: {
-                        path: { agent_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    agent_schedule?: {
-                                        status?: number;
-                                        agent?: {
-                                            id?: string;
-                                            avatar_url?: string;
-                                            name?: string;
-                                            email?: string;
-                                            department?: string;
-                                            company_name?: string;
-                                        };
-                                        schedule?: Array<{
-                                            start_time?: string;
-                                            end_time?: string;
-                                            weekday?: number;
-                                        }>;
-                                        agent_skills?: Array<{
-                                            id?: string;
-                                            name?: string;
-                                            is_default?: boolean;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent-schedules/patch document }
-                 *
-                 * 更新客服日程
-                 *
-                 * 该接口用于更新客服的日程
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            agent_schedule?: {
-                                schedule?: Array<{
-                                    start_time?: string;
-                                    end_time?: string;
-                                    weekday?: number;
-                                }>;
-                                agent_skill_ids?: Array<string>;
-                            };
-                        };
-                        path: { agent_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
              * agent_schedule
              */
             agentSchedule: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_schedule&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_schedule/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=agent_schedule&version=v1 document }
                  *
-                 * 创建客服
+                 * 创建客服工作日程
                  *
-                 * 该接口用于创建客服
+                 * 该接口用于创建客服日程。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
                  */
                 create: async (
                     payload?: {
@@ -3687,11 +3551,11 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_schedule&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_schedule/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=agent_schedule&version=v1 document }
                  *
-                 * 获取全部客服工作日程
+                 * 查询全部客服工作日程
                  *
-                 * 该接口用于获取所有客服信息
+                 * 该接口用于获取所有客服信息。
                  */
                 list: async (
                     payload?: {
@@ -3751,17 +3615,19 @@ export default abstract class Client extends gtm_ai {
                 },
             },
             /**
-             * 客服技能
+             * agent_skill
              */
             agentSkill: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=agent_skill&version=v1 document }
                  *
                  * 创建客服技能
                  *
-                 * 该接口用于创建客服技能
+                 * 该接口用于创建客服技能。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
                  */
                 create: async (
                     payload?: {
@@ -3807,17 +3673,32 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=delete&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=agent_skill&version=v1 document }
                  *
-                 * 删除客服技能
+                 * 更新客服技能
                  *
-                 * 该接口用于删除客服技能
+                 * 该接口用于更新客服技能。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
                  */
-                delete: async (
+                patch: async (
                     payload?: {
-                        path?: { agent_skill_id?: string };
+                        data?: {
+                            agent_skill?: {
+                                name?: string;
+                                rules?: Array<{
+                                    id?: string;
+                                    selected_operator?: number;
+                                    operator_options?: Array<number>;
+                                    operand?: string;
+                                }>;
+                                agent_ids?: Array<string>;
+                                agent_skill_id?: string;
+                            };
+                        };
+                        path: { agent_skill_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -3833,7 +3714,7 @@ export default abstract class Client extends gtm_ai {
                                 `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
                                 path
                             ),
-                            method: "DELETE",
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -3848,11 +3729,11 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=agent_skill&version=v1 document }
                  *
-                 * 获取客服技能
+                 * 查询指定客服技能
                  *
-                 * 该接口用于获取客服技能
+                 * 该接口用于获取客服技能。
                  */
                 get: async (
                     payload?: {
@@ -3910,13 +3791,54 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=agent_skill&version=v1 document }
+                 *
+                 * 删除客服技能
+                 *
+                 * 该接口用于删除客服技能。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { agent_skill_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=agent_skill&version=v1 document }
                  *
-                 * 获取全部客服技能
+                 * 查询全部客服技能
                  *
-                 * 获取全部客服技能
+                 * 获取全部客服技能。
                  */
                 list: async (payload?: {}, options?: IRequestOptions) => {
                     const { headers, params, data, path } =
@@ -3955,67 +3877,15 @@ export default abstract class Client extends gtm_ai {
                             throw e;
                         });
                 },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill/patch document }
-                 *
-                 * 更新客服技能
-                 *
-                 * 该接口用于更新客服技能
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            agent_skill?: {
-                                name?: string;
-                                rules?: Array<{
-                                    id?: string;
-                                    selected_operator?: number;
-                                    operator_options?: Array<number>;
-                                    operand?: string;
-                                }>;
-                                agent_ids?: Array<string>;
-                                agent_skill_id?: string;
-                            };
-                        };
-                        path: { agent_skill_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
             },
             /**
-             * 客服技能规则
+             * agent_skill_rule
              */
             agentSkillRule: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent_skill_rule&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/agent_skill_rule/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=agent_skill_rule&version=v1 document }
                  *
                  * 获取客服技能列表
                  *
@@ -4060,217 +3930,15 @@ export default abstract class Client extends gtm_ai {
                 },
             },
             /**
-             * 机器人消息
-             */
-            botMessage: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=bot.message&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/bot-message/create document }
-                 *
-                 * 服务台机器人发送消息
-                 *
-                 * 通过服务台机器人给指定用户的服务台专属群或私聊发送消息，支持文本、富文本、卡片、图片。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            msg_type: "text" | "post" | "image" | "interactive";
-                            content: string;
-                            receiver_id: string;
-                            receive_type?: "chat" | "user";
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { message_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/message`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 知识库分类
+             * category
              */
             category: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/create document }
-                 *
-                 * 创建知识库分类
-                 *
-                 * 该接口用于创建知识库分类。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            name: string;
-                            parent_id: string;
-                            language?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    category?: {
-                                        category_id: string;
-                                        id: string;
-                                        name: string;
-                                        parent_id: string;
-                                        helpdesk_id: string;
-                                        language?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/categories`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/delete document }
-                 *
-                 * 删除知识库分类详情
-                 *
-                 * 该接口用于删除知识库分类详情。
-                 */
-                delete: async (
-                    payload?: {
-                        path: { id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/get document }
-                 *
-                 * 获取知识库分类
-                 *
-                 * 该接口用于获取知识库分类。
-                 */
-                get: async (
-                    payload?: {
-                        path: { id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    category_id: string;
-                                    id: string;
-                                    name: string;
-                                    helpdesk_id: string;
-                                    language?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=category&version=v1 document }
                  *
-                 * 获取全部知识库分类 - meta
-                 *
-                 * 该接口用于获取服务台知识库所有分类
+                 * list all categories
                  */
                 list: async (
                     payload?: {
@@ -4320,13 +3988,73 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=category&version=v1 document }
+                 *
+                 * 创建知识库分类
+                 *
+                 * 该接口用于创建知识库分类。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            parent_id: string;
+                            language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    category?: {
+                                        category_id: string;
+                                        id: string;
+                                        name: string;
+                                        parent_id: string;
+                                        helpdesk_id: string;
+                                        language?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/categories`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/category/patch document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=category&version=v1 document }
                  *
                  * 更新知识库分类详情
                  *
                  * 该接口用于更新知识库分类详情。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
                  */
                 patch: async (
                     payload?: {
@@ -4359,19 +4087,109 @@ export default abstract class Client extends gtm_ai {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=category&version=v1 document }
+                 *
+                 * 删除知识库分类详情
+                 *
+                 * 该接口用于删除知识库分类详情。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
+                 */
+                delete: async (
+                    payload?: {
+                        path: { id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=category&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=category&version=v1 document }
+                 *
+                 * 获取知识库分类
+                 *
+                 * 该接口用于获取知识库分类。
+                 */
+                get: async (
+                    payload?: {
+                        path: { id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    category_id: string;
+                                    id: string;
+                                    name: string;
+                                    helpdesk_id: string;
+                                    language?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
-             * 事件订阅
+             * event
              */
             event: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=event&apiName=subscribe&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/subscribe document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscribe&project=helpdesk&resource=event&version=v1 document }
                  *
                  * 订阅服务台事件
                  *
-                 * 用于订阅服务台事件
+                 * 本接口用于订阅服务台事件。
                  */
                 subscribe: async (
                     payload?: {
@@ -4408,11 +4226,11 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=event&apiName=unsubscribe&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/unsubscribe document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscribe&project=helpdesk&resource=event&version=v1 document }
                  *
                  * 取消订阅服务台事件
                  *
-                 * 用于取消订阅服务台事件
+                 * 本接口用于取消订阅服务台事件。
                  */
                 unsubscribe: async (
                     payload?: {
@@ -4448,143 +4266,13 @@ export default abstract class Client extends gtm_ai {
                 },
             },
             /**
-             * 知识库
+             * faq
              */
             faq: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/create document }
-                 *
-                 * 创建知识库
-                 *
-                 * 该接口用于创建知识库。
-                 */
-                create: async (
-                    payload?: {
-                        data?: {
-                            faq?: {
-                                category_id?: string;
-                                question: string;
-                                answer?: string;
-                                answer_richtext?: string;
-                                tags?: Array<string>;
-                            };
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    faq?: {
-                                        faq_id?: string;
-                                        id?: string;
-                                        helpdesk_id?: string;
-                                        question?: string;
-                                        answer?: string;
-                                        answer_richtext?: Array<{
-                                            content?: string;
-                                            type?: string;
-                                        }>;
-                                        create_time?: number;
-                                        update_time?: number;
-                                        categories?: Array<{
-                                            category_id: string;
-                                            id: string;
-                                            name: string;
-                                            parent_id: string;
-                                            helpdesk_id: string;
-                                            language?: string;
-                                        }>;
-                                        tags?: Array<string>;
-                                        expire_time?: number;
-                                        update_user?: {
-                                            id?: string;
-                                            avatar_url?: string;
-                                            name?: string;
-                                            department?: string;
-                                            city?: string;
-                                            country?: string;
-                                        };
-                                        create_user?: {
-                                            id?: string;
-                                            avatar_url?: string;
-                                            name?: string;
-                                            department?: string;
-                                            city?: string;
-                                            country?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/faqs`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/delete document }
-                 *
-                 * 删除知识库
-                 *
-                 * 该接口用于删除知识库。
-                 */
-                delete: async (
-                    payload?: {
-                        path?: { id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=faq_image&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/faq_image document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=faq_image&project=helpdesk&resource=faq&version=v1 document }
                  *
                  * 获取知识库图像
                  *
@@ -4649,89 +4337,6 @@ export default abstract class Client extends gtm_ai {
                         },
                         headers: res.headers,
                     };
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/get document }
-                 *
-                 * 获取知识库详情
-                 *
-                 * 该接口用于获取服务台知识库详情。
-                 */
-                get: async (
-                    payload?: {
-                        path?: { id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    faq?: {
-                                        faq_id?: string;
-                                        id?: string;
-                                        helpdesk_id?: string;
-                                        question?: string;
-                                        answer?: string;
-                                        answer_richtext?: Array<{
-                                            content?: string;
-                                            type?: string;
-                                        }>;
-                                        create_time?: number;
-                                        update_time?: number;
-                                        categories?: Array<{
-                                            category_id: string;
-                                            id: string;
-                                            name: string;
-                                            parent_id: string;
-                                            helpdesk_id: string;
-                                            language?: string;
-                                        }>;
-                                        tags?: Array<string>;
-                                        expire_time?: number;
-                                        update_user?: {
-                                            id?: string;
-                                            avatar_url?: string;
-                                            name?: string;
-                                            department?: string;
-                                            city?: string;
-                                            country?: string;
-                                        };
-                                        create_user?: {
-                                            id?: string;
-                                            avatar_url?: string;
-                                            name?: string;
-                                            department?: string;
-                                            city?: string;
-                                            country?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
                 },
                 listWithIterator: async (
                     payload?: {
@@ -4868,7 +4473,7 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=faq&version=v1 document }
                  *
                  * 获取全部知识库详情
                  *
@@ -4947,57 +4552,6 @@ export default abstract class Client extends gtm_ai {
                                 path
                             ),
                             method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/patch document }
-                 *
-                 * 修改知识库
-                 *
-                 * 该接口用于修改知识库。
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            faq?: {
-                                category_id?: string;
-                                question: string;
-                                answer?: string;
-                                answer_richtext?: Array<{
-                                    content?: string;
-                                    type?: string;
-                                }>;
-                                tags?: Array<string>;
-                            };
-                        };
-                        path?: { id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
-                                path
-                            ),
-                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -5141,7 +4695,7 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=search&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/faq/search document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=helpdesk&resource=faq&version=v1 document }
                  *
                  * 搜索知识库
                  *
@@ -5228,146 +4782,27 @@ export default abstract class Client extends gtm_ai {
                             throw e;
                         });
                 },
-            },
-            /**
-             * 推送中心
-             */
-            notification: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_approve&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/cancel_approve document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=faq&version=v1 document }
                  *
-                 * 取消审核
+                 * 创建知识库
                  *
-                 * 提交审核后，如果需要取消审核，则调用此接口
-                 */
-                cancelApprove: async (
-                    payload?: {
-                        path: { notification_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_approve`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_send&version=v1 click to debug }
+                 * 该接口用于创建知识库。
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/cancel_send document }
-                 *
-                 * 取消推送
-                 *
-                 * 取消推送接口，审核通过后待调度可以调用，发送过程中可以调用（会撤回已发送的消息），发送完成后可以需要推送（会撤回所有已发送的消息）
-                 */
-                cancelSend: async (
-                    payload?: {
-                        data: { is_recall: boolean };
-                        path: { notification_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_send`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/create document }
-                 *
-                 * 创建推送
-                 *
-                 * 调用接口创建推送，创建成功后为草稿状态
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
                  */
                 create: async (
                     payload?: {
                         data?: {
-                            id?: string;
-                            job_name?: string;
-                            status?: number;
-                            create_user?: {
-                                user_id?: string;
-                                avatar_url?: string;
-                                name?: string;
+                            faq?: {
+                                category_id?: string;
+                                question: string;
+                                answer?: string;
+                                answer_richtext?: string;
+                                tags?: Array<string>;
                             };
-                            created_at?: string;
-                            update_user?: {
-                                user_id?: string;
-                                avatar_url?: string;
-                                name?: string;
-                            };
-                            updated_at?: string;
-                            target_user_count?: number;
-                            sent_user_count?: number;
-                            read_user_count?: number;
-                            send_at?: string;
-                            push_content?: string;
-                            push_type?: number;
-                            push_scope_type?: number;
-                            new_staff_scope_type?: number;
-                            new_staff_scope_department_list?: Array<{
-                                department_id?: string;
-                                name?: string;
-                            }>;
-                            user_list?: Array<{
-                                user_id?: string;
-                                avatar_url?: string;
-                                name?: string;
-                            }>;
-                            department_list?: Array<{
-                                department_id?: string;
-                                name?: string;
-                            }>;
-                            chat_list?: Array<{
-                                chat_id?: string;
-                                name?: string;
-                            }>;
-                            ext?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
                     options?: IRequestOptions
@@ -5382,13 +4817,50 @@ export default abstract class Client extends gtm_ai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    notification_id?: string;
-                                    status?: number;
+                                    faq?: {
+                                        faq_id?: string;
+                                        id?: string;
+                                        helpdesk_id?: string;
+                                        question?: string;
+                                        answer?: string;
+                                        answer_richtext?: Array<{
+                                            content?: string;
+                                            type?: string;
+                                        }>;
+                                        create_time?: number;
+                                        update_time?: number;
+                                        categories?: Array<{
+                                            category_id: string;
+                                            id: string;
+                                            name: string;
+                                            parent_id: string;
+                                            helpdesk_id: string;
+                                            language?: string;
+                                        }>;
+                                        tags?: Array<string>;
+                                        expire_time?: number;
+                                        update_user?: {
+                                            id?: string;
+                                            avatar_url?: string;
+                                            name?: string;
+                                            department?: string;
+                                            city?: string;
+                                            country?: string;
+                                        };
+                                        create_user?: {
+                                            id?: string;
+                                            avatar_url?: string;
+                                            name?: string;
+                                            department?: string;
+                                            city?: string;
+                                            country?: string;
+                                        };
+                                    };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications`,
+                                `${this.domain}/open-apis/helpdesk/v1/faqs`,
                                 path
                             ),
                             method: "POST",
@@ -5404,60 +4876,17 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=execute_send&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/execute_send document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=faq&version=v1 document }
                  *
-                 * 执行推送
+                 * 获取指定知识库详情
                  *
-                 * 审核通过后调用此接口设置推送时间，等待调度系统调度，发送消息
-                 */
-                executeSend: async (
-                    payload?: {
-                        data: { send_at: string };
-                        path: { notification_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/execute_send`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/get document }
-                 *
-                 * 查询推送
-                 *
-                 * 查询推送详情
+                 * 该接口用于获取服务台知识库详情。
                  */
                 get: async (
                     payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { notification_id: string };
+                        path?: { id?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5471,55 +4900,50 @@ export default abstract class Client extends gtm_ai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    notification?: {
+                                    faq?: {
+                                        faq_id?: string;
                                         id?: string;
-                                        job_name?: string;
-                                        status?: number;
-                                        create_user?: {
-                                            user_id?: string;
-                                            avatar_url?: string;
-                                            name?: string;
-                                        };
-                                        created_at?: string;
+                                        helpdesk_id?: string;
+                                        question?: string;
+                                        answer?: string;
+                                        answer_richtext?: Array<{
+                                            content?: string;
+                                            type?: string;
+                                        }>;
+                                        create_time?: number;
+                                        update_time?: number;
+                                        categories?: Array<{
+                                            category_id: string;
+                                            id: string;
+                                            name: string;
+                                            parent_id: string;
+                                            helpdesk_id: string;
+                                            language?: string;
+                                        }>;
+                                        tags?: Array<string>;
+                                        expire_time?: number;
                                         update_user?: {
-                                            user_id?: string;
+                                            id?: string;
                                             avatar_url?: string;
                                             name?: string;
+                                            department?: string;
+                                            city?: string;
+                                            country?: string;
                                         };
-                                        updated_at?: string;
-                                        target_user_count?: number;
-                                        sent_user_count?: number;
-                                        read_user_count?: number;
-                                        send_at?: string;
-                                        push_content?: string;
-                                        push_type?: number;
-                                        push_scope_type?: number;
-                                        new_staff_scope_type?: number;
-                                        new_staff_scope_department_list?: Array<{
-                                            department_id?: string;
-                                            name?: string;
-                                        }>;
-                                        user_list?: Array<{
-                                            user_id?: string;
+                                        create_user?: {
+                                            id?: string;
                                             avatar_url?: string;
                                             name?: string;
-                                        }>;
-                                        department_list?: Array<{
-                                            department_id?: string;
-                                            name?: string;
-                                        }>;
-                                        chat_list?: Array<{
-                                            chat_id?: string;
-                                            name?: string;
-                                        }>;
-                                        ext?: string;
+                                            department?: string;
+                                            city?: string;
+                                            country?: string;
+                                        };
                                     };
-                                    approval_app_link?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                                `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
                                 path
                             ),
                             method: "GET",
@@ -5535,63 +4959,19 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=patch&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/patch document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=faq&version=v1 document }
                  *
-                 * 更新推送
+                 * 删除知识库
                  *
-                 * 更新推送信息，只有在草稿状态下才可以调用此接口进行更新
+                 * 该接口用于删除知识库。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
                  */
-                patch: async (
+                delete: async (
                     payload?: {
-                        data?: {
-                            id?: string;
-                            job_name?: string;
-                            status?: number;
-                            create_user?: {
-                                user_id?: string;
-                                avatar_url?: string;
-                                name?: string;
-                            };
-                            created_at?: string;
-                            update_user?: {
-                                user_id?: string;
-                                avatar_url?: string;
-                                name?: string;
-                            };
-                            updated_at?: string;
-                            target_user_count?: number;
-                            sent_user_count?: number;
-                            read_user_count?: number;
-                            send_at?: string;
-                            push_content?: string;
-                            push_type?: number;
-                            push_scope_type?: number;
-                            new_staff_scope_type?: number;
-                            new_staff_scope_department_list?: Array<{
-                                department_id?: string;
-                                name?: string;
-                            }>;
-                            user_list?: Array<{
-                                user_id?: string;
-                                avatar_url?: string;
-                                name?: string;
-                            }>;
-                            department_list?: Array<{
-                                department_id?: string;
-                                name?: string;
-                            }>;
-                            chat_list?: Array<{
-                                chat_id?: string;
-                                name?: string;
-                            }>;
-                            ext?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { notification_id: string };
+                        path?: { id?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5604,7 +4984,157 @@ export default abstract class Client extends gtm_ai {
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                                `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=faq&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=faq&version=v1 document }
+                 *
+                 * 修改知识库
+                 *
+                 * 该接口用于修改知识库。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的客服、管理员或所有者;</md-alert>;:::
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            faq?: {
+                                category_id?: string;
+                                question: string;
+                                answer?: string;
+                                answer_richtext?: Array<{
+                                    content?: string;
+                                    type?: string;
+                                }>;
+                                tags?: Array<string>;
+                            };
+                        };
+                        path?: { id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * agent.schedules
+             */
+            agentSchedules: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=agent.schedules&version=v1 document }
+                 *
+                 * 删除客服工作日程
+                 *
+                 * 该接口用于删除客服日程。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { agent_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=agent.schedules&version=v1 document }
+                 *
+                 * 更新客服工作日程
+                 *
+                 * 该接口用于更新客服的日程。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            agent_schedule?: {
+                                schedule?: Array<{
+                                    start_time?: string;
+                                    end_time?: string;
+                                    weekday?: number;
+                                }>;
+                                agent_skill_ids?: Array<string>;
+                            };
+                        };
+                        path: { agent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                                 path
                             ),
                             method: "PATCH",
@@ -5620,57 +5150,17 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=preview&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=agent.schedules&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/preview document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=agent.schedules&version=v1 document }
                  *
-                 * 预览推送内容
+                 * 查询指定客服工作日程
                  *
-                 * 在正式执行推送之前是可以调用此接口预览设置的推送内容
+                 * 该接口用于获取客服信息。
                  */
-                preview: async (
+                get: async (
                     payload?: {
-                        path: { notification_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/preview`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=submit_approve&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/submit_approve document }
-                 *
-                 * 提交审核
-                 *
-                 * 正常情况下调用创建推送接口后，就可以调用提交审核接口，如果创建人是服务台owner则会自动审核通过，否则会通知服务台owner审核此推送信息
-                 */
-                submitApprove: async (
-                    payload?: {
-                        data: { reason: string };
-                        path: { notification_id: string };
+                        path: { agent_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5683,14 +5173,36 @@ export default abstract class Client extends gtm_ai {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { has_access?: boolean };
+                                data?: {
+                                    agent_schedule?: {
+                                        status?: number;
+                                        agent?: {
+                                            id?: string;
+                                            avatar_url?: string;
+                                            name?: string;
+                                            email?: string;
+                                            department?: string;
+                                            company_name?: string;
+                                        };
+                                        schedule?: Array<{
+                                            start_time?: string;
+                                            end_time?: string;
+                                            weekday?: number;
+                                        }>;
+                                        agent_skills?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                            is_default?: boolean;
+                                        }>;
+                                    };
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/submit_approve`,
+                                `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                                 path
                             ),
-                            method: "POST",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -5704,58 +5216,15 @@ export default abstract class Client extends gtm_ai {
                 },
             },
             /**
-             * 工单
+             * ticket
              */
             ticket: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=answer_user_query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/answer_user_query document }
-                 *
-                 * 回复用户提问结果至工单
-                 *
-                 * 该接口用于回复用户提问结果至工单，需要工单仍处于进行中且未接入人工状态。仅支持自建应用。
-                 */
-                answerUserQuery: async (
-                    payload?: {
-                        data: {
-                            event_id: string;
-                            faqs?: Array<{ id?: string; score?: number }>;
-                        };
-                        path: { ticket_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/answer_user_query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=customized_fields&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/customized_fields document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=customized_fields&project=helpdesk&resource=ticket&version=v1 document }
                  *
-                 * 获取服务台自定义字段详情
+                 * 获取服务台自定义字段
                  *
                  * 该接口用于获取服务台自定义字段详情。
                  */
@@ -5843,11 +5312,84 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=ticket_image&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ticket_image&project=helpdesk&resource=ticket&version=v1 document }
+                 *
+                 * 获取工单内图像
+                 *
+                 * 该接口用于获取服务台工单消息图象。仅支持自建应用。
+                 */
+                ticketImage: async (
+                    payload?: {
+                        params: {
+                            ticket_id: string;
+                            msg_id: string;
+                            index?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/ticket_images`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=ticket&version=v1 document }
                  *
-                 * 获取工单详情
+                 * 查询指定工单详情
                  *
                  * 该接口用于获取单个服务台工单详情。仅支持自建应用。
                  */
@@ -5980,9 +5522,9 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=ticket&version=v1 document }
                  *
-                 * 获取全部工单详情
+                 * 查询全部工单详情
                  *
                  * 该接口用于获取全部工单详情。仅支持自建应用。
                  */
@@ -6134,7 +5676,7 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=start_service&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/start_service document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=start_service&project=helpdesk&resource=ticket&version=v1 document }
                  *
                  * 创建服务台对话
                  *
@@ -6180,86 +5722,15 @@ export default abstract class Client extends gtm_ai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=ticket_image&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/ticket_image document }
-                 *
-                 * 获取服务台工单内消息图像
-                 *
-                 * 该接口用于获取服务台工单消息图象。仅支持自建应用。
-                 */
-                ticketImage: async (
-                    payload?: {
-                        params: {
-                            ticket_id: string;
-                            msg_id: string;
-                            index?: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/ticket_images`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=update&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/update document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=helpdesk&resource=ticket&version=v1 document }
                  *
                  * 更新工单详情
                  *
                  * 该接口用于更新服务台工单详情。只会更新数据，不会触发相关操作。如修改工单状态到关单，不会关闭聊天页面。仅支持自建应用。要更新的工单字段必须至少输入一项。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者有当前工单的权限，属于服务台的客服（并且具有该工单的权限）、管理员或所有者;</md-alert>;:::
                  */
                 update: async (
                     payload?: {
@@ -6304,144 +5775,22 @@ export default abstract class Client extends gtm_ai {
                             throw e;
                         });
                 },
-            },
-            /**
-             * 事件
-             */
-            ticketMessage: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket&apiName=answer_user_query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket-message/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=answer_user_query&project=helpdesk&resource=ticket&version=v1 document }
                  *
-                 * 工单发送消息
+                 * 回复用户在工单里的提问
                  *
-                 * 该接口用于工单发送消息。
+                 * 该接口用于回复用户提问结果至工单，需要工单仍处于进行中且未接入人工状态。仅支持自建应用。
                  */
-                create: async (
-                    payload?: {
-                        data: { msg_type: string; content: string };
-                        path?: { ticket_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { message_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket-message/list document }
-                 *
-                 * 获取服务台工单消息详情
-                 *
-                 * 该接口用于获取服务台工单消息详情。
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            time_start?: number;
-                            time_end?: number;
-                            page?: number;
-                            page_size?: number;
-                        };
-                        path?: { ticket_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    messages?: Array<{
-                                        id?: string;
-                                        message_id?: string;
-                                        message_type: string;
-                                        created_at?: number;
-                                        content: string;
-                                        user_name?: string;
-                                        avatar_url?: string;
-                                        user_id?: string;
-                                    }>;
-                                    total?: number;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 工单自定义字段
-             */
-            ticketCustomizedField: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/create document }
-                 *
-                 * 创建工单自定义字段
-                 *
-                 * 该接口用于创建自定义字段
-                 */
-                create: async (
+                answerUserQuery: async (
                     payload?: {
                         data: {
-                            helpdesk_id?: string;
-                            key_name: string;
-                            display_name: string;
-                            position: string;
-                            field_type: string;
-                            description: string;
-                            visible: boolean;
-                            editable?: boolean;
-                            required: boolean;
-                            dropdown_allow_multiple?: boolean;
+                            event_id: string;
+                            faqs?: Array<{ id?: string; score?: number }>;
                         };
+                        path: { ticket_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -6454,7 +5803,7 @@ export default abstract class Client extends gtm_ai {
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
+                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/answer_user_query`,
                                 path
                             ),
                             method: "POST",
@@ -6469,14 +5818,21 @@ export default abstract class Client extends gtm_ai {
                             throw e;
                         });
                 },
+            },
+            /**
+             * ticket_customized_field
+             */
+            ticketCustomizedField: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=helpdesk&resource=ticket_customized_field&version=v1 document }
                  *
                  * 删除工单自定义字段
                  *
                  * 该接口用于删除工单自定义字段。
+                 *
+                 * :::html;<md-alert type="tip">;	注意事项：;	user_access_token 访问，需要操作者是当前服务台的管理员或所有者;</md-alert>;:::
                  */
                 delete: async (
                     payload?: {
@@ -6511,11 +5867,9 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=ticket_customized_field&version=v1 document }
                  *
-                 * 获取工单自定义字段
-                 *
-                 * 该接口用于获取工单自定义字段详情。
+                 * get ticket customized field
                  */
                 get: async (
                     payload?: {
@@ -6705,11 +6059,9 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=ticket_customized_field&version=v1 document }
                  *
-                 * 获取全部工单自定义字段
-                 *
-                 * 该接口用于获取全部工单自定义字段。
+                 * list the ticket customized fields
                  */
                 list: async (
                     payload?: {
@@ -6785,11 +6137,9 @@ export default abstract class Client extends gtm_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_customized_field/patch document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=ticket_customized_field&version=v1 document }
                  *
-                 * 更新工单自定义字段
-                 *
-                 * 该接口用于更新自定义字段。
+                 * update the ticket customized field
                  */
                 patch: async (
                     payload?: {
@@ -6817,6 +6167,696 @@ export default abstract class Client extends gtm_ai {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket_customized_field&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=ticket_customized_field&version=v1 document }
+                 *
+                 * create ticket customized field
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            helpdesk_id?: string;
+                            key_name: string;
+                            display_name: string;
+                            position: string;
+                            field_type: string;
+                            description: string;
+                            visible: boolean;
+                            editable?: boolean;
+                            required: boolean;
+                            dropdown_allow_multiple?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * notification
+             */
+            notification: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_approve&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel_approve&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 取消审核
+                 *
+                 * 提交审核后，如果需要取消审核，则调用此接口。
+                 */
+                cancelApprove: async (
+                    payload?: {
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_approve`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=cancel_send&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel_send&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 取消推送
+                 *
+                 * 取消推送接口，审核通过后待调度可以调用，发送过程中可以调用（会撤回已发送的消息），发送完成后可以需要推送（会撤回所有已发送的消息）。
+                 */
+                cancelSend: async (
+                    payload?: {
+                        data: { is_recall: boolean };
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_send`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 创建推送
+                 *
+                 * 调用接口创建推送，创建成功后为草稿状态。
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            id?: string;
+                            job_name?: string;
+                            status?: number;
+                            create_user?: {
+                                user_id?: string;
+                                avatar_url?: string;
+                                name?: string;
+                            };
+                            created_at?: string;
+                            update_user?: {
+                                user_id?: string;
+                                avatar_url?: string;
+                                name?: string;
+                            };
+                            updated_at?: string;
+                            target_user_count?: number;
+                            sent_user_count?: number;
+                            read_user_count?: number;
+                            send_at?: string;
+                            push_content?: string;
+                            push_type?: number;
+                            push_scope_type?: number;
+                            new_staff_scope_type?: number;
+                            new_staff_scope_department_list?: Array<{
+                                department_id?: string;
+                                name?: string;
+                            }>;
+                            user_list?: Array<{
+                                user_id?: string;
+                                avatar_url?: string;
+                                name?: string;
+                            }>;
+                            department_list?: Array<{
+                                department_id?: string;
+                                name?: string;
+                            }>;
+                            chat_list?: Array<{
+                                chat_id?: string;
+                                name?: string;
+                            }>;
+                            ext?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    notification_id?: string;
+                                    status?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=execute_send&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=execute_send&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 执行推送
+                 *
+                 * 审核通过后调用此接口设置推送时间，等待调度系统调度，发送消息。
+                 */
+                executeSend: async (
+                    payload?: {
+                        data: { send_at: string };
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/execute_send`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 更新推送
+                 *
+                 * 更新推送信息，只有在草稿状态下才可以调用此接口进行更新。
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            id?: string;
+                            job_name?: string;
+                            status?: number;
+                            create_user?: {
+                                user_id?: string;
+                                avatar_url?: string;
+                                name?: string;
+                            };
+                            created_at?: string;
+                            update_user?: {
+                                user_id?: string;
+                                avatar_url?: string;
+                                name?: string;
+                            };
+                            updated_at?: string;
+                            target_user_count?: number;
+                            sent_user_count?: number;
+                            read_user_count?: number;
+                            send_at?: string;
+                            push_content?: string;
+                            push_type?: number;
+                            push_scope_type?: number;
+                            new_staff_scope_type?: number;
+                            new_staff_scope_department_list?: Array<{
+                                department_id?: string;
+                                name?: string;
+                            }>;
+                            user_list?: Array<{
+                                user_id?: string;
+                                avatar_url?: string;
+                                name?: string;
+                            }>;
+                            department_list?: Array<{
+                                department_id?: string;
+                                name?: string;
+                            }>;
+                            chat_list?: Array<{
+                                chat_id?: string;
+                                name?: string;
+                            }>;
+                            ext?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=preview&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 预览推送
+                 *
+                 * 在正式执行推送之前是可以调用此接口预览设置的推送内容。
+                 */
+                preview: async (
+                    payload?: {
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/preview`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=submit_approve&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=submit_approve&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 提交审核
+                 *
+                 * 正常情况下调用创建推送接口后，就可以调用提交审核接口，如果创建人是服务台owner则会自动审核通过，否则会通知服务台owner审核此推送信息。
+                 */
+                submitApprove: async (
+                    payload?: {
+                        data: { reason: string };
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { has_access?: boolean };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/submit_approve`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=notification&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=helpdesk&resource=notification&version=v1 document }
+                 *
+                 * 查询推送
+                 *
+                 * 查询推送详情。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { notification_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    notification?: {
+                                        id?: string;
+                                        job_name?: string;
+                                        status?: number;
+                                        create_user?: {
+                                            user_id?: string;
+                                            avatar_url?: string;
+                                            name?: string;
+                                        };
+                                        created_at?: string;
+                                        update_user?: {
+                                            user_id?: string;
+                                            avatar_url?: string;
+                                            name?: string;
+                                        };
+                                        updated_at?: string;
+                                        target_user_count?: number;
+                                        sent_user_count?: number;
+                                        read_user_count?: number;
+                                        send_at?: string;
+                                        push_content?: string;
+                                        push_type?: number;
+                                        push_scope_type?: number;
+                                        new_staff_scope_type?: number;
+                                        new_staff_scope_department_list?: Array<{
+                                            department_id?: string;
+                                            name?: string;
+                                        }>;
+                                        user_list?: Array<{
+                                            user_id?: string;
+                                            avatar_url?: string;
+                                            name?: string;
+                                        }>;
+                                        department_list?: Array<{
+                                            department_id?: string;
+                                            name?: string;
+                                        }>;
+                                        chat_list?: Array<{
+                                            chat_id?: string;
+                                            name?: string;
+                                        }>;
+                                        ext?: string;
+                                    };
+                                    approval_app_link?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * ticket_message
+             */
+            ticketMessage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=helpdesk&resource=ticket.message&version=v1 document }
+                 *
+                 * 获取工单消息详情
+                 *
+                 * 该接口用于获取服务台工单消息详情。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            time_start?: number;
+                            time_end?: number;
+                            page?: number;
+                            page_size?: number;
+                        };
+                        path?: { ticket_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    messages?: Array<{
+                                        id?: string;
+                                        message_id?: string;
+                                        message_type: string;
+                                        created_at?: number;
+                                        content: string;
+                                        user_name?: string;
+                                        avatar_url?: string;
+                                        user_id?: string;
+                                    }>;
+                                    total?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=ticket.message&version=v1 document }
+                 *
+                 * 发送工单消息
+                 *
+                 * 该接口用于发送工单消息。
+                 */
+                create: async (
+                    payload?: {
+                        data: { msg_type: string; content: string };
+                        path?: { ticket_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { message_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * bot.message
+             */
+            botMessage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=bot.message&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=helpdesk&resource=bot.message&version=v1 document }
+                 *
+                 * 服务台机器人向工单绑定的群内发送消息
+                 *
+                 * 通过服务台机器人给指定用户的服务台专属群或私聊发送消息，支持文本、富文本、卡片、图片。
+                 *
+                 * - 暂不支持新版卡片（ JSON 2.0 版本）。;- 暂不支持商店应用使用。;- 只支持向没有进行中工单的专属群中发送消息。;
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            msg_type: "text" | "post" | "image" | "interactive";
+                            content: string;
+                            receiver_id: string;
+                            receive_type?: "chat" | "user";
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { message_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/message`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

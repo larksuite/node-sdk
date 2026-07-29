@@ -29,3124 +29,23 @@ export default abstract class Client extends human_authentication {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 消息与群组
-     */
+         
+         */
     im = {
         /**
-         * 消息 - 批量消息
-         */
-        batchMessage: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/delete document }
-             *
-             * 批量撤回消息
-             *
-             * 批量撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。
-             *
-             * 注意事项：;- 应用需要启用[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) ;- 撤回单条发送的消息请使用[撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete)接口;- 不支持撤回发出时间超过1天的消息;- 一次调用涉及大量消息，所以为异步接口，会有一定延迟。
-             */
-            delete: async (
-                payload?: {
-                    path: { batch_message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=get_progress&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/get_progress document }
-             *
-             * 查询批量消息整体进度
-             *
-             * 该接口在[查询批量消息推送和阅读人数](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/read_user)查询结果的基础上，增加了批量请求中有效的userid数量以及消息撤回进度数据。
-             *
-             * 注意事项:;* 该接口返回的数据为查询时刻的快照数据
-             */
-            getProgress: async (
-                payload?: {
-                    path: { batch_message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                batch_message_send_progress?: {
-                                    valid_user_ids_count?: number;
-                                    success_user_ids_count?: number;
-                                    read_user_ids_count?: number;
-                                };
-                                batch_message_recall_progress?: {
-                                    recall?: boolean;
-                                    recall_count?: number;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/get_progress`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=read_user&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/read_user document }
-             *
-             * 查询批量消息推送和阅读人数
-             *
-             * 批量发送消息后，可以通过该接口查询批量消息推送的总人数和阅读人数。
-             *
-             * 注意事项：;- 只能查询通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口产生的消息;- 该接口返回的数据为查询时刻的快照数据
-             */
-            readUser: async (
-                payload?: {
-                    path: { batch_message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                read_user?: {
-                                    read_count: string;
-                                    total_count: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/read_user`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 群组 - 群公告
-         */
-        chatAnnouncement: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/get document }
-             *
-             * 获取群公告信息
-             *
-             * 获取会话中的群公告信息，公告信息格式与[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 获取内部群信息时，操作者须与群组在同一租户下
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                content?: string;
-                                revision?: string;
-                                create_time?: string;
-                                update_time?: string;
-                                owner_id_type?:
-                                    | "user_id"
-                                    | "union_id"
-                                    | "open_id"
-                                    | "app_id";
-                                owner_id?: string;
-                                modifier_id_type?:
-                                    | "user_id"
-                                    | "union_id"
-                                    | "open_id"
-                                    | "app_id";
-                                modifier_id?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/patch document }
-             *
-             * 更新群公告信息
-             *
-             * 更新会话中的群公告信息，更新公告信息的格式和更新[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 操作者需要拥有群公告文档的阅读权限;- 获取内部群信息时，操作者须与群组在同一租户下;- 若群开启了 ==仅群主和群管理员可编辑群信息== 配置，群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新群公告;- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置，所有成员可以更新群公告
-             */
-            patch: async (
-                payload?: {
-                    data: { revision: string; requests?: Array<string> };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 群组
-         */
-        chat: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/create document }
-             *
-             * 创建群
-             *
-             * 创建群并设置群头像、群名、群描述等。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 本接口支持在创建群的同时拉用户或机器人进群；如果仅需要拉用户或者机器人入群参考 [将用户或机器人拉入群聊](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create)接口
-             */
-            create: async (
-                payload?: {
-                    data?: {
-                        avatar?: string;
-                        name?: string;
-                        description?: string;
-                        i18n_names?: {
-                            zh_cn?: string;
-                            en_us?: string;
-                            ja_jp?: string;
-                        };
-                        owner_id?: string;
-                        user_id_list?: Array<string>;
-                        bot_id_list?: Array<string>;
-                        group_message_type?: "chat" | "thread";
-                        chat_mode?: string;
-                        chat_type?: string;
-                        external?: boolean;
-                        join_message_visibility?: string;
-                        leave_message_visibility?: string;
-                        membership_approval?: string;
-                        labels?: Array<string>;
-                        toolkit_ids?: Array<string>;
-                        restricted_mode_setting?: {
-                            status?: boolean;
-                            screenshot_has_permission_setting?:
-                                | "all_members"
-                                | "not_anyone";
-                            download_has_permission_setting?:
-                                | "all_members"
-                                | "not_anyone";
-                            message_has_permission_setting?:
-                                | "all_members"
-                                | "not_anyone";
-                        };
-                        urgent_setting?: "only_owner" | "all_members";
-                        video_conference_setting?: "only_owner" | "all_members";
-                        edit_permission?: "only_owner" | "all_members";
-                        chat_tags?: Array<string>;
-                        pin_manage_setting?: "only_owner" | "all_members";
-                        hide_member_count_setting?:
-                            | "all_members"
-                            | "only_owner";
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        set_bot_manager?: boolean;
-                        uuid?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_id?: string;
-                                avatar?: string;
-                                name?: string;
-                                description?: string;
-                                i18n_names?: {
-                                    zh_cn?: string;
-                                    en_us?: string;
-                                    ja_jp?: string;
-                                };
-                                owner_id?: string;
-                                owner_id_type?: string;
-                                urgent_setting?: "only_owner" | "all_members";
-                                video_conference_setting?:
-                                    | "only_owner"
-                                    | "all_members";
-                                pin_manage_setting?:
-                                    | "only_owner"
-                                    | "all_members";
-                                add_member_permission?: string;
-                                share_card_permission?: string;
-                                at_all_permission?: string;
-                                edit_permission?: string;
-                                group_message_type?: string;
-                                chat_mode?: string;
-                                chat_type?: string;
-                                chat_tag?: string;
-                                external?: boolean;
-                                tenant_key?: string;
-                                join_message_visibility?: string;
-                                leave_message_visibility?: string;
-                                membership_approval?: string;
-                                moderation_permission?: string;
-                                labels?: Array<string>;
-                                toolkit_ids?: Array<string>;
-                                restricted_mode_setting?: {
-                                    status?: boolean;
-                                    screenshot_has_permission_setting?:
-                                        | "all_members"
-                                        | "not_anyone";
-                                    download_has_permission_setting?:
-                                        | "all_members"
-                                        | "not_anyone";
-                                    message_has_permission_setting?:
-                                        | "all_members"
-                                        | "not_anyone";
-                                };
-                                hide_member_count_setting?:
-                                    | "all_members"
-                                    | "only_owner";
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/delete document }
-             *
-             * 解散群
-             *
-             * 解散群组。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 如果使用tenant_access_token，需要机器人符合以下任一情况才可解散群：;    - 机器人是群主;    - 机器人是群的创建者且具备==更新应用所创建群的群信息==权限;- 如果使用user_access_token，需要对应的用户是群主才可解散群
-             */
-            delete: async (
-                payload?: {
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get document }
-             *
-             * 获取群信息
-             *
-             * 获取群名称、群描述、群头像、群主 ID 等群基本信息。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群里（否则只会返回群名称、群头像等基本信息）;- 获取内部群信息时，操作者须与群组在同一租户下
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                avatar?: string;
-                                name?: string;
-                                description?: string;
-                                i18n_names?: {
-                                    zh_cn?: string;
-                                    en_us?: string;
-                                    ja_jp?: string;
-                                };
-                                add_member_permission?: string;
-                                share_card_permission?: string;
-                                at_all_permission?: string;
-                                edit_permission?: string;
-                                owner_id_type?: string;
-                                owner_id?: string;
-                                user_manager_id_list?: Array<string>;
-                                bot_manager_id_list?: Array<string>;
-                                group_message_type?: string;
-                                chat_mode?: string;
-                                chat_type?: string;
-                                chat_tag?: string;
-                                join_message_visibility?: string;
-                                leave_message_visibility?: string;
-                                membership_approval?: string;
-                                moderation_permission?: string;
-                                external?: boolean;
-                                tenant_key?: string;
-                                user_count?: string;
-                                bot_count?: string;
-                                labels?: Array<string>;
-                                toolkit_ids?: Array<string>;
-                                restricted_mode_setting?: {
-                                    status?: boolean;
-                                    screenshot_has_permission_setting?:
-                                        | "all_members"
-                                        | "not_anyone";
-                                    download_has_permission_setting?:
-                                        | "all_members"
-                                        | "not_anyone";
-                                    message_has_permission_setting?:
-                                        | "all_members"
-                                        | "not_anyone";
-                                };
-                                urgent_setting?: "only_owner" | "all_members";
-                                video_conference_setting?:
-                                    | "only_owner"
-                                    | "all_members";
-                                pin_manage_setting?:
-                                    | "only_owner"
-                                    | "all_members";
-                                hide_member_count_setting?:
-                                    | "all_members"
-                                    | "only_owner";
-                                chat_status?:
-                                    | "normal"
-                                    | "dissolved"
-                                    | "dissolved_save";
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=link&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/link document }
-             *
-             * 获取群分享链接
-             *
-             * 获取指定群的分享链接。
-             *
-             * 注意事项:;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - access_token所对应的 **机器人** 或 **授权用户** 必须在`chat_id`参数指定的群组中;- 单聊、密聊、团队群不支持分享群链接;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用;- 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅**群主**和**群管理员**可以获取群分享链接;- 获取内部群分享链接时，操作者须与群组在同一租户下
-             */
-            link: async (
-                payload?: {
-                    data?: {
-                        validity_period?: "week" | "year" | "permanently";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                share_link?: string;
-                                expire_time?: string;
-                                is_permanent?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/link`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
-                        page_token?: string;
-                        page_size?: number;
-                        types?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    chat_id?: string;
-                                                    avatar?: string;
-                                                    name?: string;
-                                                    description?: string;
-                                                    owner_id?: string;
-                                                    owner_id_type?: string;
-                                                    external?: boolean;
-                                                    tenant_key?: string;
-                                                    labels?: Array<string>;
-                                                    chat_status?:
-                                                        | "normal"
-                                                        | "dissolved"
-                                                        | "dissolved_save";
-                                                    chat_mode?:
-                                                        | "group"
-                                                        | "topic"
-                                                        | "p2p";
-                                                    p2p_target_type?:
-                                                        | "user"
-                                                        | "bot";
-                                                    p2p_target_id?: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/list document }
-             *
-             * 获取用户或机器人所在的群列表
-             *
-             * 获取用户或者机器人所在群列表。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL;- 获取的群列表不包含P2P单聊
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
-                        page_token?: string;
-                        page_size?: number;
-                        types?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    chat_id?: string;
-                                    avatar?: string;
-                                    name?: string;
-                                    description?: string;
-                                    owner_id?: string;
-                                    owner_id_type?: string;
-                                    external?: boolean;
-                                    tenant_key?: string;
-                                    labels?: Array<string>;
-                                    chat_status?:
-                                        | "normal"
-                                        | "dissolved"
-                                        | "dissolved_save";
-                                    chat_mode?: "group" | "topic" | "p2p";
-                                    p2p_target_type?: "user" | "bot";
-                                    p2p_target_id?: string;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            searchWithIterator: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        query?: string;
-                        page_token?: string;
-                        page_size?: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/search`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    chat_id?: string;
-                                                    avatar?: string;
-                                                    name?: string;
-                                                    description?: string;
-                                                    owner_id?: string;
-                                                    owner_id_type?: string;
-                                                    external?: boolean;
-                                                    tenant_key?: string;
-                                                    labels?: Array<string>;
-                                                    chat_status?:
-                                                        | "normal"
-                                                        | "dissolved"
-                                                        | "dissolved_save";
-                                                    chat_mode?:
-                                                        | "group"
-                                                        | "topic"
-                                                        | "p2p";
-                                                    p2p_target_type?:
-                                                        | "user"
-                                                        | "bot";
-                                                    p2p_target_id?: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=search&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/search document }
-             *
-             * 搜索对用户或机器人可见的群列表
-             *
-             * 搜索对用户或机器人可见的群列表，包括：用户或机器人所在的群、对用户或机器人公开的群。;搜索可获得的群信息包括：群ID（chat_id）、群名称、群描述等。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
-             */
-            search: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        query?: string;
-                        page_token?: string;
-                        page_size?: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    chat_id?: string;
-                                    avatar?: string;
-                                    name?: string;
-                                    description?: string;
-                                    owner_id?: string;
-                                    owner_id_type?: string;
-                                    external?: boolean;
-                                    tenant_key?: string;
-                                    labels?: Array<string>;
-                                    chat_status?:
-                                        | "normal"
-                                        | "dissolved"
-                                        | "dissolved_save";
-                                    chat_mode?: "group" | "topic" | "p2p";
-                                    p2p_target_type?: "user" | "bot";
-                                    p2p_target_id?: string;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/search`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/update document }
-             *
-             * 更新群信息
-             *
-             * 更新群头像、群名称、群描述、群配置、转让群主等。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 对于群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新所有信息;- 对于不满足上述权限条件的群成员或机器人：;    - 若未开启 ==仅群主和群管理员可编辑群信息== 配置，仅可更新群头像、群名称、群描述、群国际化名称信息;    - 若开启了 ==仅群主和群管理员可编辑群信息== 配置，任何群信息都不能修改;- 如果同时更新 ==邀请用户或机器人入群权限== 和 ==群分享权限== 这两项设置需要满足以下条件：;    - 若未开启 ==仅群主和管理员可以邀请用户或机器人入群==，需要设置 ==群分享权限== 为 ==允许分享==;    - 若开启了 ==仅群主和管理员可以邀请用户或机器人入群==，需要设置 ==群分享权限== 为 ==不允许分享==
-             */
-            update: async (
-                payload?: {
-                    data?: {
-                        avatar?: string;
-                        name?: string;
-                        description?: string;
-                        i18n_names?: {
-                            zh_cn?: string;
-                            en_us?: string;
-                            ja_jp?: string;
-                        };
-                        add_member_permission?: string;
-                        share_card_permission?: string;
-                        at_all_permission?: string;
-                        edit_permission?: string;
-                        owner_id?: string;
-                        join_message_visibility?: string;
-                        leave_message_visibility?: string;
-                        membership_approval?: string;
-                        labels?: Array<string>;
-                        toolkit_ids?: Array<string>;
-                        restricted_mode_setting?: {
-                            status?: boolean;
-                            screenshot_has_permission_setting?:
-                                | "all_members"
-                                | "not_anyone";
-                            download_has_permission_setting?:
-                                | "all_members"
-                                | "not_anyone";
-                            message_has_permission_setting?:
-                                | "all_members"
-                                | "not_anyone";
-                        };
-                        chat_type?: string;
-                        group_message_type?: "chat" | "thread";
-                        urgent_setting?: "only_owner" | "all_members";
-                        video_conference_setting?: "only_owner" | "all_members";
-                        pin_manage_setting?: "only_owner" | "all_members";
-                        hide_member_count_setting?:
-                            | "all_members"
-                            | "only_owner";
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 群组 - 群成员
-         */
-        chatManagers: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=add_managers&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-managers/add_managers document }
-             *
-             * 指定群管理员
-             *
-             * 将用户或机器人指定为群管理员。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 仅有群主可以指定群管理员
-             */
-            addManagers: async (
-                payload?: {
-                    data?: { manager_ids?: Array<string> };
-                    params?: {
-                        member_id_type?:
-                            | "user_id"
-                            | "union_id"
-                            | "open_id"
-                            | "app_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_managers?: Array<string>;
-                                chat_bot_managers?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/add_managers`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=delete_managers&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-managers/delete_managers document }
-             *
-             * 删除群管理员
-             *
-             * 删除指定的群管理员（用户或机器人）。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 仅有群主可以删除群管理员
-             */
-            deleteManagers: async (
-                payload?: {
-                    data?: { manager_ids?: Array<string> };
-                    params?: {
-                        member_id_type?:
-                            | "user_id"
-                            | "union_id"
-                            | "open_id"
-                            | "app_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_managers?: Array<string>;
-                                chat_bot_managers?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/delete_managers`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 群组 - 群成员
-         */
-        chatMembers: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create document }
-             *
-             * 将用户或机器人拉入群聊
-             *
-             * 将用户或机器人拉入群聊。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 如需拉用户进群，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability); - 机器人或授权用户必须在群组中;- 外部租户不能被加入到内部群中;- 操作内部群时，操作者须与群组在同一租户下; - 在开启 ==仅群主和群管理员可添加群成员== 的设置时，仅有群主/管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可以拉用户或者机器人进群; - 在未开启 ==仅群主和群管理员可添加群成员== 的设置时，所有群成员都可以拉用户或机器人进群
-             */
-            create: async (
-                payload?: {
-                    data?: { id_list?: Array<string> };
-                    params?: {
-                        member_id_type?:
-                            | "user_id"
-                            | "union_id"
-                            | "open_id"
-                            | "app_id";
-                        succeed_type?: number;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                invalid_id_list?: Array<string>;
-                                not_existed_id_list?: Array<string>;
-                                pending_approval_id_list?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/delete document }
-             *
-             * 将用户或机器人移出群聊
-             *
-             * 将用户或机器人移出群聊。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人;- 每次请求，最多移除50个用户或者5个机器人;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            delete: async (
-                payload?: {
-                    data?: { id_list?: Array<string> };
-                    params?: {
-                        member_id_type?:
-                            | "user_id"
-                            | "union_id"
-                            | "open_id"
-                            | "app_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { invalid_id_list?: Array<string> };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            getWithIterator: async (
-                payload?: {
-                    params?: {
-                        member_id_type?: "user_id" | "union_id" | "open_id";
-                        page_size?: number;
-                        page_token?: string;
-                        check_security_conf?: boolean;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    member_id_type?: string;
-                                                    member_id?: string;
-                                                    name?: string;
-                                                    tenant_key?: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                                member_total?: number;
-                                                trigger_security_conf_limit?: boolean;
-                                                security_conf_limit?: number;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/get document }
-             *
-             * 获取群成员列表
-             *
-             * 获取用户/机器人所在群的群成员列表。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中; - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size;- 获取内部群信息时，操作者须与群组在同一租户下
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        member_id_type?: "user_id" | "union_id" | "open_id";
-                        page_size?: number;
-                        page_token?: string;
-                        check_security_conf?: boolean;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    member_id_type?: string;
-                                    member_id?: string;
-                                    name?: string;
-                                    tenant_key?: string;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                                member_total?: number;
-                                trigger_security_conf_limit?: boolean;
-                                security_conf_limit?: number;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=is_in_chat&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/is_in_chat document }
-             *
-             * 判断用户或机器人是否在群里
-             *
-             * 根据使用的access_token判断对应的用户或者机器人是否在群里。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 获取内部群信息时，操作者须与群组在同一租户下
-             */
-            isInChat: async (
-                payload?: {
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { is_in_chat?: boolean };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members/is_in_chat`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=me_join&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/me_join document }
-             *
-             * 用户或机器人主动加入群聊
-             *
-             * 用户或机器人主动加入群聊。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 目前仅支持加入公开群;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            meJoin: async (
-                payload?: {
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members/me_join`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * chat.menu_item
-         */
-        chatMenuItem: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_item&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_item/patch document }
-             *
-             * 修改群菜单元信息
-             *
-             * 修改某个一级菜单或者二级菜单的元信息。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。
-             */
-            patch: async (
-                payload?: {
-                    data: {
-                        update_fields: Array<
-                            "ICON" | "NAME" | "I18N_NAME" | "REDIRECT_LINK"
-                        >;
-                        chat_menu_item: {
-                            action_type?: "NONE" | "REDIRECT_LINK";
-                            redirect_link?: {
-                                common_url?: string;
-                                ios_url?: string;
-                                android_url?: string;
-                                pc_url?: string;
-                                web_url?: string;
-                            };
-                            image_key?: string;
-                            name?: string;
-                            i18n_names?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                        };
-                    };
-                    path?: { chat_id?: string; menu_item_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_menu_item?: {
-                                    action_type?: "NONE" | "REDIRECT_LINK";
-                                    redirect_link?: {
-                                        common_url?: string;
-                                        ios_url?: string;
-                                        android_url?: string;
-                                        pc_url?: string;
-                                        web_url?: string;
-                                    };
-                                    image_key?: string;
-                                    name?: string;
-                                    i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_items/:menu_item_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 群组 - 群菜单
-         */
-        chatMenuTree: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/create document }
-             *
-             * 添加群菜单
-             *
-             * 向群内添加群菜单。
-             *
-             * 注意事项：;- 该API是向群内追加菜单，群内原来存在的菜单并不会被覆盖。操作API后，将返回群内所有菜单。;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。;- 一个群内，一级菜单最多有3个，每个一级菜单最多有5个二级菜单。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        menu_tree: {
-                            chat_menu_top_levels: Array<{
-                                chat_menu_item: {
-                                    action_type: "NONE" | "REDIRECT_LINK";
-                                    redirect_link?: {
-                                        common_url?: string;
-                                        ios_url?: string;
-                                        android_url?: string;
-                                        pc_url?: string;
-                                        web_url?: string;
-                                    };
-                                    image_key?: string;
-                                    name: string;
-                                    i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                                children?: Array<{
-                                    chat_menu_item?: {
-                                        action_type?: "NONE" | "REDIRECT_LINK";
-                                        redirect_link?: {
-                                            common_url?: string;
-                                            ios_url?: string;
-                                            android_url?: string;
-                                            pc_url?: string;
-                                            web_url?: string;
-                                        };
-                                        image_key?: string;
-                                        name?: string;
-                                        i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                }>;
-                            }>;
-                        };
-                    };
-                    path?: { chat_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                menu_tree?: {
-                                    chat_menu_top_levels?: Array<{
-                                        chat_menu_top_level_id?: string;
-                                        chat_menu_item?: {
-                                            action_type?:
-                                                | "NONE"
-                                                | "REDIRECT_LINK";
-                                            redirect_link?: {
-                                                common_url?: string;
-                                                ios_url?: string;
-                                                android_url?: string;
-                                                pc_url?: string;
-                                                web_url?: string;
-                                            };
-                                            image_key?: string;
-                                            name?: string;
-                                            i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        children?: Array<{
-                                            chat_menu_second_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/delete document }
-             *
-             * 删除群菜单。
-             *
-             * 删除群内菜单。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。;- 操作API后，将返回群内所有菜单。
-             */
-            delete: async (
-                payload?: {
-                    data: { chat_menu_top_level_ids: Array<string> };
-                    path?: { chat_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                menu_tree?: {
-                                    chat_menu_top_levels?: Array<{
-                                        chat_menu_top_level_id?: string;
-                                        chat_menu_item?: {
-                                            action_type?:
-                                                | "NONE"
-                                                | "REDIRECT_LINK";
-                                            redirect_link?: {
-                                                common_url?: string;
-                                                ios_url?: string;
-                                                android_url?: string;
-                                                pc_url?: string;
-                                                web_url?: string;
-                                            };
-                                            image_key?: string;
-                                            name?: string;
-                                            i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        children?: Array<{
-                                            chat_menu_second_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/get document }
-             *
-             * 获取群内菜单
-             *
-             * 通过群ID获取群内菜单。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。
-             */
-            get: async (
-                payload?: {
-                    path?: { chat_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                menu_tree?: {
-                                    chat_menu_top_levels?: Array<{
-                                        chat_menu_top_level_id?: string;
-                                        chat_menu_item?: {
-                                            action_type?:
-                                                | "NONE"
-                                                | "REDIRECT_LINK";
-                                            redirect_link?: {
-                                                common_url?: string;
-                                                ios_url?: string;
-                                                android_url?: string;
-                                                pc_url?: string;
-                                                web_url?: string;
-                                            };
-                                            image_key?: string;
-                                            name?: string;
-                                            i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        children?: Array<{
-                                            chat_menu_second_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=sort&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/sort document }
-             *
-             * 排序群菜单
-             *
-             * 给一个群内的一级菜单排序。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。;- 操作API后，将返回群内所有菜单。
-             */
-            sort: async (
-                payload?: {
-                    data: { chat_menu_top_level_ids: Array<string> };
-                    path?: { chat_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                menu_tree?: {
-                                    chat_menu_top_levels?: Array<{
-                                        chat_menu_top_level_id?: string;
-                                        chat_menu_item?: {
-                                            action_type?:
-                                                | "NONE"
-                                                | "REDIRECT_LINK";
-                                            redirect_link?: {
-                                                common_url?: string;
-                                                ios_url?: string;
-                                                android_url?: string;
-                                                pc_url?: string;
-                                                web_url?: string;
-                                            };
-                                            image_key?: string;
-                                            name?: string;
-                                            i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        children?: Array<{
-                                            chat_menu_second_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree/sort`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * chat.moderation
-         */
-        chatModeration: {
-            getWithIterator: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        page_size?: number;
-                        page_token?: string;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                moderation_setting?: string;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                                items?: Array<{
-                                                    user_id_type?: string;
-                                                    user_id?: string;
-                                                    tenant_key?: string;
-                                                }>;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-moderation/get document }
-             *
-             * 获取群成员发言权限
-             *
-             * 获取群发言模式、可发言用户名单等
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人 或 授权用户 必须在群里
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        page_size?: number;
-                        page_token?: string;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                moderation_setting?: string;
-                                page_token?: string;
-                                has_more?: boolean;
-                                items?: Array<{
-                                    user_id_type?: string;
-                                    user_id?: string;
-                                    tenant_key?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-moderation/update document }
-             *
-             * 更新群发言权限
-             *
-             * 更新群组的发言权限设置，可设置为全员可发言、仅管理员可发言  或 指定用户可发言。
-             *
-             * 注意事项：; - 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 若以用户授权调用接口，**当授权用户是群主**时，可更新群发言权限;- 若以租户授权调用接口(即以机器人身份调用接口)，当**机器人是群主** 或者 **机器人是群组创建者、具备==更新应用所创建群的群信息==权限且仍在群内**时，可更新群发言权限
-             */
-            update: async (
-                payload?: {
-                    data?: {
-                        moderation_setting?: string;
-                        moderator_added_list?: Array<string>;
-                        moderator_removed_list?: Array<string>;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 群组 - 会话标签页
-         */
-        chatTab: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/create document }
-             *
-             * 添加会话标签页
-             *
-             * 添加自定义会话标签页。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 只允许添加类型为`doc`和`url`的会话标签页;- 添加doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- tab_config字段当前只对`url`类型的会话标签页生效;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以添加会话标签页;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        chat_tabs: Array<{
-                            tab_name?: string;
-                            tab_type:
-                                | "message"
-                                | "doc_list"
-                                | "doc"
-                                | "pin"
-                                | "meeting_minute"
-                                | "chat_announcement"
-                                | "url"
-                                | "file"
-                                | "files_resources"
-                                | "images_videos"
-                                | "task";
-                            tab_content?: {
-                                url?: string;
-                                doc?: string;
-                                meeting_minute?: string;
-                                task?: string;
-                            };
-                            tab_config?: {
-                                icon_key?: string;
-                                is_built_in?: boolean;
-                            };
-                        }>;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_tabs?: Array<{
-                                    tab_id?: string;
-                                    tab_name?: string;
-                                    tab_type:
-                                        | "message"
-                                        | "doc_list"
-                                        | "doc"
-                                        | "pin"
-                                        | "meeting_minute"
-                                        | "chat_announcement"
-                                        | "url"
-                                        | "file"
-                                        | "files_resources"
-                                        | "images_videos"
-                                        | "task";
-                                    tab_content?: {
-                                        url?: string;
-                                        doc?: string;
-                                        meeting_minute?: string;
-                                        task?: string;
-                                    };
-                                    tab_config?: {
-                                        icon_key?: string;
-                                        is_built_in?: boolean;
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=delete_tabs&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/delete_tabs document }
-             *
-             * 删除会话标签页
-             *
-             * 删除会话标签页。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 只允许删除类型为`doc`和`url`的会话标签页;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以删除会话标签页;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            deleteTabs: async (
-                payload?: {
-                    data: { tab_ids: Array<string> };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_tabs?: Array<{
-                                    tab_id?: string;
-                                    tab_name?: string;
-                                    tab_type:
-                                        | "message"
-                                        | "doc_list"
-                                        | "doc"
-                                        | "pin"
-                                        | "meeting_minute"
-                                        | "chat_announcement"
-                                        | "url"
-                                        | "file"
-                                        | "files_resources"
-                                        | "images_videos"
-                                        | "task";
-                                    tab_content?: {
-                                        url?: string;
-                                        doc?: string;
-                                        meeting_minute?: string;
-                                        task?: string;
-                                    };
-                                    tab_config?: {
-                                        icon_key?: string;
-                                        is_built_in?: boolean;
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/delete_tabs`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=list_tabs&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/list_tabs document }
-             *
-             * 拉取会话标签页
-             *
-             * 拉取会话标签页。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            listTabs: async (
-                payload?: {
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_tabs?: Array<{
-                                    tab_id?: string;
-                                    tab_name?: string;
-                                    tab_type:
-                                        | "message"
-                                        | "doc_list"
-                                        | "doc"
-                                        | "pin"
-                                        | "meeting_minute"
-                                        | "chat_announcement"
-                                        | "url"
-                                        | "file"
-                                        | "files_resources"
-                                        | "images_videos"
-                                        | "task";
-                                    tab_content?: {
-                                        url?: string;
-                                        doc?: string;
-                                        meeting_minute?: string;
-                                        task?: string;
-                                    };
-                                    tab_config?: {
-                                        icon_key?: string;
-                                        is_built_in?: boolean;
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/list_tabs`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=sort_tabs&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/sort_tabs document }
-             *
-             * 会话标签页排序
-             *
-             * 会话标签页排序。
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 消息标签页强制固定为第一顺位，不参与排序，但是请求体中必须包含该标签页的Tab ID;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            sortTabs: async (
-                payload?: {
-                    data?: { tab_ids?: Array<string> };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_tabs?: Array<{
-                                    tab_id?: string;
-                                    tab_name?: string;
-                                    tab_type:
-                                        | "message"
-                                        | "doc_list"
-                                        | "doc"
-                                        | "pin"
-                                        | "meeting_minute"
-                                        | "chat_announcement"
-                                        | "url"
-                                        | "file"
-                                        | "files_resources"
-                                        | "images_videos"
-                                        | "task";
-                                    tab_content?: {
-                                        url?: string;
-                                        doc?: string;
-                                        meeting_minute?: string;
-                                        task?: string;
-                                    };
-                                    tab_config?: {
-                                        icon_key?: string;
-                                        is_built_in?: boolean;
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/sort_tabs`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=update_tabs&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/update_tabs document }
-             *
-             * 更新会话标签页
-             *
-             * 更新会话标签页
-             *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 只允许更新类型为`doc`和`url`的会话标签页;- 更新doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以更新会话标签页;- 操作内部群时，操作者须与群组在同一租户下
-             */
-            updateTabs: async (
-                payload?: {
-                    data?: {
-                        chat_tabs?: Array<{
-                            tab_id?: string;
-                            tab_name?: string;
-                            tab_type:
-                                | "message"
-                                | "doc_list"
-                                | "doc"
-                                | "pin"
-                                | "meeting_minute"
-                                | "chat_announcement"
-                                | "url"
-                                | "file"
-                                | "files_resources"
-                                | "images_videos"
-                                | "task";
-                            tab_content?: {
-                                url?: string;
-                                doc?: string;
-                                meeting_minute?: string;
-                                task?: string;
-                            };
-                            tab_config?: {
-                                icon_key?: string;
-                                is_built_in?: boolean;
-                            };
-                        }>;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                chat_tabs?: Array<{
-                                    tab_id?: string;
-                                    tab_name?: string;
-                                    tab_type:
-                                        | "message"
-                                        | "doc_list"
-                                        | "doc"
-                                        | "pin"
-                                        | "meeting_minute"
-                                        | "chat_announcement"
-                                        | "url"
-                                        | "file"
-                                        | "files_resources"
-                                        | "images_videos"
-                                        | "task";
-                                    tab_content?: {
-                                        url?: string;
-                                        doc?: string;
-                                        meeting_minute?: string;
-                                        task?: string;
-                                    };
-                                    tab_config?: {
-                                        icon_key?: string;
-                                        is_built_in?: boolean;
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/update_tabs`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * chat.top_notice
-         */
-        chatTopNotice: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=delete_top_notice&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-top_notice/delete_top_notice document }
-             *
-             * 撤销群置顶
-             *
-             * 撤销会话中的置顶。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中;- 撤销内部群置顶时，操作者须与群组在同一租户下
-             */
-            deleteTopNotice: async (
-                payload?: {
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=put_top_notice&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-top_notice/put_top_notice document }
-             *
-             * 更新群置顶
-             *
-             * 更新会话中的群置顶信息，可以将群中的某一条消息，或者群公告置顶显示。
-             *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中;- 更新内部群置顶时，操作者须与群组在同一租户下
-             */
-            putTopNotice: async (
-                payload?: {
-                    data: {
-                        chat_top_notice: Array<{
-                            action_type?: "1" | "2";
-                            message_id?: string;
-                        }>;
-                    };
-                    path: { chat_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/put_top_notice`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 消息 - 文件信息
-         */
-        file: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/file/create document }
-             *
-             * 上传文件
-             *
-             * 上传文件，可以上传视频，音频和常见的文件类型。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 文件大小不得超过30M，且不允许上传空文件
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        file_type:
-                            | "opus"
-                            | "mp4"
-                            | "pdf"
-                            | "doc"
-                            | "xls"
-                            | "ppt"
-                            | "stream";
-                        file_name: string;
-                        duration?: number;
-                        file: Buffer | fs.ReadStream;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { file_key?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/files`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/file/get document }
-             *
-             * 下载文件
-             *
-             * 下载文件接口，只能下载应用自己上传的文件。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 只能下载机器人自己上传的文件;- 下载用户发送的资源，请使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口;- 下载的资源大小不能超过100M;- 如果需要Content-Disposition header，发起请求的时候需要在header中设置Content-Type为application/json
-             */
-            get: async (
-                payload?: {
-                    path: { file_key: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/files/:file_key`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
-            },
-        },
-        /**
-         * 消息 - 图片信息
-         */
-        image: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/image/create document }
-             *
-             * 上传图片
-             *
-             * 上传图片接口，支持上传 JPEG、PNG、WEBP、GIF、TIFF、BMP、ICO格式图片。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 图片大小不得超过10M，且不支持上传大小为0的图片
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        image_type: "message" | "avatar";
-                        image: Buffer | fs.ReadStream;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { image_key?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/images`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/image/get document }
-             *
-             * 下载图片
-             *
-             * 下载图片资源，只能下载当前应用所上传且图片类型为message的图片。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 只能下载机器人自己上传且图片类型为message的图片，avatar类型暂不支持下载;- 下载用户发送的资源，请使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口
-             */
-            get: async (
-                payload?: {
-                    path: { image_key: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/images/:image_key`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
-            },
-        },
-        /**
-         * 消息
+         * message
          */
         message: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create document }
-             *
-             * 发送消息
-             *
-             * 给指定用户或者会话发送消息，支持文本、富文本、可交互的[消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)、群名片、个人名片、图片、视频、音频、文件、表情包。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 给用户发送消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群组中
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        receive_id: string;
-                        msg_type: string;
-                        content: string;
-                        uuid?: string;
-                    };
-                    params: {
-                        receive_id_type:
-                            | "open_id"
-                            | "user_id"
-                            | "union_id"
-                            | "email"
-                            | "chat_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                message_id?: string;
-                                root_id?: string;
-                                parent_id?: string;
-                                thread_id?: string;
-                                msg_type?: string;
-                                create_time?: string;
-                                update_time?: string;
-                                deleted?: boolean;
-                                updated?: boolean;
-                                chat_id?: string;
-                                sender?: {
-                                    id: string;
-                                    id_type: string;
-                                    sender_type: string;
-                                    tenant_key?: string;
-                                    sender_name?: string;
-                                    open_bot_id?: string;
-                                    sender_i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                                body?: { content: string };
-                                mentions?: Array<{
-                                    key: string;
-                                    id: string;
-                                    id_type: string;
-                                    name: string;
-                                    tenant_key?: string;
-                                }>;
-                                upper_message_id?: string;
-                                message_app_link?: string;
-                                message_position?: string;
-                                thread_message_position?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=message&version=v1 document }
              *
              * 撤回消息
              *
-             * 机器人撤回机器人自己发送的消息或群主撤回群内消息。
+             * 调用该接口撤回指定消息。调用接口的身份不同（身份通过 Authorization 请求头参数指定），可实现的效果不同：;;- 机器人可以撤回该机器人自己发送的消息。;- 群聊的群主可以撤回群内指定的消息。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ，撤回消息时机器人仍需要在会话内;- 机器人可以撤回单聊和群组内，自己发送 且 发送时间不超过1天(24小时)的消息;- 若机器人要撤回群内他人发送的消息，则机器人必须是该群的群主、管理员 或者 创建者，且消息发送时间不超过1年;- 无法撤回通过「[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)」接口发送的消息
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 撤回用户单聊内的消息时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 撤回群组内的消息时，机器人需要在该群组中。;;;## 使用限制;- 无法撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息，撤回该接口发送的消息需要使用[批量撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/delete)接口。;- 撤回的消息需要符合由企业管理员设置的撤回时限。详情了解[管理员设置撤回和编辑消息权限](https://www.feishu.cn/hc/zh-CN/articles/325339752183)。;- 在群聊内的机器人如需撤回他人发送的消息，则该机器人必须是该群的群主、管理员或者创建者，且消息发送时间不超过 1 年。;
              */
             delete: async (
                 payload?: {
@@ -3164,543 +63,6 @@ export default abstract class Client extends human_authentication {
                             path
                         ),
                         method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=forward&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=message&version=v1 document }
-             *
-             * 转发一条消息
-             */
-            forward: async (
-                payload?: {
-                    data: { receive_id: string };
-                    params: {
-                        receive_id_type:
-                            | "open_id"
-                            | "user_id"
-                            | "union_id"
-                            | "email"
-                            | "chat_id"
-                            | "thread_id";
-                        uuid?: string;
-                    };
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                message_id?: string;
-                                root_id?: string;
-                                parent_id?: string;
-                                thread_id?: string;
-                                msg_type?: string;
-                                create_time?: string;
-                                update_time?: string;
-                                deleted?: boolean;
-                                updated?: boolean;
-                                chat_id?: string;
-                                sender?: {
-                                    id: string;
-                                    id_type: string;
-                                    sender_type: string;
-                                    tenant_key?: string;
-                                    sender_name?: string;
-                                    open_bot_id?: string;
-                                    sender_i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                                body?: { content: string };
-                                mentions?: Array<{
-                                    key: string;
-                                    id: string;
-                                    id_type: string;
-                                    name: string;
-                                    tenant_key?: string;
-                                }>;
-                                upper_message_id?: string;
-                                message_app_link?: string;
-                                message_position?: string;
-                                thread_message_position?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/forward`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/get document }
-             *
-             * 获取指定消息的内容
-             *
-             * 通过 message_id 查询消息内容。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 机器人必须在群组中
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        card_msg_content_type?: string;
-                        with_sender_name?: boolean;
-                    };
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        container_id_type: string;
-                        container_id: string;
-                        start_time?: string;
-                        end_time?: string;
-                        sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
-                        page_size?: number;
-                        page_token?: string;
-                        card_msg_content_type?: string;
-                        only_thread_root_messages?: boolean;
-                        with_sender_name?: boolean;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                has_more?: boolean;
-                                                page_token?: string;
-                                                items?: Array<{
-                                                    message_id?: string;
-                                                    root_id?: string;
-                                                    parent_id?: string;
-                                                    thread_id?: string;
-                                                    msg_type?: string;
-                                                    create_time?: string;
-                                                    update_time?: string;
-                                                    deleted?: boolean;
-                                                    updated?: boolean;
-                                                    chat_id?: string;
-                                                    sender?: {
-                                                        id: string;
-                                                        id_type: string;
-                                                        sender_type: string;
-                                                        tenant_key?: string;
-                                                        sender_name?: string;
-                                                        open_bot_id?: string;
-                                                        sender_i18n_names?: {
-                                                            zh_cn?: string;
-                                                            en_us?: string;
-                                                            ja_jp?: string;
-                                                        };
-                                                    };
-                                                    body?: { content: string };
-                                                    mentions?: Array<{
-                                                        key: string;
-                                                        id: string;
-                                                        id_type: string;
-                                                        name: string;
-                                                        tenant_key?: string;
-                                                    }>;
-                                                    upper_message_id?: string;
-                                                    message_app_link?: string;
-                                                    message_position?: string;
-                                                    thread_message_position?: string;
-                                                }>;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/list document }
-             *
-             * 获取会话历史消息
-             *
-             * 获取会话（包括单聊、群组）的历史消息（聊天记录）。
-             *
-             * - 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 获取消息时，机器人必须在群组中
-             *
-             * 接口级别权限默认只能获取单聊（p2p）消息，如果需要获取群组（group）消息，应用还必须拥有 **==获取群组中所有消息==** 权限
-             */
-            list: async (
-                payload?: {
-                    params: {
-                        container_id_type: string;
-                        container_id: string;
-                        start_time?: string;
-                        end_time?: string;
-                        sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
-                        page_size?: number;
-                        page_token?: string;
-                        card_msg_content_type?: string;
-                        only_thread_root_messages?: boolean;
-                        with_sender_name?: boolean;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                has_more?: boolean;
-                                page_token?: string;
-                                items?: Array<{
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=merge_forward&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=merge_forward&project=im&resource=message&version=v1 document }
-             *
-             * 合并转发多条消息
-             */
-            mergeForward: async (
-                payload?: {
-                    data: {
-                        receive_id: string;
-                        message_id_list: Array<string>;
-                    };
-                    params: {
-                        receive_id_type:
-                            | "open_id"
-                            | "user_id"
-                            | "union_id"
-                            | "email"
-                            | "chat_id"
-                            | "thread_id";
-                        uuid?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                message?: {
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                };
-                                invalid_message_id_list?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/merge_forward`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/patch document }
-             *
-             * 更新应用发送的消息
-             *
-             * 更新应用已发送的消息卡片内容。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 若以user_access_token更新消息，该操作用户必须是卡片消息的发送者;- 仅支持对所有人更新**未撤回**的[「共享卡片」](ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)消息，需在卡片的config属性中，显式声明 =="update_multi":true==。 ;- **不支持更新批量消息**;- 文本消息请求体最大不能超过150KB；卡片及富文本消息请求体最大不能超过30KB;- 仅支持修改14天内发送的消息;- 单条消息更新频控为**5QPS**
-             */
-            patch: async (
-                payload?: {
-                    data: { content: string };
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id`,
-                            path
-                        ),
-                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -3716,6 +78,12 @@ export default abstract class Client extends human_authentication {
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=push_follow_up&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=push_follow_up&project=im&resource=message&version=v1 document }
+             *
+             * 添加跟随气泡
+             *
+             * 调用该接口在最新一条消息下方添加气泡样式的内容，当消息接收者点击气泡或者新消息到达后，气泡消失。
+             *
+             * ![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/05f992f251e9949661370b6c73aa6eda_DseiZlt09t.png?height=278&maxWidth=450&width=1383);;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 跟随气泡的效果在飞书客户端 v7.20 及以上版本生效。;- 仅支持在当前机器人与用户单聊的消息上添加跟随气泡，且消息需要符合：;;    - 消息是机器人发送的。;    - 消息是会话内最新的消息。;    - 消息发送后未超过 600 秒。;;## 注意事项;;添加跟随气泡后，会话内的用户点击气泡会自动转换为该用户发送的一条消息，你可以为应用订阅[接收消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive)事件，接收用户发送的消息并判断是否为跟随气泡的内容。
              */
             pushFollowUp: async (
                 payload?: {
@@ -3770,22 +138,19 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_users&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_app&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/read_users document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_app&project=im&resource=message&version=v1 document }
              *
-             * 查询消息已读信息
+             * 发送应用内加急
              *
-             * 查询消息的已读信息。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能查询机器人自己发送，且发送时间不超过7天的消息;- 查询消息已读信息时机器人仍需要在会话内;- 本接口不支持查询批量消息
+             * 调用该接口把指定消息加急给目标用户，加急仅在飞书客户端内通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
              */
-            readUsers: async (
+            urgentApp: async (
                 payload?: {
+                    data: { user_id_list: Array<string> };
                     params: {
                         user_id_type: "user_id" | "union_id" | "open_id";
-                        page_size?: number;
-                        page_token?: string;
                     };
                     path: { message_id: string };
                 },
@@ -3800,23 +165,14 @@ export default abstract class Client extends human_authentication {
                         {
                             code?: number;
                             msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    user_id_type: string;
-                                    user_id: string;
-                                    timestamp: string;
-                                    tenant_key?: string;
-                                }>;
-                                has_more: boolean;
-                                page_token?: string;
-                            };
+                            data?: { invalid_user_id_list: Array<string> };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/read_users`,
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_app`,
                             path
                         ),
-                        method: "GET",
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -3829,23 +185,21 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_phone&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/reply document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_phone&project=im&resource=message&version=v1 document }
              *
-             * 回复消息
+             * 发送电话加急
              *
-             * 回复指定消息，支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种消息类型。
+             * 调用该接口把指定消息加急给目标用户，加急将通过飞书客户端和电话进行通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 回复私聊消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 回复群组消息，需要机器人在群中
+             * **注意**：电话加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** > **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
              */
-            reply: async (
+            urgentPhone: async (
                 payload?: {
-                    data: {
-                        content: string;
-                        msg_type: string;
-                        reply_in_thread?: boolean;
-                        uuid?: string;
+                    data: { user_id_list: Array<string> };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
                     };
                     path: { message_id: string };
                 },
@@ -3860,50 +214,100 @@ export default abstract class Client extends human_authentication {
                         {
                             code?: number;
                             msg?: string;
-                            data?: {
-                                message_id?: string;
-                                root_id?: string;
-                                parent_id?: string;
-                                thread_id?: string;
-                                msg_type?: string;
-                                create_time?: string;
-                                update_time?: string;
-                                deleted?: boolean;
-                                updated?: boolean;
-                                chat_id?: string;
-                                sender?: {
-                                    id: string;
-                                    id_type: string;
-                                    sender_type: string;
-                                    tenant_key?: string;
-                                    sender_name?: string;
-                                    open_bot_id?: string;
-                                    sender_i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                                body?: { content: string };
-                                mentions?: Array<{
-                                    key: string;
-                                    id: string;
-                                    id_type: string;
-                                    name: string;
-                                    tenant_key?: string;
-                                }>;
-                                upper_message_id?: string;
-                                message_app_link?: string;
-                                message_position?: string;
-                                thread_message_position?: string;
-                            };
+                            data?: { invalid_user_id_list: Array<string> };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_phone`,
                             path
                         ),
-                        method: "POST",
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_sms&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_sms&project=im&resource=message&version=v1 document }
+             *
+             * 发送短信加急
+             *
+             * 调用该接口把指定消息加急给目标用户，加急将通过飞书客户端和短信进行通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
+             *
+             * **注意**：短信加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** >  **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
+             */
+            urgentSms: async (
+                payload?: {
+                    data: { user_id_list: Array<string> };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { invalid_user_id_list: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_sms`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=message&version=v1 document }
+             *
+             * 更新已发送的消息卡片
+             *
+             * 通过消息 ID（message_id）更新已发送的消息卡片的内容。
+             */
+            patch: async (
+                payload?: {
+                    data: { content: string };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id`,
+                            path
+                        ),
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -4072,6 +476,8 @@ export default abstract class Client extends human_authentication {
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
              *
              * 搜索消息
+             *
+             * 用户可以通过关键字搜索可见消息，可见性和套件内搜索一致。
              */
             search: async (
                 payload?: {
@@ -4179,11 +585,690 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=im&resource=message&version=v1 document }
+             *
+             * 回复消息
+             *
+             * 调用该接口回复指定消息。回复的内容支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种类型。
+             *
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
+             */
+            reply: async (
+                payload?: {
+                    data: {
+                        content: string;
+                        msg_type: string;
+                        reply_in_thread?: boolean;
+                        uuid?: string;
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                thread_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                    sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        container_id_type: string;
+                        container_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                        page_size?: number;
+                        page_token?: string;
+                        card_msg_content_type?: string;
+                        only_thread_root_messages?: boolean;
+                        with_sender_name?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    message_id?: string;
+                                                    root_id?: string;
+                                                    parent_id?: string;
+                                                    thread_id?: string;
+                                                    msg_type?: string;
+                                                    create_time?: string;
+                                                    update_time?: string;
+                                                    deleted?: boolean;
+                                                    updated?: boolean;
+                                                    chat_id?: string;
+                                                    sender?: {
+                                                        id: string;
+                                                        id_type: string;
+                                                        sender_type: string;
+                                                        tenant_key?: string;
+                                                        sender_name?: string;
+                                                        open_bot_id?: string;
+                                                        sender_i18n_names?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                    };
+                                                    body?: { content: string };
+                                                    mentions?: Array<{
+                                                        key: string;
+                                                        id: string;
+                                                        id_type: string;
+                                                        name: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                    upper_message_id?: string;
+                                                    message_app_link?: string;
+                                                    message_position?: string;
+                                                    thread_message_position?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=message&version=v1 document }
+             *
+             * 获取会话历史消息
+             *
+             * 获取指定会话（包括单聊、群组）内的历史消息（即聊天记录）。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        container_id_type: string;
+                        container_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                        page_size?: number;
+                        page_token?: string;
+                        card_msg_content_type?: string;
+                        only_thread_root_messages?: boolean;
+                        with_sender_name?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=merge_forward&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=merge_forward&project=im&resource=message&version=v1 document }
+             *
+             * 合并转发消息
+             *
+             * 将来自同一个会话内的多条消息，合并转发给指定的用户、群聊或话题。
+             */
+            mergeForward: async (
+                payload?: {
+                    data: {
+                        receive_id: string;
+                        message_id_list: Array<string>;
+                    };
+                    params: {
+                        receive_id_type:
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id"
+                            | "thread_id";
+                        uuid?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message?: {
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                };
+                                invalid_message_id_list?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/merge_forward`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message&version=v1 document }
+             *
+             * 获取指定消息的内容
+             *
+             * 调用该接口通过消息的 `message_id` 查询消息内容。
+             *
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在消息所属的群组内。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        card_msg_content_type?: string;
+                        with_sender_name?: boolean;
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message&version=v1 document }
+             *
+             * 发送消息
+             *
+             * 调用该接口向指定用户或者群聊发送消息。支持发送的消息类型包括文本、富文本、卡片、群名片、个人名片、图片、视频、音频、文件以及表情包等。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        receive_id: string;
+                        msg_type: string;
+                        content: string;
+                        uuid?: string;
+                    };
+                    params: {
+                        receive_id_type:
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                thread_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                    sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=forward&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=message&version=v1 document }
+             *
+             * 转发消息
+             *
+             * 调用该接口将一条指定的消息转发给用户、群聊或话题。
+             */
+            forward: async (
+                payload?: {
+                    data: { receive_id: string };
+                    params: {
+                        receive_id_type:
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id"
+                            | "thread_id";
+                        uuid?: string;
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                thread_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                    sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/forward`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=update&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message&version=v1 document }
              *
-             * 编辑已发送的消息内容，当前仅支持编辑文本和富文本消息。
+             * 编辑消息
+             *
+             * 调用该接口编辑已发送的消息内容，支持编辑文本、富文本消息。如需编辑卡片消息，请使用[更新应用发送的消息卡片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/patch)接口
              */
             update: async (
                 payload?: {
@@ -4257,23 +1342,22 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_app&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_users&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/urgent_app document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_users&project=im&resource=message&version=v1 document }
              *
-             * 发送应用内加急
+             * 消息发送者查询消息已读状态
              *
-             * 对指定消息进行应用内加急。
+             * 作为消息发送者，查询指定消息是否已读。接口只返回已读用户的信息，不返回未读用户的信息。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 不支持加急批量消息;- 只能加急机器人自己发送的消息;- 加急时机器人需要在加急消息所在的群中;- 调用本接口需要用户已阅读加急的消息才可以继续加急（用户未读的加急上限为200条）
-             *
-             * 特别说明：;- 默认接口限流为50 QPS，请谨慎调用
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  。;- 查询消息已读信息时，机器人需要在待查询消息所在的会话内。;;## 使用限制;- 只能查询由当前机器人自己发送的、发送时间不超过 7 天的消息已读信息。;- 一次请求只能查询一条消息，不支持批量查询。
              */
-            urgentApp: async (
+            readUsers: async (
                 payload?: {
-                    data: { user_id_list: Array<string> };
                     params: {
                         user_id_type: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
                     };
                     path: { message_id: string };
                 },
@@ -4288,14 +1372,23 @@ export default abstract class Client extends human_authentication {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { invalid_user_id_list: Array<string> };
+                            data?: {
+                                items?: Array<{
+                                    user_id_type: string;
+                                    user_id: string;
+                                    timestamp: string;
+                                    tenant_key?: string;
+                                }>;
+                                has_more: boolean;
+                                page_token?: string;
+                            };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_app`,
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/read_users`,
                             path
                         ),
-                        method: "PATCH",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -4308,23 +1401,21 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_phone&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/urgent_phone document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=im&resource=message&version=v1 document }
              *
-             * 发送电话加急
+             * 通过模版消息卡片回复消息
              *
-             * 对指定消息进行应用内加急与电话加急。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能加急机器人自己发送的消息;- 加急时机器人需要在加急消息所在的群组中;- 需要用户阅读已加急的消息才可以继续加急（用户未读的加急上限为200条）
-             *
-             * 特别说明：;- 通过接口产生的电话加急将消耗企业的加急额度，请慎重调用;- 通过[租户管理后台](https://admin.feishu.cn/)-费用中心-短信/电话加急 可以查看当前额度;- 默认接口限流为50 QPS，请谨慎调用
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
              */
-            urgentPhone: async (
+            replyByCard: async (
                 payload?: {
-                    data: { user_id_list: Array<string> };
-                    params: {
-                        user_id_type: "user_id" | "union_id" | "open_id";
+                    data: {
+                        reply_in_thread?: boolean;
+                        uuid?: string;
+                        template_id: string;
+                        template_variable?: Record<string, any>;
                     };
                     path: { message_id: string };
                 },
@@ -4333,56 +1424,18 @@ export default abstract class Client extends human_authentication {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { invalid_user_id_list: Array<string> };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_phone`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_sms&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/urgent_sms document }
-             *
-             * 发送短信加急
-             *
-             * 对指定消息进行应用内加急与短信加急。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在加急消息所在的群组中;- 调用本接口需要用户已阅读加急的消息才可以继续加急（用户未读的加急上限为200条）
-             *
-             * 特别说明：;- 通过接口产生的短信加急将消耗企业的加急额度，请慎重调用;- 通过[租户管理后台](https://admin.feishu.cn/)-费用中心-短信/电话加急 可以查看当前额度;- 默认接口限流为50 QPS，请谨慎调用
-             */
-            urgentSms: async (
-                payload?: {
-                    data: { user_id_list: Array<string> };
-                    params: {
-                        user_id_type: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
+                const { template_id, template_variable, ...rest } = data;
+                const targetData = {
+                    msg_type: "interactive",
+                    content: JSON.stringify({
+                        type: "template",
+                        data: {
+                            template_id: template_id,
+                            template_variable: template_variable,
+                        },
+                    }),
+                    ...rest,
+                };
 
                 return this.httpInstance
                     .request<
@@ -4390,15 +1443,51 @@ export default abstract class Client extends human_authentication {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { invalid_user_id_list: Array<string> };
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                thread_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                    sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
+                            };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_sms`,
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
                             path
                         ),
-                        method: "PATCH",
-                        data,
+                        method: "POST",
+                        data: targetData,
                         params,
                         headers,
                         paramsSerializer: (params) =>
@@ -4412,11 +1501,9 @@ export default abstract class Client extends human_authentication {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message&version=v1 document }
              *
              * 通过模版消息卡片发送消息
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 给用户发送消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群组中
              */
             createByCard: async (
                 payload?: {
@@ -4515,109 +1602,11 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/reply document }
-             *
-             * 通过模版消息卡片回复消息
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 回复私聊消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 回复群组消息，需要机器人在群中
-             */
-            replyByCard: async (
-                payload?: {
-                    data: {
-                        reply_in_thread?: boolean;
-                        uuid?: string;
-                        template_id: string;
-                        template_variable?: Record<string, any>;
-                    };
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const { template_id, template_variable, ...rest } = data;
-                const targetData = {
-                    msg_type: "interactive",
-                    content: JSON.stringify({
-                        type: "template",
-                        data: {
-                            template_id: template_id,
-                            template_variable: template_variable,
-                        },
-                    }),
-                    ...rest,
-                };
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                message_id?: string;
-                                root_id?: string;
-                                parent_id?: string;
-                                thread_id?: string;
-                                msg_type?: string;
-                                create_time?: string;
-                                update_time?: string;
-                                deleted?: boolean;
-                                updated?: boolean;
-                                chat_id?: string;
-                                sender?: {
-                                    id: string;
-                                    id_type: string;
-                                    sender_type: string;
-                                    tenant_key?: string;
-                                    sender_name?: string;
-                                    open_bot_id?: string;
-                                    sender_i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                                body?: { content: string };
-                                mentions?: Array<{
-                                    key: string;
-                                    id: string;
-                                    id_type: string;
-                                    name: string;
-                                    tenant_key?: string;
-                                }>;
-                                upper_message_id?: string;
-                                message_app_link?: string;
-                                message_position?: string;
-                                thread_message_position?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
-                            path
-                        ),
-                        method: "POST",
-                        data: targetData,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=update&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message&version=v1 document }
              *
-             * 通过模版消息卡片
+             * 通过模版消息卡片编辑消息
              */
             updateByCard: async (
                 payload?: {
@@ -4708,29 +1697,23 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * 消息 - 表情回复
+         * batch_message
          */
-        messageReaction: {
+        batchMessage: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=batch_query&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=read_user&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=message.reaction&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_user&project=im&resource=batch_message&version=v1 document }
              *
-             * 批量获取消息表情
+             * 查询批量消息推送和阅读人数
+             *
+             * [批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)后，可通过该接口查询消息推送的总人数以及消息已读人数。
+             *
+             * ## 前提条件;;应用需要启用[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;- 只能查询 30 天内，通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。;- 该接口返回的数据为查询时刻的快照数据。
              */
-            batchQuery: async (
+            readUser: async (
                 payload?: {
-                    data: {
-                        queries: Array<{
-                            message_id?: string;
-                            page_token?: string;
-                        }>;
-                        page_size_per_message?: number;
-                        reaction_type?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
+                    path: { batch_message_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -4744,39 +1727,169 @@ export default abstract class Client extends human_authentication {
                             code?: number;
                             msg?: string;
                             data?: {
-                                success_msg_reaction_details?: Array<{
-                                    message_id?: string;
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    message_reaction_items?: Array<{
-                                        reaction_id?: string;
-                                        operator?: {
-                                            operator_id: string;
-                                            operator_type: "app" | "user";
-                                        };
-                                        action_time?: string;
-                                        emoji_type?: string;
-                                    }>;
-                                }>;
-                                success_msg_reaction_counts?: Array<{
-                                    message_id?: string;
-                                    reaction_count?: Array<{
-                                        reaction_type?: string;
-                                        count?: string;
-                                    }>;
-                                }>;
-                                fail_msg_reaction_details?: Array<{
-                                    message_id?: string;
-                                    fail_reason?:
-                                        | "invalid"
-                                        | "invalid_page_token"
-                                        | "no_permission";
-                                }>;
+                                read_user?: {
+                                    read_count: string;
+                                    total_count: string;
+                                };
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/reactions/batch_query`,
+                            `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/read_user`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=batch_message&version=v1 document }
+             *
+             * 批量撤回消息
+             *
+             * 该接口用于撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。
+             *
+             * ## 前提条件;;应用需要启用[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 仅支持撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。如果你需要撤回单条消息，请使用[撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete)接口。;- 不支持撤回时间较久的消息。撤回的消息需要符合由企业管理员设置的撤回时限。详情了解[管理员设置撤回和编辑消息权限](https://www.feishu.cn/hc/zh-CN/articles/325339752183)。;- 该接口为异步接口，会有一定延迟。
+             */
+            delete: async (
+                payload?: {
+                    path: { batch_message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=get_progress&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_progress&project=im&resource=batch_message&version=v1 document }
+             *
+             * 查询批量消息整体进度
+             *
+             * [批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)或者[批量撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/delete)后，可通过该接口查询消息的发送进度和撤回进度。
+             */
+            getProgress: async (
+                payload?: {
+                    path: { batch_message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                batch_message_send_progress?: {
+                                    valid_user_ids_count?: number;
+                                    success_user_ids_count?: number;
+                                    read_user_ids_count?: number;
+                                };
+                                batch_message_recall_progress?: {
+                                    recall?: boolean;
+                                    recall_count?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/get_progress`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.members
+         */
+        chatMembers: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat.members&version=v1 document }
+             *
+             * 将用户或机器人拉入群聊
+             *
+             * 把指定的用户或机器人拉入指定群聊内。
+             *
+             * ## 前提条件;;- 调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用该接口的应用或者用户，必须在相应的群组中。;- 如需拉机器人进群，则该机器人必须开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 如果以应用身份拉用户进群，则该用户需要在应用的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;;## 使用限制;;- 外部租户不能被拉入内部群，但可以被拉入外部群。通过机器人拉外部租户的用户进群，需要先为机器人配置对外共享能力，详情参考[机器人支持外部群和外部用户单聊](https://open.feishu.cn/document/uAjLw4CM/ukzMukzMukzM/develop-robots/add-bot-to-external-group)。;- 操作内部群时，当前操作者必须与群组在同一租户内。;- 如果群组配置了 **仅群主和群管理员可添加群成员**，则仅有群主、群管理员，或者是创建群组且具有 **更新应用所创建群的群信息（im:chat:operate_as_owner）** 权限的机器人，可以拉用户或机器人进群。;- 如果群组没有配置 **仅群主和群管理员可添加群成员**，则所有群成员都可以拉用户或机器人进群。;- 操作同一个群组时，如果同时多次调用当前接口，可能会出现 232019 错误码，建议你串行调用，即等待当前调用完成后再进行下一次调用。;;
+             */
+            create: async (
+                payload?: {
+                    data?: { id_list?: Array<string> };
+                    params?: {
+                        member_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
+                        succeed_type?: number;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                invalid_id_list?: Array<string>;
+                                not_existed_id_list?: Array<string>;
+                                pending_approval_id_list?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
                             path
                         ),
                         method: "POST",
@@ -4792,19 +1905,318 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=is_in_chat&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=is_in_chat&project=im&resource=chat.members&version=v1 document }
              *
-             * 添加消息表情回复
+             * 判断用户或机器人是否在群里
              *
-             * 给指定消息添加指定类型的表情回复（reaction即表情回复，本文档统一用“reaction”代称）。
+             * 根据使用的 access_token 判断对应的用户或者机器人是否在指定的群里。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 待添加reaction的消息要真实存在，不能被撤回;- 给消息添加reaction，需要reaction的发送方（机器人或者用户）在消息所在的会话内
+             * ## 前提条件;;调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;获取内部群信息时，操作者须与群组在同一租户下。
              */
-            create: async (
+            isInChat: async (
                 payload?: {
-                    data: { reaction_type: { emoji_type: string } };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { is_in_chat?: boolean };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members/is_in_chat`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat.members&version=v1 document }
+             *
+             * 将用户或机器人移出群聊
+             *
+             * 将指定的用户或机器人从群聊中移出。
+             *
+             * ## 前提条件;;调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 仅群主、群管理员，或者是创建群组且具有 **更新应用所创建群的群信息（im:chat:operate_as_owner）** 权限的机器人，可以将其他群成员移出群组。;- 用户或机器人在任何条件下均可将自己移出群组（即主动退群）。;- 每次请求，最多移除 50 个用户或者 5 个机器人。;- 操作内部群时，操作者须与群组在同一租户下。;- 操作同一个群组时，如果同时多次调用当前接口，可能会出现 232019 错误码，建议你串行调用，即等待当前调用完成后再进行下一次调用。
+             */
+            delete: async (
+                payload?: {
+                    data?: { id_list?: Array<string> };
+                    params?: {
+                        member_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { invalid_id_list?: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=me_join&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=me_join&project=im&resource=chat.members&version=v1 document }
+             *
+             * 用户或机器人主动加入群聊
+             *
+             * 将当前调用接口的操作者（用户或机器人）加入指定群聊。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口仅支持加入公开群。;;    公开群是指的群类型，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_type ` 参数取值是否为 `public`。;;- 操作内部群时，操作者必须与相应的群组在同一租户内。;;    内部群是指的群标签，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_tag ` 参数取值是否为 `inner `。
+             */
+            meJoin: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members/me_join`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            getWithIterator: async (
+                payload?: {
+                    params?: {
+                        member_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                        check_security_conf?: boolean;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    member_id_type?: string;
+                                                    member_id?: string;
+                                                    name?: string;
+                                                    tenant_key?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                member_total?: number;
+                                                trigger_security_conf_limit?: boolean;
+                                                security_conf_limit?: number;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.members&version=v1 document }
+             *
+             * 获取群成员列表
+             *
+             * 获取指定群组的成员信息，包括成员名字与 ID。
+             *
+             * ## 前提条件;;- 调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 当前接口的操作者（机器人或用户）必须在被查询的群组内。;;## 使用限制;;- 该接口不会返回群组内的机器人成员。;- 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的 page_size。; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的 page_size。;- 获取内部群信息时，操作者须与群组在同一租户下。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        member_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                        check_security_conf?: boolean;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    member_id_type?: string;
+                                    member_id?: string;
+                                    name?: string;
+                                    tenant_key?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                member_total?: number;
+                                trigger_security_conf_limit?: boolean;
+                                security_conf_limit?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * pin
+         */
+        pin: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=pin&version=v1 document }
+             *
+             * 移除 Pin 消息
+             *
+             * 移除一条指定消息的 Pin。
+             */
+            delete: async (
+                payload?: {
                     path: { message_id: string };
                 },
                 options?: IRequestOptions
@@ -4813,24 +2225,310 @@ export default abstract class Client extends human_authentication {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/pins/:message_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        chat_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/pins`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    message_id: string;
+                                                    chat_id?: string;
+                                                    operator_id?: string;
+                                                    operator_id_type?: string;
+                                                    create_time?: string;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=pin&version=v1 document }
+             *
+             * 获取群内 Pin 消息
+             *
+             * 获取指定群、指定时间范围内的所有 Pin 消息。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        chat_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
                     .request<
                         any,
                         {
                             code?: number;
                             msg?: string;
                             data?: {
-                                reaction_id?: string;
-                                operator?: {
-                                    operator_id: string;
-                                    operator_type: "app" | "user";
-                                };
-                                action_time?: string;
-                                reaction_type?: { emoji_type: string };
+                                items?: Array<{
+                                    message_id: string;
+                                    chat_id?: string;
+                                    operator_id?: string;
+                                    operator_id_type?: string;
+                                    create_time?: string;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
+                            `${this.domain}/open-apis/im/v1/pins`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=pin&version=v1 document }
+             *
+             * Pin 消息
+             *
+             * Pin 一条指定的消息。Pin 消息的效果可参见[Pin 消息概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/pin-overview)。
+             */
+            create: async (
+                payload?: {
+                    data: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                pin?: {
+                                    message_id: string;
+                                    chat_id?: string;
+                                    operator_id?: string;
+                                    operator_id_type?: string;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/pins`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat
+         */
+        chat: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat&version=v1 document }
+             *
+             * 解散群
+             *
+             * 通过 chat_id 解散指定群组。通过 API 解散群组后，群聊天记录将不会保存。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以应用身份（tenant_access_token）解散群，则应用机器人需要符合以下任一情况。;;    - 应用机器人是群主。;    - 应用机器人是群的创建者，且应用已开通 **更新应用所创建群的群信息**（im:chat:operate_as_owner）权限。;;- 如果以用户身份（user_access_token）解散群，需要该用户是群主。;;
+             */
+            delete: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=link&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=link&project=im&resource=chat&version=v1 document }
+             *
+             * 获取群分享链接
+             *
+             * 获取指定群的分享链接，他人点击分享链接后可加入群组。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口的用户或机器人必须在对应群组内。;- 单聊、密聊、团队群不支持生成分享链接。;- 当机器人被停用或者退出群组时，由该机器人获取的群分享链接也将失效。;- 当群组设置了 **仅群主和群管理员可添加群成员或分享群** 时，调用该接口的用户或机器人必须是群组的群主或管理员。;- 获取内部群分享链接时，调用该接口的用户或机器人必须和群组属于同一租户。
+             */
+            link: async (
+                payload?: {
+                    data?: {
+                        validity_period?: "week" | "year" | "permanently";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                share_link?: string;
+                                expire_time?: string;
+                                is_permanent?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/link`,
                             path
                         ),
                         method: "POST",
@@ -4846,15 +2544,2271 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat&version=v1 document }
+             *
+             * 更新群信息
+             *
+             * 更新指定群的信息，包括群头像、群名称、群描述、群配置以及群主等。
+             */
+            update: async (
+                payload?: {
+                    data?: {
+                        avatar?: string;
+                        name?: string;
+                        description?: string;
+                        i18n_names?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                        add_member_permission?: string;
+                        share_card_permission?: string;
+                        at_all_permission?: string;
+                        edit_permission?: string;
+                        owner_id?: string;
+                        join_message_visibility?: string;
+                        leave_message_visibility?: string;
+                        membership_approval?: string;
+                        labels?: Array<string>;
+                        toolkit_ids?: Array<string>;
+                        restricted_mode_setting?: {
+                            status?: boolean;
+                            screenshot_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            download_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            message_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                        };
+                        chat_type?: string;
+                        group_message_type?: "chat" | "thread";
+                        urgent_setting?: "only_owner" | "all_members";
+                        video_conference_setting?: "only_owner" | "all_members";
+                        pin_manage_setting?: "only_owner" | "all_members";
+                        hide_member_count_setting?:
+                            | "all_members"
+                            | "only_owner";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat&version=v1 document }
+             *
+             * 创建群
+             *
+             * 创建群聊，创建时支持设置群头像、群名称、群主以及群类型等配置，同时支持邀请群成员、群机器人入群。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;商店应用无法使用用户的 user_id，因此使用商店应用调用本接口时用户 ID 类型请选择 open_id 或者 union_id。;;## 注意事项;;- 如果你需要在已创建的群聊内邀请用户或机器人入群，可调用[将用户或机器人拉入群聊](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create)接口。;- 调用 API 只能创建普通消息群，消息形式可以选择对话消息或者话题消息。如果你需要直接创建话题群，请通过飞书客户端创建群组，创建时群模式选择 **话题**。;- 已添加外部共享能力的机器人，允许在创建群时将外部企业用户和内部用户同时添加到群组中，这样创建的群为外部群。详情参见[机器人支持外部群和外部用户单聊](https://open.feishu.cn/document/uAjLw4CM/ukzMukzMukzM/develop-robots/add-bot-to-external-group)。
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        avatar?: string;
+                        name?: string;
+                        description?: string;
+                        i18n_names?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                        owner_id?: string;
+                        user_id_list?: Array<string>;
+                        bot_id_list?: Array<string>;
+                        group_message_type?: "chat" | "thread";
+                        chat_mode?: string;
+                        chat_type?: string;
+                        external?: boolean;
+                        join_message_visibility?: string;
+                        leave_message_visibility?: string;
+                        membership_approval?: string;
+                        labels?: Array<string>;
+                        toolkit_ids?: Array<string>;
+                        restricted_mode_setting?: {
+                            status?: boolean;
+                            screenshot_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            download_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            message_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                        };
+                        urgent_setting?: "only_owner" | "all_members";
+                        video_conference_setting?: "only_owner" | "all_members";
+                        edit_permission?: "only_owner" | "all_members";
+                        chat_tags?: Array<string>;
+                        pin_manage_setting?: "only_owner" | "all_members";
+                        hide_member_count_setting?:
+                            | "all_members"
+                            | "only_owner";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        set_bot_manager?: boolean;
+                        uuid?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_id?: string;
+                                avatar?: string;
+                                name?: string;
+                                description?: string;
+                                i18n_names?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                                owner_id?: string;
+                                owner_id_type?: string;
+                                urgent_setting?: "only_owner" | "all_members";
+                                video_conference_setting?:
+                                    | "only_owner"
+                                    | "all_members";
+                                pin_manage_setting?:
+                                    | "only_owner"
+                                    | "all_members";
+                                add_member_permission?: string;
+                                share_card_permission?: string;
+                                at_all_permission?: string;
+                                edit_permission?: string;
+                                group_message_type?: string;
+                                chat_mode?: string;
+                                chat_type?: string;
+                                chat_tag?: string;
+                                external?: boolean;
+                                tenant_key?: string;
+                                join_message_visibility?: string;
+                                leave_message_visibility?: string;
+                                membership_approval?: string;
+                                moderation_permission?: string;
+                                labels?: Array<string>;
+                                toolkit_ids?: Array<string>;
+                                restricted_mode_setting?: {
+                                    status?: boolean;
+                                    screenshot_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    download_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    message_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                };
+                                hide_member_count_setting?:
+                                    | "all_members"
+                                    | "only_owner";
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat&version=v1 document }
+             *
+             * 获取群信息
+             *
+             * 获取指定群的基本信息，包括群名称、群描述、群头像、群主 ID 以及群权限配置等。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用接口的机器人或者用户需要在群组内，才可以获取完整信息，否则只返回群名称、群头像、成员数量以及群状态信息。;- 获取内部群信息时，调用接口的机器人或者用户需要与群组在同一租户下。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                avatar?: string;
+                                name?: string;
+                                description?: string;
+                                i18n_names?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                                add_member_permission?: string;
+                                share_card_permission?: string;
+                                at_all_permission?: string;
+                                edit_permission?: string;
+                                owner_id_type?: string;
+                                owner_id?: string;
+                                user_manager_id_list?: Array<string>;
+                                bot_manager_id_list?: Array<string>;
+                                group_message_type?: string;
+                                chat_mode?: string;
+                                chat_type?: string;
+                                chat_tag?: string;
+                                join_message_visibility?: string;
+                                leave_message_visibility?: string;
+                                membership_approval?: string;
+                                moderation_permission?: string;
+                                external?: boolean;
+                                tenant_key?: string;
+                                user_count?: string;
+                                bot_count?: string;
+                                labels?: Array<string>;
+                                toolkit_ids?: Array<string>;
+                                restricted_mode_setting?: {
+                                    status?: boolean;
+                                    screenshot_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    download_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    message_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                };
+                                urgent_setting?: "only_owner" | "all_members";
+                                video_conference_setting?:
+                                    | "only_owner"
+                                    | "all_members";
+                                pin_manage_setting?:
+                                    | "only_owner"
+                                    | "all_members";
+                                hide_member_count_setting?:
+                                    | "all_members"
+                                    | "only_owner";
+                                chat_status?:
+                                    | "normal"
+                                    | "dissolved"
+                                    | "dissolved_save";
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        query?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/search`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    chat_id?: string;
+                                                    avatar?: string;
+                                                    name?: string;
+                                                    description?: string;
+                                                    owner_id?: string;
+                                                    owner_id_type?: string;
+                                                    external?: boolean;
+                                                    tenant_key?: string;
+                                                    labels?: Array<string>;
+                                                    chat_status?:
+                                                        | "normal"
+                                                        | "dissolved"
+                                                        | "dissolved_save";
+                                                    chat_mode?:
+                                                        | "group"
+                                                        | "topic"
+                                                        | "p2p";
+                                                    p2p_target_type?:
+                                                        | "user"
+                                                        | "bot";
+                                                    p2p_target_id?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=chat&version=v1 document }
+             *
+             * 搜索对用户或机器人可见的群列表
+             *
+             * 获取当前身份（用户或机器人）可见的群列表，包括当前身份所在的群、对当前身份公开的群。支持关键词搜索、分页搜索。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。
+             */
+            search: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        query?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    chat_id?: string;
+                                    avatar?: string;
+                                    name?: string;
+                                    description?: string;
+                                    owner_id?: string;
+                                    owner_id_type?: string;
+                                    external?: boolean;
+                                    tenant_key?: string;
+                                    labels?: Array<string>;
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
+                                    chat_mode?: "group" | "topic" | "p2p";
+                                    p2p_target_type?: "user" | "bot";
+                                    p2p_target_id?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/search`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
+                        page_token?: string;
+                        page_size?: number;
+                        types?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    chat_id?: string;
+                                                    avatar?: string;
+                                                    name?: string;
+                                                    description?: string;
+                                                    owner_id?: string;
+                                                    owner_id_type?: string;
+                                                    external?: boolean;
+                                                    tenant_key?: string;
+                                                    labels?: Array<string>;
+                                                    chat_status?:
+                                                        | "normal"
+                                                        | "dissolved"
+                                                        | "dissolved_save";
+                                                    chat_mode?:
+                                                        | "group"
+                                                        | "topic"
+                                                        | "p2p";
+                                                    p2p_target_type?:
+                                                        | "user"
+                                                        | "bot";
+                                                    p2p_target_id?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat&version=v1 document }
+             *
+             * 获取用户或机器人所在的群列表
+             *
+             * 获取 [access_token](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-choose-which-type-of-token-to-use) 所代表的用户或者机器人所在的群列表。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL。;- 获取到的群列表中，不包含单聊（群模式为 `p2p`）。;- 查询参数  **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填。;
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
+                        page_token?: string;
+                        page_size?: number;
+                        types?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    chat_id?: string;
+                                    avatar?: string;
+                                    name?: string;
+                                    description?: string;
+                                    owner_id?: string;
+                                    owner_id_type?: string;
+                                    external?: boolean;
+                                    tenant_key?: string;
+                                    labels?: Array<string>;
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
+                                    chat_mode?: "group" | "topic" | "p2p";
+                                    p2p_target_type?: "user" | "bot";
+                                    p2p_target_id?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.moderation
+         */
+        chatModeration: {
+            getWithIterator: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                moderation_setting?: string;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                items?: Array<{
+                                                    user_id_type?: string;
+                                                    user_id?: string;
+                                                    tenant_key?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.moderation&version=v1 document }
+             *
+             * 获取群成员发言权限
+             *
+             * 获取指定群组的发言模式、可发言用户名单等信息。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;调用本接口的用户或机器人必须要在对应的群组内。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                moderation_setting?: string;
+                                page_token?: string;
+                                has_more?: boolean;
+                                items?: Array<{
+                                    user_id_type?: string;
+                                    user_id?: string;
+                                    tenant_key?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat.moderation&version=v1 document }
+             *
+             * 更新群发言权限
+             *
+             * 更新指定群组的发言权限，可设置为所有群成员可发言、仅群主或管理员可发言、指定群成员可发言。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以用户身份（user_access_token）调用本接口，则该用户必须是群组的群主，才可以更新群发言权限。;- 如果以应用身份（tenant_access_token）调用本接口，则该应用机器人需要符合以下任一情况才可以更新群发言权限。;    - 机器人是群组的群主。;    - 机器人是群组的创建者、具备==更新应用所创建群的群信息（im:chat:operate_as_owner）== 权限，且仍在群组内。
+             */
+            update: async (
+                payload?: {
+                    data?: {
+                        moderation_setting?: string;
+                        moderator_added_list?: Array<string>;
+                        moderator_removed_list?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.tab
+         */
+        chatTab: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=list_tabs&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_tabs&project=im&resource=chat.tab&version=v1 document }
+             *
+             * 拉取会话标签页
+             *
+             * 获取指定会话内的会话标签页信息，包括 ID、名称、类型以及内容等。
+             */
+            listTabs: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_tabs?: Array<{
+                                    tab_id?: string;
+                                    tab_name?: string;
+                                    tab_type:
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos"
+                                        | "task";
+                                    tab_content?: {
+                                        url?: string;
+                                        doc?: string;
+                                        meeting_minute?: string;
+                                        task?: string;
+                                    };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/list_tabs`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=sort_tabs&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sort_tabs&project=im&resource=chat.tab&version=v1 document }
+             *
+             * 会话标签页排序
+             *
+             * 调整指定会话内的多个会话标签页排列顺序。
+             */
+            sortTabs: async (
+                payload?: {
+                    data?: { tab_ids?: Array<string> };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_tabs?: Array<{
+                                    tab_id?: string;
+                                    tab_name?: string;
+                                    tab_type:
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos"
+                                        | "task";
+                                    tab_content?: {
+                                        url?: string;
+                                        doc?: string;
+                                        meeting_minute?: string;
+                                        task?: string;
+                                    };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/sort_tabs`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=delete_tabs&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_tabs&project=im&resource=chat.tab&version=v1 document }
+             *
+             * 删除会话标签页
+             *
+             * 删除指定会话内的一个或多个会话标签页。
+             */
+            deleteTabs: async (
+                payload?: {
+                    data: { tab_ids: Array<string> };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_tabs?: Array<{
+                                    tab_id?: string;
+                                    tab_name?: string;
+                                    tab_type:
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos"
+                                        | "task";
+                                    tab_content?: {
+                                        url?: string;
+                                        doc?: string;
+                                        meeting_minute?: string;
+                                        task?: string;
+                                    };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/delete_tabs`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=update_tabs&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_tabs&project=im&resource=chat.tab&version=v1 document }
+             *
+             * 更新会话标签页
+             *
+             * 更新指定的会话标签页信息，包括名称、类型以及内容等。仅支持更新文档类型（doc）或 URL （url）类型的标签页。
+             */
+            updateTabs: async (
+                payload?: {
+                    data?: {
+                        chat_tabs?: Array<{
+                            tab_id?: string;
+                            tab_name?: string;
+                            tab_type:
+                                | "message"
+                                | "doc_list"
+                                | "doc"
+                                | "pin"
+                                | "meeting_minute"
+                                | "chat_announcement"
+                                | "url"
+                                | "file"
+                                | "files_resources"
+                                | "images_videos"
+                                | "task";
+                            tab_content?: {
+                                url?: string;
+                                doc?: string;
+                                meeting_minute?: string;
+                                task?: string;
+                            };
+                            tab_config?: {
+                                icon_key?: string;
+                                is_built_in?: boolean;
+                            };
+                        }>;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_tabs?: Array<{
+                                    tab_id?: string;
+                                    tab_name?: string;
+                                    tab_type:
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos"
+                                        | "task";
+                                    tab_content?: {
+                                        url?: string;
+                                        doc?: string;
+                                        meeting_minute?: string;
+                                        task?: string;
+                                    };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/update_tabs`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat.tab&version=v1 document }
+             *
+             * 添加会话标签页
+             *
+             * 在指定会话内添加自定义会话标签页，仅支持添加文档类型（doc）或 URL （url）类型的标签页。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        chat_tabs: Array<{
+                            tab_name?: string;
+                            tab_type:
+                                | "message"
+                                | "doc_list"
+                                | "doc"
+                                | "pin"
+                                | "meeting_minute"
+                                | "chat_announcement"
+                                | "url"
+                                | "file"
+                                | "files_resources"
+                                | "images_videos"
+                                | "task";
+                            tab_content?: {
+                                url?: string;
+                                doc?: string;
+                                meeting_minute?: string;
+                                task?: string;
+                            };
+                            tab_config?: {
+                                icon_key?: string;
+                                is_built_in?: boolean;
+                            };
+                        }>;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_tabs?: Array<{
+                                    tab_id?: string;
+                                    tab_name?: string;
+                                    tab_type:
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos"
+                                        | "task";
+                                    tab_content?: {
+                                        url?: string;
+                                        doc?: string;
+                                        meeting_minute?: string;
+                                        task?: string;
+                                    };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.top_notice
+         */
+        chatTopNotice: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=delete_top_notice&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_top_notice&project=im&resource=chat.top_notice&version=v1 document }
+             *
+             * 撤销群置顶
+             *
+             * 撤销指定群组中的置顶消息或群公告。
+             */
+            deleteTopNotice: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=put_top_notice&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=put_top_notice&project=im&resource=chat.top_notice&version=v1 document }
+             *
+             * 更新群置顶
+             *
+             * 更新群组中的群置顶信息，可以将群中的某一条消息，或群公告置顶展示。
+             */
+            putTopNotice: async (
+                payload?: {
+                    data: {
+                        chat_top_notice: Array<{
+                            action_type?: "1" | "2";
+                            message_id?: string;
+                        }>;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/put_top_notice`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.announcement
+         */
+        chatAnnouncement: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat.announcement&version=v1 document }
+             *
+             * 更新群公告信息
+             *
+             * 更新指定群组中的群公告信息。更新的公告内容格式和更新[旧版云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)的格式相同，不支持新版云文档格式。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的用户或者机器人必须在对应的群组内，且需要拥有群公告文档的阅读权限。;;## 使用限制;;- 如果群组配置了 **仅群主和群管理员可编辑群信息**，则仅有群主、群管理员，或者是创建群组且具有 **更新应用所创建群的群信息（im:chat:operate_as_owner）** 权限的机器人，可以更新群公告信息。;- 如果群组没有配置 **仅群主和群管理员可编辑群信息**，则所有群成员可以更新群公告信息。;- 操作内部群时，操作者和被操作的群组必须在同一租户下。
+             */
+            patch: async (
+                payload?: {
+                    data: { revision: string; requests?: Array<string> };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.announcement&version=v1 document }
+             *
+             * 获取群公告信息
+             *
+             * 获取指定群组中的群公告信息，公告信息格式与[旧版云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的用户或者机器人必须在对应的群组内。;- 获取内部群信息时，调用当前接口的用户或者机器人必须与对应群组在同一租户下。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                content?: string;
+                                revision?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                owner_id_type?:
+                                    | "user_id"
+                                    | "union_id"
+                                    | "open_id"
+                                    | "app_id";
+                                owner_id?: string;
+                                modifier_id_type?:
+                                    | "user_id"
+                                    | "union_id"
+                                    | "open_id"
+                                    | "app_id";
+                                modifier_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.menu_tree
+         */
+        chatMenuTree: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.menu_tree&version=v1 document }
+             *
+             * 获取群菜单
+             *
+             * 获取指定群组内的群菜单信息，包括所有一级或二级菜单的名称、跳转链接、图标等信息。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。
+             */
+            get: async (
+                payload?: {
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                menu_tree?: {
+                                    chat_menu_top_levels?: Array<{
+                                        chat_menu_top_level_id?: string;
+                                        chat_menu_item?: {
+                                            action_type?:
+                                                | "NONE"
+                                                | "REDIRECT_LINK";
+                                            redirect_link?: {
+                                                common_url?: string;
+                                                ios_url?: string;
+                                                android_url?: string;
+                                                pc_url?: string;
+                                                web_url?: string;
+                                            };
+                                            image_key?: string;
+                                            name?: string;
+                                            i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        children?: Array<{
+                                            chat_menu_second_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat.menu_tree&version=v1 document }
+             *
+             * 删除群菜单
+             *
+             * 删除指定群内的一级菜单。成功调用后接口会返回群组内最新的群菜单信息。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的用户或者机器人必须在对应的会话内。;;## 使用限制;;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。;- 仅支持删除群组内的一级菜单。
+             */
+            delete: async (
+                payload?: {
+                    data: { chat_menu_top_level_ids: Array<string> };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                menu_tree?: {
+                                    chat_menu_top_levels?: Array<{
+                                        chat_menu_top_level_id?: string;
+                                        chat_menu_item?: {
+                                            action_type?:
+                                                | "NONE"
+                                                | "REDIRECT_LINK";
+                                            redirect_link?: {
+                                                common_url?: string;
+                                                ios_url?: string;
+                                                android_url?: string;
+                                                pc_url?: string;
+                                                web_url?: string;
+                                            };
+                                            image_key?: string;
+                                            name?: string;
+                                            i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        children?: Array<{
+                                            chat_menu_second_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=sort&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sort&project=im&resource=chat.menu_tree&version=v1 document }
+             *
+             * 排序群菜单
+             *
+             * 调整指定群组内的群菜单排列顺序，成功调用后接口会返回群组内所有群菜单信息。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。;- 仅支持调整群组内一级菜单的排序。
+             */
+            sort: async (
+                payload?: {
+                    data: { chat_menu_top_level_ids: Array<string> };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                menu_tree?: {
+                                    chat_menu_top_levels?: Array<{
+                                        chat_menu_top_level_id?: string;
+                                        chat_menu_item?: {
+                                            action_type?:
+                                                | "NONE"
+                                                | "REDIRECT_LINK";
+                                            redirect_link?: {
+                                                common_url?: string;
+                                                ios_url?: string;
+                                                android_url?: string;
+                                                pc_url?: string;
+                                                web_url?: string;
+                                            };
+                                            image_key?: string;
+                                            name?: string;
+                                            i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        children?: Array<{
+                                            chat_menu_second_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree/sort`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat.menu_tree&version=v1 document }
+             *
+             * 添加群菜单
+             *
+             * 在指定群组中添加一个或多个群菜单。成功调用后接口会返回当前群组内所有群菜单信息。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;- 该接口是向群内追加菜单，群内已存在的菜单不会被覆盖。;- 一个群内最多有 3 个一级菜单，每个一级菜单最多配置 5 个二级菜单。;- 不支持在已有的一级菜单中追加二级菜单。;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        menu_tree: {
+                            chat_menu_top_levels: Array<{
+                                chat_menu_item: {
+                                    action_type: "NONE" | "REDIRECT_LINK";
+                                    redirect_link?: {
+                                        common_url?: string;
+                                        ios_url?: string;
+                                        android_url?: string;
+                                        pc_url?: string;
+                                        web_url?: string;
+                                    };
+                                    image_key?: string;
+                                    name: string;
+                                    i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                                children?: Array<{
+                                    chat_menu_item?: {
+                                        action_type?: "NONE" | "REDIRECT_LINK";
+                                        redirect_link?: {
+                                            common_url?: string;
+                                            ios_url?: string;
+                                            android_url?: string;
+                                            pc_url?: string;
+                                            web_url?: string;
+                                        };
+                                        image_key?: string;
+                                        name?: string;
+                                        i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                }>;
+                            }>;
+                        };
+                    };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                menu_tree?: {
+                                    chat_menu_top_levels?: Array<{
+                                        chat_menu_top_level_id?: string;
+                                        chat_menu_item?: {
+                                            action_type?:
+                                                | "NONE"
+                                                | "REDIRECT_LINK";
+                                            redirect_link?: {
+                                                common_url?: string;
+                                                ios_url?: string;
+                                                android_url?: string;
+                                                pc_url?: string;
+                                                web_url?: string;
+                                            };
+                                            image_key?: string;
+                                            name?: string;
+                                            i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        children?: Array<{
+                                            chat_menu_second_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.managers
+         */
+        chatManagers: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=delete_managers&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_managers&project=im&resource=chat.managers&version=v1 document }
+             *
+             * 删除群管理员
+             *
+             * 指定群组，删除群组内指定的管理员，包括用户类型的管理员和机器人类型的管理员。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;仅群组内的群主可以删除群管理员。;
+             */
+            deleteManagers: async (
+                payload?: {
+                    data?: { manager_ids?: Array<string> };
+                    params?: {
+                        member_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_managers?: Array<string>;
+                                chat_bot_managers?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/delete_managers`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=add_managers&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_managers&project=im&resource=chat.managers&version=v1 document }
+             *
+             * 指定群管理员
+             *
+             * 指定群组，将群内指定的用户或者机器人设置为群管理员。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;仅群组内的群主可以指定群管理员。;
+             */
+            addManagers: async (
+                payload?: {
+                    data?: { manager_ids?: Array<string> };
+                    params?: {
+                        member_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_managers?: Array<string>;
+                                chat_bot_managers?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/add_managers`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.menu_item
+         */
+        chatMenuItem: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_item&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat.menu_item&version=v1 document }
+             *
+             * 修改群菜单元信息
+             *
+             * 修改指定群组内的某个一级菜单或者二级菜单的元信息，包括图标、名称、国际化名称和跳转链接。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。;- 本接口不支持在一级菜单上添加或删除二级菜单。
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        update_fields: Array<
+                            "ICON" | "NAME" | "I18N_NAME" | "REDIRECT_LINK"
+                        >;
+                        chat_menu_item: {
+                            action_type?: "NONE" | "REDIRECT_LINK";
+                            redirect_link?: {
+                                common_url?: string;
+                                ios_url?: string;
+                                android_url?: string;
+                                pc_url?: string;
+                                web_url?: string;
+                            };
+                            image_key?: string;
+                            name?: string;
+                            i18n_names?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                        };
+                    };
+                    path?: { chat_id?: string; menu_item_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                chat_menu_item?: {
+                                    action_type?: "NONE" | "REDIRECT_LINK";
+                                    redirect_link?: {
+                                        common_url?: string;
+                                        ios_url?: string;
+                                        android_url?: string;
+                                        pc_url?: string;
+                                        web_url?: string;
+                                    };
+                                    image_key?: string;
+                                    name?: string;
+                                    i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_items/:menu_item_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * image
+         */
+        image: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=image&version=v1 document }
+             *
+             * 下载图片
+             *
+             * 通过已上传图片的 Key 值下载图片。;
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的图片，且上传时图片类型为 **用于发送消息**。**用于设置头像** 的图片暂不支持下载。;- 该接口仅适用于通过图片的 Key 下载图片。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。
+             */
+            get: async (
+                payload?: {
+                    path: { image_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/images/:image_key`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=image&version=v1 document }
+             *
+             * 上传图片
+             *
+             * 调用本接口将图片上传至飞书开放平台，支持上传 JPG、JPEG、PNG、WEBP、GIF、BMP、ICO、TIFF、HEIC 格式的图片，但需要注意 TIFF、HEIC 上传后会被转为 JPG 格式。
+             *
+             * ## 使用场景;;如果需要发送图片消息，或者将图片作为头像，则需要先调用本接口将图片上传至开放平台，平台会返回一个图片标识（image_key），后续使用该 Key 值调用其他 API。例如：;;- [发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)时，如果需要发送图片，则需要先调用本接口上传图片（上传时图片类型需要选择 **用于发送消息**），并使用返回结果中的 image_key 发送图片消息。;- [创建用户](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/create)时，如果需要设置用户头像，则需要先调用本接口将头像上传（上传时图片类型需要选择 **用于设置头像**），并使用返回结果中的 image_key 设置头像。;;## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 上传的图片大小不能超过 10 MB，且不支持上传大小为 0 的图片。;- 上传图片的分辨率限制：;	- GIF 图片分辨率不能超过 2000 x 2000，其他图片分辨率不能超过 12000 x 12000。;	- 用于设置头像的图片分辨率不能超过 4096 x 4096。;;如需上传高分辨率图片，可使用[上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/file/create)接口，将图片作为文件进行上传。注意该方式不支持将图片文件设置为头像。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        image_type: "message" | "avatar";
+                        image: Buffer | fs.ReadStream;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { image_key?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/images`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+        },
+        /**
+         * message.reaction
+         */
+        messageReaction: {
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=message.reaction&version=v1 document }
              *
              * 删除消息表情回复
              *
-             * 删除指定消息的表情回复（reaction即表情回复，本文档统一用“reaction”代称）。
+             * 删除指定消息的某一表情回复。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能删除真实存在的reaction，并且删除reaction请求的操作者必须是reaction的原始添加者
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待删除表情回复的消息所属的会话内。;;## 使用限制;;- 已被撤回的消息无法添加表情回复。;- 调用当前接口的机器人或者用户，只能删除由自己添加的表情回复，且需要保证该表情回复真实存在于消息中。
              */
             delete: async (
                 payload?: {
@@ -5003,13 +4957,13 @@ export default abstract class Client extends human_authentication {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=message.reaction&version=v1 document }
              *
              * 获取消息表情回复
              *
-             * 获取指定消息的特定类型表情回复列表（reaction即表情回复，本文档统一用“reaction”代称）。
+             * 获取指定消息内的表情回复列表
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 待获取reaction信息的消息要真实存在，不能被撤回;- 获取消息的reaction，需要request的授权主体（机器人或者用户）在消息所在的会话内
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待查询的消息所属的会话内。;;## 使用限制;;已被撤回的消息无法获取表情回复列表。;
              */
             list: async (
                 payload?: {
@@ -5063,6 +5017,281 @@ export default abstract class Client extends human_authentication {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=message.reaction&version=v1 document }
+             *
+             * 批量获取消息表情回复
+             *
+             * 支持批量分页的获取消息上的表情详情、支持批量获取消息上表情的统计
+             *
+             * ## 前提条件;;- 应用身份调用接口需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待查询的消息所属的会话内。;;## 使用限制;;已被撤回的消息、消息不可见等情况无法获取表情回复列表。
+             */
+            batchQuery: async (
+                payload?: {
+                    data: {
+                        queries: Array<{
+                            message_id?: string;
+                            page_token?: string;
+                        }>;
+                        page_size_per_message?: number;
+                        reaction_type?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                success_msg_reaction_details?: Array<{
+                                    message_id?: string;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    message_reaction_items?: Array<{
+                                        reaction_id?: string;
+                                        operator?: {
+                                            operator_id: string;
+                                            operator_type: "app" | "user";
+                                        };
+                                        action_time?: string;
+                                        emoji_type?: string;
+                                    }>;
+                                }>;
+                                success_msg_reaction_counts?: Array<{
+                                    message_id?: string;
+                                    reaction_count?: Array<{
+                                        reaction_type?: string;
+                                        count?: string;
+                                    }>;
+                                }>;
+                                fail_msg_reaction_details?: Array<{
+                                    message_id?: string;
+                                    fail_reason?:
+                                        | "invalid"
+                                        | "invalid_page_token"
+                                        | "no_permission";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/reactions/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message.reaction&version=v1 document }
+             *
+             * 添加消息表情回复
+             *
+             * 给指定消息添加指定类型的表情回复。
+             *
+             * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待添加表情回复的消息所属的会话内。;;## 使用限制;;- 已被撤回的消息无法添加表情回复。;- [系统消息（system）](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/im-v1/message/create_json#e159cb73)无法添加表情回复。
+             */
+            create: async (
+                payload?: {
+                    data: { reaction_type: { emoji_type: string } };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                reaction_id?: string;
+                                operator?: {
+                                    operator_id: string;
+                                    operator_type: "app" | "user";
+                                };
+                                action_time?: string;
+                                reaction_type?: { emoji_type: string };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * file
+         */
+        file: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=file&version=v1 document }
+             *
+             * 下载文件
+             *
+             * 通过已上传文件的 Key 下载文件。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的文件。;- 下载的资源大小不能超过 100 MB。 ;- 该接口仅适用于通过文件的 Key 下载文件。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。;- 如果需要 Content-Disposition header，发起请求时需要在 header 中设置 Content-Type 为 application/json。
+             */
+            get: async (
+                payload?: {
+                    path: { file_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files/:file_key`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=file&version=v1 document }
+             *
+             * 上传文件
+             *
+             * 调用该接口将本地文件上传至开放平台，支持上传音频、视频、文档等文件类型。上传后接口会返回文件的 Key，使用该 Key 值可以调用其他 OpenAPI。例如，调用[发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)接口，发送文件。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;文件大小不得超过 30 MB，且不允许上传空文件。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        file_type:
+                            | "opus"
+                            | "mp4"
+                            | "pdf"
+                            | "doc"
+                            | "xls"
+                            | "ppt"
+                            | "stream";
+                        file_name: string;
+                        duration?: number;
+                        file: Buffer | fs.ReadStream;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_key?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
         },
         /**
          * message.resource
@@ -5071,13 +5300,13 @@ export default abstract class Client extends human_authentication {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message.resource&version=v1 document }
              *
              * 获取消息中的资源文件
              *
-             * 获取消息中的资源文件，包括音频，视频，图片和文件，**暂不支持表情包资源下载**。当前仅支持 100M 以内的资源文件的下载。
+             * 获取指定消息内包含的资源文件，包括音频、视频、图片和文件。成功调用后，返回二进制文件流下载文件。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人和消息需要在同一会话中;- 暂不支持获取合并转发消息中的子消息的资源文件
+             * ## 前提条件; ;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人和待操作的消息需要在同一会话内。;;## 使用限制;- 仅支持下载 100 MB 以内的资源文件。;- 暂不支持获取表情包资源。;- 暂不支持获取合并转发消息中的子消息、卡片消息中的资源文件。如果请求时传入了合并转发消息或子消息的 ID、卡片消息 ID，则会返回错误码 234043。;- 不支持在当前接口内调整文件格式，你可以获取资源文件后，在本地自行调整。
              */
             get: async (
                 payload?: {
@@ -5142,403 +5371,6 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * message_cot
-         */
-        messageCot: {
-            /**
-         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=complete&version=v1 click to debug } 
- * 
-* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=complete&project=im&resource=message_cot&version=v1 document } 
- * 
-* ## 功能介绍
-标记指定智能对话思考过程为完成状态，同步完成原因，用于终止对话机器人的思考流程并反馈处理结果，适用于智能客服、自动问答等场景。
-
-### 注意事项
-- 思考过程标记完成后将无法继续修改或恢复，需确保流程已真正结束。
-- 若传入`error`或`timeout`原因，系统将记录异常日志用于问题排查。
-         */
-            complete: async (
-                payload?: {
-                    params: { message_id: string; reason?: string };
-                    path: { cot_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/message_cot/complete/:cot_id`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=create&version=v1 click to debug } 
- * 
-* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_cot&version=v1 document } 
- * 
-* ## 功能介绍
-生成并发送带有智能思考过程的消息内容，支持向单聊或群组发送结构化消息，适用于需要展示AI推导逻辑的对话场景。
-
-### 注意事项
-- 消息内容需符合平台内容安全规范，违规内容将被拦截。
-- 思考过程仅在特定客户端版本可见，旧版本客户端将仅展示最终消息内容。
-         */
-            create: async (
-                payload?: {
-                    data: { receive_id: string; origin_message_id?: string };
-                    params: { receive_id_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { cot_id?: string; message_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/message_cot`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=update&version=v1 click to debug } 
- * 
-* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message_cot&version=v1 document } 
- * 
-* ## 功能介绍
-更新指定思考过程关联的消息事件列表，支持添加或替换AG2UI交互事件，用于同步AI助手与用户端的对话交互轨迹，确保思考过程与实际展示内容一致。
-
-### 前提条件
-- 需拥有目标消息及思考过程的编辑权限
-- 待更新的思考过程需处于可编辑状态
-
-### 注意事项
-- 事件列表将完全覆盖原有内容，增量更新需先获取当前事件列表后合并再提交
-- 时间戳需严格按照事件发生顺序填写，否则会导致交互轨迹展示异常
-- 事件内容需符合JSON格式规范，否则会导致解析失败
-         */
-            update: async (
-                payload?: {
-                    data: {
-                        events: Array<{
-                            event_type: string;
-                            content: string;
-                            timestamp: string;
-                        }>;
-                        message_id: string;
-                        cot_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/message_cot`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 消息 - Pin
-         */
-        pin: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/create document }
-             *
-             * Pin消息
-             *
-             * Pin一条指定的消息。
-             *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- Pin消息时，机器人必须在对应的群组中;- 若消息已经被Pin，返回该Pin的操作信息;- 不能Pin一条对操作者不可见的消息;- 对同一条消息的Pin操作不能超过==5 QPS==
-             */
-            create: async (
-                payload?: {
-                    data: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                pin?: {
-                                    message_id: string;
-                                    chat_id?: string;
-                                    operator_id?: string;
-                                    operator_id_type?: string;
-                                    create_time?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/pins`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/delete document }
-             *
-             * 移除Pin消息
-             *
-             * 移除一条指定消息的Pin。
-             *
-             * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 移除Pin消息时，机器人必须在对应的群组中;- 若消息未被Pin或已被撤回，返回成功信息;- 不能移除一条对操作者不可见的Pin消息;- 对同一条消息移除Pin的操作不能超过==5 QPS==
-             */
-            delete: async (
-                payload?: {
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/pins/:message_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        chat_id: string;
-                        start_time?: string;
-                        end_time?: string;
-                        page_size?: number;
-                        page_token?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/pins`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    message_id: string;
-                                                    chat_id?: string;
-                                                    operator_id?: string;
-                                                    operator_id_type?: string;
-                                                    create_time?: string;
-                                                }>;
-                                                has_more?: boolean;
-                                                page_token?: string;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/list document }
-             *
-             * 获取群内Pin消息
-             *
-             * 获取所在群内指定时间范围内的所有Pin消息。
-             *
-             * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 获取Pin消息时，机器人必须在群组中;- 获取的Pin消息按Pin的创建时间降序排列;- 接口默认限流为==50 QPS==
-             */
-            list: async (
-                payload?: {
-                    params: {
-                        chat_id: string;
-                        start_time?: string;
-                        end_time?: string;
-                        page_size?: number;
-                        page_token?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    message_id: string;
-                                    chat_id?: string;
-                                    operator_id?: string;
-                                    operator_id_type?: string;
-                                    create_time?: string;
-                                }>;
-                                has_more?: boolean;
-                                page_token?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/pins`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
          * thread
          */
         thread: {
@@ -5547,7 +5379,9 @@ export default abstract class Client extends human_authentication {
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=thread&version=v1 document }
              *
-             * 转发
+             * 转发话题
+             *
+             * 调用该接口将话题转发至指定的用户、群聊或话题。
              */
             forward: async (
                 payload?: {
@@ -5633,3162 +5467,19 @@ export default abstract class Client extends human_authentication {
         },
         v1: {
             /**
-             * 消息 - 批量消息
-             */
-            batchMessage: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/delete document }
-                 *
-                 * 批量撤回消息
-                 *
-                 * 批量撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。
-                 *
-                 * 注意事项：;- 应用需要启用[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) ;- 撤回单条发送的消息请使用[撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete)接口;- 不支持撤回发出时间超过1天的消息;- 一次调用涉及大量消息，所以为异步接口，会有一定延迟。
-                 */
-                delete: async (
-                    payload?: {
-                        path: { batch_message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=get_progress&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/get_progress document }
-                 *
-                 * 查询批量消息整体进度
-                 *
-                 * 该接口在[查询批量消息推送和阅读人数](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/read_user)查询结果的基础上，增加了批量请求中有效的userid数量以及消息撤回进度数据。
-                 *
-                 * 注意事项:;* 该接口返回的数据为查询时刻的快照数据
-                 */
-                getProgress: async (
-                    payload?: {
-                        path: { batch_message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    batch_message_send_progress?: {
-                                        valid_user_ids_count?: number;
-                                        success_user_ids_count?: number;
-                                        read_user_ids_count?: number;
-                                    };
-                                    batch_message_recall_progress?: {
-                                        recall?: boolean;
-                                        recall_count?: number;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/get_progress`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=read_user&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/read_user document }
-                 *
-                 * 查询批量消息推送和阅读人数
-                 *
-                 * 批量发送消息后，可以通过该接口查询批量消息推送的总人数和阅读人数。
-                 *
-                 * 注意事项：;- 只能查询通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口产生的消息;- 该接口返回的数据为查询时刻的快照数据
-                 */
-                readUser: async (
-                    payload?: {
-                        path: { batch_message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    read_user?: {
-                                        read_count: string;
-                                        total_count: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/read_user`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 群组 - 群公告
-             */
-            chatAnnouncement: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/get document }
-                 *
-                 * 获取群公告信息
-                 *
-                 * 获取会话中的群公告信息，公告信息格式与[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 获取内部群信息时，操作者须与群组在同一租户下
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    content?: string;
-                                    revision?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    owner_id_type?:
-                                        | "user_id"
-                                        | "union_id"
-                                        | "open_id"
-                                        | "app_id";
-                                    owner_id?: string;
-                                    modifier_id_type?:
-                                        | "user_id"
-                                        | "union_id"
-                                        | "open_id"
-                                        | "app_id";
-                                    modifier_id?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/patch document }
-                 *
-                 * 更新群公告信息
-                 *
-                 * 更新会话中的群公告信息，更新公告信息的格式和更新[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 操作者需要拥有群公告文档的阅读权限;- 获取内部群信息时，操作者须与群组在同一租户下;- 若群开启了 ==仅群主和群管理员可编辑群信息== 配置，群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新群公告;- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置，所有成员可以更新群公告
-                 */
-                patch: async (
-                    payload?: {
-                        data: { revision: string; requests?: Array<string> };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 群组
-             */
-            chat: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/create document }
-                 *
-                 * 创建群
-                 *
-                 * 创建群并设置群头像、群名、群描述等。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 本接口支持在创建群的同时拉用户或机器人进群；如果仅需要拉用户或者机器人入群参考 [将用户或机器人拉入群聊](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create)接口
-                 */
-                create: async (
-                    payload?: {
-                        data?: {
-                            avatar?: string;
-                            name?: string;
-                            description?: string;
-                            i18n_names?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                            owner_id?: string;
-                            user_id_list?: Array<string>;
-                            bot_id_list?: Array<string>;
-                            group_message_type?: "chat" | "thread";
-                            chat_mode?: string;
-                            chat_type?: string;
-                            external?: boolean;
-                            join_message_visibility?: string;
-                            leave_message_visibility?: string;
-                            membership_approval?: string;
-                            labels?: Array<string>;
-                            toolkit_ids?: Array<string>;
-                            restricted_mode_setting?: {
-                                status?: boolean;
-                                screenshot_has_permission_setting?:
-                                    | "all_members"
-                                    | "not_anyone";
-                                download_has_permission_setting?:
-                                    | "all_members"
-                                    | "not_anyone";
-                                message_has_permission_setting?:
-                                    | "all_members"
-                                    | "not_anyone";
-                            };
-                            urgent_setting?: "only_owner" | "all_members";
-                            video_conference_setting?:
-                                | "only_owner"
-                                | "all_members";
-                            edit_permission?: "only_owner" | "all_members";
-                            chat_tags?: Array<string>;
-                            pin_manage_setting?: "only_owner" | "all_members";
-                            hide_member_count_setting?:
-                                | "all_members"
-                                | "only_owner";
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            set_bot_manager?: boolean;
-                            uuid?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_id?: string;
-                                    avatar?: string;
-                                    name?: string;
-                                    description?: string;
-                                    i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                    owner_id?: string;
-                                    owner_id_type?: string;
-                                    urgent_setting?:
-                                        | "only_owner"
-                                        | "all_members";
-                                    video_conference_setting?:
-                                        | "only_owner"
-                                        | "all_members";
-                                    pin_manage_setting?:
-                                        | "only_owner"
-                                        | "all_members";
-                                    add_member_permission?: string;
-                                    share_card_permission?: string;
-                                    at_all_permission?: string;
-                                    edit_permission?: string;
-                                    group_message_type?: string;
-                                    chat_mode?: string;
-                                    chat_type?: string;
-                                    chat_tag?: string;
-                                    external?: boolean;
-                                    tenant_key?: string;
-                                    join_message_visibility?: string;
-                                    leave_message_visibility?: string;
-                                    membership_approval?: string;
-                                    moderation_permission?: string;
-                                    labels?: Array<string>;
-                                    toolkit_ids?: Array<string>;
-                                    restricted_mode_setting?: {
-                                        status?: boolean;
-                                        screenshot_has_permission_setting?:
-                                            | "all_members"
-                                            | "not_anyone";
-                                        download_has_permission_setting?:
-                                            | "all_members"
-                                            | "not_anyone";
-                                        message_has_permission_setting?:
-                                            | "all_members"
-                                            | "not_anyone";
-                                    };
-                                    hide_member_count_setting?:
-                                        | "all_members"
-                                        | "only_owner";
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/delete document }
-                 *
-                 * 解散群
-                 *
-                 * 解散群组。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 如果使用tenant_access_token，需要机器人符合以下任一情况才可解散群：;    - 机器人是群主;    - 机器人是群的创建者且具备==更新应用所创建群的群信息==权限;- 如果使用user_access_token，需要对应的用户是群主才可解散群
-                 */
-                delete: async (
-                    payload?: {
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get document }
-                 *
-                 * 获取群信息
-                 *
-                 * 获取群名称、群描述、群头像、群主 ID 等群基本信息。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群里（否则只会返回群名称、群头像等基本信息）;- 获取内部群信息时，操作者须与群组在同一租户下
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    avatar?: string;
-                                    name?: string;
-                                    description?: string;
-                                    i18n_names?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                    add_member_permission?: string;
-                                    share_card_permission?: string;
-                                    at_all_permission?: string;
-                                    edit_permission?: string;
-                                    owner_id_type?: string;
-                                    owner_id?: string;
-                                    user_manager_id_list?: Array<string>;
-                                    bot_manager_id_list?: Array<string>;
-                                    group_message_type?: string;
-                                    chat_mode?: string;
-                                    chat_type?: string;
-                                    chat_tag?: string;
-                                    join_message_visibility?: string;
-                                    leave_message_visibility?: string;
-                                    membership_approval?: string;
-                                    moderation_permission?: string;
-                                    external?: boolean;
-                                    tenant_key?: string;
-                                    user_count?: string;
-                                    bot_count?: string;
-                                    labels?: Array<string>;
-                                    toolkit_ids?: Array<string>;
-                                    restricted_mode_setting?: {
-                                        status?: boolean;
-                                        screenshot_has_permission_setting?:
-                                            | "all_members"
-                                            | "not_anyone";
-                                        download_has_permission_setting?:
-                                            | "all_members"
-                                            | "not_anyone";
-                                        message_has_permission_setting?:
-                                            | "all_members"
-                                            | "not_anyone";
-                                    };
-                                    urgent_setting?:
-                                        | "only_owner"
-                                        | "all_members";
-                                    video_conference_setting?:
-                                        | "only_owner"
-                                        | "all_members";
-                                    pin_manage_setting?:
-                                        | "only_owner"
-                                        | "all_members";
-                                    hide_member_count_setting?:
-                                        | "all_members"
-                                        | "only_owner";
-                                    chat_status?:
-                                        | "normal"
-                                        | "dissolved"
-                                        | "dissolved_save";
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=link&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/link document }
-                 *
-                 * 获取群分享链接
-                 *
-                 * 获取指定群的分享链接。
-                 *
-                 * 注意事项:;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - access_token所对应的 **机器人** 或 **授权用户** 必须在`chat_id`参数指定的群组中;- 单聊、密聊、团队群不支持分享群链接;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用;- 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅**群主**和**群管理员**可以获取群分享链接;- 获取内部群分享链接时，操作者须与群组在同一租户下
-                 */
-                link: async (
-                    payload?: {
-                        data?: {
-                            validity_period?: "week" | "year" | "permanently";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    share_link?: string;
-                                    expire_time?: string;
-                                    is_permanent?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/link`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
-                            page_token?: string;
-                            page_size?: number;
-                            types?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/chats`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        chat_id?: string;
-                                                        avatar?: string;
-                                                        name?: string;
-                                                        description?: string;
-                                                        owner_id?: string;
-                                                        owner_id_type?: string;
-                                                        external?: boolean;
-                                                        tenant_key?: string;
-                                                        labels?: Array<string>;
-                                                        chat_status?:
-                                                            | "normal"
-                                                            | "dissolved"
-                                                            | "dissolved_save";
-                                                        chat_mode?:
-                                                            | "group"
-                                                            | "topic"
-                                                            | "p2p";
-                                                        p2p_target_type?:
-                                                            | "user"
-                                                            | "bot";
-                                                        p2p_target_id?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/list document }
-                 *
-                 * 获取用户或机器人所在的群列表
-                 *
-                 * 获取用户或者机器人所在群列表。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL;- 获取的群列表不包含P2P单聊
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
-                            page_token?: string;
-                            page_size?: number;
-                            types?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        chat_id?: string;
-                                        avatar?: string;
-                                        name?: string;
-                                        description?: string;
-                                        owner_id?: string;
-                                        owner_id_type?: string;
-                                        external?: boolean;
-                                        tenant_key?: string;
-                                        labels?: Array<string>;
-                                        chat_status?:
-                                            | "normal"
-                                            | "dissolved"
-                                            | "dissolved_save";
-                                        chat_mode?: "group" | "topic" | "p2p";
-                                        p2p_target_type?: "user" | "bot";
-                                        p2p_target_id?: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                searchWithIterator: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            query?: string;
-                            page_token?: string;
-                            page_size?: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/chats/search`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        chat_id?: string;
-                                                        avatar?: string;
-                                                        name?: string;
-                                                        description?: string;
-                                                        owner_id?: string;
-                                                        owner_id_type?: string;
-                                                        external?: boolean;
-                                                        tenant_key?: string;
-                                                        labels?: Array<string>;
-                                                        chat_status?:
-                                                            | "normal"
-                                                            | "dissolved"
-                                                            | "dissolved_save";
-                                                        chat_mode?:
-                                                            | "group"
-                                                            | "topic"
-                                                            | "p2p";
-                                                        p2p_target_type?:
-                                                            | "user"
-                                                            | "bot";
-                                                        p2p_target_id?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=search&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/search document }
-                 *
-                 * 搜索对用户或机器人可见的群列表
-                 *
-                 * 搜索对用户或机器人可见的群列表，包括：用户或机器人所在的群、对用户或机器人公开的群。;搜索可获得的群信息包括：群ID（chat_id）、群名称、群描述等。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
-                 */
-                search: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            query?: string;
-                            page_token?: string;
-                            page_size?: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        chat_id?: string;
-                                        avatar?: string;
-                                        name?: string;
-                                        description?: string;
-                                        owner_id?: string;
-                                        owner_id_type?: string;
-                                        external?: boolean;
-                                        tenant_key?: string;
-                                        labels?: Array<string>;
-                                        chat_status?:
-                                            | "normal"
-                                            | "dissolved"
-                                            | "dissolved_save";
-                                        chat_mode?: "group" | "topic" | "p2p";
-                                        p2p_target_type?: "user" | "bot";
-                                        p2p_target_id?: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/search`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/update document }
-                 *
-                 * 更新群信息
-                 *
-                 * 更新群头像、群名称、群描述、群配置、转让群主等。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 对于群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新所有信息;- 对于不满足上述权限条件的群成员或机器人：;    - 若未开启 ==仅群主和群管理员可编辑群信息== 配置，仅可更新群头像、群名称、群描述、群国际化名称信息;    - 若开启了 ==仅群主和群管理员可编辑群信息== 配置，任何群信息都不能修改;- 如果同时更新 ==邀请用户或机器人入群权限== 和 ==群分享权限== 这两项设置需要满足以下条件：;    - 若未开启 ==仅群主和管理员可以邀请用户或机器人入群==，需要设置 ==群分享权限== 为 ==允许分享==;    - 若开启了 ==仅群主和管理员可以邀请用户或机器人入群==，需要设置 ==群分享权限== 为 ==不允许分享==
-                 */
-                update: async (
-                    payload?: {
-                        data?: {
-                            avatar?: string;
-                            name?: string;
-                            description?: string;
-                            i18n_names?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                            add_member_permission?: string;
-                            share_card_permission?: string;
-                            at_all_permission?: string;
-                            edit_permission?: string;
-                            owner_id?: string;
-                            join_message_visibility?: string;
-                            leave_message_visibility?: string;
-                            membership_approval?: string;
-                            labels?: Array<string>;
-                            toolkit_ids?: Array<string>;
-                            restricted_mode_setting?: {
-                                status?: boolean;
-                                screenshot_has_permission_setting?:
-                                    | "all_members"
-                                    | "not_anyone";
-                                download_has_permission_setting?:
-                                    | "all_members"
-                                    | "not_anyone";
-                                message_has_permission_setting?:
-                                    | "all_members"
-                                    | "not_anyone";
-                            };
-                            chat_type?: string;
-                            group_message_type?: "chat" | "thread";
-                            urgent_setting?: "only_owner" | "all_members";
-                            video_conference_setting?:
-                                | "only_owner"
-                                | "all_members";
-                            pin_manage_setting?: "only_owner" | "all_members";
-                            hide_member_count_setting?:
-                                | "all_members"
-                                | "only_owner";
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 群组 - 群成员
-             */
-            chatManagers: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=add_managers&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-managers/add_managers document }
-                 *
-                 * 指定群管理员
-                 *
-                 * 将用户或机器人指定为群管理员。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 仅有群主可以指定群管理员
-                 */
-                addManagers: async (
-                    payload?: {
-                        data?: { manager_ids?: Array<string> };
-                        params?: {
-                            member_id_type?:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "app_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_managers?: Array<string>;
-                                    chat_bot_managers?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/add_managers`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=delete_managers&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-managers/delete_managers document }
-                 *
-                 * 删除群管理员
-                 *
-                 * 删除指定的群管理员（用户或机器人）。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 仅有群主可以删除群管理员
-                 */
-                deleteManagers: async (
-                    payload?: {
-                        data?: { manager_ids?: Array<string> };
-                        params?: {
-                            member_id_type?:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "app_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_managers?: Array<string>;
-                                    chat_bot_managers?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/delete_managers`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 群组 - 群成员
-             */
-            chatMembers: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create document }
-                 *
-                 * 将用户或机器人拉入群聊
-                 *
-                 * 将用户或机器人拉入群聊。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 如需拉用户进群，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability); - 机器人或授权用户必须在群组中;- 外部租户不能被加入到内部群中;- 操作内部群时，操作者须与群组在同一租户下; - 在开启 ==仅群主和群管理员可添加群成员== 的设置时，仅有群主/管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可以拉用户或者机器人进群; - 在未开启 ==仅群主和群管理员可添加群成员== 的设置时，所有群成员都可以拉用户或机器人进群
-                 */
-                create: async (
-                    payload?: {
-                        data?: { id_list?: Array<string> };
-                        params?: {
-                            member_id_type?:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "app_id";
-                            succeed_type?: number;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    invalid_id_list?: Array<string>;
-                                    not_existed_id_list?: Array<string>;
-                                    pending_approval_id_list?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/delete document }
-                 *
-                 * 将用户或机器人移出群聊
-                 *
-                 * 将用户或机器人移出群聊。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人;- 每次请求，最多移除50个用户或者5个机器人;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                delete: async (
-                    payload?: {
-                        data?: { id_list?: Array<string> };
-                        params?: {
-                            member_id_type?:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "app_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { invalid_id_list?: Array<string> };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                getWithIterator: async (
-                    payload?: {
-                        params?: {
-                            member_id_type?: "user_id" | "union_id" | "open_id";
-                            page_size?: number;
-                            page_token?: string;
-                            check_security_conf?: boolean;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        member_id_type?: string;
-                                                        member_id?: string;
-                                                        name?: string;
-                                                        tenant_key?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                    member_total?: number;
-                                                    trigger_security_conf_limit?: boolean;
-                                                    security_conf_limit?: number;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/get document }
-                 *
-                 * 获取群成员列表
-                 *
-                 * 获取用户/机器人所在群的群成员列表。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中; - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size;- 获取内部群信息时，操作者须与群组在同一租户下
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            member_id_type?: "user_id" | "union_id" | "open_id";
-                            page_size?: number;
-                            page_token?: string;
-                            check_security_conf?: boolean;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        member_id_type?: string;
-                                        member_id?: string;
-                                        name?: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                    member_total?: number;
-                                    trigger_security_conf_limit?: boolean;
-                                    security_conf_limit?: number;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=is_in_chat&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/is_in_chat document }
-                 *
-                 * 判断用户或机器人是否在群里
-                 *
-                 * 根据使用的access_token判断对应的用户或者机器人是否在群里。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 获取内部群信息时，操作者须与群组在同一租户下
-                 */
-                isInChat: async (
-                    payload?: {
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { is_in_chat?: boolean };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/is_in_chat`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=me_join&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/me_join document }
-                 *
-                 * 用户或机器人主动加入群聊
-                 *
-                 * 用户或机器人主动加入群聊。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 目前仅支持加入公开群;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                meJoin: async (
-                    payload?: {
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/me_join`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * chat.menu_item
-             */
-            chatMenuItem: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_item&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_item/patch document }
-                 *
-                 * 修改群菜单元信息
-                 *
-                 * 修改某个一级菜单或者二级菜单的元信息。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。
-                 */
-                patch: async (
-                    payload?: {
-                        data: {
-                            update_fields: Array<
-                                "ICON" | "NAME" | "I18N_NAME" | "REDIRECT_LINK"
-                            >;
-                            chat_menu_item: {
-                                action_type?: "NONE" | "REDIRECT_LINK";
-                                redirect_link?: {
-                                    common_url?: string;
-                                    ios_url?: string;
-                                    android_url?: string;
-                                    pc_url?: string;
-                                    web_url?: string;
-                                };
-                                image_key?: string;
-                                name?: string;
-                                i18n_names?: {
-                                    zh_cn?: string;
-                                    en_us?: string;
-                                    ja_jp?: string;
-                                };
-                            };
-                        };
-                        path?: { chat_id?: string; menu_item_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_menu_item?: {
-                                        action_type?: "NONE" | "REDIRECT_LINK";
-                                        redirect_link?: {
-                                            common_url?: string;
-                                            ios_url?: string;
-                                            android_url?: string;
-                                            pc_url?: string;
-                                            web_url?: string;
-                                        };
-                                        image_key?: string;
-                                        name?: string;
-                                        i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_items/:menu_item_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 群组 - 群菜单
-             */
-            chatMenuTree: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/create document }
-                 *
-                 * 添加群菜单
-                 *
-                 * 向群内添加群菜单。
-                 *
-                 * 注意事项：;- 该API是向群内追加菜单，群内原来存在的菜单并不会被覆盖。操作API后，将返回群内所有菜单。;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。;- 一个群内，一级菜单最多有3个，每个一级菜单最多有5个二级菜单。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            menu_tree: {
-                                chat_menu_top_levels: Array<{
-                                    chat_menu_item: {
-                                        action_type: "NONE" | "REDIRECT_LINK";
-                                        redirect_link?: {
-                                            common_url?: string;
-                                            ios_url?: string;
-                                            android_url?: string;
-                                            pc_url?: string;
-                                            web_url?: string;
-                                        };
-                                        image_key?: string;
-                                        name: string;
-                                        i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    children?: Array<{
-                                        chat_menu_item?: {
-                                            action_type?:
-                                                | "NONE"
-                                                | "REDIRECT_LINK";
-                                            redirect_link?: {
-                                                common_url?: string;
-                                                ios_url?: string;
-                                                android_url?: string;
-                                                pc_url?: string;
-                                                web_url?: string;
-                                            };
-                                            image_key?: string;
-                                            name?: string;
-                                            i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                    }>;
-                                }>;
-                            };
-                        };
-                        path?: { chat_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    menu_tree?: {
-                                        chat_menu_top_levels?: Array<{
-                                            chat_menu_top_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                            children?: Array<{
-                                                chat_menu_second_level_id?: string;
-                                                chat_menu_item?: {
-                                                    action_type?:
-                                                        | "NONE"
-                                                        | "REDIRECT_LINK";
-                                                    redirect_link?: {
-                                                        common_url?: string;
-                                                        ios_url?: string;
-                                                        android_url?: string;
-                                                        pc_url?: string;
-                                                        web_url?: string;
-                                                    };
-                                                    image_key?: string;
-                                                    name?: string;
-                                                    i18n_names?: {
-                                                        zh_cn?: string;
-                                                        en_us?: string;
-                                                        ja_jp?: string;
-                                                    };
-                                                };
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/delete document }
-                 *
-                 * 删除群菜单。
-                 *
-                 * 删除群内菜单。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。;- 操作API后，将返回群内所有菜单。
-                 */
-                delete: async (
-                    payload?: {
-                        data: { chat_menu_top_level_ids: Array<string> };
-                        path?: { chat_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    menu_tree?: {
-                                        chat_menu_top_levels?: Array<{
-                                            chat_menu_top_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                            children?: Array<{
-                                                chat_menu_second_level_id?: string;
-                                                chat_menu_item?: {
-                                                    action_type?:
-                                                        | "NONE"
-                                                        | "REDIRECT_LINK";
-                                                    redirect_link?: {
-                                                        common_url?: string;
-                                                        ios_url?: string;
-                                                        android_url?: string;
-                                                        pc_url?: string;
-                                                        web_url?: string;
-                                                    };
-                                                    image_key?: string;
-                                                    name?: string;
-                                                    i18n_names?: {
-                                                        zh_cn?: string;
-                                                        en_us?: string;
-                                                        ja_jp?: string;
-                                                    };
-                                                };
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/get document }
-                 *
-                 * 获取群内菜单
-                 *
-                 * 通过群ID获取群内菜单。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。
-                 */
-                get: async (
-                    payload?: {
-                        path?: { chat_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    menu_tree?: {
-                                        chat_menu_top_levels?: Array<{
-                                            chat_menu_top_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                            children?: Array<{
-                                                chat_menu_second_level_id?: string;
-                                                chat_menu_item?: {
-                                                    action_type?:
-                                                        | "NONE"
-                                                        | "REDIRECT_LINK";
-                                                    redirect_link?: {
-                                                        common_url?: string;
-                                                        ios_url?: string;
-                                                        android_url?: string;
-                                                        pc_url?: string;
-                                                        web_url?: string;
-                                                    };
-                                                    image_key?: string;
-                                                    name?: string;
-                                                    i18n_names?: {
-                                                        zh_cn?: string;
-                                                        en_us?: string;
-                                                        ja_jp?: string;
-                                                    };
-                                                };
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=sort&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-menu_tree/sort document }
-                 *
-                 * 排序群菜单
-                 *
-                 * 给一个群内的一级菜单排序。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在群里。;- 操作API后，将返回群内所有菜单。
-                 */
-                sort: async (
-                    payload?: {
-                        data: { chat_menu_top_level_ids: Array<string> };
-                        path?: { chat_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    menu_tree?: {
-                                        chat_menu_top_levels?: Array<{
-                                            chat_menu_top_level_id?: string;
-                                            chat_menu_item?: {
-                                                action_type?:
-                                                    | "NONE"
-                                                    | "REDIRECT_LINK";
-                                                redirect_link?: {
-                                                    common_url?: string;
-                                                    ios_url?: string;
-                                                    android_url?: string;
-                                                    pc_url?: string;
-                                                    web_url?: string;
-                                                };
-                                                image_key?: string;
-                                                name?: string;
-                                                i18n_names?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                    ja_jp?: string;
-                                                };
-                                            };
-                                            children?: Array<{
-                                                chat_menu_second_level_id?: string;
-                                                chat_menu_item?: {
-                                                    action_type?:
-                                                        | "NONE"
-                                                        | "REDIRECT_LINK";
-                                                    redirect_link?: {
-                                                        common_url?: string;
-                                                        ios_url?: string;
-                                                        android_url?: string;
-                                                        pc_url?: string;
-                                                        web_url?: string;
-                                                    };
-                                                    image_key?: string;
-                                                    name?: string;
-                                                    i18n_names?: {
-                                                        zh_cn?: string;
-                                                        en_us?: string;
-                                                        ja_jp?: string;
-                                                    };
-                                                };
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree/sort`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * chat.moderation
-             */
-            chatModeration: {
-                getWithIterator: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            page_size?: number;
-                            page_token?: string;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    moderation_setting?: string;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                    items?: Array<{
-                                                        user_id_type?: string;
-                                                        user_id?: string;
-                                                        tenant_key?: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-moderation/get document }
-                 *
-                 * 获取群成员发言权限
-                 *
-                 * 获取群发言模式、可发言用户名单等
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人 或 授权用户 必须在群里
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            page_size?: number;
-                            page_token?: string;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    moderation_setting?: string;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                    items?: Array<{
-                                        user_id_type?: string;
-                                        user_id?: string;
-                                        tenant_key?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-moderation/update document }
-                 *
-                 * 更新群发言权限
-                 *
-                 * 更新群组的发言权限设置，可设置为全员可发言、仅管理员可发言  或 指定用户可发言。
-                 *
-                 * 注意事项：; - 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 若以用户授权调用接口，**当授权用户是群主**时，可更新群发言权限;- 若以租户授权调用接口(即以机器人身份调用接口)，当**机器人是群主** 或者 **机器人是群组创建者、具备==更新应用所创建群的群信息==权限且仍在群内**时，可更新群发言权限
-                 */
-                update: async (
-                    payload?: {
-                        data?: {
-                            moderation_setting?: string;
-                            moderator_added_list?: Array<string>;
-                            moderator_removed_list?: Array<string>;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 群组 - 会话标签页
-             */
-            chatTab: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/create document }
-                 *
-                 * 添加会话标签页
-                 *
-                 * 添加自定义会话标签页。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 只允许添加类型为`doc`和`url`的会话标签页;- 添加doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- tab_config字段当前只对`url`类型的会话标签页生效;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以添加会话标签页;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            chat_tabs: Array<{
-                                tab_name?: string;
-                                tab_type:
-                                    | "message"
-                                    | "doc_list"
-                                    | "doc"
-                                    | "pin"
-                                    | "meeting_minute"
-                                    | "chat_announcement"
-                                    | "url"
-                                    | "file"
-                                    | "files_resources"
-                                    | "images_videos"
-                                    | "task";
-                                tab_content?: {
-                                    url?: string;
-                                    doc?: string;
-                                    meeting_minute?: string;
-                                    task?: string;
-                                };
-                                tab_config?: {
-                                    icon_key?: string;
-                                    is_built_in?: boolean;
-                                };
-                            }>;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_tabs?: Array<{
-                                        tab_id?: string;
-                                        tab_name?: string;
-                                        tab_type:
-                                            | "message"
-                                            | "doc_list"
-                                            | "doc"
-                                            | "pin"
-                                            | "meeting_minute"
-                                            | "chat_announcement"
-                                            | "url"
-                                            | "file"
-                                            | "files_resources"
-                                            | "images_videos"
-                                            | "task";
-                                        tab_content?: {
-                                            url?: string;
-                                            doc?: string;
-                                            meeting_minute?: string;
-                                            task?: string;
-                                        };
-                                        tab_config?: {
-                                            icon_key?: string;
-                                            is_built_in?: boolean;
-                                        };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=delete_tabs&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/delete_tabs document }
-                 *
-                 * 删除会话标签页
-                 *
-                 * 删除会话标签页。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 只允许删除类型为`doc`和`url`的会话标签页;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以删除会话标签页;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                deleteTabs: async (
-                    payload?: {
-                        data: { tab_ids: Array<string> };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_tabs?: Array<{
-                                        tab_id?: string;
-                                        tab_name?: string;
-                                        tab_type:
-                                            | "message"
-                                            | "doc_list"
-                                            | "doc"
-                                            | "pin"
-                                            | "meeting_minute"
-                                            | "chat_announcement"
-                                            | "url"
-                                            | "file"
-                                            | "files_resources"
-                                            | "images_videos"
-                                            | "task";
-                                        tab_content?: {
-                                            url?: string;
-                                            doc?: string;
-                                            meeting_minute?: string;
-                                            task?: string;
-                                        };
-                                        tab_config?: {
-                                            icon_key?: string;
-                                            is_built_in?: boolean;
-                                        };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/delete_tabs`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=list_tabs&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/list_tabs document }
-                 *
-                 * 拉取会话标签页
-                 *
-                 * 拉取会话标签页。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                listTabs: async (
-                    payload?: {
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_tabs?: Array<{
-                                        tab_id?: string;
-                                        tab_name?: string;
-                                        tab_type:
-                                            | "message"
-                                            | "doc_list"
-                                            | "doc"
-                                            | "pin"
-                                            | "meeting_minute"
-                                            | "chat_announcement"
-                                            | "url"
-                                            | "file"
-                                            | "files_resources"
-                                            | "images_videos"
-                                            | "task";
-                                        tab_content?: {
-                                            url?: string;
-                                            doc?: string;
-                                            meeting_minute?: string;
-                                            task?: string;
-                                        };
-                                        tab_config?: {
-                                            icon_key?: string;
-                                            is_built_in?: boolean;
-                                        };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/list_tabs`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=sort_tabs&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/sort_tabs document }
-                 *
-                 * 会话标签页排序
-                 *
-                 * 会话标签页排序。
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 消息标签页强制固定为第一顺位，不参与排序，但是请求体中必须包含该标签页的Tab ID;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                sortTabs: async (
-                    payload?: {
-                        data?: { tab_ids?: Array<string> };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_tabs?: Array<{
-                                        tab_id?: string;
-                                        tab_name?: string;
-                                        tab_type:
-                                            | "message"
-                                            | "doc_list"
-                                            | "doc"
-                                            | "pin"
-                                            | "meeting_minute"
-                                            | "chat_announcement"
-                                            | "url"
-                                            | "file"
-                                            | "files_resources"
-                                            | "images_videos"
-                                            | "task";
-                                        tab_content?: {
-                                            url?: string;
-                                            doc?: string;
-                                            meeting_minute?: string;
-                                            task?: string;
-                                        };
-                                        tab_config?: {
-                                            icon_key?: string;
-                                            is_built_in?: boolean;
-                                        };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/sort_tabs`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=update_tabs&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/update_tabs document }
-                 *
-                 * 更新会话标签页
-                 *
-                 * 更新会话标签页
-                 *
-                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户必须在群里;- 只允许更新类型为`doc`和`url`的会话标签页;- 更新doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以更新会话标签页;- 操作内部群时，操作者须与群组在同一租户下
-                 */
-                updateTabs: async (
-                    payload?: {
-                        data?: {
-                            chat_tabs?: Array<{
-                                tab_id?: string;
-                                tab_name?: string;
-                                tab_type:
-                                    | "message"
-                                    | "doc_list"
-                                    | "doc"
-                                    | "pin"
-                                    | "meeting_minute"
-                                    | "chat_announcement"
-                                    | "url"
-                                    | "file"
-                                    | "files_resources"
-                                    | "images_videos"
-                                    | "task";
-                                tab_content?: {
-                                    url?: string;
-                                    doc?: string;
-                                    meeting_minute?: string;
-                                    task?: string;
-                                };
-                                tab_config?: {
-                                    icon_key?: string;
-                                    is_built_in?: boolean;
-                                };
-                            }>;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chat_tabs?: Array<{
-                                        tab_id?: string;
-                                        tab_name?: string;
-                                        tab_type:
-                                            | "message"
-                                            | "doc_list"
-                                            | "doc"
-                                            | "pin"
-                                            | "meeting_minute"
-                                            | "chat_announcement"
-                                            | "url"
-                                            | "file"
-                                            | "files_resources"
-                                            | "images_videos"
-                                            | "task";
-                                        tab_content?: {
-                                            url?: string;
-                                            doc?: string;
-                                            meeting_minute?: string;
-                                            task?: string;
-                                        };
-                                        tab_config?: {
-                                            icon_key?: string;
-                                            is_built_in?: boolean;
-                                        };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/update_tabs`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * chat.top_notice
-             */
-            chatTopNotice: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=delete_top_notice&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-top_notice/delete_top_notice document }
-                 *
-                 * 撤销群置顶
-                 *
-                 * 撤销会话中的置顶。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中;- 撤销内部群置顶时，操作者须与群组在同一租户下
-                 */
-                deleteTopNotice: async (
-                    payload?: {
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=put_top_notice&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-top_notice/put_top_notice document }
-                 *
-                 * 更新群置顶
-                 *
-                 * 更新会话中的群置顶信息，可以将群中的某一条消息，或者群公告置顶显示。
-                 *
-                 * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中;- 更新内部群置顶时，操作者须与群组在同一租户下
-                 */
-                putTopNotice: async (
-                    payload?: {
-                        data: {
-                            chat_top_notice: Array<{
-                                action_type?: "1" | "2";
-                                message_id?: string;
-                            }>;
-                        };
-                        path: { chat_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/put_top_notice`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 消息 - 文件信息
-             */
-            file: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/file/create document }
-                 *
-                 * 上传文件
-                 *
-                 * 上传文件，可以上传视频，音频和常见的文件类型。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 文件大小不得超过30M，且不允许上传空文件
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            file_type:
-                                | "opus"
-                                | "mp4"
-                                | "pdf"
-                                | "doc"
-                                | "xls"
-                                | "ppt"
-                                | "stream";
-                            file_name: string;
-                            duration?: number;
-                            file: Buffer | fs.ReadStream;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { file_key?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/files`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/file/get document }
-                 *
-                 * 下载文件
-                 *
-                 * 下载文件接口，只能下载应用自己上传的文件。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 只能下载机器人自己上传的文件;- 下载用户发送的资源，请使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口;- 下载的资源大小不能超过100M;- 如果需要Content-Disposition header，发起请求的时候需要在header中设置Content-Type为application/json
-                 */
-                get: async (
-                    payload?: {
-                        path: { file_key: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/files/:file_key`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
-                },
-            },
-            /**
-             * 消息 - 图片信息
-             */
-            image: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/image/create document }
-                 *
-                 * 上传图片
-                 *
-                 * 上传图片接口，支持上传 JPEG、PNG、WEBP、GIF、TIFF、BMP、ICO格式图片。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 图片大小不得超过10M，且不支持上传大小为0的图片
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            image_type: "message" | "avatar";
-                            image: Buffer | fs.ReadStream;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { image_key?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/images`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/image/get document }
-                 *
-                 * 下载图片
-                 *
-                 * 下载图片资源，只能下载当前应用所上传且图片类型为message的图片。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 只能下载机器人自己上传且图片类型为message的图片，avatar类型暂不支持下载;- 下载用户发送的资源，请使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口
-                 */
-                get: async (
-                    payload?: {
-                        path: { image_key: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/images/:image_key`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
-                },
-            },
-            /**
-             * 消息
+             * message
              */
             message: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create document }
-                 *
-                 * 发送消息
-                 *
-                 * 给指定用户或者会话发送消息，支持文本、富文本、可交互的[消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)、群名片、个人名片、图片、视频、音频、文件、表情包。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 给用户发送消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群组中
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            receive_id: string;
-                            msg_type: string;
-                            content: string;
-                            uuid?: string;
-                        };
-                        params: {
-                            receive_id_type:
-                                | "open_id"
-                                | "user_id"
-                                | "union_id"
-                                | "email"
-                                | "chat_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=message&version=v1 document }
                  *
                  * 撤回消息
                  *
-                 * 机器人撤回机器人自己发送的消息或群主撤回群内消息。
+                 * 调用该接口撤回指定消息。调用接口的身份不同（身份通过 Authorization 请求头参数指定），可实现的效果不同：;;- 机器人可以撤回该机器人自己发送的消息。;- 群聊的群主可以撤回群内指定的消息。
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ，撤回消息时机器人仍需要在会话内;- 机器人可以撤回单聊和群组内，自己发送 且 发送时间不超过1天(24小时)的消息;- 若机器人要撤回群内他人发送的消息，则机器人必须是该群的群主、管理员 或者 创建者，且消息发送时间不超过1年;- 无法撤回通过「[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)」接口发送的消息
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 撤回用户单聊内的消息时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 撤回群组内的消息时，机器人需要在该群组中。;;;## 使用限制;- 无法撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息，撤回该接口发送的消息需要使用[批量撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/delete)接口。;- 撤回的消息需要符合由企业管理员设置的撤回时限。详情了解[管理员设置撤回和编辑消息权限](https://www.feishu.cn/hc/zh-CN/articles/325339752183)。;- 在群聊内的机器人如需撤回他人发送的消息，则该机器人必须是该群的群主、管理员或者创建者，且消息发送时间不超过 1 年。;
                  */
                 delete: async (
                     payload?: {
@@ -8809,550 +5500,6 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=forward&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=message&version=v1 document }
-                 *
-                 * 转发一条消息
-                 */
-                forward: async (
-                    payload?: {
-                        data: { receive_id: string };
-                        params: {
-                            receive_id_type:
-                                | "open_id"
-                                | "user_id"
-                                | "union_id"
-                                | "email"
-                                | "chat_id"
-                                | "thread_id";
-                            uuid?: string;
-                        };
-                        path: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/forward`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/get document }
-                 *
-                 * 获取指定消息的内容
-                 *
-                 * 通过 message_id 查询消息内容。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 机器人必须在群组中
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            card_msg_content_type?: string;
-                            with_sender_name?: boolean;
-                        };
-                        path: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        message_id?: string;
-                                        root_id?: string;
-                                        parent_id?: string;
-                                        thread_id?: string;
-                                        msg_type?: string;
-                                        create_time?: string;
-                                        update_time?: string;
-                                        deleted?: boolean;
-                                        updated?: boolean;
-                                        chat_id?: string;
-                                        sender?: {
-                                            id: string;
-                                            id_type: string;
-                                            sender_type: string;
-                                            tenant_key?: string;
-                                            sender_name?: string;
-                                            open_bot_id?: string;
-                                            sender_i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        body?: { content: string };
-                                        mentions?: Array<{
-                                            key: string;
-                                            id: string;
-                                            id_type: string;
-                                            name: string;
-                                            tenant_key?: string;
-                                        }>;
-                                        upper_message_id?: string;
-                                        message_app_link?: string;
-                                        message_position?: string;
-                                        thread_message_position?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            container_id_type: string;
-                            container_id: string;
-                            start_time?: string;
-                            end_time?: string;
-                            sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
-                            page_size?: number;
-                            page_token?: string;
-                            card_msg_content_type?: string;
-                            only_thread_root_messages?: boolean;
-                            with_sender_name?: boolean;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/messages`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    items?: Array<{
-                                                        message_id?: string;
-                                                        root_id?: string;
-                                                        parent_id?: string;
-                                                        thread_id?: string;
-                                                        msg_type?: string;
-                                                        create_time?: string;
-                                                        update_time?: string;
-                                                        deleted?: boolean;
-                                                        updated?: boolean;
-                                                        chat_id?: string;
-                                                        sender?: {
-                                                            id: string;
-                                                            id_type: string;
-                                                            sender_type: string;
-                                                            tenant_key?: string;
-                                                            sender_name?: string;
-                                                            open_bot_id?: string;
-                                                            sender_i18n_names?: {
-                                                                zh_cn?: string;
-                                                                en_us?: string;
-                                                                ja_jp?: string;
-                                                            };
-                                                        };
-                                                        body?: {
-                                                            content: string;
-                                                        };
-                                                        mentions?: Array<{
-                                                            key: string;
-                                                            id: string;
-                                                            id_type: string;
-                                                            name: string;
-                                                            tenant_key?: string;
-                                                        }>;
-                                                        upper_message_id?: string;
-                                                        message_app_link?: string;
-                                                        message_position?: string;
-                                                        thread_message_position?: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/list document }
-                 *
-                 * 获取会话历史消息
-                 *
-                 * 获取会话（包括单聊、群组）的历史消息（聊天记录）。
-                 *
-                 * - 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 获取消息时，机器人必须在群组中
-                 *
-                 * 接口级别权限默认只能获取单聊（p2p）消息，如果需要获取群组（group）消息，应用还必须拥有 **==获取群组中所有消息==** 权限
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            container_id_type: string;
-                            container_id: string;
-                            start_time?: string;
-                            end_time?: string;
-                            sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
-                            page_size?: number;
-                            page_token?: string;
-                            card_msg_content_type?: string;
-                            only_thread_root_messages?: boolean;
-                            with_sender_name?: boolean;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    items?: Array<{
-                                        message_id?: string;
-                                        root_id?: string;
-                                        parent_id?: string;
-                                        thread_id?: string;
-                                        msg_type?: string;
-                                        create_time?: string;
-                                        update_time?: string;
-                                        deleted?: boolean;
-                                        updated?: boolean;
-                                        chat_id?: string;
-                                        sender?: {
-                                            id: string;
-                                            id_type: string;
-                                            sender_type: string;
-                                            tenant_key?: string;
-                                            sender_name?: string;
-                                            open_bot_id?: string;
-                                            sender_i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        body?: { content: string };
-                                        mentions?: Array<{
-                                            key: string;
-                                            id: string;
-                                            id_type: string;
-                                            name: string;
-                                            tenant_key?: string;
-                                        }>;
-                                        upper_message_id?: string;
-                                        message_app_link?: string;
-                                        message_position?: string;
-                                        thread_message_position?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=merge_forward&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=merge_forward&project=im&resource=message&version=v1 document }
-                 *
-                 * 合并转发多条消息
-                 */
-                mergeForward: async (
-                    payload?: {
-                        data: {
-                            receive_id: string;
-                            message_id_list: Array<string>;
-                        };
-                        params: {
-                            receive_id_type:
-                                | "open_id"
-                                | "user_id"
-                                | "union_id"
-                                | "email"
-                                | "chat_id"
-                                | "thread_id";
-                            uuid?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    message?: {
-                                        message_id?: string;
-                                        root_id?: string;
-                                        parent_id?: string;
-                                        thread_id?: string;
-                                        msg_type?: string;
-                                        create_time?: string;
-                                        update_time?: string;
-                                        deleted?: boolean;
-                                        updated?: boolean;
-                                        chat_id?: string;
-                                        sender?: {
-                                            id: string;
-                                            id_type: string;
-                                            sender_type: string;
-                                            tenant_key?: string;
-                                            sender_name?: string;
-                                            open_bot_id?: string;
-                                            sender_i18n_names?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                                ja_jp?: string;
-                                            };
-                                        };
-                                        body?: { content: string };
-                                        mentions?: Array<{
-                                            key: string;
-                                            id: string;
-                                            id_type: string;
-                                            name: string;
-                                            tenant_key?: string;
-                                        }>;
-                                        upper_message_id?: string;
-                                        message_app_link?: string;
-                                        message_position?: string;
-                                        thread_message_position?: string;
-                                    };
-                                    invalid_message_id_list?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/merge_forward`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/patch document }
-                 *
-                 * 更新应用发送的消息
-                 *
-                 * 更新应用已发送的消息卡片内容。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 若以user_access_token更新消息，该操作用户必须是卡片消息的发送者;- 仅支持对所有人更新**未撤回**的[「共享卡片」](ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)消息，需在卡片的config属性中，显式声明 =="update_multi":true==。 ;- **不支持更新批量消息**;- 文本消息请求体最大不能超过150KB；卡片及富文本消息请求体最大不能超过30KB;- 仅支持修改14天内发送的消息;- 单条消息更新频控为**5QPS**
-                 */
-                patch: async (
-                    payload?: {
-                        data: { content: string };
-                        path: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id`,
-                                path
-                            ),
-                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -9368,6 +5515,12 @@ export default abstract class Client extends human_authentication {
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=push_follow_up&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=push_follow_up&project=im&resource=message&version=v1 document }
+                 *
+                 * 添加跟随气泡
+                 *
+                 * 调用该接口在最新一条消息下方添加气泡样式的内容，当消息接收者点击气泡或者新消息到达后，气泡消失。
+                 *
+                 * ![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/05f992f251e9949661370b6c73aa6eda_DseiZlt09t.png?height=278&maxWidth=450&width=1383);;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 跟随气泡的效果在飞书客户端 v7.20 及以上版本生效。;- 仅支持在当前机器人与用户单聊的消息上添加跟随气泡，且消息需要符合：;;    - 消息是机器人发送的。;    - 消息是会话内最新的消息。;    - 消息发送后未超过 600 秒。;;## 注意事项;;添加跟随气泡后，会话内的用户点击气泡会自动转换为该用户发送的一条消息，你可以为应用订阅[接收消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive)事件，接收用户发送的消息并判断是否为跟随气泡的内容。
                  */
                 pushFollowUp: async (
                     payload?: {
@@ -9425,22 +5578,19 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_users&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_app&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/read_users document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_app&project=im&resource=message&version=v1 document }
                  *
-                 * 查询消息已读信息
+                 * 发送应用内加急
                  *
-                 * 查询消息的已读信息。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能查询机器人自己发送，且发送时间不超过7天的消息;- 查询消息已读信息时机器人仍需要在会话内;- 本接口不支持查询批量消息
+                 * 调用该接口把指定消息加急给目标用户，加急仅在飞书客户端内通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
                  */
-                readUsers: async (
+                urgentApp: async (
                     payload?: {
+                        data: { user_id_list: Array<string> };
                         params: {
                             user_id_type: "user_id" | "union_id" | "open_id";
-                            page_size?: number;
-                            page_token?: string;
                         };
                         path: { message_id: string };
                     },
@@ -9455,23 +5605,14 @@ export default abstract class Client extends human_authentication {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        user_id_type: string;
-                                        user_id: string;
-                                        timestamp: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    has_more: boolean;
-                                    page_token?: string;
-                                };
+                                data?: { invalid_user_id_list: Array<string> };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/read_users`,
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_app`,
                                 path
                             ),
-                            method: "GET",
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -9484,23 +5625,21 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_phone&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/reply document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_phone&project=im&resource=message&version=v1 document }
                  *
-                 * 回复消息
+                 * 发送电话加急
                  *
-                 * 回复指定消息，支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种消息类型。
+                 * 调用该接口把指定消息加急给目标用户，加急将通过飞书客户端和电话进行通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 回复私聊消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 回复群组消息，需要机器人在群中
+                 * **注意**：电话加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** > **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
                  */
-                reply: async (
+                urgentPhone: async (
                     payload?: {
-                        data: {
-                            content: string;
-                            msg_type: string;
-                            reply_in_thread?: boolean;
-                            uuid?: string;
+                        data: { user_id_list: Array<string> };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
                         };
                         path: { message_id: string };
                     },
@@ -9515,50 +5654,103 @@ export default abstract class Client extends human_authentication {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: {
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                };
+                                data?: { invalid_user_id_list: Array<string> };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_phone`,
                                 path
                             ),
-                            method: "POST",
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_sms&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_sms&project=im&resource=message&version=v1 document }
+                 *
+                 * 发送短信加急
+                 *
+                 * 调用该接口把指定消息加急给目标用户，加急将通过飞书客户端和短信进行通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
+                 *
+                 * **注意**：短信加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** >  **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
+                 */
+                urgentSms: async (
+                    payload?: {
+                        data: { user_id_list: Array<string> };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { invalid_user_id_list: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_sms`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=message&version=v1 document }
+                 *
+                 * 更新已发送的消息卡片
+                 *
+                 * 通过消息 ID（message_id）更新已发送的消息卡片的内容。
+                 */
+                patch: async (
+                    payload?: {
+                        data: { content: string };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -9729,6 +5921,8 @@ export default abstract class Client extends human_authentication {
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
                  *
                  * 搜索消息
+                 *
+                 * 用户可以通过关键字搜索可见消息，可见性和套件内搜索一致。
                  */
                 search: async (
                     payload?: {
@@ -9836,11 +6030,694 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=im&resource=message&version=v1 document }
+                 *
+                 * 回复消息
+                 *
+                 * 调用该接口回复指定消息。回复的内容支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种类型。
+                 *
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
+                 */
+                reply: async (
+                    payload?: {
+                        data: {
+                            content: string;
+                            msg_type: string;
+                            reply_in_thread?: boolean;
+                            uuid?: string;
+                        };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            container_id_type: string;
+                            container_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                            sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                            page_size?: number;
+                            page_token?: string;
+                            card_msg_content_type?: string;
+                            only_thread_root_messages?: boolean;
+                            with_sender_name?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/messages`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        message_id?: string;
+                                                        root_id?: string;
+                                                        parent_id?: string;
+                                                        thread_id?: string;
+                                                        msg_type?: string;
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                        deleted?: boolean;
+                                                        updated?: boolean;
+                                                        chat_id?: string;
+                                                        sender?: {
+                                                            id: string;
+                                                            id_type: string;
+                                                            sender_type: string;
+                                                            tenant_key?: string;
+                                                            sender_name?: string;
+                                                            open_bot_id?: string;
+                                                            sender_i18n_names?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                                ja_jp?: string;
+                                                            };
+                                                        };
+                                                        body?: {
+                                                            content: string;
+                                                        };
+                                                        mentions?: Array<{
+                                                            key: string;
+                                                            id: string;
+                                                            id_type: string;
+                                                            name: string;
+                                                            tenant_key?: string;
+                                                        }>;
+                                                        upper_message_id?: string;
+                                                        message_app_link?: string;
+                                                        message_position?: string;
+                                                        thread_message_position?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=message&version=v1 document }
+                 *
+                 * 获取会话历史消息
+                 *
+                 * 获取指定会话（包括单聊、群组）内的历史消息（即聊天记录）。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            container_id_type: string;
+                            container_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                            sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                            page_size?: number;
+                            page_token?: string;
+                            card_msg_content_type?: string;
+                            only_thread_root_messages?: boolean;
+                            with_sender_name?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        message_id?: string;
+                                        root_id?: string;
+                                        parent_id?: string;
+                                        thread_id?: string;
+                                        msg_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        deleted?: boolean;
+                                        updated?: boolean;
+                                        chat_id?: string;
+                                        sender?: {
+                                            id: string;
+                                            id_type: string;
+                                            sender_type: string;
+                                            tenant_key?: string;
+                                            sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        body?: { content: string };
+                                        mentions?: Array<{
+                                            key: string;
+                                            id: string;
+                                            id_type: string;
+                                            name: string;
+                                            tenant_key?: string;
+                                        }>;
+                                        upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=merge_forward&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=merge_forward&project=im&resource=message&version=v1 document }
+                 *
+                 * 合并转发消息
+                 *
+                 * 将来自同一个会话内的多条消息，合并转发给指定的用户、群聊或话题。
+                 */
+                mergeForward: async (
+                    payload?: {
+                        data: {
+                            receive_id: string;
+                            message_id_list: Array<string>;
+                        };
+                        params: {
+                            receive_id_type:
+                                | "open_id"
+                                | "user_id"
+                                | "union_id"
+                                | "email"
+                                | "chat_id"
+                                | "thread_id";
+                            uuid?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message?: {
+                                        message_id?: string;
+                                        root_id?: string;
+                                        parent_id?: string;
+                                        thread_id?: string;
+                                        msg_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        deleted?: boolean;
+                                        updated?: boolean;
+                                        chat_id?: string;
+                                        sender?: {
+                                            id: string;
+                                            id_type: string;
+                                            sender_type: string;
+                                            tenant_key?: string;
+                                            sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        body?: { content: string };
+                                        mentions?: Array<{
+                                            key: string;
+                                            id: string;
+                                            id_type: string;
+                                            name: string;
+                                            tenant_key?: string;
+                                        }>;
+                                        upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
+                                    };
+                                    invalid_message_id_list?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/merge_forward`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message&version=v1 document }
+                 *
+                 * 获取指定消息的内容
+                 *
+                 * 调用该接口通过消息的 `message_id` 查询消息内容。
+                 *
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在消息所属的群组内。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            card_msg_content_type?: string;
+                            with_sender_name?: boolean;
+                        };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        message_id?: string;
+                                        root_id?: string;
+                                        parent_id?: string;
+                                        thread_id?: string;
+                                        msg_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        deleted?: boolean;
+                                        updated?: boolean;
+                                        chat_id?: string;
+                                        sender?: {
+                                            id: string;
+                                            id_type: string;
+                                            sender_type: string;
+                                            tenant_key?: string;
+                                            sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        body?: { content: string };
+                                        mentions?: Array<{
+                                            key: string;
+                                            id: string;
+                                            id_type: string;
+                                            name: string;
+                                            tenant_key?: string;
+                                        }>;
+                                        upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message&version=v1 document }
+                 *
+                 * 发送消息
+                 *
+                 * 调用该接口向指定用户或者群聊发送消息。支持发送的消息类型包括文本、富文本、卡片、群名片、个人名片、图片、视频、音频、文件以及表情包等。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            receive_id: string;
+                            msg_type: string;
+                            content: string;
+                            uuid?: string;
+                        };
+                        params: {
+                            receive_id_type:
+                                | "open_id"
+                                | "user_id"
+                                | "union_id"
+                                | "email"
+                                | "chat_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=forward&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=message&version=v1 document }
+                 *
+                 * 转发消息
+                 *
+                 * 调用该接口将一条指定的消息转发给用户、群聊或话题。
+                 */
+                forward: async (
+                    payload?: {
+                        data: { receive_id: string };
+                        params: {
+                            receive_id_type:
+                                | "open_id"
+                                | "user_id"
+                                | "union_id"
+                                | "email"
+                                | "chat_id"
+                                | "thread_id";
+                            uuid?: string;
+                        };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/forward`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=update&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message&version=v1 document }
                  *
-                 * 编辑已发送的消息内容，当前仅支持编辑文本和富文本消息。
+                 * 编辑消息
+                 *
+                 * 调用该接口编辑已发送的消息内容，支持编辑文本、富文本消息。如需编辑卡片消息，请使用[更新应用发送的消息卡片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/patch)接口
                  */
                 update: async (
                     payload?: {
@@ -9914,23 +6791,22 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_app&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_users&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/urgent_app document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_users&project=im&resource=message&version=v1 document }
                  *
-                 * 发送应用内加急
+                 * 消息发送者查询消息已读状态
                  *
-                 * 对指定消息进行应用内加急。
+                 * 作为消息发送者，查询指定消息是否已读。接口只返回已读用户的信息，不返回未读用户的信息。
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 不支持加急批量消息;- 只能加急机器人自己发送的消息;- 加急时机器人需要在加急消息所在的群中;- 调用本接口需要用户已阅读加急的消息才可以继续加急（用户未读的加急上限为200条）
-                 *
-                 * 特别说明：;- 默认接口限流为50 QPS，请谨慎调用
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  。;- 查询消息已读信息时，机器人需要在待查询消息所在的会话内。;;## 使用限制;- 只能查询由当前机器人自己发送的、发送时间不超过 7 天的消息已读信息。;- 一次请求只能查询一条消息，不支持批量查询。
                  */
-                urgentApp: async (
+                readUsers: async (
                     payload?: {
-                        data: { user_id_list: Array<string> };
                         params: {
                             user_id_type: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
                         };
                         path: { message_id: string };
                     },
@@ -9945,14 +6821,23 @@ export default abstract class Client extends human_authentication {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { invalid_user_id_list: Array<string> };
+                                data?: {
+                                    items?: Array<{
+                                        user_id_type: string;
+                                        user_id: string;
+                                        timestamp: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_app`,
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/read_users`,
                                 path
                             ),
-                            method: "PATCH",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -9965,23 +6850,21 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_phone&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/urgent_phone document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=im&resource=message&version=v1 document }
                  *
-                 * 发送电话加急
+                 * 通过模版消息卡片回复消息
                  *
-                 * 对指定消息进行应用内加急与电话加急。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能加急机器人自己发送的消息;- 加急时机器人需要在加急消息所在的群组中;- 需要用户阅读已加急的消息才可以继续加急（用户未读的加急上限为200条）
-                 *
-                 * 特别说明：;- 通过接口产生的电话加急将消耗企业的加急额度，请慎重调用;- 通过[租户管理后台](https://admin.feishu.cn/)-费用中心-短信/电话加急 可以查看当前额度;- 默认接口限流为50 QPS，请谨慎调用
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
                  */
-                urgentPhone: async (
+                replyByCard: async (
                     payload?: {
-                        data: { user_id_list: Array<string> };
-                        params: {
-                            user_id_type: "user_id" | "union_id" | "open_id";
+                        data: {
+                            reply_in_thread?: boolean;
+                            uuid?: string;
+                            template_id: string;
+                            template_variable?: Record<string, any>;
                         };
                         path: { message_id: string };
                     },
@@ -9990,56 +6873,18 @@ export default abstract class Client extends human_authentication {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { invalid_user_id_list: Array<string> };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_phone`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_sms&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/urgent_sms document }
-                 *
-                 * 发送短信加急
-                 *
-                 * 对指定消息进行应用内加急与短信加急。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在加急消息所在的群组中;- 调用本接口需要用户已阅读加急的消息才可以继续加急（用户未读的加急上限为200条）
-                 *
-                 * 特别说明：;- 通过接口产生的短信加急将消耗企业的加急额度，请慎重调用;- 通过[租户管理后台](https://admin.feishu.cn/)-费用中心-短信/电话加急 可以查看当前额度;- 默认接口限流为50 QPS，请谨慎调用
-                 */
-                urgentSms: async (
-                    payload?: {
-                        data: { user_id_list: Array<string> };
-                        params: {
-                            user_id_type: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
+                    const { template_id, template_variable, ...rest } = data;
+                    const targetData = {
+                        msg_type: "interactive",
+                        content: JSON.stringify({
+                            type: "template",
+                            data: {
+                                template_id: template_id,
+                                template_variable: template_variable,
+                            },
+                        }),
+                        ...rest,
+                    };
 
                     return this.httpInstance
                         .request<
@@ -10047,15 +6892,51 @@ export default abstract class Client extends human_authentication {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { invalid_user_id_list: Array<string> };
+                                data?: {
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_sms`,
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
                                 path
                             ),
-                            method: "PATCH",
-                            data,
+                            method: "POST",
+                            data: targetData,
                             params,
                             headers,
                             paramsSerializer: (params) =>
@@ -10069,11 +6950,9 @@ export default abstract class Client extends human_authentication {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message&version=v1 document }
                  *
                  * 通过模版消息卡片发送消息
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 给用户发送消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群组中
                  */
                 createByCard: async (
                     payload?: {
@@ -10172,109 +7051,11 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/reply document }
-                 *
-                 * 通过模版消息卡片回复消息
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 回复私聊消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 回复群组消息，需要机器人在群中
-                 */
-                replyByCard: async (
-                    payload?: {
-                        data: {
-                            reply_in_thread?: boolean;
-                            uuid?: string;
-                            template_id: string;
-                            template_variable?: Record<string, any>;
-                        };
-                        path: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const { template_id, template_variable, ...rest } = data;
-                    const targetData = {
-                        msg_type: "interactive",
-                        content: JSON.stringify({
-                            type: "template",
-                            data: {
-                                template_id: template_id,
-                                template_variable: template_variable,
-                            },
-                        }),
-                        ...rest,
-                    };
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    message_id?: string;
-                                    root_id?: string;
-                                    parent_id?: string;
-                                    thread_id?: string;
-                                    msg_type?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    deleted?: boolean;
-                                    updated?: boolean;
-                                    chat_id?: string;
-                                    sender?: {
-                                        id: string;
-                                        id_type: string;
-                                        sender_type: string;
-                                        tenant_key?: string;
-                                        sender_name?: string;
-                                        open_bot_id?: string;
-                                        sender_i18n_names?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                    body?: { content: string };
-                                    mentions?: Array<{
-                                        key: string;
-                                        id: string;
-                                        id_type: string;
-                                        name: string;
-                                        tenant_key?: string;
-                                    }>;
-                                    upper_message_id?: string;
-                                    message_app_link?: string;
-                                    message_position?: string;
-                                    thread_message_position?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
-                                path
-                            ),
-                            method: "POST",
-                            data: targetData,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=update&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message&version=v1 document }
                  *
-                 * 通过模版消息卡片
+                 * 通过模版消息卡片编辑消息
                  */
                 updateByCard: async (
                     payload?: {
@@ -10365,29 +7146,23 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * 消息 - 表情回复
+             * batch_message
              */
-            messageReaction: {
+            batchMessage: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=batch_query&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=read_user&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=message.reaction&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_user&project=im&resource=batch_message&version=v1 document }
                  *
-                 * 批量获取消息表情
+                 * 查询批量消息推送和阅读人数
+                 *
+                 * [批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)后，可通过该接口查询消息推送的总人数以及消息已读人数。
+                 *
+                 * ## 前提条件;;应用需要启用[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;- 只能查询 30 天内，通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。;- 该接口返回的数据为查询时刻的快照数据。
                  */
-                batchQuery: async (
+                readUser: async (
                     payload?: {
-                        data: {
-                            queries: Array<{
-                                message_id?: string;
-                                page_token?: string;
-                            }>;
-                            page_size_per_message?: number;
-                            reaction_type?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
+                        path: { batch_message_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -10401,39 +7176,172 @@ export default abstract class Client extends human_authentication {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    success_msg_reaction_details?: Array<{
-                                        message_id?: string;
-                                        has_more?: boolean;
-                                        page_token?: string;
-                                        message_reaction_items?: Array<{
-                                            reaction_id?: string;
-                                            operator?: {
-                                                operator_id: string;
-                                                operator_type: "app" | "user";
-                                            };
-                                            action_time?: string;
-                                            emoji_type?: string;
-                                        }>;
-                                    }>;
-                                    success_msg_reaction_counts?: Array<{
-                                        message_id?: string;
-                                        reaction_count?: Array<{
-                                            reaction_type?: string;
-                                            count?: string;
-                                        }>;
-                                    }>;
-                                    fail_msg_reaction_details?: Array<{
-                                        message_id?: string;
-                                        fail_reason?:
-                                            | "invalid"
-                                            | "invalid_page_token"
-                                            | "no_permission";
-                                    }>;
+                                    read_user?: {
+                                        read_count: string;
+                                        total_count: string;
+                                    };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/reactions/batch_query`,
+                                `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/read_user`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=batch_message&version=v1 document }
+                 *
+                 * 批量撤回消息
+                 *
+                 * 该接口用于撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。
+                 *
+                 * ## 前提条件;;应用需要启用[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 仅支持撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口发送的消息。如果你需要撤回单条消息，请使用[撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete)接口。;- 不支持撤回时间较久的消息。撤回的消息需要符合由企业管理员设置的撤回时限。详情了解[管理员设置撤回和编辑消息权限](https://www.feishu.cn/hc/zh-CN/articles/325339752183)。;- 该接口为异步接口，会有一定延迟。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { batch_message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=batch_message&apiName=get_progress&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_progress&project=im&resource=batch_message&version=v1 document }
+                 *
+                 * 查询批量消息整体进度
+                 *
+                 * [批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)或者[批量撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/delete)后，可通过该接口查询消息的发送进度和撤回进度。
+                 */
+                getProgress: async (
+                    payload?: {
+                        path: { batch_message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    batch_message_send_progress?: {
+                                        valid_user_ids_count?: number;
+                                        success_user_ids_count?: number;
+                                        read_user_ids_count?: number;
+                                    };
+                                    batch_message_recall_progress?: {
+                                        recall?: boolean;
+                                        recall_count?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/get_progress`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.members
+             */
+            chatMembers: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat.members&version=v1 document }
+                 *
+                 * 将用户或机器人拉入群聊
+                 *
+                 * 把指定的用户或机器人拉入指定群聊内。
+                 *
+                 * ## 前提条件;;- 调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用该接口的应用或者用户，必须在相应的群组中。;- 如需拉机器人进群，则该机器人必须开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 如果以应用身份拉用户进群，则该用户需要在应用的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;;## 使用限制;;- 外部租户不能被拉入内部群，但可以被拉入外部群。通过机器人拉外部租户的用户进群，需要先为机器人配置对外共享能力，详情参考[机器人支持外部群和外部用户单聊](https://open.feishu.cn/document/uAjLw4CM/ukzMukzMukzM/develop-robots/add-bot-to-external-group)。;- 操作内部群时，当前操作者必须与群组在同一租户内。;- 如果群组配置了 **仅群主和群管理员可添加群成员**，则仅有群主、群管理员，或者是创建群组且具有 **更新应用所创建群的群信息（im:chat:operate_as_owner）** 权限的机器人，可以拉用户或机器人进群。;- 如果群组没有配置 **仅群主和群管理员可添加群成员**，则所有群成员都可以拉用户或机器人进群。;- 操作同一个群组时，如果同时多次调用当前接口，可能会出现 232019 错误码，建议你串行调用，即等待当前调用完成后再进行下一次调用。;;
+                 */
+                create: async (
+                    payload?: {
+                        data?: { id_list?: Array<string> };
+                        params?: {
+                            member_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "app_id";
+                            succeed_type?: number;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invalid_id_list?: Array<string>;
+                                    not_existed_id_list?: Array<string>;
+                                    pending_approval_id_list?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
                                 path
                             ),
                             method: "POST",
@@ -10449,19 +7357,323 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=is_in_chat&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=is_in_chat&project=im&resource=chat.members&version=v1 document }
                  *
-                 * 添加消息表情回复
+                 * 判断用户或机器人是否在群里
                  *
-                 * 给指定消息添加指定类型的表情回复（reaction即表情回复，本文档统一用“reaction”代称）。
+                 * 根据使用的 access_token 判断对应的用户或者机器人是否在指定的群里。
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 待添加reaction的消息要真实存在，不能被撤回;- 给消息添加reaction，需要reaction的发送方（机器人或者用户）在消息所在的会话内
+                 * ## 前提条件;;调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;获取内部群信息时，操作者须与群组在同一租户下。
                  */
-                create: async (
+                isInChat: async (
                     payload?: {
-                        data: { reaction_type: { emoji_type: string } };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { is_in_chat?: boolean };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/is_in_chat`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat.members&version=v1 document }
+                 *
+                 * 将用户或机器人移出群聊
+                 *
+                 * 将指定的用户或机器人从群聊中移出。
+                 *
+                 * ## 前提条件;;调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 仅群主、群管理员，或者是创建群组且具有 **更新应用所创建群的群信息（im:chat:operate_as_owner）** 权限的机器人，可以将其他群成员移出群组。;- 用户或机器人在任何条件下均可将自己移出群组（即主动退群）。;- 每次请求，最多移除 50 个用户或者 5 个机器人。;- 操作内部群时，操作者须与群组在同一租户下。;- 操作同一个群组时，如果同时多次调用当前接口，可能会出现 232019 错误码，建议你串行调用，即等待当前调用完成后再进行下一次调用。
+                 */
+                delete: async (
+                    payload?: {
+                        data?: { id_list?: Array<string> };
+                        params?: {
+                            member_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "app_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { invalid_id_list?: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=me_join&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=me_join&project=im&resource=chat.members&version=v1 document }
+                 *
+                 * 用户或机器人主动加入群聊
+                 *
+                 * 将当前调用接口的操作者（用户或机器人）加入指定群聊。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口仅支持加入公开群。;;    公开群是指的群类型，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_type ` 参数取值是否为 `public`。;;- 操作内部群时，操作者必须与相应的群组在同一租户内。;;    内部群是指的群标签，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_tag ` 参数取值是否为 `inner `。
+                 */
+                meJoin: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/me_join`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                getWithIterator: async (
+                    payload?: {
+                        params?: {
+                            member_id_type?: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                            check_security_conf?: boolean;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        member_id_type?: string;
+                                                        member_id?: string;
+                                                        name?: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    member_total?: number;
+                                                    trigger_security_conf_limit?: boolean;
+                                                    security_conf_limit?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.members&version=v1 document }
+                 *
+                 * 获取群成员列表
+                 *
+                 * 获取指定群组的成员信息，包括成员名字与 ID。
+                 *
+                 * ## 前提条件;;- 调用该接口的应用，需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 当前接口的操作者（机器人或用户）必须在被查询的群组内。;;## 使用限制;;- 该接口不会返回群组内的机器人成员。;- 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的 page_size。; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的 page_size。;- 获取内部群信息时，操作者须与群组在同一租户下。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            member_id_type?: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                            check_security_conf?: boolean;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        member_id_type?: string;
+                                        member_id?: string;
+                                        name?: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    member_total?: number;
+                                    trigger_security_conf_limit?: boolean;
+                                    security_conf_limit?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * pin
+             */
+            pin: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=pin&version=v1 document }
+                 *
+                 * 移除 Pin 消息
+                 *
+                 * 移除一条指定消息的 Pin。
+                 */
+                delete: async (
+                    payload?: {
                         path: { message_id: string };
                     },
                     options?: IRequestOptions
@@ -10472,22 +7684,316 @@ export default abstract class Client extends human_authentication {
                     return this.httpInstance
                         .request<
                             any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/pins/:message_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            chat_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/pins`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        message_id: string;
+                                                        chat_id?: string;
+                                                        operator_id?: string;
+                                                        operator_id_type?: string;
+                                                        create_time?: string;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=pin&version=v1 document }
+                 *
+                 * 获取群内 Pin 消息
+                 *
+                 * 获取指定群、指定时间范围内的所有 Pin 消息。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            chat_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
                             {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    reaction_id?: string;
-                                    operator?: {
-                                        operator_id: string;
-                                        operator_type: "app" | "user";
-                                    };
-                                    action_time?: string;
-                                    reaction_type?: { emoji_type: string };
+                                    items?: Array<{
+                                        message_id: string;
+                                        chat_id?: string;
+                                        operator_id?: string;
+                                        operator_id_type?: string;
+                                        create_time?: string;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
+                                `${this.domain}/open-apis/im/v1/pins`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=pin&version=v1 document }
+                 *
+                 * Pin 消息
+                 *
+                 * Pin 一条指定的消息。Pin 消息的效果可参见[Pin 消息概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/pin-overview)。
+                 */
+                create: async (
+                    payload?: {
+                        data: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    pin?: {
+                                        message_id: string;
+                                        chat_id?: string;
+                                        operator_id?: string;
+                                        operator_id_type?: string;
+                                        create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/pins`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat
+             */
+            chat: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat&version=v1 document }
+                 *
+                 * 解散群
+                 *
+                 * 通过 chat_id 解散指定群组。通过 API 解散群组后，群聊天记录将不会保存。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以应用身份（tenant_access_token）解散群，则应用机器人需要符合以下任一情况。;;    - 应用机器人是群主。;    - 应用机器人是群的创建者，且应用已开通 **更新应用所创建群的群信息**（im:chat:operate_as_owner）权限。;;- 如果以用户身份（user_access_token）解散群，需要该用户是群主。;;
+                 */
+                delete: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=link&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=link&project=im&resource=chat&version=v1 document }
+                 *
+                 * 获取群分享链接
+                 *
+                 * 获取指定群的分享链接，他人点击分享链接后可加入群组。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口的用户或机器人必须在对应群组内。;- 单聊、密聊、团队群不支持生成分享链接。;- 当机器人被停用或者退出群组时，由该机器人获取的群分享链接也将失效。;- 当群组设置了 **仅群主和群管理员可添加群成员或分享群** 时，调用该接口的用户或机器人必须是群组的群主或管理员。;- 获取内部群分享链接时，调用该接口的用户或机器人必须和群组属于同一租户。
+                 */
+                link: async (
+                    payload?: {
+                        data?: {
+                            validity_period?: "week" | "year" | "permanently";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    share_link?: string;
+                                    expire_time?: string;
+                                    is_permanent?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/link`,
                                 path
                             ),
                             method: "POST",
@@ -10503,15 +8009,2302 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat&version=v1 document }
+                 *
+                 * 更新群信息
+                 *
+                 * 更新指定群的信息，包括群头像、群名称、群描述、群配置以及群主等。
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            avatar?: string;
+                            name?: string;
+                            description?: string;
+                            i18n_names?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                            add_member_permission?: string;
+                            share_card_permission?: string;
+                            at_all_permission?: string;
+                            edit_permission?: string;
+                            owner_id?: string;
+                            join_message_visibility?: string;
+                            leave_message_visibility?: string;
+                            membership_approval?: string;
+                            labels?: Array<string>;
+                            toolkit_ids?: Array<string>;
+                            restricted_mode_setting?: {
+                                status?: boolean;
+                                screenshot_has_permission_setting?:
+                                    | "all_members"
+                                    | "not_anyone";
+                                download_has_permission_setting?:
+                                    | "all_members"
+                                    | "not_anyone";
+                                message_has_permission_setting?:
+                                    | "all_members"
+                                    | "not_anyone";
+                            };
+                            chat_type?: string;
+                            group_message_type?: "chat" | "thread";
+                            urgent_setting?: "only_owner" | "all_members";
+                            video_conference_setting?:
+                                | "only_owner"
+                                | "all_members";
+                            pin_manage_setting?: "only_owner" | "all_members";
+                            hide_member_count_setting?:
+                                | "all_members"
+                                | "only_owner";
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat&version=v1 document }
+                 *
+                 * 创建群
+                 *
+                 * 创建群聊，创建时支持设置群头像、群名称、群主以及群类型等配置，同时支持邀请群成员、群机器人入群。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;商店应用无法使用用户的 user_id，因此使用商店应用调用本接口时用户 ID 类型请选择 open_id 或者 union_id。;;## 注意事项;;- 如果你需要在已创建的群聊内邀请用户或机器人入群，可调用[将用户或机器人拉入群聊](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create)接口。;- 调用 API 只能创建普通消息群，消息形式可以选择对话消息或者话题消息。如果你需要直接创建话题群，请通过飞书客户端创建群组，创建时群模式选择 **话题**。;- 已添加外部共享能力的机器人，允许在创建群时将外部企业用户和内部用户同时添加到群组中，这样创建的群为外部群。详情参见[机器人支持外部群和外部用户单聊](https://open.feishu.cn/document/uAjLw4CM/ukzMukzMukzM/develop-robots/add-bot-to-external-group)。
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            avatar?: string;
+                            name?: string;
+                            description?: string;
+                            i18n_names?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                            owner_id?: string;
+                            user_id_list?: Array<string>;
+                            bot_id_list?: Array<string>;
+                            group_message_type?: "chat" | "thread";
+                            chat_mode?: string;
+                            chat_type?: string;
+                            external?: boolean;
+                            join_message_visibility?: string;
+                            leave_message_visibility?: string;
+                            membership_approval?: string;
+                            labels?: Array<string>;
+                            toolkit_ids?: Array<string>;
+                            restricted_mode_setting?: {
+                                status?: boolean;
+                                screenshot_has_permission_setting?:
+                                    | "all_members"
+                                    | "not_anyone";
+                                download_has_permission_setting?:
+                                    | "all_members"
+                                    | "not_anyone";
+                                message_has_permission_setting?:
+                                    | "all_members"
+                                    | "not_anyone";
+                            };
+                            urgent_setting?: "only_owner" | "all_members";
+                            video_conference_setting?:
+                                | "only_owner"
+                                | "all_members";
+                            edit_permission?: "only_owner" | "all_members";
+                            chat_tags?: Array<string>;
+                            pin_manage_setting?: "only_owner" | "all_members";
+                            hide_member_count_setting?:
+                                | "all_members"
+                                | "only_owner";
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            set_bot_manager?: boolean;
+                            uuid?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_id?: string;
+                                    avatar?: string;
+                                    name?: string;
+                                    description?: string;
+                                    i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    owner_id?: string;
+                                    owner_id_type?: string;
+                                    urgent_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    video_conference_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    pin_manage_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    add_member_permission?: string;
+                                    share_card_permission?: string;
+                                    at_all_permission?: string;
+                                    edit_permission?: string;
+                                    group_message_type?: string;
+                                    chat_mode?: string;
+                                    chat_type?: string;
+                                    chat_tag?: string;
+                                    external?: boolean;
+                                    tenant_key?: string;
+                                    join_message_visibility?: string;
+                                    leave_message_visibility?: string;
+                                    membership_approval?: string;
+                                    moderation_permission?: string;
+                                    labels?: Array<string>;
+                                    toolkit_ids?: Array<string>;
+                                    restricted_mode_setting?: {
+                                        status?: boolean;
+                                        screenshot_has_permission_setting?:
+                                            | "all_members"
+                                            | "not_anyone";
+                                        download_has_permission_setting?:
+                                            | "all_members"
+                                            | "not_anyone";
+                                        message_has_permission_setting?:
+                                            | "all_members"
+                                            | "not_anyone";
+                                    };
+                                    hide_member_count_setting?:
+                                        | "all_members"
+                                        | "only_owner";
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat&version=v1 document }
+                 *
+                 * 获取群信息
+                 *
+                 * 获取指定群的基本信息，包括群名称、群描述、群头像、群主 ID 以及群权限配置等。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用接口的机器人或者用户需要在群组内，才可以获取完整信息，否则只返回群名称、群头像、成员数量以及群状态信息。;- 获取内部群信息时，调用接口的机器人或者用户需要与群组在同一租户下。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    avatar?: string;
+                                    name?: string;
+                                    description?: string;
+                                    i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    add_member_permission?: string;
+                                    share_card_permission?: string;
+                                    at_all_permission?: string;
+                                    edit_permission?: string;
+                                    owner_id_type?: string;
+                                    owner_id?: string;
+                                    user_manager_id_list?: Array<string>;
+                                    bot_manager_id_list?: Array<string>;
+                                    group_message_type?: string;
+                                    chat_mode?: string;
+                                    chat_type?: string;
+                                    chat_tag?: string;
+                                    join_message_visibility?: string;
+                                    leave_message_visibility?: string;
+                                    membership_approval?: string;
+                                    moderation_permission?: string;
+                                    external?: boolean;
+                                    tenant_key?: string;
+                                    user_count?: string;
+                                    bot_count?: string;
+                                    labels?: Array<string>;
+                                    toolkit_ids?: Array<string>;
+                                    restricted_mode_setting?: {
+                                        status?: boolean;
+                                        screenshot_has_permission_setting?:
+                                            | "all_members"
+                                            | "not_anyone";
+                                        download_has_permission_setting?:
+                                            | "all_members"
+                                            | "not_anyone";
+                                        message_has_permission_setting?:
+                                            | "all_members"
+                                            | "not_anyone";
+                                    };
+                                    urgent_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    video_conference_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    pin_manage_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    hide_member_count_setting?:
+                                        | "all_members"
+                                        | "only_owner";
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            query?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats/search`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        chat_id?: string;
+                                                        avatar?: string;
+                                                        name?: string;
+                                                        description?: string;
+                                                        owner_id?: string;
+                                                        owner_id_type?: string;
+                                                        external?: boolean;
+                                                        tenant_key?: string;
+                                                        labels?: Array<string>;
+                                                        chat_status?:
+                                                            | "normal"
+                                                            | "dissolved"
+                                                            | "dissolved_save";
+                                                        chat_mode?:
+                                                            | "group"
+                                                            | "topic"
+                                                            | "p2p";
+                                                        p2p_target_type?:
+                                                            | "user"
+                                                            | "bot";
+                                                        p2p_target_id?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=chat&version=v1 document }
+                 *
+                 * 搜索对用户或机器人可见的群列表
+                 *
+                 * 获取当前身份（用户或机器人）可见的群列表，包括当前身份所在的群、对当前身份公开的群。支持关键词搜索、分页搜索。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。
+                 */
+                search: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            query?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        chat_id?: string;
+                                        avatar?: string;
+                                        name?: string;
+                                        description?: string;
+                                        owner_id?: string;
+                                        owner_id_type?: string;
+                                        external?: boolean;
+                                        tenant_key?: string;
+                                        labels?: Array<string>;
+                                        chat_status?:
+                                            | "normal"
+                                            | "dissolved"
+                                            | "dissolved_save";
+                                        chat_mode?: "group" | "topic" | "p2p";
+                                        p2p_target_type?: "user" | "bot";
+                                        p2p_target_id?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/search`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
+                            page_token?: string;
+                            page_size?: number;
+                            types?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        chat_id?: string;
+                                                        avatar?: string;
+                                                        name?: string;
+                                                        description?: string;
+                                                        owner_id?: string;
+                                                        owner_id_type?: string;
+                                                        external?: boolean;
+                                                        tenant_key?: string;
+                                                        labels?: Array<string>;
+                                                        chat_status?:
+                                                            | "normal"
+                                                            | "dissolved"
+                                                            | "dissolved_save";
+                                                        chat_mode?:
+                                                            | "group"
+                                                            | "topic"
+                                                            | "p2p";
+                                                        p2p_target_type?:
+                                                            | "user"
+                                                            | "bot";
+                                                        p2p_target_id?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat&version=v1 document }
+                 *
+                 * 获取用户或机器人所在的群列表
+                 *
+                 * 获取 [access_token](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-choose-which-type-of-token-to-use) 所代表的用户或者机器人所在的群列表。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL。;- 获取到的群列表中，不包含单聊（群模式为 `p2p`）。;- 查询参数  **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填。;
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
+                            page_token?: string;
+                            page_size?: number;
+                            types?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        chat_id?: string;
+                                        avatar?: string;
+                                        name?: string;
+                                        description?: string;
+                                        owner_id?: string;
+                                        owner_id_type?: string;
+                                        external?: boolean;
+                                        tenant_key?: string;
+                                        labels?: Array<string>;
+                                        chat_status?:
+                                            | "normal"
+                                            | "dissolved"
+                                            | "dissolved_save";
+                                        chat_mode?: "group" | "topic" | "p2p";
+                                        p2p_target_type?: "user" | "bot";
+                                        p2p_target_id?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.moderation
+             */
+            chatModeration: {
+                getWithIterator: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    moderation_setting?: string;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    items?: Array<{
+                                                        user_id_type?: string;
+                                                        user_id?: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.moderation&version=v1 document }
+                 *
+                 * 获取群成员发言权限
+                 *
+                 * 获取指定群组的发言模式、可发言用户名单等信息。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;调用本接口的用户或机器人必须要在对应的群组内。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    moderation_setting?: string;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    items?: Array<{
+                                        user_id_type?: string;
+                                        user_id?: string;
+                                        tenant_key?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.moderation&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat.moderation&version=v1 document }
+                 *
+                 * 更新群发言权限
+                 *
+                 * 更新指定群组的发言权限，可设置为所有群成员可发言、仅群主或管理员可发言、指定群成员可发言。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以用户身份（user_access_token）调用本接口，则该用户必须是群组的群主，才可以更新群发言权限。;- 如果以应用身份（tenant_access_token）调用本接口，则该应用机器人需要符合以下任一情况才可以更新群发言权限。;    - 机器人是群组的群主。;    - 机器人是群组的创建者、具备==更新应用所创建群的群信息（im:chat:operate_as_owner）== 权限，且仍在群组内。
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            moderation_setting?: string;
+                            moderator_added_list?: Array<string>;
+                            moderator_removed_list?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.tab
+             */
+            chatTab: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=list_tabs&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_tabs&project=im&resource=chat.tab&version=v1 document }
+                 *
+                 * 拉取会话标签页
+                 *
+                 * 获取指定会话内的会话标签页信息，包括 ID、名称、类型以及内容等。
+                 */
+                listTabs: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_tabs?: Array<{
+                                        tab_id?: string;
+                                        tab_name?: string;
+                                        tab_type:
+                                            | "message"
+                                            | "doc_list"
+                                            | "doc"
+                                            | "pin"
+                                            | "meeting_minute"
+                                            | "chat_announcement"
+                                            | "url"
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos"
+                                            | "task";
+                                        tab_content?: {
+                                            url?: string;
+                                            doc?: string;
+                                            meeting_minute?: string;
+                                            task?: string;
+                                        };
+                                        tab_config?: {
+                                            icon_key?: string;
+                                            is_built_in?: boolean;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/list_tabs`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=sort_tabs&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sort_tabs&project=im&resource=chat.tab&version=v1 document }
+                 *
+                 * 会话标签页排序
+                 *
+                 * 调整指定会话内的多个会话标签页排列顺序。
+                 */
+                sortTabs: async (
+                    payload?: {
+                        data?: { tab_ids?: Array<string> };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_tabs?: Array<{
+                                        tab_id?: string;
+                                        tab_name?: string;
+                                        tab_type:
+                                            | "message"
+                                            | "doc_list"
+                                            | "doc"
+                                            | "pin"
+                                            | "meeting_minute"
+                                            | "chat_announcement"
+                                            | "url"
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos"
+                                            | "task";
+                                        tab_content?: {
+                                            url?: string;
+                                            doc?: string;
+                                            meeting_minute?: string;
+                                            task?: string;
+                                        };
+                                        tab_config?: {
+                                            icon_key?: string;
+                                            is_built_in?: boolean;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/sort_tabs`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=delete_tabs&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_tabs&project=im&resource=chat.tab&version=v1 document }
+                 *
+                 * 删除会话标签页
+                 *
+                 * 删除指定会话内的一个或多个会话标签页。
+                 */
+                deleteTabs: async (
+                    payload?: {
+                        data: { tab_ids: Array<string> };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_tabs?: Array<{
+                                        tab_id?: string;
+                                        tab_name?: string;
+                                        tab_type:
+                                            | "message"
+                                            | "doc_list"
+                                            | "doc"
+                                            | "pin"
+                                            | "meeting_minute"
+                                            | "chat_announcement"
+                                            | "url"
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos"
+                                            | "task";
+                                        tab_content?: {
+                                            url?: string;
+                                            doc?: string;
+                                            meeting_minute?: string;
+                                            task?: string;
+                                        };
+                                        tab_config?: {
+                                            icon_key?: string;
+                                            is_built_in?: boolean;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/delete_tabs`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=update_tabs&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_tabs&project=im&resource=chat.tab&version=v1 document }
+                 *
+                 * 更新会话标签页
+                 *
+                 * 更新指定的会话标签页信息，包括名称、类型以及内容等。仅支持更新文档类型（doc）或 URL （url）类型的标签页。
+                 */
+                updateTabs: async (
+                    payload?: {
+                        data?: {
+                            chat_tabs?: Array<{
+                                tab_id?: string;
+                                tab_name?: string;
+                                tab_type:
+                                    | "message"
+                                    | "doc_list"
+                                    | "doc"
+                                    | "pin"
+                                    | "meeting_minute"
+                                    | "chat_announcement"
+                                    | "url"
+                                    | "file"
+                                    | "files_resources"
+                                    | "images_videos"
+                                    | "task";
+                                tab_content?: {
+                                    url?: string;
+                                    doc?: string;
+                                    meeting_minute?: string;
+                                    task?: string;
+                                };
+                                tab_config?: {
+                                    icon_key?: string;
+                                    is_built_in?: boolean;
+                                };
+                            }>;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_tabs?: Array<{
+                                        tab_id?: string;
+                                        tab_name?: string;
+                                        tab_type:
+                                            | "message"
+                                            | "doc_list"
+                                            | "doc"
+                                            | "pin"
+                                            | "meeting_minute"
+                                            | "chat_announcement"
+                                            | "url"
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos"
+                                            | "task";
+                                        tab_content?: {
+                                            url?: string;
+                                            doc?: string;
+                                            meeting_minute?: string;
+                                            task?: string;
+                                        };
+                                        tab_config?: {
+                                            icon_key?: string;
+                                            is_built_in?: boolean;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/update_tabs`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat.tab&version=v1 document }
+                 *
+                 * 添加会话标签页
+                 *
+                 * 在指定会话内添加自定义会话标签页，仅支持添加文档类型（doc）或 URL （url）类型的标签页。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            chat_tabs: Array<{
+                                tab_name?: string;
+                                tab_type:
+                                    | "message"
+                                    | "doc_list"
+                                    | "doc"
+                                    | "pin"
+                                    | "meeting_minute"
+                                    | "chat_announcement"
+                                    | "url"
+                                    | "file"
+                                    | "files_resources"
+                                    | "images_videos"
+                                    | "task";
+                                tab_content?: {
+                                    url?: string;
+                                    doc?: string;
+                                    meeting_minute?: string;
+                                    task?: string;
+                                };
+                                tab_config?: {
+                                    icon_key?: string;
+                                    is_built_in?: boolean;
+                                };
+                            }>;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_tabs?: Array<{
+                                        tab_id?: string;
+                                        tab_name?: string;
+                                        tab_type:
+                                            | "message"
+                                            | "doc_list"
+                                            | "doc"
+                                            | "pin"
+                                            | "meeting_minute"
+                                            | "chat_announcement"
+                                            | "url"
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos"
+                                            | "task";
+                                        tab_content?: {
+                                            url?: string;
+                                            doc?: string;
+                                            meeting_minute?: string;
+                                            task?: string;
+                                        };
+                                        tab_config?: {
+                                            icon_key?: string;
+                                            is_built_in?: boolean;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.top_notice
+             */
+            chatTopNotice: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=delete_top_notice&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_top_notice&project=im&resource=chat.top_notice&version=v1 document }
+                 *
+                 * 撤销群置顶
+                 *
+                 * 撤销指定群组中的置顶消息或群公告。
+                 */
+                deleteTopNotice: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.top_notice&apiName=put_top_notice&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=put_top_notice&project=im&resource=chat.top_notice&version=v1 document }
+                 *
+                 * 更新群置顶
+                 *
+                 * 更新群组中的群置顶信息，可以将群中的某一条消息，或群公告置顶展示。
+                 */
+                putTopNotice: async (
+                    payload?: {
+                        data: {
+                            chat_top_notice: Array<{
+                                action_type?: "1" | "2";
+                                message_id?: string;
+                            }>;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/put_top_notice`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.announcement
+             */
+            chatAnnouncement: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat.announcement&version=v1 document }
+                 *
+                 * 更新群公告信息
+                 *
+                 * 更新指定群组中的群公告信息。更新的公告内容格式和更新[旧版云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)的格式相同，不支持新版云文档格式。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的用户或者机器人必须在对应的群组内，且需要拥有群公告文档的阅读权限。;;## 使用限制;;- 如果群组配置了 **仅群主和群管理员可编辑群信息**，则仅有群主、群管理员，或者是创建群组且具有 **更新应用所创建群的群信息（im:chat:operate_as_owner）** 权限的机器人，可以更新群公告信息。;- 如果群组没有配置 **仅群主和群管理员可编辑群信息**，则所有群成员可以更新群公告信息。;- 操作内部群时，操作者和被操作的群组必须在同一租户下。
+                 */
+                patch: async (
+                    payload?: {
+                        data: { revision: string; requests?: Array<string> };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.announcement&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.announcement&version=v1 document }
+                 *
+                 * 获取群公告信息
+                 *
+                 * 获取指定群组中的群公告信息，公告信息格式与[旧版云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的用户或者机器人必须在对应的群组内。;- 获取内部群信息时，调用当前接口的用户或者机器人必须与对应群组在同一租户下。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    content?: string;
+                                    revision?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    owner_id_type?:
+                                        | "user_id"
+                                        | "union_id"
+                                        | "open_id"
+                                        | "app_id";
+                                    owner_id?: string;
+                                    modifier_id_type?:
+                                        | "user_id"
+                                        | "union_id"
+                                        | "open_id"
+                                        | "app_id";
+                                    modifier_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.menu_tree
+             */
+            chatMenuTree: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.menu_tree&version=v1 document }
+                 *
+                 * 获取群菜单
+                 *
+                 * 获取指定群组内的群菜单信息，包括所有一级或二级菜单的名称、跳转链接、图标等信息。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。
+                 */
+                get: async (
+                    payload?: {
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    menu_tree?: {
+                                        chat_menu_top_levels?: Array<{
+                                            chat_menu_top_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                            children?: Array<{
+                                                chat_menu_second_level_id?: string;
+                                                chat_menu_item?: {
+                                                    action_type?:
+                                                        | "NONE"
+                                                        | "REDIRECT_LINK";
+                                                    redirect_link?: {
+                                                        common_url?: string;
+                                                        ios_url?: string;
+                                                        android_url?: string;
+                                                        pc_url?: string;
+                                                        web_url?: string;
+                                                    };
+                                                    image_key?: string;
+                                                    name?: string;
+                                                    i18n_names?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat.menu_tree&version=v1 document }
+                 *
+                 * 删除群菜单
+                 *
+                 * 删除指定群内的一级菜单。成功调用后接口会返回群组内最新的群菜单信息。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的用户或者机器人必须在对应的会话内。;;## 使用限制;;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。;- 仅支持删除群组内的一级菜单。
+                 */
+                delete: async (
+                    payload?: {
+                        data: { chat_menu_top_level_ids: Array<string> };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    menu_tree?: {
+                                        chat_menu_top_levels?: Array<{
+                                            chat_menu_top_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                            children?: Array<{
+                                                chat_menu_second_level_id?: string;
+                                                chat_menu_item?: {
+                                                    action_type?:
+                                                        | "NONE"
+                                                        | "REDIRECT_LINK";
+                                                    redirect_link?: {
+                                                        common_url?: string;
+                                                        ios_url?: string;
+                                                        android_url?: string;
+                                                        pc_url?: string;
+                                                        web_url?: string;
+                                                    };
+                                                    image_key?: string;
+                                                    name?: string;
+                                                    i18n_names?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=sort&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sort&project=im&resource=chat.menu_tree&version=v1 document }
+                 *
+                 * 排序群菜单
+                 *
+                 * 调整指定群组内的群菜单排列顺序，成功调用后接口会返回群组内所有群菜单信息。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。;- 仅支持调整群组内一级菜单的排序。
+                 */
+                sort: async (
+                    payload?: {
+                        data: { chat_menu_top_level_ids: Array<string> };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    menu_tree?: {
+                                        chat_menu_top_levels?: Array<{
+                                            chat_menu_top_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                            children?: Array<{
+                                                chat_menu_second_level_id?: string;
+                                                chat_menu_item?: {
+                                                    action_type?:
+                                                        | "NONE"
+                                                        | "REDIRECT_LINK";
+                                                    redirect_link?: {
+                                                        common_url?: string;
+                                                        ios_url?: string;
+                                                        android_url?: string;
+                                                        pc_url?: string;
+                                                        web_url?: string;
+                                                    };
+                                                    image_key?: string;
+                                                    name?: string;
+                                                    i18n_names?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree/sort`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_tree&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat.menu_tree&version=v1 document }
+                 *
+                 * 添加群菜单
+                 *
+                 * 在指定群组中添加一个或多个群菜单。成功调用后接口会返回当前群组内所有群菜单信息。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;- 该接口是向群内追加菜单，群内已存在的菜单不会被覆盖。;- 一个群内最多有 3 个一级菜单，每个一级菜单最多配置 5 个二级菜单。;- 不支持在已有的一级菜单中追加二级菜单。;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            menu_tree: {
+                                chat_menu_top_levels: Array<{
+                                    chat_menu_item: {
+                                        action_type: "NONE" | "REDIRECT_LINK";
+                                        redirect_link?: {
+                                            common_url?: string;
+                                            ios_url?: string;
+                                            android_url?: string;
+                                            pc_url?: string;
+                                            web_url?: string;
+                                        };
+                                        image_key?: string;
+                                        name: string;
+                                        i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    children?: Array<{
+                                        chat_menu_item?: {
+                                            action_type?:
+                                                | "NONE"
+                                                | "REDIRECT_LINK";
+                                            redirect_link?: {
+                                                common_url?: string;
+                                                ios_url?: string;
+                                                android_url?: string;
+                                                pc_url?: string;
+                                                web_url?: string;
+                                            };
+                                            image_key?: string;
+                                            name?: string;
+                                            i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                    }>;
+                                }>;
+                            };
+                        };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    menu_tree?: {
+                                        chat_menu_top_levels?: Array<{
+                                            chat_menu_top_level_id?: string;
+                                            chat_menu_item?: {
+                                                action_type?:
+                                                    | "NONE"
+                                                    | "REDIRECT_LINK";
+                                                redirect_link?: {
+                                                    common_url?: string;
+                                                    ios_url?: string;
+                                                    android_url?: string;
+                                                    pc_url?: string;
+                                                    web_url?: string;
+                                                };
+                                                image_key?: string;
+                                                name?: string;
+                                                i18n_names?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                            children?: Array<{
+                                                chat_menu_second_level_id?: string;
+                                                chat_menu_item?: {
+                                                    action_type?:
+                                                        | "NONE"
+                                                        | "REDIRECT_LINK";
+                                                    redirect_link?: {
+                                                        common_url?: string;
+                                                        ios_url?: string;
+                                                        android_url?: string;
+                                                        pc_url?: string;
+                                                        web_url?: string;
+                                                    };
+                                                    image_key?: string;
+                                                    name?: string;
+                                                    i18n_names?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_tree`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.managers
+             */
+            chatManagers: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=delete_managers&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_managers&project=im&resource=chat.managers&version=v1 document }
+                 *
+                 * 删除群管理员
+                 *
+                 * 指定群组，删除群组内指定的管理员，包括用户类型的管理员和机器人类型的管理员。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;仅群组内的群主可以删除群管理员。;
+                 */
+                deleteManagers: async (
+                    payload?: {
+                        data?: { manager_ids?: Array<string> };
+                        params?: {
+                            member_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "app_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_managers?: Array<string>;
+                                    chat_bot_managers?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/delete_managers`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.managers&apiName=add_managers&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_managers&project=im&resource=chat.managers&version=v1 document }
+                 *
+                 * 指定群管理员
+                 *
+                 * 指定群组，将群内指定的用户或者机器人设置为群管理员。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;仅群组内的群主可以指定群管理员。;
+                 */
+                addManagers: async (
+                    payload?: {
+                        data?: { manager_ids?: Array<string> };
+                        params?: {
+                            member_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "app_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_managers?: Array<string>;
+                                    chat_bot_managers?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/add_managers`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.menu_item
+             */
+            chatMenuItem: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.menu_item&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat.menu_item&version=v1 document }
+                 *
+                 * 修改群菜单元信息
+                 *
+                 * 修改指定群组内的某个一级菜单或者二级菜单的元信息，包括图标、名称、国际化名称和跳转链接。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人必须在对应的群组内。;;## 使用限制;;- 该接口仅支持群模式为 `group` 的群组，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_mode` 参数取值是否为 `group`。;- 本接口不支持在一级菜单上添加或删除二级菜单。
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            update_fields: Array<
+                                "ICON" | "NAME" | "I18N_NAME" | "REDIRECT_LINK"
+                            >;
+                            chat_menu_item: {
+                                action_type?: "NONE" | "REDIRECT_LINK";
+                                redirect_link?: {
+                                    common_url?: string;
+                                    ios_url?: string;
+                                    android_url?: string;
+                                    pc_url?: string;
+                                    web_url?: string;
+                                };
+                                image_key?: string;
+                                name?: string;
+                                i18n_names?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                            };
+                        };
+                        path?: { chat_id?: string; menu_item_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_menu_item?: {
+                                        action_type?: "NONE" | "REDIRECT_LINK";
+                                        redirect_link?: {
+                                            common_url?: string;
+                                            ios_url?: string;
+                                            android_url?: string;
+                                            pc_url?: string;
+                                            web_url?: string;
+                                        };
+                                        image_key?: string;
+                                        name?: string;
+                                        i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/menu_items/:menu_item_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * image
+             */
+            image: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=image&version=v1 document }
+                 *
+                 * 下载图片
+                 *
+                 * 通过已上传图片的 Key 值下载图片。;
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的图片，且上传时图片类型为 **用于发送消息**。**用于设置头像** 的图片暂不支持下载。;- 该接口仅适用于通过图片的 Key 下载图片。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。
+                 */
+                get: async (
+                    payload?: {
+                        path: { image_key: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/images/:image_key`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=image&version=v1 document }
+                 *
+                 * 上传图片
+                 *
+                 * 调用本接口将图片上传至飞书开放平台，支持上传 JPG、JPEG、PNG、WEBP、GIF、BMP、ICO、TIFF、HEIC 格式的图片，但需要注意 TIFF、HEIC 上传后会被转为 JPG 格式。
+                 *
+                 * ## 使用场景;;如果需要发送图片消息，或者将图片作为头像，则需要先调用本接口将图片上传至开放平台，平台会返回一个图片标识（image_key），后续使用该 Key 值调用其他 API。例如：;;- [发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)时，如果需要发送图片，则需要先调用本接口上传图片（上传时图片类型需要选择 **用于发送消息**），并使用返回结果中的 image_key 发送图片消息。;- [创建用户](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/create)时，如果需要设置用户头像，则需要先调用本接口将头像上传（上传时图片类型需要选择 **用于设置头像**），并使用返回结果中的 image_key 设置头像。;;## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 上传的图片大小不能超过 10 MB，且不支持上传大小为 0 的图片。;- 上传图片的分辨率限制：;	- GIF 图片分辨率不能超过 2000 x 2000，其他图片分辨率不能超过 12000 x 12000。;	- 用于设置头像的图片分辨率不能超过 4096 x 4096。;;如需上传高分辨率图片，可使用[上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/file/create)接口，将图片作为文件进行上传。注意该方式不支持将图片文件设置为头像。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            image_type: "message" | "avatar";
+                            image: Buffer | fs.ReadStream;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { image_key?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/images`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * message.reaction
+             */
+            messageReaction: {
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=message.reaction&version=v1 document }
                  *
                  * 删除消息表情回复
                  *
-                 * 删除指定消息的表情回复（reaction即表情回复，本文档统一用“reaction”代称）。
+                 * 删除指定消息的某一表情回复。
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 只能删除真实存在的reaction，并且删除reaction请求的操作者必须是reaction的原始添加者
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待删除表情回复的消息所属的会话内。;;## 使用限制;;- 已被撤回的消息无法添加表情回复。;- 调用当前接口的机器人或者用户，只能删除由自己添加的表情回复，且需要保证该表情回复真实存在于消息中。
                  */
                 delete: async (
                     payload?: {
@@ -10662,13 +10455,13 @@ export default abstract class Client extends human_authentication {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=message.reaction&version=v1 document }
                  *
                  * 获取消息表情回复
                  *
-                 * 获取指定消息的特定类型表情回复列表（reaction即表情回复，本文档统一用“reaction”代称）。
+                 * 获取指定消息内的表情回复列表
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 待获取reaction信息的消息要真实存在，不能被撤回;- 获取消息的reaction，需要request的授权主体（机器人或者用户）在消息所在的会话内
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待查询的消息所属的会话内。;;## 使用限制;;已被撤回的消息无法获取表情回复列表。;
                  */
                 list: async (
                     payload?: {
@@ -10722,6 +10515,281 @@ export default abstract class Client extends human_authentication {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=message.reaction&version=v1 document }
+                 *
+                 * 批量获取消息表情回复
+                 *
+                 * 支持批量分页的获取消息上的表情详情、支持批量获取消息上表情的统计
+                 *
+                 * ## 前提条件;;- 应用身份调用接口需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待查询的消息所属的会话内。;;## 使用限制;;已被撤回的消息、消息不可见等情况无法获取表情回复列表。
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: {
+                            queries: Array<{
+                                message_id?: string;
+                                page_token?: string;
+                            }>;
+                            page_size_per_message?: number;
+                            reaction_type?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    success_msg_reaction_details?: Array<{
+                                        message_id?: string;
+                                        has_more?: boolean;
+                                        page_token?: string;
+                                        message_reaction_items?: Array<{
+                                            reaction_id?: string;
+                                            operator?: {
+                                                operator_id: string;
+                                                operator_type: "app" | "user";
+                                            };
+                                            action_time?: string;
+                                            emoji_type?: string;
+                                        }>;
+                                    }>;
+                                    success_msg_reaction_counts?: Array<{
+                                        message_id?: string;
+                                        reaction_count?: Array<{
+                                            reaction_type?: string;
+                                            count?: string;
+                                        }>;
+                                    }>;
+                                    fail_msg_reaction_details?: Array<{
+                                        message_id?: string;
+                                        fail_reason?:
+                                            | "invalid"
+                                            | "invalid_page_token"
+                                            | "no_permission";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/reactions/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message.reaction&version=v1 document }
+                 *
+                 * 添加消息表情回复
+                 *
+                 * 给指定消息添加指定类型的表情回复。
+                 *
+                 * ## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 调用当前接口的机器人或者用户，需要在待添加表情回复的消息所属的会话内。;;## 使用限制;;- 已被撤回的消息无法添加表情回复。;- [系统消息（system）](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/im-v1/message/create_json#e159cb73)无法添加表情回复。
+                 */
+                create: async (
+                    payload?: {
+                        data: { reaction_type: { emoji_type: string } };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    reaction_id?: string;
+                                    operator?: {
+                                        operator_id: string;
+                                        operator_type: "app" | "user";
+                                    };
+                                    action_time?: string;
+                                    reaction_type?: { emoji_type: string };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * file
+             */
+            file: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=file&version=v1 document }
+                 *
+                 * 下载文件
+                 *
+                 * 通过已上传文件的 Key 下载文件。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的文件。;- 下载的资源大小不能超过 100 MB。 ;- 该接口仅适用于通过文件的 Key 下载文件。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。;- 如果需要 Content-Disposition header，发起请求时需要在 header 中设置 Content-Type 为 application/json。
+                 */
+                get: async (
+                    payload?: {
+                        path: { file_key: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files/:file_key`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=file&version=v1 document }
+                 *
+                 * 上传文件
+                 *
+                 * 调用该接口将本地文件上传至开放平台，支持上传音频、视频、文档等文件类型。上传后接口会返回文件的 Key，使用该 Key 值可以调用其他 OpenAPI。例如，调用[发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)接口，发送文件。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;文件大小不得超过 30 MB，且不允许上传空文件。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            file_type:
+                                | "opus"
+                                | "mp4"
+                                | "pdf"
+                                | "doc"
+                                | "xls"
+                                | "ppt"
+                                | "stream";
+                            file_name: string;
+                            duration?: number;
+                            file: Buffer | fs.ReadStream;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_key?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
             },
             /**
              * message.resource
@@ -10730,13 +10798,13 @@ export default abstract class Client extends human_authentication {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message.resource&version=v1 document }
                  *
                  * 获取消息中的资源文件
                  *
-                 * 获取消息中的资源文件，包括音频，视频，图片和文件，**暂不支持表情包资源下载**。当前仅支持 100M 以内的资源文件的下载。
+                 * 获取指定消息内包含的资源文件，包括音频、视频、图片和文件。成功调用后，返回二进制文件流下载文件。
                  *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人和消息需要在同一会话中;- 暂不支持获取合并转发消息中的子消息的资源文件
+                 * ## 前提条件; ;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人和待操作的消息需要在同一会话内。;;## 使用限制;- 仅支持下载 100 MB 以内的资源文件。;- 暂不支持获取表情包资源。;- 暂不支持获取合并转发消息中的子消息、卡片消息中的资源文件。如果请求时传入了合并转发消息或子消息的 ID、卡片消息 ID，则会返回错误码 234043。;- 不支持在当前接口内调整文件格式，你可以获取资源文件后，在本地自行调整。
                  */
                 get: async (
                     payload?: {
@@ -10801,417 +10869,6 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * message_cot
-             */
-            messageCot: {
-                /**
-         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=complete&version=v1 click to debug } 
- * 
-* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=complete&project=im&resource=message_cot&version=v1 document } 
- * 
-* ## 功能介绍
-标记指定智能对话思考过程为完成状态，同步完成原因，用于终止对话机器人的思考流程并反馈处理结果，适用于智能客服、自动问答等场景。
-
-### 注意事项
-- 思考过程标记完成后将无法继续修改或恢复，需确保流程已真正结束。
-- 若传入`error`或`timeout`原因，系统将记录异常日志用于问题排查。
-         */
-                complete: async (
-                    payload?: {
-                        params: { message_id: string; reason?: string };
-                        path: { cot_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/message_cot/complete/:cot_id`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=create&version=v1 click to debug } 
- * 
-* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_cot&version=v1 document } 
- * 
-* ## 功能介绍
-生成并发送带有智能思考过程的消息内容，支持向单聊或群组发送结构化消息，适用于需要展示AI推导逻辑的对话场景。
-
-### 注意事项
-- 消息内容需符合平台内容安全规范，违规内容将被拦截。
-- 思考过程仅在特定客户端版本可见，旧版本客户端将仅展示最终消息内容。
-         */
-                create: async (
-                    payload?: {
-                        data: {
-                            receive_id: string;
-                            origin_message_id?: string;
-                        };
-                        params: { receive_id_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { cot_id?: string; message_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/message_cot`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=update&version=v1 click to debug } 
- * 
-* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message_cot&version=v1 document } 
- * 
-* ## 功能介绍
-更新指定思考过程关联的消息事件列表，支持添加或替换AG2UI交互事件，用于同步AI助手与用户端的对话交互轨迹，确保思考过程与实际展示内容一致。
-
-### 前提条件
-- 需拥有目标消息及思考过程的编辑权限
-- 待更新的思考过程需处于可编辑状态
-
-### 注意事项
-- 事件列表将完全覆盖原有内容，增量更新需先获取当前事件列表后合并再提交
-- 时间戳需严格按照事件发生顺序填写，否则会导致交互轨迹展示异常
-- 事件内容需符合JSON格式规范，否则会导致解析失败
-         */
-                update: async (
-                    payload?: {
-                        data: {
-                            events: Array<{
-                                event_type: string;
-                                content: string;
-                                timestamp: string;
-                            }>;
-                            message_id: string;
-                            cot_id: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/message_cot`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 消息 - Pin
-             */
-            pin: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/create document }
-                 *
-                 * Pin消息
-                 *
-                 * Pin一条指定的消息。
-                 *
-                 * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- Pin消息时，机器人必须在对应的群组中;- 若消息已经被Pin，返回该Pin的操作信息;- 不能Pin一条对操作者不可见的消息;- 对同一条消息的Pin操作不能超过==5 QPS==
-                 */
-                create: async (
-                    payload?: {
-                        data: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    pin?: {
-                                        message_id: string;
-                                        chat_id?: string;
-                                        operator_id?: string;
-                                        operator_id_type?: string;
-                                        create_time?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/pins`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/delete document }
-                 *
-                 * 移除Pin消息
-                 *
-                 * 移除一条指定消息的Pin。
-                 *
-                 * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 移除Pin消息时，机器人必须在对应的群组中;- 若消息未被Pin或已被撤回，返回成功信息;- 不能移除一条对操作者不可见的Pin消息;- 对同一条消息移除Pin的操作不能超过==5 QPS==
-                 */
-                delete: async (
-                    payload?: {
-                        path: { message_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/pins/:message_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            chat_id: string;
-                            start_time?: string;
-                            end_time?: string;
-                            page_size?: number;
-                            page_token?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/pins`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        message_id: string;
-                                                        chat_id?: string;
-                                                        operator_id?: string;
-                                                        operator_id_type?: string;
-                                                        create_time?: string;
-                                                    }>;
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/list document }
-                 *
-                 * 获取群内Pin消息
-                 *
-                 * 获取所在群内指定时间范围内的所有Pin消息。
-                 *
-                 * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 获取Pin消息时，机器人必须在群组中;- 获取的Pin消息按Pin的创建时间降序排列;- 接口默认限流为==50 QPS==
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            chat_id: string;
-                            start_time?: string;
-                            end_time?: string;
-                            page_size?: number;
-                            page_token?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        message_id: string;
-                                        chat_id?: string;
-                                        operator_id?: string;
-                                        operator_id_type?: string;
-                                        create_time?: string;
-                                    }>;
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/pins`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
              * thread
              */
             thread: {
@@ -11220,7 +10877,9 @@ export default abstract class Client extends human_authentication {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=thread&version=v1 document }
                  *
-                 * 转发
+                 * 转发话题
+                 *
+                 * 调用该接口将话题转发至指定的用户、群聊或话题。
                  */
                 forward: async (
                     payload?: {
@@ -11307,6 +10966,210 @@ export default abstract class Client extends human_authentication {
         },
         v2: {
             /**
+             * biz_entity_tag_relation
+             */
+            bizEntityTagRelation: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=biz_entity_tag_relation&version=v2 document }
+                 *
+                 * 解绑标签与群
+                 *
+                 * 从业务实体上解绑标签。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            tag_biz_type: "chat";
+                            biz_entity_id: string;
+                            tag_ids?: Array<string>;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=biz_entity_tag_relation&version=v2 document }
+                 *
+                 * 绑定标签到群
+                 *
+                 * 绑定标签到业务实体。目前支持给会话打标签。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            tag_biz_type: "chat";
+                            biz_entity_id: string;
+                            tag_ids?: Array<string>;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=biz_entity_tag_relation&version=v2 document }
+                 *
+                 * 查询实体与标签的绑定关系
+                 *
+                 * 查询实体与标签的绑定关系
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            tag_biz_type: "chat";
+                            biz_entity_id: string;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tag_info_with_bind_versions?: Array<{
+                                        tag_info?: {
+                                            id?: string;
+                                            tag_type?: string;
+                                            name?: string;
+                                            i18n_names?: Array<{
+                                                locale?: string;
+                                                name?: string;
+                                            }>;
+                                            create_time?: string;
+                                            update_time?: string;
+                                        };
+                                        bind_version?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * url_preview
+             */
+            urlPreview: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=url_preview&apiName=batch_update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=url_preview&version=v2 document }
+                 *
+                 * 更新 URL 预览
+                 *
+                 * 该接口用于主动更新 [URL 预览](https://open.feishu.cn/document/uAjLw4CM/ukzMukzMukzM/development-link-preview/link-preview-development-guide)，调用后会重新触发一次客户端拉取，需要回调服务返回更新后的数据。
+                 *
+                 * **注意**：更新链接预览时需要注意更新频率，如果更新时不指定用户，则可能会造成链接预览请求放大。例如，群聊中的链接预览，所有群成员均会尝试重新拉取预览请求。
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            preview_tokens: Array<string>;
+                            open_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/url_previews/batch_update`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * app_feed_card.batch
              */
             appFeedCardBatch: {
@@ -11314,6 +11177,10 @@ export default abstract class Client extends human_authentication {
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=app_feed_card.batch&apiName=delete&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=app_feed_card.batch&version=v2 document }
+                 *
+                 * 删除应用消息流卡片
+                 *
+                 * 该接口用于删除应用消息流卡片
                  */
                 delete: async (
                     payload?: {
@@ -11367,6 +11234,12 @@ export default abstract class Client extends human_authentication {
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=app_feed_card.batch&apiName=update&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=app_feed_card.batch&version=v2 document }
+                 *
+                 * 更新应用消息流卡片
+                 *
+                 * 该接口用于更新消息流卡片的头像、标题、预览、标签状态、按钮等信息
+                 *
+                 * **字段更新策略**：具体更新的字段以 `update_fields` 为准，根据 `update_fields` 代表的字段从 `app_feed_card` 中取出来进行更新，不在 `update_fields` 中的字段不会更新。
                  */
                 update: async (
                     payload?: {
@@ -11467,6 +11340,333 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
+             * feed_card
+             */
+            feedCard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=bot_time_sentive&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bot_time_sentive&project=im&resource=feed_card&version=v2 document }
+                 *
+                 * 机器人单聊会话即时提醒
+                 *
+                 * 可将机器人对话在消息列表中置顶展示，打开飞书首页即可处理重要任务。
+                 */
+                botTimeSentive: async (
+                    payload?: {
+                        data: {
+                            bot_id?: string;
+                            time_sensitive: boolean;
+                            user_ids: Array<string>;
+                        };
+                        params: {
+                            user_id_type: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_user_reasons?: Array<{
+                                        error_code?: number;
+                                        error_message?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_cards/bot_time_sentive`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=feed_card&version=v2 document }
+                 *
+                 * 即时提醒
+                 *
+                 * 即时提醒能力是飞书在消息列表中提供的强提醒能力，当有重要通知或任务需要及时触达用户，可将群组或机器人对话在消息列表中置顶展示，打开飞书首页即可处理重要任务。
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            time_sensitive: boolean;
+                            user_ids: Array<string>;
+                        };
+                        params: {
+                            user_id_type: "open_id" | "user_id" | "union_id";
+                        };
+                        path: { feed_card_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_user_reasons?: Array<{
+                                        error_code?: number;
+                                        error_message?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_cards/:feed_card_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * tag
+             */
+            tag: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=tag&version=v2 document }
+                 *
+                 * 创建标签
+                 *
+                 * 创建标签并返回标签 ID。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            create_tag: {
+                                tag_type: "tenant";
+                                name: string;
+                                i18n_names?: Array<{
+                                    locale: string;
+                                    name: string;
+                                }>;
+                            };
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    id?: string;
+                                    create_tag_fail_reason?: {
+                                        duplicate_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/tags`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=tag&version=v2 document }
+                 *
+                 * 修改标签
+                 *
+                 * 修改标签在各个语言下的名称。
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            patch_tag?: {
+                                id: string;
+                                name?: string;
+                                i18n_names?: Array<{
+                                    locale: string;
+                                    name: string;
+                                }>;
+                            };
+                            bot_id?: string;
+                        };
+                        path: { tag_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tag_info?: {
+                                        id?: string;
+                                        tag_type?: string;
+                                        name?: string;
+                                        i18n_names?: Array<{
+                                            locale?: string;
+                                            name?: string;
+                                        }>;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    };
+                                    patch_tag_fail_reason?: {
+                                        duplicate_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/tags/:tag_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat_button
+             */
+            chatButton: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_button&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat_button&version=v2 document }
+                 *
+                 * 更新消息流卡片按钮
+                 *
+                 * 为群组消息、机器人消息的消息流卡片添加、更新、删除快捷操作按钮。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            bot_id?: string;
+                            user_ids?: Array<string>;
+                            chat_id: string;
+                            buttons?: {
+                                buttons: Array<{
+                                    multi_url?: {
+                                        url?: string;
+                                        android_url?: string;
+                                        ios_url?: string;
+                                        pc_url?: string;
+                                    };
+                                    action_type: "url_page" | "webhook";
+                                    text: { text: string };
+                                    button_type?:
+                                        | "default"
+                                        | "primary"
+                                        | "success";
+                                    action_map?: Record<string, string>;
+                                }>;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_user_reasons?: Array<{
+                                        error_code?: number;
+                                        error_message?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chat_button`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * app_feed_card
              */
             appFeedCard: {
@@ -11474,6 +11674,12 @@ export default abstract class Client extends human_authentication {
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=app_feed_card&apiName=create&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=app_feed_card&version=v2 document }
+                 *
+                 * 创建应用消息流卡片
+                 *
+                 * 应用消息流卡片是飞书为应用提供的消息触达能力，让应用可以直接在消息流发送消息，重要消息能更快触达用户。
+                 *
+                 * **说明**：飞书客户端在 V7.6 及以上版本开始支持应用消息流卡片。
                  */
                 create: async (
                     payload?: {
@@ -11548,149 +11754,6 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * biz_entity_tag_relation
-             */
-            bizEntityTagRelation: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=biz_entity_tag_relation&version=v2 document }
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            tag_biz_type: "chat";
-                            biz_entity_id: string;
-                            tag_ids?: Array<string>;
-                            bot_id?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=biz_entity_tag_relation&version=v2 document }
-                 */
-                get: async (
-                    payload?: {
-                        params: {
-                            tag_biz_type: "chat";
-                            biz_entity_id: string;
-                            bot_id?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tag_info_with_bind_versions?: Array<{
-                                        tag_info?: {
-                                            id?: string;
-                                            tag_type?: string;
-                                            name?: string;
-                                            i18n_names?: Array<{
-                                                locale?: string;
-                                                name?: string;
-                                            }>;
-                                            create_time?: string;
-                                            update_time?: string;
-                                        };
-                                        bind_version?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=update&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=biz_entity_tag_relation&version=v2 document }
-                 */
-                update: async (
-                    payload?: {
-                        data: {
-                            tag_biz_type: "chat";
-                            biz_entity_id: string;
-                            tag_ids?: Array<string>;
-                            bot_id?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
-                                path
-                            ),
-                            method: "PUT",
                             data,
                             params,
                             headers,
@@ -11844,6 +11907,10 @@ export default abstract class Client extends human_authentication {
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=chat&version=v2 document }
                  *
                  * 搜索群组
+                 *
+                 * 用户可以通过关键字搜索可见群组，可见性和套件内搜索一致。
+                 *
+                 * 该接口是 https://open.feishu.cn/document/server-docs/group/chat/search 搜群组能力的升级版，推荐使用该接口
                  */
                 search: async (
                     payload?: {
@@ -11914,356 +11981,6 @@ export default abstract class Client extends human_authentication {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v2/chats/search`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * chat_button
-             */
-            chatButton: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_button&apiName=update&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat_button&version=v2 document }
-                 */
-                update: async (
-                    payload?: {
-                        data: {
-                            bot_id?: string;
-                            user_ids?: Array<string>;
-                            chat_id: string;
-                            buttons?: {
-                                buttons: Array<{
-                                    multi_url?: {
-                                        url?: string;
-                                        android_url?: string;
-                                        ios_url?: string;
-                                        pc_url?: string;
-                                    };
-                                    action_type: "url_page" | "webhook";
-                                    text: { text: string };
-                                    button_type?:
-                                        | "default"
-                                        | "primary"
-                                        | "success";
-                                    action_map?: Record<string, string>;
-                                }>;
-                            };
-                        };
-                        params?: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    failed_user_reasons?: Array<{
-                                        error_code?: number;
-                                        error_message?: string;
-                                        user_id?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/chat_button`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * feed_card
-             */
-            feedCard: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=bot_time_sentive&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bot_time_sentive&project=im&resource=feed_card&version=v2 document }
-                 */
-                botTimeSentive: async (
-                    payload?: {
-                        data: {
-                            bot_id?: string;
-                            time_sensitive: boolean;
-                            user_ids: Array<string>;
-                        };
-                        params: {
-                            user_id_type: "open_id" | "user_id" | "union_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    failed_user_reasons?: Array<{
-                                        error_code?: number;
-                                        error_message?: string;
-                                        user_id?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/feed_cards/bot_time_sentive`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=patch&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=feed_card&version=v2 document }
-                 */
-                patch: async (
-                    payload?: {
-                        data: {
-                            time_sensitive: boolean;
-                            user_ids: Array<string>;
-                        };
-                        params: {
-                            user_id_type: "open_id" | "user_id" | "union_id";
-                        };
-                        path: { feed_card_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    failed_user_reasons?: Array<{
-                                        error_code?: number;
-                                        error_message?: string;
-                                        user_id?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/feed_cards/:feed_card_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * tag
-             */
-            tag: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=tag&version=v2 document }
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            create_tag: {
-                                tag_type: "tenant";
-                                name: string;
-                                i18n_names?: Array<{
-                                    locale: string;
-                                    name: string;
-                                }>;
-                            };
-                            bot_id?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    id?: string;
-                                    create_tag_fail_reason?: {
-                                        duplicate_id?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/tags`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=patch&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=tag&version=v2 document }
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            patch_tag?: {
-                                id: string;
-                                name?: string;
-                                i18n_names?: Array<{
-                                    locale: string;
-                                    name: string;
-                                }>;
-                            };
-                            bot_id?: string;
-                        };
-                        path: { tag_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tag_info?: {
-                                        id?: string;
-                                        tag_type?: string;
-                                        name?: string;
-                                        i18n_names?: Array<{
-                                            locale?: string;
-                                            name?: string;
-                                        }>;
-                                        create_time?: string;
-                                        update_time?: string;
-                                    };
-                                    patch_tag_fail_reason?: {
-                                        duplicate_id?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/tags/:tag_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * url_preview
-             */
-            urlPreview: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=url_preview&apiName=batch_update&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=url_preview&version=v2 document }
-                 */
-                batchUpdate: async (
-                    payload?: {
-                        data: {
-                            preview_tokens: Array<string>;
-                            open_ids?: Array<string>;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v2/url_previews/batch_update`,
                                 path
                             ),
                             method: "POST",

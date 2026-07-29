@@ -29,23 +29,21 @@ export default abstract class Client extends okr {
     ): Promise<Required<IPayload>>;
 
     /**
-     * AI能力
-     */
+         
+         */
     optical_char_recognition = {
         /**
-         * 图片识别
+         * image
          */
         image: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=optical_char_recognition&resource=image&apiName=basic_recognize&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/ai/optical_char_recognition-v1/image/basic_recognize document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=basic_recognize&project=optical_char_recognition&resource=image&version=v1 document }
              *
-             * 基础图片识别 (OCR)
+             * 识别图片中的文字
              *
-             * 可识别图片中的文字，按图片中的区域划分，分段返回文本列表
-             *
-             * 单租户限流：20QPS，同租户下的应用没有限流，共享本租户的 20QPS 限流
+             * 可识别图片中的文字，按图片中的区域划分，分段返回文本列表。文件大小需小于5M。
              */
             basicRecognize: async (
                 payload?: {
@@ -84,19 +82,17 @@ export default abstract class Client extends okr {
         },
         v1: {
             /**
-             * 图片识别
+             * image
              */
             image: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=optical_char_recognition&resource=image&apiName=basic_recognize&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/ai/optical_char_recognition-v1/image/basic_recognize document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=basic_recognize&project=optical_char_recognition&resource=image&version=v1 document }
                  *
-                 * 基础图片识别 (OCR)
+                 * 识别图片中的文字
                  *
-                 * 可识别图片中的文字，按图片中的区域划分，分段返回文本列表
-                 *
-                 * 单租户限流：20QPS，同租户下的应用没有限流，共享本租户的 20QPS 限流
+                 * 可识别图片中的文字，按图片中的区域划分，分段返回文本列表。文件大小需小于5M。
                  */
                 basicRecognize: async (
                     payload?: {

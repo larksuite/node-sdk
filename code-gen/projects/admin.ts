@@ -29,149 +29,46 @@ export default abstract class Client extends acs {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 管理后台-企业勋章
-     */
+         
+         */
     admin = {
         /**
-         * 部门维度的数据报表
+         * badge.grant
          */
-        adminDeptStat: {
+        badgeGrant: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_dept_stat&apiName=list&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/admin_dept_stat/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=badge.grant&version=v1 document }
              *
-             * 获取部门维度的用户活跃和功能使用数据
+             * 创建授予名单
              *
-             * 该接口用于获取部门维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议功能的使用数据。
-             *
-             * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（UTC+8）
+             * 通过该接口可以为特定勋章创建一份授予名单，一枚勋章下最多可创建1000份授予名单。
              */
-            list: async (
+            create: async (
                 payload?: {
-                    params: {
-                        department_id_type:
-                            | "department_id"
-                            | "open_department_id";
-                        start_date: string;
-                        end_date: string;
-                        department_id: string;
-                        contains_child_dept: boolean;
-                        page_size?: number;
-                        page_token?: string;
-                        target_geo?: string;
-                        with_product_version?: boolean;
+                    data: {
+                        name: string;
+                        grant_type: number;
+                        time_zone: string;
+                        rule_detail: {
+                            effective_time?: string;
+                            expiration_time?: string;
+                            anniversary?: number;
+                            effective_period?: number;
+                        };
+                        is_grant_all: boolean;
+                        user_ids?: Array<string>;
+                        department_ids?: Array<string>;
+                        group_ids?: Array<string>;
                     };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                has_more?: boolean;
-                                page_token?: string;
-                                items?: Array<{
-                                    date?: string;
-                                    department_id?: string;
-                                    department_name?: string;
-                                    department_path?: string;
-                                    total_user_num?: number;
-                                    active_user_num?: number;
-                                    active_user_rate?: string;
-                                    suite_dau?: number;
-                                    suite_active_rate?: string;
-                                    new_user_num?: number;
-                                    new_active_num?: number;
-                                    resign_user_num?: number;
-                                    im_dau?: number;
-                                    send_messenger_user_num?: number;
-                                    send_messenger_num?: number;
-                                    avg_send_messenger_num?: string;
-                                    docs_dau?: number;
-                                    create_docs_user_num?: number;
-                                    create_docs_num?: number;
-                                    avg_create_docs_num?: string;
-                                    cal_dau?: number;
-                                    create_cal_user_num?: number;
-                                    create_cal_num?: number;
-                                    avg_create_cal_num?: string;
-                                    vc_dau?: number;
-                                    vc_duration?: number;
-                                    avg_vc_duration?: string;
-                                    avg_duration?: string;
-                                    task_dau?: number;
-                                    create_task_user_num?: number;
-                                    create_task_num?: number;
-                                    avg_create_task_num?: string;
-                                    email_send_count?: string;
-                                    email_receive_count?: string;
-                                    email_send_ext_count?: string;
-                                    email_receive_ext_count?: string;
-                                    email_send_in_count?: string;
-                                    email_receive_in_count?: string;
-                                    search_active_dau?: string;
-                                    total_search_count?: string;
-                                    quick_search_count?: string;
-                                    tab_search_count?: string;
-                                    product_version?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/admin_dept_stats`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 用户维度的数据报表
-         */
-        adminUserStat: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_stat&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/admin_user_stat/list document }
-             *
-             * 获取用户维度的用户活跃和功能使用数据
-             *
-             * 用于获取用户维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议功能的使用数据。
-             *
-             * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（UTC+8）
-             */
-            list: async (
-                payload?: {
-                    params: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
                             | "department_id"
                             | "open_department_id";
-                        start_date: string;
-                        end_date: string;
-                        department_id?: string;
-                        user_id?: string;
-                        page_size?: number;
-                        page_token?: string;
-                        target_geo?: string;
                     };
+                    path: { badge_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -185,48 +82,394 @@ export default abstract class Client extends acs {
                             code?: number;
                             msg?: string;
                             data?: {
-                                has_more?: boolean;
-                                page_token?: string;
-                                items?: Array<{
-                                    date?: string;
-                                    user_id?: string;
-                                    user_name?: string;
-                                    department_name?: string;
-                                    department_path?: string;
-                                    create_time?: string;
-                                    user_active_flag?: number;
-                                    register_time?: string;
-                                    suite_active_flag?: number;
-                                    last_active_time?: string;
-                                    im_active_flag?: number;
-                                    send_messenger_num?: number;
-                                    docs_active_flag?: number;
-                                    create_docs_num?: number;
-                                    cal_active_flag?: number;
-                                    create_cal_num?: number;
-                                    vc_active_flag?: number;
-                                    vc_duration?: number;
-                                    active_os?: string;
-                                    create_task_num?: number;
-                                    vc_num?: number;
-                                    app_package_type?: string;
-                                    os_name?: string;
-                                    email_send_count?: string;
-                                    email_receive_count?: string;
-                                    email_send_ext_count?: string;
-                                    email_receive_ext_count?: string;
-                                    email_send_in_count?: string;
-                                    email_receive_in_count?: string;
-                                    search_active_flag?: number;
-                                    total_search_count?: string;
-                                    quick_search_count?: string;
-                                    tab_search_count?: string;
-                                }>;
+                                grant?: {
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                };
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/admin_user_stats`,
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=admin&resource=badge.grant&version=v1 document }
+             *
+             * 修改授予名单
+             *
+             * 通过该接口可以修改特定授予名单的相关信息。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        grant_type: number;
+                        time_zone: string;
+                        rule_detail: {
+                            effective_time?: string;
+                            expiration_time?: string;
+                            anniversary?: number;
+                            effective_period?: number;
+                        };
+                        is_grant_all: boolean;
+                        user_ids?: Array<string>;
+                        department_ids?: Array<string>;
+                        group_ids?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string; grant_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grant?: {
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=admin&resource=badge.grant&version=v1 document }
+             *
+             * 删除授予名单
+             *
+             * 通过该接口可以删除特定授予名单的信息。
+             */
+            delete: async (
+                payload?: {
+                    path: { badge_id: string; grant_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=admin&resource=badge.grant&version=v1 document }
+             *
+             * 获取授予名单详情
+             *
+             * 通过该接口可以获取特定授予名单的信息。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string; grant_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grant?: {
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        name?: string;
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                grants?: Array<{
+                                                    id?: string;
+                                                    badge_id?: string;
+                                                    name: string;
+                                                    grant_type: number;
+                                                    time_zone: string;
+                                                    rule_detail: {
+                                                        effective_time?: string;
+                                                        expiration_time?: string;
+                                                        anniversary?: number;
+                                                        effective_period?: number;
+                                                    };
+                                                    is_grant_all: boolean;
+                                                    user_ids?: Array<string>;
+                                                    department_ids?: Array<string>;
+                                                    group_ids?: Array<string>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=badge.grant&version=v1 document }
+             *
+             * 获取授予名单列表
+             *
+             * 通过该接口可以获取特定勋章下的授予名单列表，授予名单的排列顺序按照创建时间倒序排列。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        name?: string;
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grants?: Array<{
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
                             path
                         ),
                         method: "GET",
@@ -243,7 +486,499 @@ export default abstract class Client extends acs {
             },
         },
         /**
-         * 行为审计日志（灰度租户可见）
+         * badge
+         */
+        badge: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=admin&resource=badge&version=v1 document }
+             *
+             * 修改勋章信息
+             *
+             * 通过该接口可以修改勋章的信息。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        explanation?: string;
+                        detail_image: string;
+                        show_image: string;
+                        i18n_name?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                        i18n_explanation?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badge?: {
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    i18n_explanation?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=admin&resource=badge&version=v1 document }
+             *
+             * 获取勋章详情
+             *
+             * 可以通过该接口查询勋章的详情。
+             */
+            get: async (
+                payload?: {
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badge?: {
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    i18n_explanation?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        name?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                badges?: Array<{
+                                                    id?: string;
+                                                    name: string;
+                                                    explanation?: string;
+                                                    detail_image: string;
+                                                    show_image: string;
+                                                    i18n_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                    i18n_explanation?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=badge&version=v1 document }
+             *
+             * 获取勋章列表
+             *
+             * 可以通过该接口列出租户下所有的勋章，勋章的排列顺序是按照创建时间倒序排列。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        name?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badges?: Array<{
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    i18n_explanation?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=badge&version=v1 document }
+             *
+             * 创建勋章
+             *
+             * 使用该接口可以创建一枚完整的勋章信息，一个租户下最多可创建1000枚勋章。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        explanation?: string;
+                        detail_image: string;
+                        show_image: string;
+                        i18n_name?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                        i18n_explanation?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badge?: {
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    i18n_explanation?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * password
+         */
+        password: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=password&apiName=reset&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reset&project=admin&resource=password&version=v1 document }
+             *
+             * 重置用户的企业邮箱密码
+             *
+             * 重置用户的企业邮箱密码，仅当用户的邮箱和企业邮箱(别名)一致时生效，可用于处理飞书企业邮箱登录死锁的问题。;;邮箱死锁：当用户的登录凭证与飞书企业邮箱一致时，目前飞书登录流程要求用户输入验证码，由于飞书邮箱无单独的帐号体系，则未登录时无法收取邮箱验证码，即陷入死锁。
+             */
+            reset: async (
+                payload?: {
+                    data: {
+                        password: { ent_email_password: string };
+                        user_id: string;
+                    };
+                    params: {
+                        user_id_type: "open_id" | "union_id" | "user_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/password/reset`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * badge_image
+         */
+        badgeImage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge_image&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=badge_image&version=v1 document }
+             *
+             * 上传勋章图片
+             *
+             * 通过该接口可以上传勋章详情图、挂饰图的文件，获取对应的文件key。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        image_file: Buffer | fs.ReadStream;
+                        image_type: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { image_key?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badge_images`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+        },
+        /**
+         * audit_info
          */
         auditInfo: {
             listWithIterator: async (
@@ -486,7 +1221,7 @@ export default abstract class Client extends acs {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=admin&resource=audit_info&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQjM5YjL0ITO24CNykjN/audit_log/audit_data_get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=audit_info&version=v1 document }
              *
              * 用户行为日志搜索
              */
@@ -683,265 +1418,34 @@ export default abstract class Client extends acs {
             },
         },
         /**
-         * 勋章
+         * admin_user_stat
          */
-        badge: {
+        adminUserStat: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_stat&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_user_stat&version=v1 document }
              *
-             * 创建勋章
+             * 获取用户维度的用户活跃和功能使用数据
              *
-             * 使用该接口可以创建一枚完整的勋章信息，一个租户下最多可创建1000枚勋章。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        name: string;
-                        explanation?: string;
-                        detail_image: string;
-                        show_image: string;
-                        i18n_name?: {
-                            zh_cn?: string;
-                            en_us?: string;
-                            ja_jp?: string;
-                        };
-                        i18n_explanation?: {
-                            zh_cn?: string;
-                            en_us?: string;
-                            ja_jp?: string;
-                        };
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                badge?: {
-                                    id?: string;
-                                    name: string;
-                                    explanation?: string;
-                                    detail_image: string;
-                                    show_image: string;
-                                    i18n_name?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                    i18n_explanation?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=get&version=v1 click to debug }
+             * 用于获取用户维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议、邮箱功能的使用数据。
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/get document }
-             *
-             * 获取勋章详情
-             *
-             * 可以通过该接口查询勋章的详情
-             */
-            get: async (
-                payload?: {
-                    path: { badge_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                badge?: {
-                                    id?: string;
-                                    name: string;
-                                    explanation?: string;
-                                    detail_image: string;
-                                    show_image: string;
-                                    i18n_name?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                    i18n_explanation?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        page_size: number;
-                        page_token?: string;
-                        name?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                badges?: Array<{
-                                                    id?: string;
-                                                    name: string;
-                                                    explanation?: string;
-                                                    detail_image: string;
-                                                    show_image: string;
-                                                    i18n_name?: {
-                                                        zh_cn?: string;
-                                                        en_us?: string;
-                                                        ja_jp?: string;
-                                                    };
-                                                    i18n_explanation?: {
-                                                        zh_cn?: string;
-                                                        en_us?: string;
-                                                        ja_jp?: string;
-                                                    };
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/list document }
-             *
-             * 获取勋章列表
-             *
-             * 可以通过该接口列出租户下所有的勋章，勋章的排列顺序是按照创建时间倒序排列。
+             * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（CN时区: UTC+8，非CN时区: UTC+0）;;- 数据权限范围配置：目前只支持给每个应用配置部门级别数据权限范围，默认包含子部门
              */
             list: async (
                 payload?: {
                     params: {
-                        page_size: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        start_date: string;
+                        end_date: string;
+                        department_id?: string;
+                        user_id?: string;
+                        page_size?: number;
                         page_token?: string;
-                        name?: string;
+                        target_geo?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -956,110 +1460,51 @@ export default abstract class Client extends acs {
                             code?: number;
                             msg?: string;
                             data?: {
-                                badges?: Array<{
-                                    id?: string;
-                                    name: string;
-                                    explanation?: string;
-                                    detail_image: string;
-                                    show_image: string;
-                                    i18n_name?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                    i18n_explanation?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                }>;
-                                page_token?: string;
                                 has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    date?: string;
+                                    user_id?: string;
+                                    user_name?: string;
+                                    department_name?: string;
+                                    department_path?: string;
+                                    create_time?: string;
+                                    user_active_flag?: number;
+                                    register_time?: string;
+                                    suite_active_flag?: number;
+                                    last_active_time?: string;
+                                    im_active_flag?: number;
+                                    send_messenger_num?: number;
+                                    docs_active_flag?: number;
+                                    create_docs_num?: number;
+                                    cal_active_flag?: number;
+                                    create_cal_num?: number;
+                                    vc_active_flag?: number;
+                                    vc_duration?: number;
+                                    active_os?: string;
+                                    create_task_num?: number;
+                                    vc_num?: number;
+                                    app_package_type?: string;
+                                    os_name?: string;
+                                    email_send_count?: string;
+                                    email_receive_count?: string;
+                                    email_send_ext_count?: string;
+                                    email_receive_ext_count?: string;
+                                    email_send_in_count?: string;
+                                    email_receive_in_count?: string;
+                                    search_active_flag?: number;
+                                    total_search_count?: string;
+                                    quick_search_count?: string;
+                                    tab_search_count?: string;
+                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges`,
+                            `${this.domain}/open-apis/admin/v1/admin_user_stats`,
                             path
                         ),
                         method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/update document }
-             *
-             * 修改勋章信息
-             *
-             * 通过该接口可以修改勋章的信息
-             */
-            update: async (
-                payload?: {
-                    data: {
-                        name: string;
-                        explanation?: string;
-                        detail_image: string;
-                        show_image: string;
-                        i18n_name?: {
-                            zh_cn?: string;
-                            en_us?: string;
-                            ja_jp?: string;
-                        };
-                        i18n_explanation?: {
-                            zh_cn?: string;
-                            en_us?: string;
-                            ja_jp?: string;
-                        };
-                    };
-                    path: { badge_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                badge?: {
-                                    id?: string;
-                                    name: string;
-                                    explanation?: string;
-                                    detail_image: string;
-                                    show_image: string;
-                                    i18n_name?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                    i18n_explanation?: {
-                                        zh_cn?: string;
-                                        en_us?: string;
-                                        ja_jp?: string;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
-                            path
-                        ),
-                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -1073,324 +1518,35 @@ export default abstract class Client extends acs {
             },
         },
         /**
-         * 勋章授予名单
+         * admin_dept_stat
          */
-        badgeGrant: {
+        adminDeptStat: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_dept_stat&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_dept_stat&version=v1 document }
              *
-             * 创建勋章的授予名单
+             * 获取部门维度的用户活跃和功能使用数据
              *
-             * 通过该接口可以为特定勋章创建一份授予名单，一枚勋章下最多可创建1000份授予名单。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        name: string;
-                        grant_type: number;
-                        time_zone: string;
-                        rule_detail: {
-                            effective_time?: string;
-                            expiration_time?: string;
-                            anniversary?: number;
-                            effective_period?: number;
-                        };
-                        is_grant_all: boolean;
-                        user_ids?: Array<string>;
-                        department_ids?: Array<string>;
-                        group_ids?: Array<string>;
-                    };
-                    params?: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                    };
-                    path: { badge_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                grant?: {
-                                    id?: string;
-                                    badge_id?: string;
-                                    name: string;
-                                    grant_type: number;
-                                    time_zone: string;
-                                    rule_detail: {
-                                        effective_time?: string;
-                                        expiration_time?: string;
-                                        anniversary?: number;
-                                        effective_period?: number;
-                                    };
-                                    is_grant_all: boolean;
-                                    user_ids?: Array<string>;
-                                    department_ids?: Array<string>;
-                                    group_ids?: Array<string>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=delete&version=v1 click to debug }
+             * 该接口用于获取部门维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议、邮箱功能的使用数据。
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/delete document }
-             *
-             * 删除授予名单
-             *
-             * 通过该接口可以删除特定授予名单的信息
-             */
-            delete: async (
-                payload?: {
-                    path: { badge_id: string; grant_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/get document }
-             *
-             * 获取授予名单的信息
-             *
-             * 通过该接口可以获取特定授予名单的信息
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                    };
-                    path: { badge_id: string; grant_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                grant?: {
-                                    id?: string;
-                                    badge_id?: string;
-                                    name: string;
-                                    grant_type: number;
-                                    time_zone: string;
-                                    rule_detail: {
-                                        effective_time?: string;
-                                        expiration_time?: string;
-                                        anniversary?: number;
-                                        effective_period?: number;
-                                    };
-                                    is_grant_all: boolean;
-                                    user_ids?: Array<string>;
-                                    department_ids?: Array<string>;
-                                    group_ids?: Array<string>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        page_size: number;
-                        page_token?: string;
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                        name?: string;
-                    };
-                    path: { badge_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                grants?: Array<{
-                                                    id?: string;
-                                                    badge_id?: string;
-                                                    name: string;
-                                                    grant_type: number;
-                                                    time_zone: string;
-                                                    rule_detail: {
-                                                        effective_time?: string;
-                                                        expiration_time?: string;
-                                                        anniversary?: number;
-                                                        effective_period?: number;
-                                                    };
-                                                    is_grant_all: boolean;
-                                                    user_ids?: Array<string>;
-                                                    department_ids?: Array<string>;
-                                                    group_ids?: Array<string>;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/list document }
-             *
-             * 获取勋章的授予名单列表
-             *
-             * 通过该接口可以获取特定勋章下的授予名单列表，授予名单的排列顺序按照创建时间倒序排列。
+             * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（CN时区: UTC+8，非CN时区: UTC+0）;;- 数据权限范围配置：目前只支持给每个应用配置部门级别数据权限范围，默认包含子部门（应用数据权限在开放平台配置）
              */
             list: async (
                 payload?: {
                     params: {
-                        page_size: number;
-                        page_token?: string;
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        department_id_type?:
+                        department_id_type:
                             | "department_id"
                             | "open_department_id";
-                        name?: string;
+                        start_date: string;
+                        end_date: string;
+                        department_id: string;
+                        contains_child_dept: boolean;
+                        page_size?: number;
+                        page_token?: string;
+                        target_geo?: string;
+                        with_product_version?: boolean;
                     };
-                    path: { badge_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1404,217 +1560,61 @@ export default abstract class Client extends acs {
                             code?: number;
                             msg?: string;
                             data?: {
-                                grants?: Array<{
-                                    id?: string;
-                                    badge_id?: string;
-                                    name: string;
-                                    grant_type: number;
-                                    time_zone: string;
-                                    rule_detail: {
-                                        effective_time?: string;
-                                        expiration_time?: string;
-                                        anniversary?: number;
-                                        effective_period?: number;
-                                    };
-                                    is_grant_all: boolean;
-                                    user_ids?: Array<string>;
-                                    department_ids?: Array<string>;
-                                    group_ids?: Array<string>;
-                                }>;
-                                page_token?: string;
                                 has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    date?: string;
+                                    department_id?: string;
+                                    department_name?: string;
+                                    department_path?: string;
+                                    total_user_num?: number;
+                                    active_user_num?: number;
+                                    active_user_rate?: string;
+                                    suite_dau?: number;
+                                    suite_active_rate?: string;
+                                    new_user_num?: number;
+                                    new_active_num?: number;
+                                    resign_user_num?: number;
+                                    im_dau?: number;
+                                    send_messenger_user_num?: number;
+                                    send_messenger_num?: number;
+                                    avg_send_messenger_num?: string;
+                                    docs_dau?: number;
+                                    create_docs_user_num?: number;
+                                    create_docs_num?: number;
+                                    avg_create_docs_num?: string;
+                                    cal_dau?: number;
+                                    create_cal_user_num?: number;
+                                    create_cal_num?: number;
+                                    avg_create_cal_num?: string;
+                                    vc_dau?: number;
+                                    vc_duration?: number;
+                                    avg_vc_duration?: string;
+                                    avg_duration?: string;
+                                    task_dau?: number;
+                                    create_task_user_num?: number;
+                                    create_task_num?: number;
+                                    avg_create_task_num?: string;
+                                    email_send_count?: string;
+                                    email_receive_count?: string;
+                                    email_send_ext_count?: string;
+                                    email_receive_ext_count?: string;
+                                    email_send_in_count?: string;
+                                    email_receive_in_count?: string;
+                                    search_active_dau?: string;
+                                    total_search_count?: string;
+                                    quick_search_count?: string;
+                                    tab_search_count?: string;
+                                    product_version?: string;
+                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                            `${this.domain}/open-apis/admin/v1/admin_dept_stats`,
                             path
                         ),
                         method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/update document }
-             *
-             * 修改授予名单
-             *
-             * 通过该接口可以修改特定授予名单的相关信息
-             */
-            update: async (
-                payload?: {
-                    data: {
-                        name: string;
-                        grant_type: number;
-                        time_zone: string;
-                        rule_detail: {
-                            effective_time?: string;
-                            expiration_time?: string;
-                            anniversary?: number;
-                            effective_period?: number;
-                        };
-                        is_grant_all: boolean;
-                        user_ids?: Array<string>;
-                        department_ids?: Array<string>;
-                        group_ids?: Array<string>;
-                    };
-                    params?: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                    };
-                    path: { badge_id: string; grant_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                grant?: {
-                                    id?: string;
-                                    badge_id?: string;
-                                    name: string;
-                                    grant_type: number;
-                                    time_zone: string;
-                                    rule_detail: {
-                                        effective_time?: string;
-                                        expiration_time?: string;
-                                        anniversary?: number;
-                                        effective_period?: number;
-                                    };
-                                    is_grant_all: boolean;
-                                    user_ids?: Array<string>;
-                                    department_ids?: Array<string>;
-                                    group_ids?: Array<string>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 勋章图片
-         */
-        badgeImage: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge_image&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge_image/create document }
-             *
-             * 上传勋章图片
-             *
-             * 通过该接口可以上传勋章详情图、挂饰图的文件，获取对应的文件key
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        image_file: Buffer | fs.ReadStream;
-                        image_type: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { image_key?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/badge_images`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-        },
-        /**
-         * 登录密码管理
-         */
-        password: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=password&apiName=reset&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/password/reset document }
-             *
-             * 重置密码
-             *
-             * 重置用户的企业邮箱密码，仅当用户的邮箱和企业邮箱(别名)一致时生效，可用于处理飞书企业邮箱登录死锁的问题。;;邮箱死锁：当用户的登录凭证与飞书企业邮箱一致时，目前飞书登录流程要求用户输入验证码，由于飞书邮箱无单独的帐号体系，则未登录时无法收取邮箱验证码，即陷入死锁
-             */
-            reset: async (
-                payload?: {
-                    data: {
-                        password: { ent_email_password: string };
-                        user_id: string;
-                    };
-                    params: {
-                        user_id_type: "open_id" | "union_id" | "user_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/admin/v1/password/reset`,
-                            path
-                        ),
-                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1629,145 +1629,42 @@ export default abstract class Client extends acs {
         },
         v1: {
             /**
-             * 部门维度的数据报表
+             * badge.grant
              */
-            adminDeptStat: {
+            badgeGrant: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_dept_stat&apiName=list&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/admin_dept_stat/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=badge.grant&version=v1 document }
                  *
-                 * 获取部门维度的用户活跃和功能使用数据
+                 * 创建授予名单
                  *
-                 * 该接口用于获取部门维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议功能的使用数据。
-                 *
-                 * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（UTC+8）
+                 * 通过该接口可以为特定勋章创建一份授予名单，一枚勋章下最多可创建1000份授予名单。
                  */
-                list: async (
+                create: async (
                     payload?: {
-                        params: {
-                            department_id_type:
-                                | "department_id"
-                                | "open_department_id";
-                            start_date: string;
-                            end_date: string;
-                            department_id: string;
-                            contains_child_dept: boolean;
-                            page_size?: number;
-                            page_token?: string;
-                            target_geo?: string;
-                            with_product_version?: boolean;
+                        data: {
+                            name: string;
+                            grant_type: number;
+                            time_zone: string;
+                            rule_detail: {
+                                effective_time?: string;
+                                expiration_time?: string;
+                                anniversary?: number;
+                                effective_period?: number;
+                            };
+                            is_grant_all: boolean;
+                            user_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            group_ids?: Array<string>;
                         };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    items?: Array<{
-                                        date?: string;
-                                        department_id?: string;
-                                        department_name?: string;
-                                        department_path?: string;
-                                        total_user_num?: number;
-                                        active_user_num?: number;
-                                        active_user_rate?: string;
-                                        suite_dau?: number;
-                                        suite_active_rate?: string;
-                                        new_user_num?: number;
-                                        new_active_num?: number;
-                                        resign_user_num?: number;
-                                        im_dau?: number;
-                                        send_messenger_user_num?: number;
-                                        send_messenger_num?: number;
-                                        avg_send_messenger_num?: string;
-                                        docs_dau?: number;
-                                        create_docs_user_num?: number;
-                                        create_docs_num?: number;
-                                        avg_create_docs_num?: string;
-                                        cal_dau?: number;
-                                        create_cal_user_num?: number;
-                                        create_cal_num?: number;
-                                        avg_create_cal_num?: string;
-                                        vc_dau?: number;
-                                        vc_duration?: number;
-                                        avg_vc_duration?: string;
-                                        avg_duration?: string;
-                                        task_dau?: number;
-                                        create_task_user_num?: number;
-                                        create_task_num?: number;
-                                        avg_create_task_num?: string;
-                                        email_send_count?: string;
-                                        email_receive_count?: string;
-                                        email_send_ext_count?: string;
-                                        email_receive_ext_count?: string;
-                                        email_send_in_count?: string;
-                                        email_receive_in_count?: string;
-                                        search_active_dau?: string;
-                                        total_search_count?: string;
-                                        quick_search_count?: string;
-                                        tab_search_count?: string;
-                                        product_version?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/admin_dept_stats`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 用户维度的数据报表
-             */
-            adminUserStat: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_stat&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/admin_user_stat/list document }
-                 *
-                 * 获取用户维度的用户活跃和功能使用数据
-                 *
-                 * 用于获取用户维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议功能的使用数据。
-                 *
-                 * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（UTC+8）
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
                             department_id_type?:
                                 | "department_id"
                                 | "open_department_id";
-                            start_date: string;
-                            end_date: string;
-                            department_id?: string;
-                            user_id?: string;
-                            page_size?: number;
-                            page_token?: string;
-                            target_geo?: string;
                         };
+                        path: { badge_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1781,48 +1678,399 @@ export default abstract class Client extends acs {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    items?: Array<{
-                                        date?: string;
-                                        user_id?: string;
-                                        user_name?: string;
-                                        department_name?: string;
-                                        department_path?: string;
-                                        create_time?: string;
-                                        user_active_flag?: number;
-                                        register_time?: string;
-                                        suite_active_flag?: number;
-                                        last_active_time?: string;
-                                        im_active_flag?: number;
-                                        send_messenger_num?: number;
-                                        docs_active_flag?: number;
-                                        create_docs_num?: number;
-                                        cal_active_flag?: number;
-                                        create_cal_num?: number;
-                                        vc_active_flag?: number;
-                                        vc_duration?: number;
-                                        active_os?: string;
-                                        create_task_num?: number;
-                                        vc_num?: number;
-                                        app_package_type?: string;
-                                        os_name?: string;
-                                        email_send_count?: string;
-                                        email_receive_count?: string;
-                                        email_send_ext_count?: string;
-                                        email_receive_ext_count?: string;
-                                        email_send_in_count?: string;
-                                        email_receive_in_count?: string;
-                                        search_active_flag?: number;
-                                        total_search_count?: string;
-                                        quick_search_count?: string;
-                                        tab_search_count?: string;
-                                    }>;
+                                    grant?: {
+                                        id?: string;
+                                        badge_id?: string;
+                                        name: string;
+                                        grant_type: number;
+                                        time_zone: string;
+                                        rule_detail: {
+                                            effective_time?: string;
+                                            expiration_time?: string;
+                                            anniversary?: number;
+                                            effective_period?: number;
+                                        };
+                                        is_grant_all: boolean;
+                                        user_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/admin_user_stats`,
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=admin&resource=badge.grant&version=v1 document }
+                 *
+                 * 修改授予名单
+                 *
+                 * 通过该接口可以修改特定授予名单的相关信息。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            grant_type: number;
+                            time_zone: string;
+                            rule_detail: {
+                                effective_time?: string;
+                                expiration_time?: string;
+                                anniversary?: number;
+                                effective_period?: number;
+                            };
+                            is_grant_all: boolean;
+                            user_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            group_ids?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { badge_id: string; grant_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    grant?: {
+                                        id?: string;
+                                        badge_id?: string;
+                                        name: string;
+                                        grant_type: number;
+                                        time_zone: string;
+                                        rule_detail: {
+                                            effective_time?: string;
+                                            expiration_time?: string;
+                                            anniversary?: number;
+                                            effective_period?: number;
+                                        };
+                                        is_grant_all: boolean;
+                                        user_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=admin&resource=badge.grant&version=v1 document }
+                 *
+                 * 删除授予名单
+                 *
+                 * 通过该接口可以删除特定授予名单的信息。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { badge_id: string; grant_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=admin&resource=badge.grant&version=v1 document }
+                 *
+                 * 获取授予名单详情
+                 *
+                 * 通过该接口可以获取特定授予名单的信息。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { badge_id: string; grant_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    grant?: {
+                                        id?: string;
+                                        badge_id?: string;
+                                        name: string;
+                                        grant_type: number;
+                                        time_zone: string;
+                                        rule_detail: {
+                                            effective_time?: string;
+                                            expiration_time?: string;
+                                            anniversary?: number;
+                                            effective_period?: number;
+                                        };
+                                        is_grant_all: boolean;
+                                        user_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            name?: string;
+                        };
+                        path: { badge_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    grants?: Array<{
+                                                        id?: string;
+                                                        badge_id?: string;
+                                                        name: string;
+                                                        grant_type: number;
+                                                        time_zone: string;
+                                                        rule_detail: {
+                                                            effective_time?: string;
+                                                            expiration_time?: string;
+                                                            anniversary?: number;
+                                                            effective_period?: number;
+                                                        };
+                                                        is_grant_all: boolean;
+                                                        user_ids?: Array<string>;
+                                                        department_ids?: Array<string>;
+                                                        group_ids?: Array<string>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=badge.grant&version=v1 document }
+                 *
+                 * 获取授予名单列表
+                 *
+                 * 通过该接口可以获取特定勋章下的授予名单列表，授予名单的排列顺序按照创建时间倒序排列。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            name?: string;
+                        };
+                        path: { badge_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    grants?: Array<{
+                                        id?: string;
+                                        badge_id?: string;
+                                        name: string;
+                                        grant_type: number;
+                                        time_zone: string;
+                                        rule_detail: {
+                                            effective_time?: string;
+                                            expiration_time?: string;
+                                            anniversary?: number;
+                                            effective_period?: number;
+                                        };
+                                        is_grant_all: boolean;
+                                        user_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
                                 path
                             ),
                             method: "GET",
@@ -1839,7 +2087,504 @@ export default abstract class Client extends acs {
                 },
             },
             /**
-             * 行为审计日志（灰度租户可见）
+             * badge
+             */
+            badge: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=admin&resource=badge&version=v1 document }
+                 *
+                 * 修改勋章信息
+                 *
+                 * 通过该接口可以修改勋章的信息。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            explanation?: string;
+                            detail_image: string;
+                            show_image: string;
+                            i18n_name?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                            i18n_explanation?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                        };
+                        path: { badge_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    badge?: {
+                                        id?: string;
+                                        name: string;
+                                        explanation?: string;
+                                        detail_image: string;
+                                        show_image: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                        i18n_explanation?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=admin&resource=badge&version=v1 document }
+                 *
+                 * 获取勋章详情
+                 *
+                 * 可以通过该接口查询勋章的详情。
+                 */
+                get: async (
+                    payload?: {
+                        path: { badge_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    badge?: {
+                                        id?: string;
+                                        name: string;
+                                        explanation?: string;
+                                        detail_image: string;
+                                        show_image: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                        i18n_explanation?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            name?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/admin/v1/badges`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    badges?: Array<{
+                                                        id?: string;
+                                                        name: string;
+                                                        explanation?: string;
+                                                        detail_image: string;
+                                                        show_image: string;
+                                                        i18n_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                        i18n_explanation?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=badge&version=v1 document }
+                 *
+                 * 获取勋章列表
+                 *
+                 * 可以通过该接口列出租户下所有的勋章，勋章的排列顺序是按照创建时间倒序排列。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            name?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    badges?: Array<{
+                                        id?: string;
+                                        name: string;
+                                        explanation?: string;
+                                        detail_image: string;
+                                        show_image: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                        i18n_explanation?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=badge&version=v1 document }
+                 *
+                 * 创建勋章
+                 *
+                 * 使用该接口可以创建一枚完整的勋章信息，一个租户下最多可创建1000枚勋章。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            explanation?: string;
+                            detail_image: string;
+                            show_image: string;
+                            i18n_name?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                            i18n_explanation?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    badge?: {
+                                        id?: string;
+                                        name: string;
+                                        explanation?: string;
+                                        detail_image: string;
+                                        show_image: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                        i18n_explanation?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * password
+             */
+            password: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=password&apiName=reset&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reset&project=admin&resource=password&version=v1 document }
+                 *
+                 * 重置用户的企业邮箱密码
+                 *
+                 * 重置用户的企业邮箱密码，仅当用户的邮箱和企业邮箱(别名)一致时生效，可用于处理飞书企业邮箱登录死锁的问题。;;邮箱死锁：当用户的登录凭证与飞书企业邮箱一致时，目前飞书登录流程要求用户输入验证码，由于飞书邮箱无单独的帐号体系，则未登录时无法收取邮箱验证码，即陷入死锁。
+                 */
+                reset: async (
+                    payload?: {
+                        data: {
+                            password: { ent_email_password: string };
+                            user_id: string;
+                        };
+                        params: {
+                            user_id_type: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/password/reset`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * badge_image
+             */
+            badgeImage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge_image&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=badge_image&version=v1 document }
+                 *
+                 * 上传勋章图片
+                 *
+                 * 通过该接口可以上传勋章详情图、挂饰图的文件，获取对应的文件key。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            image_file: Buffer | fs.ReadStream;
+                            image_type: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { image_key?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badge_images`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * audit_info
              */
             auditInfo: {
                 listWithIterator: async (
@@ -2084,7 +2829,7 @@ export default abstract class Client extends acs {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=admin&resource=audit_info&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQjM5YjL0ITO24CNykjN/audit_log/audit_data_get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=audit_info&version=v1 document }
                  *
                  * 用户行为日志搜索
                  */
@@ -2281,267 +3026,34 @@ export default abstract class Client extends acs {
                 },
             },
             /**
-             * 勋章
+             * admin_user_stat
              */
-            badge: {
+            adminUserStat: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_stat&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_user_stat&version=v1 document }
                  *
-                 * 创建勋章
+                 * 获取用户维度的用户活跃和功能使用数据
                  *
-                 * 使用该接口可以创建一枚完整的勋章信息，一个租户下最多可创建1000枚勋章。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            name: string;
-                            explanation?: string;
-                            detail_image: string;
-                            show_image: string;
-                            i18n_name?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                            i18n_explanation?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    badge?: {
-                                        id?: string;
-                                        name: string;
-                                        explanation?: string;
-                                        detail_image: string;
-                                        show_image: string;
-                                        i18n_name?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                        i18n_explanation?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=get&version=v1 click to debug }
+                 * 用于获取用户维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议、邮箱功能的使用数据。
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/get document }
-                 *
-                 * 获取勋章详情
-                 *
-                 * 可以通过该接口查询勋章的详情
-                 */
-                get: async (
-                    payload?: {
-                        path: { badge_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    badge?: {
-                                        id?: string;
-                                        name: string;
-                                        explanation?: string;
-                                        detail_image: string;
-                                        show_image: string;
-                                        i18n_name?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                        i18n_explanation?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            page_size: number;
-                            page_token?: string;
-                            name?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/admin/v1/badges`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    badges?: Array<{
-                                                        id?: string;
-                                                        name: string;
-                                                        explanation?: string;
-                                                        detail_image: string;
-                                                        show_image: string;
-                                                        i18n_name?: {
-                                                            zh_cn?: string;
-                                                            en_us?: string;
-                                                            ja_jp?: string;
-                                                        };
-                                                        i18n_explanation?: {
-                                                            zh_cn?: string;
-                                                            en_us?: string;
-                                                            ja_jp?: string;
-                                                        };
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/list document }
-                 *
-                 * 获取勋章列表
-                 *
-                 * 可以通过该接口列出租户下所有的勋章，勋章的排列顺序是按照创建时间倒序排列。
+                 * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（CN时区: UTC+8，非CN时区: UTC+0）;;- 数据权限范围配置：目前只支持给每个应用配置部门级别数据权限范围，默认包含子部门
                  */
                 list: async (
                     payload?: {
                         params: {
-                            page_size: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            start_date: string;
+                            end_date: string;
+                            department_id?: string;
+                            user_id?: string;
+                            page_size?: number;
                             page_token?: string;
-                            name?: string;
+                            target_geo?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -2556,110 +3068,51 @@ export default abstract class Client extends acs {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    badges?: Array<{
-                                        id?: string;
-                                        name: string;
-                                        explanation?: string;
-                                        detail_image: string;
-                                        show_image: string;
-                                        i18n_name?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                        i18n_explanation?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    }>;
-                                    page_token?: string;
                                     has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        date?: string;
+                                        user_id?: string;
+                                        user_name?: string;
+                                        department_name?: string;
+                                        department_path?: string;
+                                        create_time?: string;
+                                        user_active_flag?: number;
+                                        register_time?: string;
+                                        suite_active_flag?: number;
+                                        last_active_time?: string;
+                                        im_active_flag?: number;
+                                        send_messenger_num?: number;
+                                        docs_active_flag?: number;
+                                        create_docs_num?: number;
+                                        cal_active_flag?: number;
+                                        create_cal_num?: number;
+                                        vc_active_flag?: number;
+                                        vc_duration?: number;
+                                        active_os?: string;
+                                        create_task_num?: number;
+                                        vc_num?: number;
+                                        app_package_type?: string;
+                                        os_name?: string;
+                                        email_send_count?: string;
+                                        email_receive_count?: string;
+                                        email_send_ext_count?: string;
+                                        email_receive_ext_count?: string;
+                                        email_send_in_count?: string;
+                                        email_receive_in_count?: string;
+                                        search_active_flag?: number;
+                                        total_search_count?: string;
+                                        quick_search_count?: string;
+                                        tab_search_count?: string;
+                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges`,
+                                `${this.domain}/open-apis/admin/v1/admin_user_stats`,
                                 path
                             ),
                             method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge/update document }
-                 *
-                 * 修改勋章信息
-                 *
-                 * 通过该接口可以修改勋章的信息
-                 */
-                update: async (
-                    payload?: {
-                        data: {
-                            name: string;
-                            explanation?: string;
-                            detail_image: string;
-                            show_image: string;
-                            i18n_name?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                            i18n_explanation?: {
-                                zh_cn?: string;
-                                en_us?: string;
-                                ja_jp?: string;
-                            };
-                        };
-                        path: { badge_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    badge?: {
-                                        id?: string;
-                                        name: string;
-                                        explanation?: string;
-                                        detail_image: string;
-                                        show_image: string;
-                                        i18n_name?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                        i18n_explanation?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                            ja_jp?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
-                                path
-                            ),
-                            method: "PUT",
                             data,
                             params,
                             headers,
@@ -2673,329 +3126,35 @@ export default abstract class Client extends acs {
                 },
             },
             /**
-             * 勋章授予名单
+             * admin_dept_stat
              */
-            badgeGrant: {
+            adminDeptStat: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_dept_stat&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_dept_stat&version=v1 document }
                  *
-                 * 创建勋章的授予名单
+                 * 获取部门维度的用户活跃和功能使用数据
                  *
-                 * 通过该接口可以为特定勋章创建一份授予名单，一枚勋章下最多可创建1000份授予名单。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            name: string;
-                            grant_type: number;
-                            time_zone: string;
-                            rule_detail: {
-                                effective_time?: string;
-                                expiration_time?: string;
-                                anniversary?: number;
-                                effective_period?: number;
-                            };
-                            is_grant_all: boolean;
-                            user_ids?: Array<string>;
-                            department_ids?: Array<string>;
-                            group_ids?: Array<string>;
-                        };
-                        params?: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { badge_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    grant?: {
-                                        id?: string;
-                                        badge_id?: string;
-                                        name: string;
-                                        grant_type: number;
-                                        time_zone: string;
-                                        rule_detail: {
-                                            effective_time?: string;
-                                            expiration_time?: string;
-                                            anniversary?: number;
-                                            effective_period?: number;
-                                        };
-                                        is_grant_all: boolean;
-                                        user_ids?: Array<string>;
-                                        department_ids?: Array<string>;
-                                        group_ids?: Array<string>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=delete&version=v1 click to debug }
+                 * 该接口用于获取部门维度的用户活跃和功能使用数据，即IM（即时通讯）、日历、云文档、音视频会议、邮箱功能的使用数据。
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/delete document }
-                 *
-                 * 删除授予名单
-                 *
-                 * 通过该接口可以删除特定授予名单的信息
-                 */
-                delete: async (
-                    payload?: {
-                        path: { badge_id: string; grant_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/get document }
-                 *
-                 * 获取授予名单的信息
-                 *
-                 * 通过该接口可以获取特定授予名单的信息
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { badge_id: string; grant_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    grant?: {
-                                        id?: string;
-                                        badge_id?: string;
-                                        name: string;
-                                        grant_type: number;
-                                        time_zone: string;
-                                        rule_detail: {
-                                            effective_time?: string;
-                                            expiration_time?: string;
-                                            anniversary?: number;
-                                            effective_period?: number;
-                                        };
-                                        is_grant_all: boolean;
-                                        user_ids?: Array<string>;
-                                        department_ids?: Array<string>;
-                                        group_ids?: Array<string>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            page_size: number;
-                            page_token?: string;
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                            name?: string;
-                        };
-                        path: { badge_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    grants?: Array<{
-                                                        id?: string;
-                                                        badge_id?: string;
-                                                        name: string;
-                                                        grant_type: number;
-                                                        time_zone: string;
-                                                        rule_detail: {
-                                                            effective_time?: string;
-                                                            expiration_time?: string;
-                                                            anniversary?: number;
-                                                            effective_period?: number;
-                                                        };
-                                                        is_grant_all: boolean;
-                                                        user_ids?: Array<string>;
-                                                        department_ids?: Array<string>;
-                                                        group_ids?: Array<string>;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/list document }
-                 *
-                 * 获取勋章的授予名单列表
-                 *
-                 * 通过该接口可以获取特定勋章下的授予名单列表，授予名单的排列顺序按照创建时间倒序排列。
+                 * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出（CN时区: UTC+8，非CN时区: UTC+0）;;- 数据权限范围配置：目前只支持给每个应用配置部门级别数据权限范围，默认包含子部门（应用数据权限在开放平台配置）
                  */
                 list: async (
                     payload?: {
                         params: {
-                            page_size: number;
-                            page_token?: string;
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            department_id_type?:
+                            department_id_type:
                                 | "department_id"
                                 | "open_department_id";
-                            name?: string;
+                            start_date: string;
+                            end_date: string;
+                            department_id: string;
+                            contains_child_dept: boolean;
+                            page_size?: number;
+                            page_token?: string;
+                            target_geo?: string;
+                            with_product_version?: boolean;
                         };
-                        path: { badge_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -3009,220 +3168,61 @@ export default abstract class Client extends acs {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    grants?: Array<{
-                                        id?: string;
-                                        badge_id?: string;
-                                        name: string;
-                                        grant_type: number;
-                                        time_zone: string;
-                                        rule_detail: {
-                                            effective_time?: string;
-                                            expiration_time?: string;
-                                            anniversary?: number;
-                                            effective_period?: number;
-                                        };
-                                        is_grant_all: boolean;
-                                        user_ids?: Array<string>;
-                                        department_ids?: Array<string>;
-                                        group_ids?: Array<string>;
-                                    }>;
-                                    page_token?: string;
                                     has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        date?: string;
+                                        department_id?: string;
+                                        department_name?: string;
+                                        department_path?: string;
+                                        total_user_num?: number;
+                                        active_user_num?: number;
+                                        active_user_rate?: string;
+                                        suite_dau?: number;
+                                        suite_active_rate?: string;
+                                        new_user_num?: number;
+                                        new_active_num?: number;
+                                        resign_user_num?: number;
+                                        im_dau?: number;
+                                        send_messenger_user_num?: number;
+                                        send_messenger_num?: number;
+                                        avg_send_messenger_num?: string;
+                                        docs_dau?: number;
+                                        create_docs_user_num?: number;
+                                        create_docs_num?: number;
+                                        avg_create_docs_num?: string;
+                                        cal_dau?: number;
+                                        create_cal_user_num?: number;
+                                        create_cal_num?: number;
+                                        avg_create_cal_num?: string;
+                                        vc_dau?: number;
+                                        vc_duration?: number;
+                                        avg_vc_duration?: string;
+                                        avg_duration?: string;
+                                        task_dau?: number;
+                                        create_task_user_num?: number;
+                                        create_task_num?: number;
+                                        avg_create_task_num?: string;
+                                        email_send_count?: string;
+                                        email_receive_count?: string;
+                                        email_send_ext_count?: string;
+                                        email_receive_ext_count?: string;
+                                        email_send_in_count?: string;
+                                        email_receive_in_count?: string;
+                                        search_active_dau?: string;
+                                        total_search_count?: string;
+                                        quick_search_count?: string;
+                                        tab_search_count?: string;
+                                        product_version?: string;
+                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                                `${this.domain}/open-apis/admin/v1/admin_dept_stats`,
                                 path
                             ),
                             method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge-grant/update document }
-                 *
-                 * 修改授予名单
-                 *
-                 * 通过该接口可以修改特定授予名单的相关信息
-                 */
-                update: async (
-                    payload?: {
-                        data: {
-                            name: string;
-                            grant_type: number;
-                            time_zone: string;
-                            rule_detail: {
-                                effective_time?: string;
-                                expiration_time?: string;
-                                anniversary?: number;
-                                effective_period?: number;
-                            };
-                            is_grant_all: boolean;
-                            user_ids?: Array<string>;
-                            department_ids?: Array<string>;
-                            group_ids?: Array<string>;
-                        };
-                        params?: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { badge_id: string; grant_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    grant?: {
-                                        id?: string;
-                                        badge_id?: string;
-                                        name: string;
-                                        grant_type: number;
-                                        time_zone: string;
-                                        rule_detail: {
-                                            effective_time?: string;
-                                            expiration_time?: string;
-                                            anniversary?: number;
-                                            effective_period?: number;
-                                        };
-                                        is_grant_all: boolean;
-                                        user_ids?: Array<string>;
-                                        department_ids?: Array<string>;
-                                        group_ids?: Array<string>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 勋章图片
-             */
-            badgeImage: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge_image&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/badge_image/create document }
-                 *
-                 * 上传勋章图片
-                 *
-                 * 通过该接口可以上传勋章详情图、挂饰图的文件，获取对应的文件key
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            image_file: Buffer | fs.ReadStream;
-                            image_type: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { image_key?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/badge_images`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * 登录密码管理
-             */
-            password: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=password&apiName=reset&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/password/reset document }
-                 *
-                 * 重置密码
-                 *
-                 * 重置用户的企业邮箱密码，仅当用户的邮箱和企业邮箱(别名)一致时生效，可用于处理飞书企业邮箱登录死锁的问题。;;邮箱死锁：当用户的登录凭证与飞书企业邮箱一致时，目前飞书登录流程要求用户输入验证码，由于飞书邮箱无单独的帐号体系，则未登录时无法收取邮箱验证码，即陷入死锁
-                 */
-                reset: async (
-                    payload?: {
-                        data: {
-                            password: { ent_email_password: string };
-                            user_id: string;
-                        };
-                        params: {
-                            user_id_type: "open_id" | "union_id" | "user_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/admin/v1/password/reset`,
-                                path
-                            ),
-                            method: "POST",
                             data,
                             params,
                             headers,

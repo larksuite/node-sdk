@@ -42,7 +42,9 @@ export default abstract class Client extends docs_tool {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=docs&resource=content&version=v1 document }
                  *
-                 * 获取云文档正文内容
+                 * 获取云文档内容
+                 *
+                 * 可获取云文档内容，当前只支持获取新版文档 Markdown 格式的内容。
                  */
                 get: async (
                     payload?: {

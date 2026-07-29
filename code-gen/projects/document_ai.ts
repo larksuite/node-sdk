@@ -34,63 +34,6 @@ export default abstract class Client extends docs {
     document_ai = {
         v1: {
             /**
-             * bank_card
-             */
-            bankCard: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=bank_card&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=bank_card&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data: { file: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    bank_card?: {
-                                        entities?: Array<{
-                                            type?:
-                                                | "card_number"
-                                                | "date_of_expiry";
-                                            value?: string;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/bank_card/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
              * business_card
              */
             businessCard: {
@@ -98,6 +41,12 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=business_card&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=business_card&version=v1 document }
+                 *
+                 * 识别文件中的名片
+                 *
+                 * 名片识别接口，通过上传 JPG / PNG / PDF 等文件类型进行一次性的名片识别。接口适用于20MB以下的文件，适用于英文、日语的名片。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流
                  */
                 recognize: async (
                     payload?: {
@@ -157,134 +106,6 @@ export default abstract class Client extends docs {
                 },
             },
             /**
-             * business_license
-             */
-            businessLicense: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=business_license&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=business_license&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data: { file: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    business_license?: {
-                                        entities?: Array<{
-                                            type?:
-                                                | "certificate_type"
-                                                | "unified_social_credit_code"
-                                                | "company_name"
-                                                | "company_type"
-                                                | "domicile"
-                                                | "legal_representative"
-                                                | "registered_capital"
-                                                | "established_time"
-                                                | "established_date"
-                                                | "business_scope"
-                                                | "website"
-                                                | "approval_date";
-                                            value?: string;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/business_license/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * chinese_passport
-             */
-            chinesePassport: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=chinese_passport&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=chinese_passport&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data: { file: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    chinese_passport?: {
-                                        entities?: Array<{
-                                            type?:
-                                                | "full_name_cn"
-                                                | "full_name_en"
-                                                | "date_of_birth"
-                                                | "date_of_expiry"
-                                                | "place_of_issue"
-                                                | "passport_number";
-                                            value?: string;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/chinese_passport/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
              * contract
              */
             contract: {
@@ -292,6 +113,12 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=contract&apiName=field_extraction&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=field_extraction&project=document_ai&resource=contract&version=v1 document }
+                 *
+                 * 提取文件中的合同字段
+                 *
+                 * 支持从doc、docx和pdf文件类型中提取合同字段。;文件大小需要小于10M。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流
                  */
                 fieldExtraction: async (
                     payload?: {
@@ -398,6 +225,77 @@ export default abstract class Client extends docs {
                 },
             },
             /**
+             * business_license
+             */
+            businessLicense: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=business_license&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=business_license&version=v1 document }
+                 *
+                 * 识别文件中的营业执照
+                 *
+                 * 营业执照识别接口，支持JPG/JPEG/PNG/BMP/PDF五种文件类型的一次性的识别。;文件大小需要小于10M。
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    business_license?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "certificate_type"
+                                                | "unified_social_credit_code"
+                                                | "company_name"
+                                                | "company_type"
+                                                | "domicile"
+                                                | "legal_representative"
+                                                | "registered_capital"
+                                                | "established_time"
+                                                | "established_date"
+                                                | "business_scope"
+                                                | "website"
+                                                | "approval_date";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/business_license/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
              * driving_license
              */
             drivingLicense: {
@@ -405,6 +303,10 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=driving_license&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=driving_license&version=v1 document }
+                 *
+                 * 识别文件中的驾驶证
+                 *
+                 * 驾驶证识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
                  */
                 recognize: async (
                     payload?: {
@@ -467,6 +369,85 @@ export default abstract class Client extends docs {
                 },
             },
             /**
+             * vehicle_license
+             */
+            vehicleLicense: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=vehicle_license&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=vehicle_license&version=v1 document }
+                 *
+                 * 识别文件中的行驶证
+                 *
+                 * 行驶证识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    vehicle_license?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "plate_number"
+                                                | "vehicle_type"
+                                                | "owner"
+                                                | "address"
+                                                | "use_character"
+                                                | "model"
+                                                | "vin"
+                                                | "engine_number"
+                                                | "register_date"
+                                                | "issue_date"
+                                                | "license_issuing_authority"
+                                                | "document_id"
+                                                | "approved_passengers_capacity"
+                                                | "total_mass"
+                                                | "curb_weight"
+                                                | "ratified_load_capacity"
+                                                | "gabarite"
+                                                | "traction_mass"
+                                                | "remarks"
+                                                | "inspection_record";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/vehicle_license/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
              * food_manage_license
              */
             foodManageLicense: {
@@ -474,6 +455,10 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=food_manage_license&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=food_manage_license&version=v1 document }
+                 *
+                 * 识别文件中的食品经营许可证
+                 *
+                 * 食品经营许可证识别接口，支持JPG/JPEG/PNG/BMP/PDF五种文件类型的一次性的识别。;文件大小需要小于10M。
                  */
                 recognize: async (
                     payload?: {
@@ -543,6 +528,10 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=food_produce_license&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=food_produce_license&version=v1 document }
+                 *
+                 * 识别文件中的食品生产许可证
+                 *
+                 * 食品生产许可证识别接口，支持JPG/JPEG/PNG/BMP/PDF五种文件类型的一次性的识别。;文件大小需要小于10M。
                  */
                 recognize: async (
                     payload?: {
@@ -604,6 +593,201 @@ export default abstract class Client extends docs {
                 },
             },
             /**
+             * hkm_mainland_travel_permit
+             */
+            hkmMainlandTravelPermit: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=hkm_mainland_travel_permit&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=hkm_mainland_travel_permit&version=v1 document }
+                 *
+                 * 识别文件中的港澳居民来往内地通行证
+                 *
+                 * 港澳居民来往内地通行证识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    hkm_mainland_travel_permit?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "full_name_cn"
+                                                | "full_name_en"
+                                                | "date_of_birth"
+                                                | "date_of_expiry"
+                                                | "card_number";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/hkm_mainland_travel_permit/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * chinese_passport
+             */
+            chinesePassport: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=chinese_passport&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=chinese_passport&version=v1 document }
+                 *
+                 * 识别文件中的中国护照
+                 *
+                 * 中国护照识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chinese_passport?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "full_name_cn"
+                                                | "full_name_en"
+                                                | "date_of_birth"
+                                                | "date_of_expiry"
+                                                | "place_of_issue"
+                                                | "passport_number";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/chinese_passport/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * tw_mainland_travel_permit
+             */
+            twMainlandTravelPermit: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=tw_mainland_travel_permit&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=tw_mainland_travel_permit&version=v1 document }
+                 *
+                 * 识别文件中的台湾居民来往大陆通行证
+                 *
+                 * 台湾居民来往大陆通行证识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流
+                 */
+                recognize: async (
+                    payload?: {
+                        data?: { file?: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tw_mainland_travel_permit?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "full_name_cn"
+                                                | "full_name_en"
+                                                | "date_of_birth"
+                                                | "date_of_expiry"
+                                                | "card_number";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/tw_mainland_travel_permit/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
              * health_certificate
              */
             healthCertificate: {
@@ -611,6 +795,12 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=health_certificate&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=health_certificate&version=v1 document }
+                 *
+                 * 识别文件中的健康证
+                 *
+                 * 健康证识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。文件大小需要小于10M。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流
                  */
                 recognize: async (
                     payload?: {
@@ -666,13 +856,19 @@ export default abstract class Client extends docs {
                 },
             },
             /**
-             * hkm_mainland_travel_permit
+             * vehicle_invoice
              */
-            hkmMainlandTravelPermit: {
+            vehicleInvoice: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=hkm_mainland_travel_permit&apiName=recognize&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=vehicle_invoice&apiName=recognize&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=hkm_mainland_travel_permit&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=vehicle_invoice&version=v1 document }
+                 *
+                 * 识别文件中的机动车发票
+                 *
+                 * 机动车发票识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。文件大小需要小于10M。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流
                  */
                 recognize: async (
                     payload?: {
@@ -690,14 +886,30 @@ export default abstract class Client extends docs {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    hkm_mainland_travel_permit?: {
+                                    vehicle_invoice?: {
                                         entities?: Array<{
                                             type?:
-                                                | "full_name_cn"
-                                                | "full_name_en"
-                                                | "date_of_birth"
-                                                | "date_of_expiry"
-                                                | "card_number";
+                                                | "invoice_code"
+                                                | "invoice_num"
+                                                | "date"
+                                                | "print_code"
+                                                | "print_num"
+                                                | "machine_num"
+                                                | "buyer_name"
+                                                | "buyer_id"
+                                                | "vehicle_type"
+                                                | "product_model"
+                                                | "certificate_num"
+                                                | "engine_num"
+                                                | "vin"
+                                                | "total_price"
+                                                | "total_price_little"
+                                                | "saler_name"
+                                                | "saler_id"
+                                                | "saler_addr"
+                                                | "tax_rate"
+                                                | "tax"
+                                                | "price";
                                             value?: string;
                                         }>;
                                     };
@@ -705,74 +917,7 @@ export default abstract class Client extends docs {
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/hkm_mainland_travel_permit/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * id_card
-             */
-            idCard: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=id_card&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=id_card&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data: { file: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    id_card?: {
-                                        entities?: Array<{
-                                            type?:
-                                                | "identity_code"
-                                                | "identity_name"
-                                                | "address"
-                                                | "valid_date_start"
-                                                | "valid_date_end"
-                                                | "gender"
-                                                | "race"
-                                                | "issued_by"
-                                                | "birth";
-                                            value?: string;
-                                        }>;
-                                        side?: number;
-                                        conners?: Array<number>;
-                                        face_conners?: Array<number>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/id_card/recognize`,
+                                `${this.domain}/open-apis/document_ai/v1/vehicle_invoice/recognize`,
                                 path
                             ),
                             method: "POST",
@@ -800,6 +945,12 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=resume&apiName=parse&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=parse&project=document_ai&resource=resume&version=v1 document }
+                 *
+                 * 识别文件中的简历信息
+                 *
+                 * 简历信息解析接口，支持PDF/DOCX/PNG/JPG四种文件类型的一次性的识别。文件大小需要小于30M。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流
                  */
                 parse: async (
                     payload?: {
@@ -909,6 +1060,140 @@ export default abstract class Client extends docs {
                 },
             },
             /**
+             * bank_card
+             */
+            bankCard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=bank_card&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=bank_card&version=v1 document }
+                 *
+                 * 识别文件中的银行卡
+                 *
+                 * 银行卡识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    bank_card?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "card_number"
+                                                | "date_of_expiry";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/bank_card/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * train_invoice
+             */
+            trainInvoice: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=train_invoice&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=train_invoice&version=v1 document }
+                 *
+                 * 识别文件中的火车票
+                 *
+                 * 火车票识别接口，支持JPG/JPEG/PNG/PDF/OFD五种文件类型的一次性的识别。;文件大小需要小于10M。
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    train_invoices?: Array<{
+                                        entities?: Array<{
+                                            type?:
+                                                | "start_station"
+                                                | "end_station"
+                                                | "train_num"
+                                                | "name"
+                                                | "seat_num"
+                                                | "ticket_num"
+                                                | "total_amount"
+                                                | "time"
+                                                | "price"
+                                                | "seat_num"
+                                                | "seat_cls"
+                                                | "id_num"
+                                                | "sale_num"
+                                                | "sale_station";
+                                            value?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/train_invoice/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
              * taxi_invoice
              */
             taxiInvoice: {
@@ -916,6 +1201,10 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=taxi_invoice&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=taxi_invoice&version=v1 document }
+                 *
+                 * 识别文件中的出租车发票
+                 *
+                 * 出租车发票识别接口，支持JPG/JPEG/PNG/PDF/OFD五种文件类型的一次性的识别。;文件大小需要小于10M。
                  */
                 recognize: async (
                     payload?: {
@@ -980,135 +1269,6 @@ export default abstract class Client extends docs {
                 },
             },
             /**
-             * train_invoice
-             */
-            trainInvoice: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=train_invoice&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=train_invoice&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data: { file: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    train_invoices?: Array<{
-                                        entities?: Array<{
-                                            type?:
-                                                | "start_station"
-                                                | "end_station"
-                                                | "train_num"
-                                                | "name"
-                                                | "seat_num"
-                                                | "ticket_num"
-                                                | "total_amount"
-                                                | "time"
-                                                | "price"
-                                                | "seat_num"
-                                                | "seat_cls"
-                                                | "id_num"
-                                                | "sale_num"
-                                                | "sale_station";
-                                            value?: string;
-                                        }>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/train_invoice/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * tw_mainland_travel_permit
-             */
-            twMainlandTravelPermit: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=tw_mainland_travel_permit&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=tw_mainland_travel_permit&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data?: { file?: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tw_mainland_travel_permit?: {
-                                        entities?: Array<{
-                                            type?:
-                                                | "full_name_cn"
-                                                | "full_name_en"
-                                                | "date_of_birth"
-                                                | "date_of_expiry"
-                                                | "card_number";
-                                            value?: string;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/tw_mainland_travel_permit/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
              * vat_invoice
              */
             vatInvoice: {
@@ -1116,6 +1276,10 @@ export default abstract class Client extends docs {
                  * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=vat_invoice&apiName=recognize&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=vat_invoice&version=v1 document }
+                 *
+                 * 识别文件中的增值税发票
+                 *
+                 * 增值税发票识别接口，支持JPG/JPEG/PNG/PDF/BMP/OFD六种文件类型的一次性的识别。;文件大小需要小于10M。
                  */
                 recognize: async (
                     payload?: {
@@ -1198,13 +1362,17 @@ export default abstract class Client extends docs {
                 },
             },
             /**
-             * vehicle_invoice
+             * id_card
              */
-            vehicleInvoice: {
+            idCard: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=vehicle_invoice&apiName=recognize&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=id_card&apiName=recognize&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=vehicle_invoice&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=id_card&version=v1 document }
+                 *
+                 * 识别文件中的身份证
+                 *
+                 * 身份证识别接口，支持JPG/JPEG/PNG/BMP四种文件类型的一次性的识别。;文件大小需要小于10M。
                  */
                 recognize: async (
                     payload?: {
@@ -1222,113 +1390,29 @@ export default abstract class Client extends docs {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    vehicle_invoice?: {
+                                    id_card?: {
                                         entities?: Array<{
                                             type?:
-                                                | "invoice_code"
-                                                | "invoice_num"
-                                                | "date"
-                                                | "print_code"
-                                                | "print_num"
-                                                | "machine_num"
-                                                | "buyer_name"
-                                                | "buyer_id"
-                                                | "vehicle_type"
-                                                | "product_model"
-                                                | "certificate_num"
-                                                | "engine_num"
-                                                | "vin"
-                                                | "total_price"
-                                                | "total_price_little"
-                                                | "saler_name"
-                                                | "saler_id"
-                                                | "saler_addr"
-                                                | "tax_rate"
-                                                | "tax"
-                                                | "price";
-                                            value?: string;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/vehicle_invoice/recognize`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * vehicle_license
-             */
-            vehicleLicense: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=vehicle_license&apiName=recognize&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=vehicle_license&version=v1 document }
-                 */
-                recognize: async (
-                    payload?: {
-                        data: { file: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    vehicle_license?: {
-                                        entities?: Array<{
-                                            type?:
-                                                | "plate_number"
-                                                | "vehicle_type"
-                                                | "owner"
+                                                | "identity_code"
+                                                | "identity_name"
                                                 | "address"
-                                                | "use_character"
-                                                | "model"
-                                                | "vin"
-                                                | "engine_number"
-                                                | "register_date"
-                                                | "issue_date"
-                                                | "license_issuing_authority"
-                                                | "document_id"
-                                                | "approved_passengers_capacity"
-                                                | "total_mass"
-                                                | "curb_weight"
-                                                | "ratified_load_capacity"
-                                                | "gabarite"
-                                                | "traction_mass"
-                                                | "remarks"
-                                                | "inspection_record";
+                                                | "valid_date_start"
+                                                | "valid_date_end"
+                                                | "gender"
+                                                | "race"
+                                                | "issued_by"
+                                                | "birth";
                                             value?: string;
                                         }>;
+                                        side?: number;
+                                        conners?: Array<number>;
+                                        face_conners?: Array<number>;
                                     };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/document_ai/v1/vehicle_license/recognize`,
+                                `${this.domain}/open-apis/document_ai/v1/id_card/recognize`,
                                 path
                             ),
                             method: "POST",

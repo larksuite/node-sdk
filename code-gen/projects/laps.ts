@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import base from "./base";
+import inline_platform from "./inline_platform";
 
 // auto gen
-export default abstract class Client extends base {
+export default abstract class Client extends inline_platform {
     declare tokenManager;
 
     declare domain;
@@ -31,5 +31,5 @@ export default abstract class Client extends base {
     /**
          
          */
-    batch = {};
+    laps = {};
 }

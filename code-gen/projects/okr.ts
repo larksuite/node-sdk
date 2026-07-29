@@ -29,81 +29,23 @@ export default abstract class Client extends myai {
     ): Promise<Required<IPayload>>;
 
     /**
-     * OKR
-     */
+         
+         */
     okr = {
         /**
-         * 图片
+         * review
          */
-        image: {
+        review: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=image&apiName=upload&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/image/upload document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=okr&resource=review&version=v1 document }
              *
-             * 上传图片
+             * 查询复盘信息
              *
-             * 上传图片
+             * 根据周期和用户查询复盘信息。
              */
-            upload: async (
-                payload?: {
-                    data: {
-                        data: Buffer | fs.ReadStream;
-                        target_id: string;
-                        target_type: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { file_token?: string; url?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/images/upload`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-        },
-        /**
-         * OKR
-         */
-        okr: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr&apiName=batch_get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/okr/batch_get document }
-             *
-             * 批量获取OKR
-             *
-             * 根据OKR id批量获取OKR
-             *
-             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
-             */
-            batchGet: async (
+            query: async (
                 payload?: {
                     params: {
                         user_id_type?:
@@ -111,8 +53,8 @@ export default abstract class Client extends myai {
                             | "union_id"
                             | "open_id"
                             | "people_admin_id";
-                        okr_ids: Array<string>;
-                        lang?: string;
+                        user_ids: Array<string>;
+                        period_ids: Array<string>;
                     };
                 },
                 options?: IRequestOptions
@@ -127,83 +69,28 @@ export default abstract class Client extends myai {
                             code?: number;
                             msg?: string;
                             data?: {
-                                okr_list?: Array<{
-                                    id?: string;
-                                    permission?: number;
-                                    period_id?: string;
-                                    name?: string;
-                                    objective_list?: Array<{
-                                        id?: string;
-                                        permission?: number;
-                                        content?: string;
-                                        progress_report?: string;
-                                        score?: number;
-                                        weight?: number;
-                                        progress_rate?: {
-                                            percent?: number;
-                                            status?: string;
-                                        };
-                                        kr_list?: Array<{
-                                            id?: string;
-                                            content?: string;
-                                            score?: number;
-                                            weight?: number;
-                                            kr_weight?: number;
-                                            progress_rate?: {
-                                                percent?: number;
-                                                status?: string;
-                                            };
-                                            progress_record_list?: Array<{
-                                                id?: string;
-                                            }>;
-                                            progress_rate_percent_last_updated_time?: string;
-                                            progress_rate_status_last_updated_time?: string;
-                                            progress_record_last_updated_time?: string;
-                                            progress_report_last_updated_time?: string;
-                                            score_last_updated_time?: string;
-                                            deadline?: string;
-                                            mentioned_user_list?: Array<{
-                                                open_id?: string;
-                                                user_id?: string;
-                                            }>;
+                                review_list?: Array<{
+                                    user_id?: {
+                                        open_id?: string;
+                                        user_id?: string;
+                                    };
+                                    review_period_list?: Array<{
+                                        period_id?: string;
+                                        cycle_review_list?: Array<{
+                                            url?: string;
+                                            create_time?: string;
                                         }>;
-                                        aligned_objective_list?: Array<{
-                                            id?: string;
-                                            okr_id?: string;
-                                            owner?: {
-                                                open_id?: string;
-                                                user_id?: string;
-                                            };
-                                        }>;
-                                        aligning_objective_list?: Array<{
-                                            id?: string;
-                                            okr_id?: string;
-                                            owner?: {
-                                                open_id?: string;
-                                                user_id?: string;
-                                            };
-                                        }>;
-                                        progress_record_list?: Array<{
-                                            id?: string;
-                                        }>;
-                                        progress_rate_percent_last_updated_time?: string;
-                                        progress_rate_status_last_updated_time?: string;
-                                        progress_record_last_updated_time?: string;
-                                        progress_report_last_updated_time?: string;
-                                        score_last_updated_time?: string;
-                                        deadline?: string;
-                                        mentioned_user_list?: Array<{
-                                            open_id?: string;
-                                            user_id?: string;
+                                        progress_report_list?: Array<{
+                                            url?: string;
+                                            create_time?: string;
                                         }>;
                                     }>;
-                                    confirm_status?: number;
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/okrs/batch_get`,
+                            `${this.domain}/open-apis/okr/v1/reviews/query`,
                             path
                         ),
                         method: "GET",
@@ -220,169 +107,17 @@ export default abstract class Client extends myai {
             },
         },
         /**
-         * OKR周期
-         */
-        period: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/create document }
-             *
-             * 创建 OKR 周期
-             *
-             * 根据周期规则创建一个 OKR 周期
-             */
-            create: async (
-                payload?: {
-                    data: { period_rule_id: string; start_month: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                period_id?: string;
-                                start_month?: string;
-                                end_month?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/periods`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/list document }
-             *
-             * 获取OKR周期列表
-             *
-             * 获取OKR周期列表
-             *
-             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
-             */
-            list: async (
-                payload?: {
-                    params?: { page_token?: string; page_size?: number };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                page_token?: string;
-                                has_more?: boolean;
-                                items?: Array<{
-                                    id?: string;
-                                    zh_name?: string;
-                                    en_name?: string;
-                                    status?: number;
-                                    period_start_time?: string;
-                                    period_end_time?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/periods`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/patch document }
-             *
-             * 修改 OKR 周期状态
-             *
-             * 修改某个 OKR 周期的状态为「正常」、「失效」或「隐藏」，对租户所有人生效，请谨慎操作
-             */
-            patch: async (
-                payload?: {
-                    data: { status: number };
-                    path: { period_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { period_id?: string; status?: number };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/periods/:period_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 周期规则
+         * period_rule
          */
         periodRule: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period_rule&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period_rule/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=period_rule&version=v1 document }
              *
              * 获取 OKR 周期规则
              *
-             * 获取租户的周期规则列表
+             * 获取租户的周期规则列表。
              */
             list: async (payload?: {}, options?: IRequestOptions) => {
                 const { headers, params, data, path } =
@@ -422,17 +157,336 @@ export default abstract class Client extends myai {
             },
         },
         /**
-         * OKR进展记录
+         * progress_record
          */
         progressRecord: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=progress_record&version=v1 document }
+             *
+             * 删除 OKR 进展记录
+             *
+             * 根据 ID 删除 OKR 进展记录。
+             */
+            delete: async (
+                payload?: {
+                    path: { progress_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=okr&resource=progress_record&version=v1 document }
+             *
+             * 更新 OKR 进展记录
+             *
+             * 根据 OKR 进展记录 ID 更新进展详情。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        content: {
+                            blocks?: Array<{
+                                type?: "paragraph" | "gallery";
+                                paragraph?: {
+                                    style?: {
+                                        list?: {
+                                            type?:
+                                                | "number"
+                                                | "bullet"
+                                                | "checkBox"
+                                                | "checkedBox"
+                                                | "indent";
+                                            indentLevel?: number;
+                                            number?: number;
+                                        };
+                                    };
+                                    elements?: Array<{
+                                        type?:
+                                            | "textRun"
+                                            | "docsLink"
+                                            | "person";
+                                        textRun?: {
+                                            text?: string;
+                                            style?: {
+                                                bold?: boolean;
+                                                strikeThrough?: boolean;
+                                                backColor?: {
+                                                    red?: number;
+                                                    green?: number;
+                                                    blue?: number;
+                                                    alpha?: number;
+                                                };
+                                                textColor?: {
+                                                    red?: number;
+                                                    green?: number;
+                                                    blue?: number;
+                                                    alpha?: number;
+                                                };
+                                                link?: { url?: string };
+                                            };
+                                        };
+                                        docsLink?: {
+                                            url?: string;
+                                            title?: string;
+                                        };
+                                        person?: { openId?: string };
+                                    }>;
+                                };
+                                gallery?: {
+                                    imageList?: Array<{
+                                        fileToken?: string;
+                                        src?: string;
+                                        width?: number;
+                                        height?: number;
+                                    }>;
+                                };
+                            }>;
+                        };
+                        progress_rate?: { percent?: number; status?: number };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { progress_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                progress_id?: string;
+                                modify_time?: string;
+                                content?: {
+                                    blocks?: Array<{
+                                        type?: "paragraph" | "gallery";
+                                        paragraph?: {
+                                            style?: {
+                                                list?: {
+                                                    type?:
+                                                        | "number"
+                                                        | "bullet"
+                                                        | "checkBox"
+                                                        | "checkedBox"
+                                                        | "indent";
+                                                    indentLevel?: number;
+                                                    number?: number;
+                                                };
+                                            };
+                                            elements?: Array<{
+                                                type?:
+                                                    | "textRun"
+                                                    | "docsLink"
+                                                    | "person";
+                                                textRun?: {
+                                                    text?: string;
+                                                    style?: {
+                                                        bold?: boolean;
+                                                        strikeThrough?: boolean;
+                                                        backColor?: {
+                                                            red?: number;
+                                                            green?: number;
+                                                            blue?: number;
+                                                            alpha?: number;
+                                                        };
+                                                        textColor?: {
+                                                            red?: number;
+                                                            green?: number;
+                                                            blue?: number;
+                                                            alpha?: number;
+                                                        };
+                                                        link?: { url?: string };
+                                                    };
+                                                };
+                                                docsLink?: {
+                                                    url?: string;
+                                                    title?: string;
+                                                };
+                                                person?: { openId?: string };
+                                            }>;
+                                        };
+                                        gallery?: {
+                                            imageList?: Array<{
+                                                fileToken?: string;
+                                                src?: string;
+                                                width?: number;
+                                                height?: number;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=progress_record&version=v1 document }
+             *
+             * 获取 OKR 进展记录
+             *
+             * 根据 ID 获取 OKR 进展记录详情，接口返回进展记录的内容、更新时间以及进展百分比和状态。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { progress_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                progress_id?: string;
+                                modify_time?: string;
+                                content?: {
+                                    blocks?: Array<{
+                                        type?: "paragraph" | "gallery";
+                                        paragraph?: {
+                                            style?: {
+                                                list?: {
+                                                    type?:
+                                                        | "number"
+                                                        | "bullet"
+                                                        | "checkBox"
+                                                        | "checkedBox"
+                                                        | "indent";
+                                                    indentLevel?: number;
+                                                    number?: number;
+                                                };
+                                            };
+                                            elements?: Array<{
+                                                type?:
+                                                    | "textRun"
+                                                    | "docsLink"
+                                                    | "person";
+                                                textRun?: {
+                                                    text?: string;
+                                                    style?: {
+                                                        bold?: boolean;
+                                                        strikeThrough?: boolean;
+                                                        backColor?: {
+                                                            red?: number;
+                                                            green?: number;
+                                                            blue?: number;
+                                                            alpha?: number;
+                                                        };
+                                                        textColor?: {
+                                                            red?: number;
+                                                            green?: number;
+                                                            blue?: number;
+                                                            alpha?: number;
+                                                        };
+                                                        link?: { url?: string };
+                                                    };
+                                                };
+                                                docsLink?: {
+                                                    url?: string;
+                                                    title?: string;
+                                                };
+                                                person?: { openId?: string };
+                                            }>;
+                                        };
+                                        gallery?: {
+                                            imageList?: Array<{
+                                                fileToken?: string;
+                                                src?: string;
+                                                width?: number;
+                                                height?: number;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=progress_record&version=v1 document }
              *
-             * 创建OKR进展记录
+             * 创建 OKR 进展记录
              *
-             * 创建OKR进展记录
+             * 创建 OKR 进展记录。
              */
             create: async (
                 payload?: {
@@ -602,57 +656,25 @@ export default abstract class Client extends myai {
                         throw e;
                     });
             },
+        },
+        /**
+         * period
+         */
+        period: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=delete&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=period&version=v1 document }
              *
-             * 删除OKR进展记录
+             * 获取 OKR 周期列表
              *
-             * 根据ID删除OKR进展记录
+             * 获取 OKR 周期列表。
+             *
+             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
              */
-            delete: async (
+            list: async (
                 payload?: {
-                    path: { progress_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/get document }
-             *
-             * 获取OKR进展记录
-             *
-             * 根据ID获取OKR进展记录详情
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path?: { progress_id?: string };
+                    params?: { page_token?: string; page_size?: number };
                 },
                 options?: IRequestOptions
             ) => {
@@ -666,75 +688,21 @@ export default abstract class Client extends myai {
                             code?: number;
                             msg?: string;
                             data?: {
-                                progress_id?: string;
-                                modify_time?: string;
-                                content?: {
-                                    blocks?: Array<{
-                                        type?: "paragraph" | "gallery";
-                                        paragraph?: {
-                                            style?: {
-                                                list?: {
-                                                    type?:
-                                                        | "number"
-                                                        | "bullet"
-                                                        | "checkBox"
-                                                        | "checkedBox"
-                                                        | "indent";
-                                                    indentLevel?: number;
-                                                    number?: number;
-                                                };
-                                            };
-                                            elements?: Array<{
-                                                type?:
-                                                    | "textRun"
-                                                    | "docsLink"
-                                                    | "person";
-                                                textRun?: {
-                                                    text?: string;
-                                                    style?: {
-                                                        bold?: boolean;
-                                                        strikeThrough?: boolean;
-                                                        backColor?: {
-                                                            red?: number;
-                                                            green?: number;
-                                                            blue?: number;
-                                                            alpha?: number;
-                                                        };
-                                                        textColor?: {
-                                                            red?: number;
-                                                            green?: number;
-                                                            blue?: number;
-                                                            alpha?: number;
-                                                        };
-                                                        link?: { url?: string };
-                                                    };
-                                                };
-                                                docsLink?: {
-                                                    url?: string;
-                                                    title?: string;
-                                                };
-                                                person?: { openId?: string };
-                                            }>;
-                                        };
-                                        gallery?: {
-                                            imageList?: Array<{
-                                                fileToken?: string;
-                                                src?: string;
-                                                width?: number;
-                                                height?: number;
-                                            }>;
-                                        };
-                                    }>;
-                                };
-                                progress_rate?: {
-                                    percent?: number;
+                                page_token?: string;
+                                has_more?: boolean;
+                                items?: Array<{
+                                    id?: string;
+                                    zh_name?: string;
+                                    en_name?: string;
                                     status?: number;
-                                };
+                                    period_start_time?: string;
+                                    period_end_time?: string;
+                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                            `${this.domain}/open-apis/okr/v1/periods`,
                             path
                         ),
                         method: "GET",
@@ -750,81 +718,17 @@ export default abstract class Client extends myai {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=update&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/update document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=period&version=v1 document }
              *
-             * 更新OKR进展记录
+             * 创建 OKR 周期
              *
-             * 根据OKR进展记录ID更新进展详情
+             * 根据周期规则创建一个 OKR 周期。
              */
-            update: async (
+            create: async (
                 payload?: {
-                    data: {
-                        content: {
-                            blocks?: Array<{
-                                type?: "paragraph" | "gallery";
-                                paragraph?: {
-                                    style?: {
-                                        list?: {
-                                            type?:
-                                                | "number"
-                                                | "bullet"
-                                                | "checkBox"
-                                                | "checkedBox"
-                                                | "indent";
-                                            indentLevel?: number;
-                                            number?: number;
-                                        };
-                                    };
-                                    elements?: Array<{
-                                        type?:
-                                            | "textRun"
-                                            | "docsLink"
-                                            | "person";
-                                        textRun?: {
-                                            text?: string;
-                                            style?: {
-                                                bold?: boolean;
-                                                strikeThrough?: boolean;
-                                                backColor?: {
-                                                    red?: number;
-                                                    green?: number;
-                                                    blue?: number;
-                                                    alpha?: number;
-                                                };
-                                                textColor?: {
-                                                    red?: number;
-                                                    green?: number;
-                                                    blue?: number;
-                                                    alpha?: number;
-                                                };
-                                                link?: { url?: string };
-                                            };
-                                        };
-                                        docsLink?: {
-                                            url?: string;
-                                            title?: string;
-                                        };
-                                        person?: { openId?: string };
-                                    }>;
-                                };
-                                gallery?: {
-                                    imageList?: Array<{
-                                        fileToken?: string;
-                                        src?: string;
-                                        width?: number;
-                                        height?: number;
-                                    }>;
-                                };
-                            }>;
-                        };
-                        progress_rate?: { percent?: number; status?: number };
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { progress_id: string };
+                    data: { period_rule_id: string; start_month: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -838,78 +742,61 @@ export default abstract class Client extends myai {
                             code?: number;
                             msg?: string;
                             data?: {
-                                progress_id?: string;
-                                modify_time?: string;
-                                content?: {
-                                    blocks?: Array<{
-                                        type?: "paragraph" | "gallery";
-                                        paragraph?: {
-                                            style?: {
-                                                list?: {
-                                                    type?:
-                                                        | "number"
-                                                        | "bullet"
-                                                        | "checkBox"
-                                                        | "checkedBox"
-                                                        | "indent";
-                                                    indentLevel?: number;
-                                                    number?: number;
-                                                };
-                                            };
-                                            elements?: Array<{
-                                                type?:
-                                                    | "textRun"
-                                                    | "docsLink"
-                                                    | "person";
-                                                textRun?: {
-                                                    text?: string;
-                                                    style?: {
-                                                        bold?: boolean;
-                                                        strikeThrough?: boolean;
-                                                        backColor?: {
-                                                            red?: number;
-                                                            green?: number;
-                                                            blue?: number;
-                                                            alpha?: number;
-                                                        };
-                                                        textColor?: {
-                                                            red?: number;
-                                                            green?: number;
-                                                            blue?: number;
-                                                            alpha?: number;
-                                                        };
-                                                        link?: { url?: string };
-                                                    };
-                                                };
-                                                docsLink?: {
-                                                    url?: string;
-                                                    title?: string;
-                                                };
-                                                person?: { openId?: string };
-                                            }>;
-                                        };
-                                        gallery?: {
-                                            imageList?: Array<{
-                                                fileToken?: string;
-                                                src?: string;
-                                                width?: number;
-                                                height?: number;
-                                            }>;
-                                        };
-                                    }>;
-                                };
-                                progress_rate?: {
-                                    percent?: number;
-                                    status?: number;
-                                };
+                                period_id?: string;
+                                start_month?: string;
+                                end_month?: string;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                            `${this.domain}/open-apis/okr/v1/periods`,
                             path
                         ),
-                        method: "PUT",
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=period&version=v1 document }
+             *
+             * 修改 OKR 周期状态
+             *
+             * 修改某个 OKR 周期的状态为「正常」、「失效」或「隐藏」，对租户所有人生效，请谨慎操作
+             */
+            patch: async (
+                payload?: {
+                    data: { status: number };
+                    path: { period_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { period_id?: string; status?: number };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/periods/:period_id`,
+                            path
+                        ),
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -923,19 +810,21 @@ export default abstract class Client extends myai {
             },
         },
         /**
-         * 复盘（灰度租户可见）
+         * okr
          */
-        review: {
+        okr: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr&apiName=batch_get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/review/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=okr&resource=okr&version=v1 document }
              *
-             * 查询复盘信息
+             * 批量获取 OKR
              *
-             * 根据周期和用户查询复盘信息。
+             * 根据 OKR id 批量获取 OKR。
+             *
+             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
              */
-            query: async (
+            batchGet: async (
                 payload?: {
                     params: {
                         user_id_type?:
@@ -943,8 +832,8 @@ export default abstract class Client extends myai {
                             | "union_id"
                             | "open_id"
                             | "people_admin_id";
-                        user_ids: Array<string>;
-                        period_ids: Array<string>;
+                        okr_ids: Array<string>;
+                        lang?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -959,28 +848,83 @@ export default abstract class Client extends myai {
                             code?: number;
                             msg?: string;
                             data?: {
-                                review_list?: Array<{
-                                    user_id?: {
-                                        open_id?: string;
-                                        user_id?: string;
-                                    };
-                                    review_period_list?: Array<{
-                                        period_id?: string;
-                                        cycle_review_list?: Array<{
-                                            url?: string;
-                                            create_time?: string;
+                                okr_list?: Array<{
+                                    id?: string;
+                                    permission?: number;
+                                    period_id?: string;
+                                    name?: string;
+                                    objective_list?: Array<{
+                                        id?: string;
+                                        permission?: number;
+                                        content?: string;
+                                        progress_report?: string;
+                                        score?: number;
+                                        weight?: number;
+                                        progress_rate?: {
+                                            percent?: number;
+                                            status?: string;
+                                        };
+                                        kr_list?: Array<{
+                                            id?: string;
+                                            content?: string;
+                                            score?: number;
+                                            weight?: number;
+                                            kr_weight?: number;
+                                            progress_rate?: {
+                                                percent?: number;
+                                                status?: string;
+                                            };
+                                            progress_record_list?: Array<{
+                                                id?: string;
+                                            }>;
+                                            progress_rate_percent_last_updated_time?: string;
+                                            progress_rate_status_last_updated_time?: string;
+                                            progress_record_last_updated_time?: string;
+                                            progress_report_last_updated_time?: string;
+                                            score_last_updated_time?: string;
+                                            deadline?: string;
+                                            mentioned_user_list?: Array<{
+                                                open_id?: string;
+                                                user_id?: string;
+                                            }>;
                                         }>;
-                                        progress_report_list?: Array<{
-                                            url?: string;
-                                            create_time?: string;
+                                        aligned_objective_list?: Array<{
+                                            id?: string;
+                                            okr_id?: string;
+                                            owner?: {
+                                                open_id?: string;
+                                                user_id?: string;
+                                            };
+                                        }>;
+                                        aligning_objective_list?: Array<{
+                                            id?: string;
+                                            okr_id?: string;
+                                            owner?: {
+                                                open_id?: string;
+                                                user_id?: string;
+                                            };
+                                        }>;
+                                        progress_record_list?: Array<{
+                                            id?: string;
+                                        }>;
+                                        progress_rate_percent_last_updated_time?: string;
+                                        progress_rate_status_last_updated_time?: string;
+                                        progress_record_last_updated_time?: string;
+                                        progress_report_last_updated_time?: string;
+                                        score_last_updated_time?: string;
+                                        deadline?: string;
+                                        mentioned_user_list?: Array<{
+                                            open_id?: string;
+                                            user_id?: string;
                                         }>;
                                     }>;
+                                    confirm_status?: number;
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/reviews/query`,
+                            `${this.domain}/open-apis/okr/v1/okrs/batch_get`,
                             path
                         ),
                         method: "GET",
@@ -997,17 +941,17 @@ export default abstract class Client extends myai {
             },
         },
         /**
-         * 用户OKR
+         * user.okr
          */
         userOkr: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=okr&resource=user.okr&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/user-okr/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=user.okr&version=v1 document }
              *
-             * 获取用户的OKR列表
+             * 获取用户的 OKR 列表
              *
-             * 根据用户的id获取OKR列表
+             * 根据用户的 id 获取 OKR 列表。
              *
              * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
              */
@@ -1131,79 +1075,77 @@ export default abstract class Client extends myai {
                     });
             },
         },
+        /**
+         * image
+         */
+        image: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=image&apiName=upload&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=okr&resource=image&version=v1 document }
+             *
+             * 上传进展记录图片
+             *
+             * 上传图片，以获取在进展记录富文本中使用的 token。成功调用该接口后，你可继续调用[创建 OKR 进展记录](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/create)或[更新 OKR 进展记录](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/update)，将返回的 `url`参数和`file_token` 参数传入 `imageList` 参数中。
+             */
+            upload: async (
+                payload?: {
+                    data: {
+                        data: Buffer | fs.ReadStream;
+                        target_id: string;
+                        target_type: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_token?: string; url?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/images/upload`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+        },
         v1: {
             /**
-             * 图片
+             * review
              */
-            image: {
+            review: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=image&apiName=upload&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/image/upload document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=okr&resource=review&version=v1 document }
                  *
-                 * 上传图片
+                 * 查询复盘信息
                  *
-                 * 上传图片
+                 * 根据周期和用户查询复盘信息。
                  */
-                upload: async (
-                    payload?: {
-                        data: {
-                            data: Buffer | fs.ReadStream;
-                            target_id: string;
-                            target_type: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { file_token?: string; url?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/images/upload`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * OKR
-             */
-            okr: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr&apiName=batch_get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/okr/batch_get document }
-                 *
-                 * 批量获取OKR
-                 *
-                 * 根据OKR id批量获取OKR
-                 *
-                 * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
-                 */
-                batchGet: async (
+                query: async (
                     payload?: {
                         params: {
                             user_id_type?:
@@ -1211,8 +1153,8 @@ export default abstract class Client extends myai {
                                 | "union_id"
                                 | "open_id"
                                 | "people_admin_id";
-                            okr_ids: Array<string>;
-                            lang?: string;
+                            user_ids: Array<string>;
+                            period_ids: Array<string>;
                         };
                     },
                     options?: IRequestOptions
@@ -1227,83 +1169,28 @@ export default abstract class Client extends myai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    okr_list?: Array<{
-                                        id?: string;
-                                        permission?: number;
-                                        period_id?: string;
-                                        name?: string;
-                                        objective_list?: Array<{
-                                            id?: string;
-                                            permission?: number;
-                                            content?: string;
-                                            progress_report?: string;
-                                            score?: number;
-                                            weight?: number;
-                                            progress_rate?: {
-                                                percent?: number;
-                                                status?: string;
-                                            };
-                                            kr_list?: Array<{
-                                                id?: string;
-                                                content?: string;
-                                                score?: number;
-                                                weight?: number;
-                                                kr_weight?: number;
-                                                progress_rate?: {
-                                                    percent?: number;
-                                                    status?: string;
-                                                };
-                                                progress_record_list?: Array<{
-                                                    id?: string;
-                                                }>;
-                                                progress_rate_percent_last_updated_time?: string;
-                                                progress_rate_status_last_updated_time?: string;
-                                                progress_record_last_updated_time?: string;
-                                                progress_report_last_updated_time?: string;
-                                                score_last_updated_time?: string;
-                                                deadline?: string;
-                                                mentioned_user_list?: Array<{
-                                                    open_id?: string;
-                                                    user_id?: string;
-                                                }>;
+                                    review_list?: Array<{
+                                        user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        review_period_list?: Array<{
+                                            period_id?: string;
+                                            cycle_review_list?: Array<{
+                                                url?: string;
+                                                create_time?: string;
                                             }>;
-                                            aligned_objective_list?: Array<{
-                                                id?: string;
-                                                okr_id?: string;
-                                                owner?: {
-                                                    open_id?: string;
-                                                    user_id?: string;
-                                                };
-                                            }>;
-                                            aligning_objective_list?: Array<{
-                                                id?: string;
-                                                okr_id?: string;
-                                                owner?: {
-                                                    open_id?: string;
-                                                    user_id?: string;
-                                                };
-                                            }>;
-                                            progress_record_list?: Array<{
-                                                id?: string;
-                                            }>;
-                                            progress_rate_percent_last_updated_time?: string;
-                                            progress_rate_status_last_updated_time?: string;
-                                            progress_record_last_updated_time?: string;
-                                            progress_report_last_updated_time?: string;
-                                            score_last_updated_time?: string;
-                                            deadline?: string;
-                                            mentioned_user_list?: Array<{
-                                                open_id?: string;
-                                                user_id?: string;
+                                            progress_report_list?: Array<{
+                                                url?: string;
+                                                create_time?: string;
                                             }>;
                                         }>;
-                                        confirm_status?: number;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/okrs/batch_get`,
+                                `${this.domain}/open-apis/okr/v1/reviews/query`,
                                 path
                             ),
                             method: "GET",
@@ -1320,169 +1207,17 @@ export default abstract class Client extends myai {
                 },
             },
             /**
-             * OKR周期
-             */
-            period: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/create document }
-                 *
-                 * 创建 OKR 周期
-                 *
-                 * 根据周期规则创建一个 OKR 周期
-                 */
-                create: async (
-                    payload?: {
-                        data: { period_rule_id: string; start_month: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    period_id?: string;
-                                    start_month?: string;
-                                    end_month?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/periods`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/list document }
-                 *
-                 * 获取OKR周期列表
-                 *
-                 * 获取OKR周期列表
-                 *
-                 * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
-                 */
-                list: async (
-                    payload?: {
-                        params?: { page_token?: string; page_size?: number };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                    items?: Array<{
-                                        id?: string;
-                                        zh_name?: string;
-                                        en_name?: string;
-                                        status?: number;
-                                        period_start_time?: string;
-                                        period_end_time?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/periods`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/patch document }
-                 *
-                 * 修改 OKR 周期状态
-                 *
-                 * 修改某个 OKR 周期的状态为「正常」、「失效」或「隐藏」，对租户所有人生效，请谨慎操作
-                 */
-                patch: async (
-                    payload?: {
-                        data: { status: number };
-                        path: { period_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { period_id?: string; status?: number };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/periods/:period_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 周期规则
+             * period_rule
              */
             periodRule: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period_rule&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period_rule/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=period_rule&version=v1 document }
                  *
                  * 获取 OKR 周期规则
                  *
-                 * 获取租户的周期规则列表
+                 * 获取租户的周期规则列表。
                  */
                 list: async (payload?: {}, options?: IRequestOptions) => {
                     const { headers, params, data, path } =
@@ -1522,17 +1257,350 @@ export default abstract class Client extends myai {
                 },
             },
             /**
-             * OKR进展记录
+             * progress_record
              */
             progressRecord: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=progress_record&version=v1 document }
+                 *
+                 * 删除 OKR 进展记录
+                 *
+                 * 根据 ID 删除 OKR 进展记录。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { progress_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=okr&resource=progress_record&version=v1 document }
+                 *
+                 * 更新 OKR 进展记录
+                 *
+                 * 根据 OKR 进展记录 ID 更新进展详情。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            content: {
+                                blocks?: Array<{
+                                    type?: "paragraph" | "gallery";
+                                    paragraph?: {
+                                        style?: {
+                                            list?: {
+                                                type?:
+                                                    | "number"
+                                                    | "bullet"
+                                                    | "checkBox"
+                                                    | "checkedBox"
+                                                    | "indent";
+                                                indentLevel?: number;
+                                                number?: number;
+                                            };
+                                        };
+                                        elements?: Array<{
+                                            type?:
+                                                | "textRun"
+                                                | "docsLink"
+                                                | "person";
+                                            textRun?: {
+                                                text?: string;
+                                                style?: {
+                                                    bold?: boolean;
+                                                    strikeThrough?: boolean;
+                                                    backColor?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    textColor?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    link?: { url?: string };
+                                                };
+                                            };
+                                            docsLink?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            person?: { openId?: string };
+                                        }>;
+                                    };
+                                    gallery?: {
+                                        imageList?: Array<{
+                                            fileToken?: string;
+                                            src?: string;
+                                            width?: number;
+                                            height?: number;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                            progress_rate?: {
+                                percent?: number;
+                                status?: number;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { progress_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    progress_id?: string;
+                                    modify_time?: string;
+                                    content?: {
+                                        blocks?: Array<{
+                                            type?: "paragraph" | "gallery";
+                                            paragraph?: {
+                                                style?: {
+                                                    list?: {
+                                                        type?:
+                                                            | "number"
+                                                            | "bullet"
+                                                            | "checkBox"
+                                                            | "checkedBox"
+                                                            | "indent";
+                                                        indentLevel?: number;
+                                                        number?: number;
+                                                    };
+                                                };
+                                                elements?: Array<{
+                                                    type?:
+                                                        | "textRun"
+                                                        | "docsLink"
+                                                        | "person";
+                                                    textRun?: {
+                                                        text?: string;
+                                                        style?: {
+                                                            bold?: boolean;
+                                                            strikeThrough?: boolean;
+                                                            backColor?: {
+                                                                red?: number;
+                                                                green?: number;
+                                                                blue?: number;
+                                                                alpha?: number;
+                                                            };
+                                                            textColor?: {
+                                                                red?: number;
+                                                                green?: number;
+                                                                blue?: number;
+                                                                alpha?: number;
+                                                            };
+                                                            link?: {
+                                                                url?: string;
+                                                            };
+                                                        };
+                                                    };
+                                                    docsLink?: {
+                                                        url?: string;
+                                                        title?: string;
+                                                    };
+                                                    person?: {
+                                                        openId?: string;
+                                                    };
+                                                }>;
+                                            };
+                                            gallery?: {
+                                                imageList?: Array<{
+                                                    fileToken?: string;
+                                                    src?: string;
+                                                    width?: number;
+                                                    height?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    };
+                                    progress_rate?: {
+                                        percent?: number;
+                                        status?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=progress_record&version=v1 document }
+                 *
+                 * 获取 OKR 进展记录
+                 *
+                 * 根据 ID 获取 OKR 进展记录详情，接口返回进展记录的内容、更新时间以及进展百分比和状态。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path?: { progress_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    progress_id?: string;
+                                    modify_time?: string;
+                                    content?: {
+                                        blocks?: Array<{
+                                            type?: "paragraph" | "gallery";
+                                            paragraph?: {
+                                                style?: {
+                                                    list?: {
+                                                        type?:
+                                                            | "number"
+                                                            | "bullet"
+                                                            | "checkBox"
+                                                            | "checkedBox"
+                                                            | "indent";
+                                                        indentLevel?: number;
+                                                        number?: number;
+                                                    };
+                                                };
+                                                elements?: Array<{
+                                                    type?:
+                                                        | "textRun"
+                                                        | "docsLink"
+                                                        | "person";
+                                                    textRun?: {
+                                                        text?: string;
+                                                        style?: {
+                                                            bold?: boolean;
+                                                            strikeThrough?: boolean;
+                                                            backColor?: {
+                                                                red?: number;
+                                                                green?: number;
+                                                                blue?: number;
+                                                                alpha?: number;
+                                                            };
+                                                            textColor?: {
+                                                                red?: number;
+                                                                green?: number;
+                                                                blue?: number;
+                                                                alpha?: number;
+                                                            };
+                                                            link?: {
+                                                                url?: string;
+                                                            };
+                                                        };
+                                                    };
+                                                    docsLink?: {
+                                                        url?: string;
+                                                        title?: string;
+                                                    };
+                                                    person?: {
+                                                        openId?: string;
+                                                    };
+                                                }>;
+                                            };
+                                            gallery?: {
+                                                imageList?: Array<{
+                                                    fileToken?: string;
+                                                    src?: string;
+                                                    width?: number;
+                                                    height?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    };
+                                    progress_rate?: {
+                                        percent?: number;
+                                        status?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=progress_record&version=v1 document }
                  *
-                 * 创建OKR进展记录
+                 * 创建 OKR 进展记录
                  *
-                 * 创建OKR进展记录
+                 * 创建 OKR 进展记录。
                  */
                 create: async (
                     payload?: {
@@ -1709,60 +1777,25 @@ export default abstract class Client extends myai {
                             throw e;
                         });
                 },
+            },
+            /**
+             * period
+             */
+            period: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=delete&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=period&version=v1 document }
                  *
-                 * 删除OKR进展记录
+                 * 获取 OKR 周期列表
                  *
-                 * 根据ID删除OKR进展记录
+                 * 获取 OKR 周期列表。
+                 *
+                 * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
                  */
-                delete: async (
+                list: async (
                     payload?: {
-                        path: { progress_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/get document }
-                 *
-                 * 获取OKR进展记录
-                 *
-                 * 根据ID获取OKR进展记录详情
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path?: { progress_id?: string };
+                        params?: { page_token?: string; page_size?: number };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1776,79 +1809,21 @@ export default abstract class Client extends myai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    progress_id?: string;
-                                    modify_time?: string;
-                                    content?: {
-                                        blocks?: Array<{
-                                            type?: "paragraph" | "gallery";
-                                            paragraph?: {
-                                                style?: {
-                                                    list?: {
-                                                        type?:
-                                                            | "number"
-                                                            | "bullet"
-                                                            | "checkBox"
-                                                            | "checkedBox"
-                                                            | "indent";
-                                                        indentLevel?: number;
-                                                        number?: number;
-                                                    };
-                                                };
-                                                elements?: Array<{
-                                                    type?:
-                                                        | "textRun"
-                                                        | "docsLink"
-                                                        | "person";
-                                                    textRun?: {
-                                                        text?: string;
-                                                        style?: {
-                                                            bold?: boolean;
-                                                            strikeThrough?: boolean;
-                                                            backColor?: {
-                                                                red?: number;
-                                                                green?: number;
-                                                                blue?: number;
-                                                                alpha?: number;
-                                                            };
-                                                            textColor?: {
-                                                                red?: number;
-                                                                green?: number;
-                                                                blue?: number;
-                                                                alpha?: number;
-                                                            };
-                                                            link?: {
-                                                                url?: string;
-                                                            };
-                                                        };
-                                                    };
-                                                    docsLink?: {
-                                                        url?: string;
-                                                        title?: string;
-                                                    };
-                                                    person?: {
-                                                        openId?: string;
-                                                    };
-                                                }>;
-                                            };
-                                            gallery?: {
-                                                imageList?: Array<{
-                                                    fileToken?: string;
-                                                    src?: string;
-                                                    width?: number;
-                                                    height?: number;
-                                                }>;
-                                            };
-                                        }>;
-                                    };
-                                    progress_rate?: {
-                                        percent?: number;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    items?: Array<{
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
                                         status?: number;
-                                    };
+                                        period_start_time?: string;
+                                        period_end_time?: string;
+                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                                `${this.domain}/open-apis/okr/v1/periods`,
                                 path
                             ),
                             method: "GET",
@@ -1864,84 +1839,17 @@ export default abstract class Client extends myai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=progress_record&apiName=update&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/update document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=period&version=v1 document }
                  *
-                 * 更新OKR进展记录
+                 * 创建 OKR 周期
                  *
-                 * 根据OKR进展记录ID更新进展详情
+                 * 根据周期规则创建一个 OKR 周期。
                  */
-                update: async (
+                create: async (
                     payload?: {
-                        data: {
-                            content: {
-                                blocks?: Array<{
-                                    type?: "paragraph" | "gallery";
-                                    paragraph?: {
-                                        style?: {
-                                            list?: {
-                                                type?:
-                                                    | "number"
-                                                    | "bullet"
-                                                    | "checkBox"
-                                                    | "checkedBox"
-                                                    | "indent";
-                                                indentLevel?: number;
-                                                number?: number;
-                                            };
-                                        };
-                                        elements?: Array<{
-                                            type?:
-                                                | "textRun"
-                                                | "docsLink"
-                                                | "person";
-                                            textRun?: {
-                                                text?: string;
-                                                style?: {
-                                                    bold?: boolean;
-                                                    strikeThrough?: boolean;
-                                                    backColor?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    textColor?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    link?: { url?: string };
-                                                };
-                                            };
-                                            docsLink?: {
-                                                url?: string;
-                                                title?: string;
-                                            };
-                                            person?: { openId?: string };
-                                        }>;
-                                    };
-                                    gallery?: {
-                                        imageList?: Array<{
-                                            fileToken?: string;
-                                            src?: string;
-                                            width?: number;
-                                            height?: number;
-                                        }>;
-                                    };
-                                }>;
-                            };
-                            progress_rate?: {
-                                percent?: number;
-                                status?: number;
-                            };
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { progress_id: string };
+                        data: { period_rule_id: string; start_month: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1955,82 +1863,61 @@ export default abstract class Client extends myai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    progress_id?: string;
-                                    modify_time?: string;
-                                    content?: {
-                                        blocks?: Array<{
-                                            type?: "paragraph" | "gallery";
-                                            paragraph?: {
-                                                style?: {
-                                                    list?: {
-                                                        type?:
-                                                            | "number"
-                                                            | "bullet"
-                                                            | "checkBox"
-                                                            | "checkedBox"
-                                                            | "indent";
-                                                        indentLevel?: number;
-                                                        number?: number;
-                                                    };
-                                                };
-                                                elements?: Array<{
-                                                    type?:
-                                                        | "textRun"
-                                                        | "docsLink"
-                                                        | "person";
-                                                    textRun?: {
-                                                        text?: string;
-                                                        style?: {
-                                                            bold?: boolean;
-                                                            strikeThrough?: boolean;
-                                                            backColor?: {
-                                                                red?: number;
-                                                                green?: number;
-                                                                blue?: number;
-                                                                alpha?: number;
-                                                            };
-                                                            textColor?: {
-                                                                red?: number;
-                                                                green?: number;
-                                                                blue?: number;
-                                                                alpha?: number;
-                                                            };
-                                                            link?: {
-                                                                url?: string;
-                                                            };
-                                                        };
-                                                    };
-                                                    docsLink?: {
-                                                        url?: string;
-                                                        title?: string;
-                                                    };
-                                                    person?: {
-                                                        openId?: string;
-                                                    };
-                                                }>;
-                                            };
-                                            gallery?: {
-                                                imageList?: Array<{
-                                                    fileToken?: string;
-                                                    src?: string;
-                                                    width?: number;
-                                                    height?: number;
-                                                }>;
-                                            };
-                                        }>;
-                                    };
-                                    progress_rate?: {
-                                        percent?: number;
-                                        status?: number;
-                                    };
+                                    period_id?: string;
+                                    start_month?: string;
+                                    end_month?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
+                                `${this.domain}/open-apis/okr/v1/periods`,
                                 path
                             ),
-                            method: "PUT",
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=period&version=v1 document }
+                 *
+                 * 修改 OKR 周期状态
+                 *
+                 * 修改某个 OKR 周期的状态为「正常」、「失效」或「隐藏」，对租户所有人生效，请谨慎操作
+                 */
+                patch: async (
+                    payload?: {
+                        data: { status: number };
+                        path: { period_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { period_id?: string; status?: number };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/periods/:period_id`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -2044,19 +1931,21 @@ export default abstract class Client extends myai {
                 },
             },
             /**
-             * 复盘（灰度租户可见）
+             * okr
              */
-            review: {
+            okr: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr&apiName=batch_get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/review/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=okr&resource=okr&version=v1 document }
                  *
-                 * 查询复盘信息
+                 * 批量获取 OKR
                  *
-                 * 根据周期和用户查询复盘信息。
+                 * 根据 OKR id 批量获取 OKR。
+                 *
+                 * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
                  */
-                query: async (
+                batchGet: async (
                     payload?: {
                         params: {
                             user_id_type?:
@@ -2064,8 +1953,8 @@ export default abstract class Client extends myai {
                                 | "union_id"
                                 | "open_id"
                                 | "people_admin_id";
-                            user_ids: Array<string>;
-                            period_ids: Array<string>;
+                            okr_ids: Array<string>;
+                            lang?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -2080,28 +1969,83 @@ export default abstract class Client extends myai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    review_list?: Array<{
-                                        user_id?: {
-                                            open_id?: string;
-                                            user_id?: string;
-                                        };
-                                        review_period_list?: Array<{
-                                            period_id?: string;
-                                            cycle_review_list?: Array<{
-                                                url?: string;
-                                                create_time?: string;
+                                    okr_list?: Array<{
+                                        id?: string;
+                                        permission?: number;
+                                        period_id?: string;
+                                        name?: string;
+                                        objective_list?: Array<{
+                                            id?: string;
+                                            permission?: number;
+                                            content?: string;
+                                            progress_report?: string;
+                                            score?: number;
+                                            weight?: number;
+                                            progress_rate?: {
+                                                percent?: number;
+                                                status?: string;
+                                            };
+                                            kr_list?: Array<{
+                                                id?: string;
+                                                content?: string;
+                                                score?: number;
+                                                weight?: number;
+                                                kr_weight?: number;
+                                                progress_rate?: {
+                                                    percent?: number;
+                                                    status?: string;
+                                                };
+                                                progress_record_list?: Array<{
+                                                    id?: string;
+                                                }>;
+                                                progress_rate_percent_last_updated_time?: string;
+                                                progress_rate_status_last_updated_time?: string;
+                                                progress_record_last_updated_time?: string;
+                                                progress_report_last_updated_time?: string;
+                                                score_last_updated_time?: string;
+                                                deadline?: string;
+                                                mentioned_user_list?: Array<{
+                                                    open_id?: string;
+                                                    user_id?: string;
+                                                }>;
                                             }>;
-                                            progress_report_list?: Array<{
-                                                url?: string;
-                                                create_time?: string;
+                                            aligned_objective_list?: Array<{
+                                                id?: string;
+                                                okr_id?: string;
+                                                owner?: {
+                                                    open_id?: string;
+                                                    user_id?: string;
+                                                };
+                                            }>;
+                                            aligning_objective_list?: Array<{
+                                                id?: string;
+                                                okr_id?: string;
+                                                owner?: {
+                                                    open_id?: string;
+                                                    user_id?: string;
+                                                };
+                                            }>;
+                                            progress_record_list?: Array<{
+                                                id?: string;
+                                            }>;
+                                            progress_rate_percent_last_updated_time?: string;
+                                            progress_rate_status_last_updated_time?: string;
+                                            progress_record_last_updated_time?: string;
+                                            progress_report_last_updated_time?: string;
+                                            score_last_updated_time?: string;
+                                            deadline?: string;
+                                            mentioned_user_list?: Array<{
+                                                open_id?: string;
+                                                user_id?: string;
                                             }>;
                                         }>;
+                                        confirm_status?: number;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v1/reviews/query`,
+                                `${this.domain}/open-apis/okr/v1/okrs/batch_get`,
                                 path
                             ),
                             method: "GET",
@@ -2118,17 +2062,17 @@ export default abstract class Client extends myai {
                 },
             },
             /**
-             * 用户OKR
+             * user.okr
              */
             userOkr: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=okr&resource=user.okr&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/user-okr/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=user.okr&version=v1 document }
                  *
-                 * 获取用户的OKR列表
+                 * 获取用户的 OKR 列表
                  *
-                 * 根据用户的id获取OKR列表
+                 * 根据用户的 id 获取 OKR 列表。
                  *
                  * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
                  */
@@ -2252,6 +2196,62 @@ export default abstract class Client extends myai {
                         });
                 },
             },
+            /**
+             * image
+             */
+            image: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=image&apiName=upload&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=okr&resource=image&version=v1 document }
+                 *
+                 * 上传进展记录图片
+                 *
+                 * 上传图片，以获取在进展记录富文本中使用的 token。成功调用该接口后，你可继续调用[创建 OKR 进展记录](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/create)或[更新 OKR 进展记录](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/progress_record/update)，将返回的 `url`参数和`file_token` 参数传入 `imageList` 参数中。
+                 */
+                upload: async (
+                    payload?: {
+                        data: {
+                            data: Buffer | fs.ReadStream;
+                            target_id: string;
+                            target_type: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_token?: string; url?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/images/upload`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
         },
         v2: {
             /**
@@ -2263,7 +2263,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=okr.alignment&version=v2 document }
                  *
-                 * 删除对齐关系
+                 * 删除 OKR 对齐关系
+                 *
+                 * 删除两个目标之间现有的 OKR 对齐关系。移除对齐连接的同时保留目标本身。
                  */
                 delete: async (
                     payload?: {
@@ -2304,7 +2306,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=okr.alignment&version=v2 document }
                  *
-                 * 获取对齐关系
+                 * 获取 OKR 对齐信息
+                 *
+                 * 获取特定 OKR 对齐的详细信息，包括对齐关系中涉及的两个实体、它们的所有者以及创建/更新时间戳。
                  */
                 get: async (
                     payload?: {
@@ -2350,6 +2354,1428 @@ export default abstract class Client extends myai {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/okr/v2/alignments/:alignment_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.objective
+             */
+            okrObjective: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=okr.objective&version=v2 document }
+                 *
+                 * 删除 OKR 目标
+                 *
+                 * 从 OKR 周期中删除已存在的目标，将目标及其关联的关键结果从 OKR 结构中移除。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { objective_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=key_results_position&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=key_results_position&project=okr&resource=okr.objective&version=v2 document }
+                 *
+                 * 修改关键结果位置
+                 *
+                 * 通过提供按顺序排列的关键结果 ID 列表，对指定目标下的关键结果进行重新排序，并相应更新其序号。
+                 */
+                keyResultsPosition: async (
+                    payload?: {
+                        data: { key_result_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        objective_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        weight?: number;
+                                        deadline?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results_position`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=okr.objective&version=v2 document }
+                 *
+                 * 编辑 OKR 目标
+                 *
+                 * 更新 OKR 周期中已存在目标的内容、分数、备注、截止时间和分类，支持对指定字段进行部分更新。
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            content?: {
+                                blocks?: Array<{
+                                    block_element_type?:
+                                        | "paragraph"
+                                        | "gallery";
+                                    paragraph?: {
+                                        style?: {
+                                            list?: {
+                                                list_type?:
+                                                    | "number"
+                                                    | "bullet"
+                                                    | "checkBox"
+                                                    | "checkedBox"
+                                                    | "indent";
+                                                indent_level?: number;
+                                                number?: number;
+                                            };
+                                        };
+                                        elements?: Array<{
+                                            paragraph_element_type?:
+                                                | "textRun"
+                                                | "docsLink"
+                                                | "mention";
+                                            text_run?: {
+                                                text?: string;
+                                                style?: {
+                                                    bold?: boolean;
+                                                    strike_through?: boolean;
+                                                    back_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    text_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    link?: { url?: string };
+                                                };
+                                            };
+                                            docs_link?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            mention?: { user_id?: string };
+                                        }>;
+                                    };
+                                    gallery?: {
+                                        images?: Array<{
+                                            file_token?: string;
+                                            src?: string;
+                                            width?: number;
+                                            height?: number;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                            score?: number;
+                            notes?: {
+                                blocks?: Array<{
+                                    block_element_type?:
+                                        | "paragraph"
+                                        | "gallery";
+                                    paragraph?: {
+                                        style?: {
+                                            list?: {
+                                                list_type?:
+                                                    | "number"
+                                                    | "bullet"
+                                                    | "checkBox"
+                                                    | "checkedBox"
+                                                    | "indent";
+                                                indent_level?: number;
+                                                number?: number;
+                                            };
+                                        };
+                                        elements?: Array<{
+                                            paragraph_element_type?:
+                                                | "textRun"
+                                                | "docsLink"
+                                                | "mention";
+                                            text_run?: {
+                                                text?: string;
+                                                style?: {
+                                                    bold?: boolean;
+                                                    strike_through?: boolean;
+                                                    back_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    text_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    link?: { url?: string };
+                                                };
+                                            };
+                                            docs_link?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            mention?: { user_id?: string };
+                                        }>;
+                                    };
+                                    gallery?: {
+                                        images?: Array<{
+                                            file_token?: string;
+                                            src?: string;
+                                            width?: number;
+                                            height?: number;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                            deadline?: string;
+                            category_id?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    objective?: {
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        cycle_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        notes?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        weight?: number;
+                                        deadline?: string;
+                                        category_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=key_results_weight&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=key_results_weight&project=okr&resource=okr.objective&version=v2 document }
+                 *
+                 * 修改关键结果权重
+                 *
+                 * 调整指定目标下各关键结果的权重分配。为每个关键结果设置权重值，以反映其在计算目标整体得分时的相对重要性。
+                 */
+                keyResultsWeight: async (
+                    payload?: {
+                        data: {
+                            key_result_weights: Array<{
+                                key_result_id: string;
+                                weight: number;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        objective_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        weight?: number;
+                                        deadline?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results_weight`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=okr.objective&version=v2 document }
+                 *
+                 * 获取目标详细信息
+                 *
+                 * 获取指定目标的详细信息，包括其内容、负责人、分数、权重、截止时间及分类。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    objective?: {
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        cycle_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        notes?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        weight?: number;
+                                        deadline?: string;
+                                        category_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.key_result
+             */
+            okrKeyResult: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=okr.key_result&version=v2 document }
+                 *
+                 * 删除关键结果
+                 *
+                 * 删除目标下指定的关键结果。此操作将永久删除该关键结果及其关联的所有数据，包括进展记录和量化指标。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { key_result_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { key_result_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=okr.key_result&version=v2 document }
+                 *
+                 * 获取关键结果
+                 *
+                 * 获取指定关键结果的详细信息，包括其内容、负责人、分数、权重、截止时间和相关指标。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { key_result_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    key_result?: {
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        objective_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        weight?: number;
+                                        deadline?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=okr.key_result&version=v2 document }
+                 *
+                 * 编辑关键结果
+                 *
+                 * 修改指定目标下现有关键结果的内容、分数和截止时间，更新其内容。
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            content?: {
+                                blocks?: Array<{
+                                    block_element_type?:
+                                        | "paragraph"
+                                        | "gallery";
+                                    paragraph?: {
+                                        style?: {
+                                            list?: {
+                                                list_type?:
+                                                    | "number"
+                                                    | "bullet"
+                                                    | "checkBox"
+                                                    | "checkedBox"
+                                                    | "indent";
+                                                indent_level?: number;
+                                                number?: number;
+                                            };
+                                        };
+                                        elements?: Array<{
+                                            paragraph_element_type?:
+                                                | "textRun"
+                                                | "docsLink"
+                                                | "mention";
+                                            text_run?: {
+                                                text?: string;
+                                                style?: {
+                                                    bold?: boolean;
+                                                    strike_through?: boolean;
+                                                    back_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    text_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    link?: { url?: string };
+                                                };
+                                            };
+                                            docs_link?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            mention?: { user_id?: string };
+                                        }>;
+                                    };
+                                    gallery?: {
+                                        images?: Array<{
+                                            file_token?: string;
+                                            src?: string;
+                                            width?: number;
+                                            height?: number;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                            score?: number;
+                            deadline?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { key_result_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    key_result?: {
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        objective_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        weight?: number;
+                                        deadline?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.objective.alignment
+             */
+            okrObjectiveAlignment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.alignment&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.objective.alignment&version=v2 document }
+                 *
+                 * 创建目标对齐关系
+                 *
+                 * 为指定目标与另一个目标创建对齐关系，在 OKR 结构中建立层级对齐。
+                 */
+                create: async (
+                    payload?: {
+                        data: { to_entity_type: number; to_entity_id: string };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { alignment_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/alignments`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            align_type?: "aligned" | "aligning";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/okr/v2/objectives/:objective_id/alignments`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id: string;
+                                                        create_time: string;
+                                                        update_time: string;
+                                                        from_owner: {
+                                                            owner_type: "user";
+                                                            user_id?: string;
+                                                        };
+                                                        to_owner: {
+                                                            owner_type: "user";
+                                                            user_id?: string;
+                                                        };
+                                                        from_entity_type: number;
+                                                        from_entity_id: string;
+                                                        to_entity_type: number;
+                                                        to_entity_id: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.alignment&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.alignment&version=v2 document }
+                 *
+                 * 获取目标的对齐信息
+                 *
+                 * 分页获取指定目标的对齐关系列表，包含被其他目标对齐（被对齐）和对齐到其他目标（对齐）两种类型的对齐信息，以及发起方和被对齐方的负责人与实体详情。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            align_type?: "aligned" | "aligning";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        from_owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        to_owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        from_entity_type: number;
+                                        from_entity_id: string;
+                                        to_entity_type: number;
+                                        to_entity_id: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/alignments`,
                                 path
                             ),
                             method: "GET",
@@ -2484,7 +3910,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.category&version=v2 document }
                  *
-                 * 批量获取分类
+                 * 获取所有 OKR 分类
+                 *
+                 * 获取系统中所有可用的 OKR 分类的分页列表。每个分类包括 ID、名称（多语言）、颜色、类型、启用状态以及创建/更新时间戳等元数据。
                  */
                 list: async (
                     payload?: {
@@ -2660,7 +4088,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.cycle&version=v2 document }
                  *
-                 * 批量获取用户周期
+                 * 获取用户 OKR 周期列表
+                 *
+                 * 获取指定用户的 OKR 周期列表，包含周期状态、时间范围和分数等信息。
                  */
                 list: async (
                     payload?: {
@@ -2719,203 +4149,13 @@ export default abstract class Client extends myai {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.cycle&apiName=objectives_position&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=objectives_position&project=okr&resource=okr.cycle&version=v2 document }
-                 *
-                 * 更新用户周期下全部目标的位置
-                 */
-                objectivesPosition: async (
-                    payload?: {
-                        data: { objective_ids: Array<string> };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { cycle_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        cycle_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        notes?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        weight?: number;
-                                        deadline?: string;
-                                        category_id?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/cycles/:cycle_id/objectives_position`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.cycle&apiName=objectives_weight&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=objectives_weight&project=okr&resource=okr.cycle&version=v2 document }
                  *
-                 * 更新用户周期下全部目标的权重
+                 * 修改 OKR 目标权重
+                 *
+                 * 批量修改指定 OKR 周期下多个目标的权重。权重取值范围为 0 到 1，支持最多三位小数。
                  */
                 objectivesWeight: async (
                     payload?: {
@@ -3107,6 +4347,773 @@ export default abstract class Client extends myai {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.cycle&apiName=objectives_position&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=objectives_position&project=okr&resource=okr.cycle&version=v2 document }
+                 *
+                 * 修改 OKR 目标位置
+                 *
+                 * 通过提供按顺序排列的目标 ID 列表，在指定的 OKR 周期内重新排序目标。
+                 */
+                objectivesPosition: async (
+                    payload?: {
+                        data: { objective_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { cycle_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        cycle_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        notes?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        weight?: number;
+                                        deadline?: string;
+                                        category_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/cycles/:cycle_id/objectives_position`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.objective.key_result
+             */
+            okrObjectiveKeyResult: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id: string;
+                                                        create_time: string;
+                                                        update_time: string;
+                                                        owner: {
+                                                            owner_type: "user";
+                                                            user_id?: string;
+                                                        };
+                                                        objective_id: string;
+                                                        position: number;
+                                                        content?: {
+                                                            blocks?: Array<{
+                                                                block_element_type?:
+                                                                    | "paragraph"
+                                                                    | "gallery";
+                                                                paragraph?: {
+                                                                    style?: {
+                                                                        list?: {
+                                                                            list_type?:
+                                                                                | "number"
+                                                                                | "bullet"
+                                                                                | "checkBox"
+                                                                                | "checkedBox"
+                                                                                | "indent";
+                                                                            indent_level?: number;
+                                                                            number?: number;
+                                                                        };
+                                                                    };
+                                                                    elements?: Array<{
+                                                                        paragraph_element_type?:
+                                                                            | "textRun"
+                                                                            | "docsLink"
+                                                                            | "mention";
+                                                                        text_run?: {
+                                                                            text?: string;
+                                                                            style?: {
+                                                                                bold?: boolean;
+                                                                                strike_through?: boolean;
+                                                                                back_color?: {
+                                                                                    red?: number;
+                                                                                    green?: number;
+                                                                                    blue?: number;
+                                                                                    alpha?: number;
+                                                                                };
+                                                                                text_color?: {
+                                                                                    red?: number;
+                                                                                    green?: number;
+                                                                                    blue?: number;
+                                                                                    alpha?: number;
+                                                                                };
+                                                                                link?: {
+                                                                                    url?: string;
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                        docs_link?: {
+                                                                            url?: string;
+                                                                            title?: string;
+                                                                        };
+                                                                        mention?: {
+                                                                            user_id?: string;
+                                                                        };
+                                                                    }>;
+                                                                };
+                                                                gallery?: {
+                                                                    images?: Array<{
+                                                                        file_token?: string;
+                                                                        src?: string;
+                                                                        width?: number;
+                                                                        height?: number;
+                                                                    }>;
+                                                                };
+                                                            }>;
+                                                        };
+                                                        score?: number;
+                                                        weight?: number;
+                                                        deadline?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.key_result&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.key_result&version=v2 document }
+                 *
+                 * 获取目标下的所有关键结果
+                 *
+                 * 分页获取指定目标下的所有关键结果列表，包括关键结果的内容、进度、分数和负责人信息。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        objective_id: string;
+                                        position: number;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
+                                        };
+                                        score?: number;
+                                        weight?: number;
+                                        deadline?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.key_result&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.objective.key_result&version=v2 document }
+                 *
+                 * 在目标下创建关键结果
+                 *
+                 * 在指定目标下创建一个新的关键结果。使用富文本结构定义关键结果内容，设置截止时间和打分。
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            content?: {
+                                blocks?: Array<{
+                                    block_element_type?:
+                                        | "paragraph"
+                                        | "gallery";
+                                    paragraph?: {
+                                        style?: {
+                                            list?: {
+                                                list_type?:
+                                                    | "number"
+                                                    | "bullet"
+                                                    | "checkBox"
+                                                    | "checkedBox"
+                                                    | "indent";
+                                                indent_level?: number;
+                                                number?: number;
+                                            };
+                                        };
+                                        elements?: Array<{
+                                            paragraph_element_type?:
+                                                | "textRun"
+                                                | "docsLink"
+                                                | "mention";
+                                            text_run?: {
+                                                text?: string;
+                                                style?: {
+                                                    bold?: boolean;
+                                                    strike_through?: boolean;
+                                                    back_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    text_color?: {
+                                                        red?: number;
+                                                        green?: number;
+                                                        blue?: number;
+                                                        alpha?: number;
+                                                    };
+                                                    link?: { url?: string };
+                                                };
+                                            };
+                                            docs_link?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            mention?: { user_id?: string };
+                                        }>;
+                                    };
+                                    gallery?: {
+                                        images?: Array<{
+                                            file_token?: string;
+                                            src?: string;
+                                            width?: number;
+                                            height?: number;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                            deadline?: string;
+                            score?: number;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { key_result_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.key_result.indicator
+             */
+            okrKeyResultIndicator: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result.indicator&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.key_result.indicator&version=v2 document }
+                 *
+                 * 获取关键结果的量化指标
+                 *
+                 * 获取指定关键结果的量化指标数据，包括其当前值、目标值、状态、计算方式和单位信息。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { key_result_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    indicator?: {
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        entity_type: number;
+                                        entity_id: string;
+                                        indicator_status: number;
+                                        status_calculate_type: number;
+                                        start_value?: number;
+                                        target_value?: number;
+                                        current_value?: number;
+                                        current_value_calculate_type?: number;
+                                        unit?: {
+                                            unit_type: number;
+                                            unit_value: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id/indicators`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.objective.indicator
+             */
+            okrObjectiveIndicator: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.indicator&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.indicator&version=v2 document }
+                 *
+                 * 获取目标的量化指标
+                 *
+                 * 获取指定目标的量化指标数据，包括其起始值、当前值、目标值、状态、计算方式和单位信息。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    indicator?: {
+                                        id: string;
+                                        create_time: string;
+                                        update_time: string;
+                                        owner: {
+                                            owner_type: "user";
+                                            user_id?: string;
+                                        };
+                                        entity_type: number;
+                                        entity_id: string;
+                                        indicator_status: number;
+                                        status_calculate_type: number;
+                                        start_value?: number;
+                                        target_value?: number;
+                                        current_value?: number;
+                                        current_value_calculate_type?: number;
+                                        unit?: {
+                                            unit_type: number;
+                                            unit_value: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/indicators`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * okr.cycle.objective
@@ -3117,7 +5124,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.cycle.objective&version=v2 document }
                  *
-                 * 创建目标
+                 * 创建 OKR 目标
+                 *
+                 * 在指定的 OKR 周期下创建一个新的目标。使用富文本结构定义目标内容，添加可选备注，设置截止时间，并配置权重、分类和初始分数。
                  */
                 create: async (
                     payload?: {
@@ -3526,7 +5535,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.cycle.objective&version=v2 document }
                  *
-                 * 批量获取用户周期下的目标
+                 * 获取用户 OKR 周期内的目标
+                 *
+                 * 获取指定用户 OKR 周期内的所有目标列表，包含目标内容、负责人、分数和进度状态等信息。
                  */
                 list: async (
                     payload?: {
@@ -3726,7 +5737,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=okr.indicator&version=v2 document }
                  *
-                 * 更新指标
+                 * 更新量化指标
+                 *
+                 * 更新现有量化指标的配置和数值，包括计算方式、状态、当前值、目标值和单位设置。
                  */
                 patch: async (
                     payload?: {
@@ -3801,387 +5814,201 @@ export default abstract class Client extends myai {
                 },
             },
             /**
-             * okr.key_result
+             * okr.objective.progress
              */
-            okrKeyResult: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=okr.key_result&version=v2 document }
-                 *
-                 * 删除关键结果
-                 */
-                delete: async (
-                    payload?: {
-                        path: { key_result_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { key_result_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=okr.key_result&version=v2 document }
-                 *
-                 * 获取关键结果
-                 */
-                get: async (
+            okrObjectiveProgress: {
+                listWithIterator: async (
                     payload?: {
                         params?: {
+                            page_size?: number;
+                            page_token?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             department_id_type?:
                                 | "department_id"
                                 | "open_department_id";
                         };
-                        path: { key_result_id: string };
+                        path: { objective_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    key_result?: {
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        objective_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        weight?: number;
-                                        deadline?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result&apiName=patch&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=okr.key_result&version=v2 document }
-                 *
-                 * 更新关键结果
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            content?: {
-                                blocks?: Array<{
-                                    block_element_type?:
-                                        | "paragraph"
-                                        | "gallery";
-                                    paragraph?: {
-                                        style?: {
-                                            list?: {
-                                                list_type?:
-                                                    | "number"
-                                                    | "bullet"
-                                                    | "checkBox"
-                                                    | "checkedBox"
-                                                    | "indent";
-                                                indent_level?: number;
-                                                number?: number;
-                                            };
-                                        };
-                                        elements?: Array<{
-                                            paragraph_element_type?:
-                                                | "textRun"
-                                                | "docsLink"
-                                                | "mention";
-                                            text_run?: {
-                                                text?: string;
-                                                style?: {
-                                                    bold?: boolean;
-                                                    strike_through?: boolean;
-                                                    back_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    text_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    link?: { url?: string };
-                                                };
-                                            };
-                                            docs_link?: {
-                                                url?: string;
-                                                title?: string;
-                                            };
-                                            mention?: { user_id?: string };
-                                        }>;
-                                    };
-                                    gallery?: {
-                                        images?: Array<{
-                                            file_token?: string;
-                                            src?: string;
-                                            width?: number;
-                                            height?: number;
-                                        }>;
-                                    };
-                                }>;
-                            };
-                            score?: number;
-                            deadline?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { key_result_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/okr/v2/objectives/:objective_id/progresses`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
 
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    key_result?: {
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        objective_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id: string;
+                                                        create_time: string;
+                                                        update_time: string;
+                                                        owner: {
+                                                            owner_type: "user";
                                                             user_id?: string;
                                                         };
+                                                        entity_type: number;
+                                                        entity_id: string;
+                                                        content?: {
+                                                            blocks?: Array<{
+                                                                block_element_type?:
+                                                                    | "paragraph"
+                                                                    | "gallery";
+                                                                paragraph?: {
+                                                                    style?: {
+                                                                        list?: {
+                                                                            list_type?:
+                                                                                | "number"
+                                                                                | "bullet"
+                                                                                | "checkBox"
+                                                                                | "checkedBox"
+                                                                                | "indent";
+                                                                            indent_level?: number;
+                                                                            number?: number;
+                                                                        };
+                                                                    };
+                                                                    elements?: Array<{
+                                                                        paragraph_element_type?:
+                                                                            | "textRun"
+                                                                            | "docsLink"
+                                                                            | "mention";
+                                                                        text_run?: {
+                                                                            text?: string;
+                                                                            style?: {
+                                                                                bold?: boolean;
+                                                                                strike_through?: boolean;
+                                                                                back_color?: {
+                                                                                    red?: number;
+                                                                                    green?: number;
+                                                                                    blue?: number;
+                                                                                    alpha?: number;
+                                                                                };
+                                                                                text_color?: {
+                                                                                    red?: number;
+                                                                                    green?: number;
+                                                                                    blue?: number;
+                                                                                    alpha?: number;
+                                                                                };
+                                                                                link?: {
+                                                                                    url?: string;
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                        docs_link?: {
+                                                                            url?: string;
+                                                                            title?: string;
+                                                                        };
+                                                                        mention?: {
+                                                                            user_id?: string;
+                                                                        };
+                                                                    }>;
+                                                                };
+                                                                gallery?: {
+                                                                    images?: Array<{
+                                                                        file_token?: string;
+                                                                        src?: string;
+                                                                        width?: number;
+                                                                        height?: number;
+                                                                    }>;
+                                                                };
+                                                            }>;
+                                                        };
+                                                        progress_rate?: {
+                                                            progress_percent?: number;
+                                                            progress_status?: number;
+                                                        };
                                                     }>;
                                                 };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        weight?: number;
-                                        deadline?: string;
-                                    };
-                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
                             }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
+                        },
+                    };
+
+                    return Iterable;
                 },
-            },
-            /**
-             * okr.key_result.indicator
-             */
-            okrKeyResultIndicator: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.key_result.indicator&apiName=list&version=v2 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.progress&apiName=list&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.key_result.indicator&version=v2 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.progress&version=v2 document }
                  *
-                 * 获取关键结果的指标
+                 * 获取目标下的进展记录
+                 *
+                 * 分页获取指定目标下的进展记录列表，包含进展内容、创建/更新时间戳、负责人信息以及进展百分比和状态。
                  */
                 list: async (
                     payload?: {
                         params?: {
+                            page_size?: number;
+                            page_token?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             department_id_type?:
                                 | "department_id"
                                 | "open_department_id";
                         };
-                        path: { key_result_id: string };
+                        path: { objective_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -4195,7 +6022,9 @@ export default abstract class Client extends myai {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    indicator?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
                                         id: string;
                                         create_time: string;
                                         update_time: string;
@@ -4205,22 +6034,80 @@ export default abstract class Client extends myai {
                                         };
                                         entity_type: number;
                                         entity_id: string;
-                                        indicator_status: number;
-                                        status_calculate_type: number;
-                                        start_value?: number;
-                                        target_value?: number;
-                                        current_value?: number;
-                                        current_value_calculate_type?: number;
-                                        unit?: {
-                                            unit_type: number;
-                                            unit_value: string;
+                                        content?: {
+                                            blocks?: Array<{
+                                                block_element_type?:
+                                                    | "paragraph"
+                                                    | "gallery";
+                                                paragraph?: {
+                                                    style?: {
+                                                        list?: {
+                                                            list_type?:
+                                                                | "number"
+                                                                | "bullet"
+                                                                | "checkBox"
+                                                                | "checkedBox"
+                                                                | "indent";
+                                                            indent_level?: number;
+                                                            number?: number;
+                                                        };
+                                                    };
+                                                    elements?: Array<{
+                                                        paragraph_element_type?:
+                                                            | "textRun"
+                                                            | "docsLink"
+                                                            | "mention";
+                                                        text_run?: {
+                                                            text?: string;
+                                                            style?: {
+                                                                bold?: boolean;
+                                                                strike_through?: boolean;
+                                                                back_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                text_color?: {
+                                                                    red?: number;
+                                                                    green?: number;
+                                                                    blue?: number;
+                                                                    alpha?: number;
+                                                                };
+                                                                link?: {
+                                                                    url?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        docs_link?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                        mention?: {
+                                                            user_id?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                                gallery?: {
+                                                    images?: Array<{
+                                                        file_token?: string;
+                                                        src?: string;
+                                                        width?: number;
+                                                        height?: number;
+                                                    }>;
+                                                };
+                                            }>;
                                         };
-                                    };
+                                        progress_rate?: {
+                                            progress_percent?: number;
+                                            progress_status?: number;
+                                        };
+                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/key_results/:key_result_id/indicators`,
+                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/progresses`,
                                 path
                             ),
                             method: "GET",
@@ -4417,7 +6304,9 @@ export default abstract class Client extends myai {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.key_result.progress&version=v2 document }
                  *
-                 * 批量获取关键结果下的进展
+                 * 获取关键结果下的进展记录
+                 *
+                 * 获取指定关键结果的分页进展更新记录。每条记录包括进展内容、完成百分比、状态指示器、所有者信息和时间戳。
                  */
                 list: async (
                     payload?: {
@@ -4529,1845 +6418,6 @@ export default abstract class Client extends myai {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/okr/v2/key_results/:key_result_id/progresses`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * okr.objective.alignment
-             */
-            okrObjectiveAlignment: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.alignment&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.objective.alignment&version=v2 document }
-                 *
-                 * 创建对齐关系
-                 */
-                create: async (
-                    payload?: {
-                        data: { to_entity_type: number; to_entity_id: string };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { alignment_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/alignments`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            align_type?: "aligned" | "aligning";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/okr/v2/objectives/:objective_id/alignments`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    items?: Array<{
-                                                        id: string;
-                                                        create_time: string;
-                                                        update_time: string;
-                                                        from_owner: {
-                                                            owner_type: "user";
-                                                            user_id?: string;
-                                                        };
-                                                        to_owner: {
-                                                            owner_type: "user";
-                                                            user_id?: string;
-                                                        };
-                                                        from_entity_type: number;
-                                                        from_entity_id: string;
-                                                        to_entity_type: number;
-                                                        to_entity_id: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.alignment&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.alignment&version=v2 document }
-                 *
-                 * 批量获取目标下的对齐关系
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            align_type?: "aligned" | "aligning";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    items?: Array<{
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        from_owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        to_owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        from_entity_type: number;
-                                        from_entity_id: string;
-                                        to_entity_type: number;
-                                        to_entity_id: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/alignments`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * okr.objective
-             */
-            okrObjective: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=okr&resource=okr.objective&version=v2 document }
-                 *
-                 * 删除目标
-                 */
-                delete: async (
-                    payload?: {
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { objective_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=okr.objective&version=v2 document }
-                 *
-                 * 获取目标
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    objective?: {
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        cycle_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        notes?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        weight?: number;
-                                        deadline?: string;
-                                        category_id?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=key_results_position&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=key_results_position&project=okr&resource=okr.objective&version=v2 document }
-                 *
-                 * 更新全部关键结果的位置
-                 */
-                keyResultsPosition: async (
-                    payload?: {
-                        data: { key_result_ids: Array<string> };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        objective_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        weight?: number;
-                                        deadline?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results_position`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=key_results_weight&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=key_results_weight&project=okr&resource=okr.objective&version=v2 document }
-                 *
-                 * 更新全部关键结果的权重
-                 */
-                keyResultsWeight: async (
-                    payload?: {
-                        data: {
-                            key_result_weights: Array<{
-                                key_result_id: string;
-                                weight: number;
-                            }>;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        objective_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        weight?: number;
-                                        deadline?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results_weight`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective&apiName=patch&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=okr.objective&version=v2 document }
-                 *
-                 * 更新目标
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            content?: {
-                                blocks?: Array<{
-                                    block_element_type?:
-                                        | "paragraph"
-                                        | "gallery";
-                                    paragraph?: {
-                                        style?: {
-                                            list?: {
-                                                list_type?:
-                                                    | "number"
-                                                    | "bullet"
-                                                    | "checkBox"
-                                                    | "checkedBox"
-                                                    | "indent";
-                                                indent_level?: number;
-                                                number?: number;
-                                            };
-                                        };
-                                        elements?: Array<{
-                                            paragraph_element_type?:
-                                                | "textRun"
-                                                | "docsLink"
-                                                | "mention";
-                                            text_run?: {
-                                                text?: string;
-                                                style?: {
-                                                    bold?: boolean;
-                                                    strike_through?: boolean;
-                                                    back_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    text_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    link?: { url?: string };
-                                                };
-                                            };
-                                            docs_link?: {
-                                                url?: string;
-                                                title?: string;
-                                            };
-                                            mention?: { user_id?: string };
-                                        }>;
-                                    };
-                                    gallery?: {
-                                        images?: Array<{
-                                            file_token?: string;
-                                            src?: string;
-                                            width?: number;
-                                            height?: number;
-                                        }>;
-                                    };
-                                }>;
-                            };
-                            score?: number;
-                            notes?: {
-                                blocks?: Array<{
-                                    block_element_type?:
-                                        | "paragraph"
-                                        | "gallery";
-                                    paragraph?: {
-                                        style?: {
-                                            list?: {
-                                                list_type?:
-                                                    | "number"
-                                                    | "bullet"
-                                                    | "checkBox"
-                                                    | "checkedBox"
-                                                    | "indent";
-                                                indent_level?: number;
-                                                number?: number;
-                                            };
-                                        };
-                                        elements?: Array<{
-                                            paragraph_element_type?:
-                                                | "textRun"
-                                                | "docsLink"
-                                                | "mention";
-                                            text_run?: {
-                                                text?: string;
-                                                style?: {
-                                                    bold?: boolean;
-                                                    strike_through?: boolean;
-                                                    back_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    text_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    link?: { url?: string };
-                                                };
-                                            };
-                                            docs_link?: {
-                                                url?: string;
-                                                title?: string;
-                                            };
-                                            mention?: { user_id?: string };
-                                        }>;
-                                    };
-                                    gallery?: {
-                                        images?: Array<{
-                                            file_token?: string;
-                                            src?: string;
-                                            width?: number;
-                                            height?: number;
-                                        }>;
-                                    };
-                                }>;
-                            };
-                            deadline?: string;
-                            category_id?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    objective?: {
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        cycle_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        notes?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        weight?: number;
-                                        deadline?: string;
-                                        category_id?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * okr.objective.indicator
-             */
-            okrObjectiveIndicator: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.indicator&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.indicator&version=v2 document }
-                 *
-                 * 获取目标的指标
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    indicator?: {
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        entity_type: number;
-                                        entity_id: string;
-                                        indicator_status: number;
-                                        status_calculate_type: number;
-                                        start_value?: number;
-                                        target_value?: number;
-                                        current_value?: number;
-                                        current_value_calculate_type?: number;
-                                        unit?: {
-                                            unit_type: number;
-                                            unit_value: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/indicators`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * okr.objective.key_result
-             */
-            okrObjectiveKeyResult: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.key_result&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.objective.key_result&version=v2 document }
-                 *
-                 * 创建关键结果
-                 */
-                create: async (
-                    payload?: {
-                        data?: {
-                            content?: {
-                                blocks?: Array<{
-                                    block_element_type?:
-                                        | "paragraph"
-                                        | "gallery";
-                                    paragraph?: {
-                                        style?: {
-                                            list?: {
-                                                list_type?:
-                                                    | "number"
-                                                    | "bullet"
-                                                    | "checkBox"
-                                                    | "checkedBox"
-                                                    | "indent";
-                                                indent_level?: number;
-                                                number?: number;
-                                            };
-                                        };
-                                        elements?: Array<{
-                                            paragraph_element_type?:
-                                                | "textRun"
-                                                | "docsLink"
-                                                | "mention";
-                                            text_run?: {
-                                                text?: string;
-                                                style?: {
-                                                    bold?: boolean;
-                                                    strike_through?: boolean;
-                                                    back_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    text_color?: {
-                                                        red?: number;
-                                                        green?: number;
-                                                        blue?: number;
-                                                        alpha?: number;
-                                                    };
-                                                    link?: { url?: string };
-                                                };
-                                            };
-                                            docs_link?: {
-                                                url?: string;
-                                                title?: string;
-                                            };
-                                            mention?: { user_id?: string };
-                                        }>;
-                                    };
-                                    gallery?: {
-                                        images?: Array<{
-                                            file_token?: string;
-                                            src?: string;
-                                            width?: number;
-                                            height?: number;
-                                        }>;
-                                    };
-                                }>;
-                            };
-                            deadline?: string;
-                            score?: number;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { key_result_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    items?: Array<{
-                                                        id: string;
-                                                        create_time: string;
-                                                        update_time: string;
-                                                        owner: {
-                                                            owner_type: "user";
-                                                            user_id?: string;
-                                                        };
-                                                        objective_id: string;
-                                                        position: number;
-                                                        content?: {
-                                                            blocks?: Array<{
-                                                                block_element_type?:
-                                                                    | "paragraph"
-                                                                    | "gallery";
-                                                                paragraph?: {
-                                                                    style?: {
-                                                                        list?: {
-                                                                            list_type?:
-                                                                                | "number"
-                                                                                | "bullet"
-                                                                                | "checkBox"
-                                                                                | "checkedBox"
-                                                                                | "indent";
-                                                                            indent_level?: number;
-                                                                            number?: number;
-                                                                        };
-                                                                    };
-                                                                    elements?: Array<{
-                                                                        paragraph_element_type?:
-                                                                            | "textRun"
-                                                                            | "docsLink"
-                                                                            | "mention";
-                                                                        text_run?: {
-                                                                            text?: string;
-                                                                            style?: {
-                                                                                bold?: boolean;
-                                                                                strike_through?: boolean;
-                                                                                back_color?: {
-                                                                                    red?: number;
-                                                                                    green?: number;
-                                                                                    blue?: number;
-                                                                                    alpha?: number;
-                                                                                };
-                                                                                text_color?: {
-                                                                                    red?: number;
-                                                                                    green?: number;
-                                                                                    blue?: number;
-                                                                                    alpha?: number;
-                                                                                };
-                                                                                link?: {
-                                                                                    url?: string;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                        docs_link?: {
-                                                                            url?: string;
-                                                                            title?: string;
-                                                                        };
-                                                                        mention?: {
-                                                                            user_id?: string;
-                                                                        };
-                                                                    }>;
-                                                                };
-                                                                gallery?: {
-                                                                    images?: Array<{
-                                                                        file_token?: string;
-                                                                        src?: string;
-                                                                        width?: number;
-                                                                        height?: number;
-                                                                    }>;
-                                                                };
-                                                            }>;
-                                                        };
-                                                        score?: number;
-                                                        weight?: number;
-                                                        deadline?: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.key_result&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.key_result&version=v2 document }
-                 *
-                 * 批量获取目标下的关键结果
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    items?: Array<{
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        objective_id: string;
-                                        position: number;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        score?: number;
-                                        weight?: number;
-                                        deadline?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/key_results`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * okr.objective.progress
-             */
-            okrObjectiveProgress: {
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/okr/v2/objectives/:objective_id/progresses`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    items?: Array<{
-                                                        id: string;
-                                                        create_time: string;
-                                                        update_time: string;
-                                                        owner: {
-                                                            owner_type: "user";
-                                                            user_id?: string;
-                                                        };
-                                                        entity_type: number;
-                                                        entity_id: string;
-                                                        content?: {
-                                                            blocks?: Array<{
-                                                                block_element_type?:
-                                                                    | "paragraph"
-                                                                    | "gallery";
-                                                                paragraph?: {
-                                                                    style?: {
-                                                                        list?: {
-                                                                            list_type?:
-                                                                                | "number"
-                                                                                | "bullet"
-                                                                                | "checkBox"
-                                                                                | "checkedBox"
-                                                                                | "indent";
-                                                                            indent_level?: number;
-                                                                            number?: number;
-                                                                        };
-                                                                    };
-                                                                    elements?: Array<{
-                                                                        paragraph_element_type?:
-                                                                            | "textRun"
-                                                                            | "docsLink"
-                                                                            | "mention";
-                                                                        text_run?: {
-                                                                            text?: string;
-                                                                            style?: {
-                                                                                bold?: boolean;
-                                                                                strike_through?: boolean;
-                                                                                back_color?: {
-                                                                                    red?: number;
-                                                                                    green?: number;
-                                                                                    blue?: number;
-                                                                                    alpha?: number;
-                                                                                };
-                                                                                text_color?: {
-                                                                                    red?: number;
-                                                                                    green?: number;
-                                                                                    blue?: number;
-                                                                                    alpha?: number;
-                                                                                };
-                                                                                link?: {
-                                                                                    url?: string;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                        docs_link?: {
-                                                                            url?: string;
-                                                                            title?: string;
-                                                                        };
-                                                                        mention?: {
-                                                                            user_id?: string;
-                                                                        };
-                                                                    }>;
-                                                                };
-                                                                gallery?: {
-                                                                    images?: Array<{
-                                                                        file_token?: string;
-                                                                        src?: string;
-                                                                        width?: number;
-                                                                        height?: number;
-                                                                    }>;
-                                                                };
-                                                            }>;
-                                                        };
-                                                        progress_rate?: {
-                                                            progress_percent?: number;
-                                                            progress_status?: number;
-                                                        };
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.progress&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=okr.objective.progress&version=v2 document }
-                 *
-                 * 批量获取目标下的进展
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: { objective_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    items?: Array<{
-                                        id: string;
-                                        create_time: string;
-                                        update_time: string;
-                                        owner: {
-                                            owner_type: "user";
-                                            user_id?: string;
-                                        };
-                                        entity_type: number;
-                                        entity_id: string;
-                                        content?: {
-                                            blocks?: Array<{
-                                                block_element_type?:
-                                                    | "paragraph"
-                                                    | "gallery";
-                                                paragraph?: {
-                                                    style?: {
-                                                        list?: {
-                                                            list_type?:
-                                                                | "number"
-                                                                | "bullet"
-                                                                | "checkBox"
-                                                                | "checkedBox"
-                                                                | "indent";
-                                                            indent_level?: number;
-                                                            number?: number;
-                                                        };
-                                                    };
-                                                    elements?: Array<{
-                                                        paragraph_element_type?:
-                                                            | "textRun"
-                                                            | "docsLink"
-                                                            | "mention";
-                                                        text_run?: {
-                                                            text?: string;
-                                                            style?: {
-                                                                bold?: boolean;
-                                                                strike_through?: boolean;
-                                                                back_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                text_color?: {
-                                                                    red?: number;
-                                                                    green?: number;
-                                                                    blue?: number;
-                                                                    alpha?: number;
-                                                                };
-                                                                link?: {
-                                                                    url?: string;
-                                                                };
-                                                            };
-                                                        };
-                                                        docs_link?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                        mention?: {
-                                                            user_id?: string;
-                                                        };
-                                                    }>;
-                                                };
-                                                gallery?: {
-                                                    images?: Array<{
-                                                        file_token?: string;
-                                                        src?: string;
-                                                        width?: number;
-                                                        height?: number;
-                                                    }>;
-                                                };
-                                            }>;
-                                        };
-                                        progress_rate?: {
-                                            progress_percent?: number;
-                                            progress_status?: number;
-                                        };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/okr/v2/objectives/:objective_id/progresses`,
                                 path
                             ),
                             method: "GET",

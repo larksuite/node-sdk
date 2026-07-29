@@ -28,85 +28,11 @@ export default abstract class Client {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 智能门禁
-     */
+         
+         */
     acs = {
         /**
-         * access_record.access_photo
-         */
-        accessRecordAccessPhoto: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=access_record.access_photo&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record-access_photo/get document }
-             *
-             * 下载开门时的人脸识别图片
-             *
-             * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录，对于使用人脸识别方式进行开门的识别记录，还会有抓拍图。;;可以用该接口下载开门时的人脸识别照片。
-             */
-            get: async (
-                payload?: {
-                    path?: { access_record_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/access_records/:access_record_id/access_photo`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
-            },
-        },
-        /**
-         * 门禁记录
+         * access_record
          */
         accessRecord: {
             listWithIterator: async (
@@ -216,7 +142,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=acs&resource=access_record&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=acs&resource=access_record&version=v1 document }
              *
              * 获取门禁记录列表
              *
@@ -282,13 +208,13 @@ export default abstract class Client {
             },
         },
         /**
-         * 门禁设备
+         * device
          */
         device: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=acs&resource=device&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/device/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=acs&resource=device&version=v1 document }
              *
              * 获取门禁设备列表
              *
@@ -339,252 +265,21 @@ export default abstract class Client {
             },
         },
         /**
-         * rule_external
+         * access_record.access_photo
          */
-        ruleExternal: {
+        accessRecordAccessPhoto: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=access_record.access_photo&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=rule_external&version=v1 document }
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        rule: {
-                            id?: string;
-                            name?: string;
-                            devices?: Array<{ id?: string; name?: string }>;
-                            user_count?: string;
-                            users?: Array<{
-                                user_type: number;
-                                user_id?: string;
-                                user_name?: string;
-                                phone_num?: string;
-                                department_id?: string;
-                            }>;
-                            visitor_count?: string;
-                            visitors?: Array<{
-                                user_type: number;
-                                user_id?: string;
-                                user_name?: string;
-                                phone_num?: string;
-                                department_id?: string;
-                            }>;
-                            remind_face?: boolean;
-                            opening_time?: {
-                                valid_day?: {
-                                    start_day: number;
-                                    end_day: number;
-                                };
-                                weekdays?: Array<number>;
-                                day_times?: Array<{
-                                    start_hhmm: number;
-                                    end_hhmm: number;
-                                }>;
-                            };
-                            is_temp?: boolean;
-                        };
-                    };
-                    params?: {
-                        rule_id?: string;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { rule_id: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/rule_external`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=delete&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=access_record.access_photo&version=v1 document }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=rule_external&version=v1 document }
-             */
-            delete: async (
-                payload?: {
-                    params: { rule_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/rule_external`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=device_bind&version=v1 click to debug }
+             * 下载开门时的人脸识别图片
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=device_bind&project=acs&resource=rule_external&version=v1 document }
-             */
-            deviceBind: async (
-                payload?: {
-                    data: { device_id: string; rule_ids: Array<string> };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/rule_external/device_bind`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=rule_external&version=v1 document }
+             * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录，对于使用人脸识别方式进行开门的识别记录，还会有抓拍图。;;可以用该接口下载开门时的人脸识别照片。
              */
             get: async (
                 payload?: {
-                    params?: {
-                        device_id?: string;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                rules: Array<{
-                                    id?: string;
-                                    name?: string;
-                                    devices?: Array<{
-                                        id?: string;
-                                        name?: string;
-                                    }>;
-                                    user_count?: string;
-                                    users?: Array<{
-                                        user_type: number;
-                                        user_id?: string;
-                                        user_name?: string;
-                                        phone_num?: string;
-                                        department_id?: string;
-                                    }>;
-                                    visitor_count?: string;
-                                    visitors?: Array<{
-                                        user_type: number;
-                                        user_id?: string;
-                                        user_name?: string;
-                                        phone_num?: string;
-                                        department_id?: string;
-                                    }>;
-                                    remind_face?: boolean;
-                                    opening_time?: {
-                                        valid_day?: {
-                                            start_day: number;
-                                            end_day: number;
-                                        };
-                                        weekdays?: Array<number>;
-                                        day_times?: Array<{
-                                            start_hhmm: number;
-                                            end_hhmm: number;
-                                        }>;
-                                    };
-                                    is_temp?: boolean;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/rule_external`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * user.face
-         */
-        userFace: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user-face/get document }
-             *
-             * 下载人脸图片
-             *
-             * 对于已经录入人脸图片的用户，可以使用该接口下载用户人脸图片。
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        is_cropped?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { user_id: string };
+                    path?: { access_record_id?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -594,7 +289,7 @@ export default abstract class Client {
                 const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                            `${this.domain}/open-apis/acs/v1/access_records/:access_record_id/access_photo`,
                             path
                         ),
                         method: "GET",
@@ -642,45 +337,43 @@ export default abstract class Client {
                     headers: res.headers,
                 };
             },
+        },
+        /**
+         * user
+         */
+        user: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=update&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user-face/update document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=acs&resource=user&version=v1 document }
              *
-             * 上传人脸图片
+             * 修改用户部分信息
              *
-             * 用户需要录入人脸图片才可以使用门禁考勤机。使用该 API 上传门禁用户的人脸图片。
+             * 飞书智能门禁在人脸识别成功后会有韦根信号输出，输出用户的卡号。;对于使用韦根协议的门禁系统，企业可使用该接口录入用户卡号。
              */
-            update: async (
+            patch: async (
                 payload?: {
-                    data: {
-                        files: Buffer | fs.ReadStream;
-                        file_type: string;
-                        file_name: string;
-                    };
+                    data?: { feature?: { card?: number } };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
-                    path: { user_id: string };
+                    path?: { user_id?: string };
                 },
                 options?: IRequestOptions
             ) => {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await this.httpInstance
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                            `${this.domain}/open-apis/acs/v1/users/:user_id`,
                             path
                         ),
-                        method: "PUT",
+                        method: "PATCH",
                         data,
                         params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
+                        headers,
                         paramsSerializer: (params) =>
                             stringify(params, { arrayFormat: "repeat" }),
                     })
@@ -688,17 +381,11 @@ export default abstract class Client {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-                return res?.data || null;
             },
-        },
-        /**
-         * 用户管理
-         */
-        user: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=user&version=v1 document }
              *
              * 获取单个用户信息
              *
@@ -848,7 +535,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=acs&resource=user&version=v1 document }
              *
              * 获取用户列表
              *
@@ -904,22 +591,233 @@ export default abstract class Client {
                         throw e;
                     });
             },
+        },
+        /**
+         * user.face
+         */
+        userFace: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=patch&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/patch document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=user.face&version=v1 document }
              *
-             * 修改用户部分信息
+             * 下载人脸图片
              *
-             * 飞书智能门禁在人脸识别成功后会有韦根信号输出，输出用户的卡号。;对于使用韦根协议的门禁系统，企业可使用该接口录入用户卡号。
+             * 对于已经录入人脸图片的用户，可以使用该接口下载用户人脸图片。
              */
-            patch: async (
+            get: async (
                 payload?: {
-                    data?: { feature?: { card?: number } };
+                    params?: {
+                        is_cropped?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { user_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=acs&resource=user.face&version=v1 document }
+             *
+             * 上传人脸图片
+             *
+             * 用户需要录入人脸图片才可以使用门禁考勤机。使用该 API 上传门禁用户的人脸图片。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        files: Buffer | fs.ReadStream;
+                        file_type: string;
+                        file_name: string;
+                    };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
-                    path?: { user_id?: string };
+                    path: { user_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+        },
+        /**
+         * rule_external
+         */
+        ruleExternal: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=rule_external&version=v1 document }
+             *
+             * 获取权限组信息
+             *
+             * 获取权限组信息
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        device_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rules: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    devices?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                    }>;
+                                    user_count?: string;
+                                    users?: Array<{
+                                        user_type: number;
+                                        user_id?: string;
+                                        user_name?: string;
+                                        phone_num?: string;
+                                        department_id?: string;
+                                    }>;
+                                    visitor_count?: string;
+                                    visitors?: Array<{
+                                        user_type: number;
+                                        user_id?: string;
+                                        user_name?: string;
+                                        phone_num?: string;
+                                        department_id?: string;
+                                    }>;
+                                    remind_face?: boolean;
+                                    opening_time?: {
+                                        valid_day?: {
+                                            start_day: number;
+                                            end_day: number;
+                                        };
+                                        weekdays?: Array<number>;
+                                        day_times?: Array<{
+                                            start_hhmm: number;
+                                            end_hhmm: number;
+                                        }>;
+                                    };
+                                    is_temp?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=rule_external&version=v1 document }
+             *
+             * 删除权限组
+             *
+             * 删除权限组
+             */
+            delete: async (
+                payload?: {
+                    params: { rule_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -929,10 +827,128 @@ export default abstract class Client {
                 return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/users/:user_id`,
+                            `${this.domain}/open-apis/acs/v1/rule_external`,
                             path
                         ),
-                        method: "PATCH",
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=device_bind&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=device_bind&project=acs&resource=rule_external&version=v1 document }
+             *
+             * 设备绑定权限组
+             *
+             * 设备绑定权限组
+             */
+            deviceBind: async (
+                payload?: {
+                    data: { device_id: string; rule_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external/device_bind`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=rule_external&version=v1 document }
+             *
+             * 创建或更新权限组
+             *
+             * 创建或更新权限组
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        rule: {
+                            id?: string;
+                            name?: string;
+                            devices?: Array<{ id?: string; name?: string }>;
+                            user_count?: string;
+                            users?: Array<{
+                                user_type: number;
+                                user_id?: string;
+                                user_name?: string;
+                                phone_num?: string;
+                                department_id?: string;
+                            }>;
+                            visitor_count?: string;
+                            visitors?: Array<{
+                                user_type: number;
+                                user_id?: string;
+                                user_name?: string;
+                                phone_num?: string;
+                                department_id?: string;
+                            }>;
+                            remind_face?: boolean;
+                            opening_time?: {
+                                valid_day?: {
+                                    start_day: number;
+                                    end_day: number;
+                                };
+                                weekdays?: Array<number>;
+                                day_times?: Array<{
+                                    start_hhmm: number;
+                                    end_hhmm: number;
+                                }>;
+                            };
+                            is_temp?: boolean;
+                        };
+                    };
+                    params?: {
+                        rule_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { rule_id: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -950,9 +966,52 @@ export default abstract class Client {
          */
         visitor: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=visitor&version=v1 document }
+             *
+             * 删除访客
+             *
+             * 删除访客
+             */
+            delete: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { visitor_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/visitors/:visitor_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=create&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=visitor&version=v1 document }
+             *
+             * 添加访客
+             *
+             * 添加访客
              */
             create: async (
                 payload?: {
@@ -999,119 +1058,10 @@ export default abstract class Client {
                         throw e;
                     });
             },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=visitor&version=v1 document }
-             */
-            delete: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { visitor_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/acs/v1/visitors/:visitor_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
         },
         v1: {
             /**
-             * access_record.access_photo
-             */
-            accessRecordAccessPhoto: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=access_record.access_photo&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record-access_photo/get document }
-                 *
-                 * 下载开门时的人脸识别图片
-                 *
-                 * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录，对于使用人脸识别方式进行开门的识别记录，还会有抓拍图。;;可以用该接口下载开门时的人脸识别照片。
-                 */
-                get: async (
-                    payload?: {
-                        path?: { access_record_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/access_records/:access_record_id/access_photo`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
-                },
-            },
-            /**
-             * 门禁记录
+             * access_record
              */
             accessRecord: {
                 listWithIterator: async (
@@ -1223,7 +1173,7 @@ export default abstract class Client {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=acs&resource=access_record&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=acs&resource=access_record&version=v1 document }
                  *
                  * 获取门禁记录列表
                  *
@@ -1289,13 +1239,13 @@ export default abstract class Client {
                 },
             },
             /**
-             * 门禁设备
+             * device
              */
             device: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=acs&resource=device&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/device/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=acs&resource=device&version=v1 document }
                  *
                  * 获取门禁设备列表
                  *
@@ -1346,258 +1296,21 @@ export default abstract class Client {
                 },
             },
             /**
-             * rule_external
+             * access_record.access_photo
              */
-            ruleExternal: {
+            accessRecordAccessPhoto: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=access_record.access_photo&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=rule_external&version=v1 document }
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            rule: {
-                                id?: string;
-                                name?: string;
-                                devices?: Array<{ id?: string; name?: string }>;
-                                user_count?: string;
-                                users?: Array<{
-                                    user_type: number;
-                                    user_id?: string;
-                                    user_name?: string;
-                                    phone_num?: string;
-                                    department_id?: string;
-                                }>;
-                                visitor_count?: string;
-                                visitors?: Array<{
-                                    user_type: number;
-                                    user_id?: string;
-                                    user_name?: string;
-                                    phone_num?: string;
-                                    department_id?: string;
-                                }>;
-                                remind_face?: boolean;
-                                opening_time?: {
-                                    valid_day?: {
-                                        start_day: number;
-                                        end_day: number;
-                                    };
-                                    weekdays?: Array<number>;
-                                    day_times?: Array<{
-                                        start_hhmm: number;
-                                        end_hhmm: number;
-                                    }>;
-                                };
-                                is_temp?: boolean;
-                            };
-                        };
-                        params?: {
-                            rule_id?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { rule_id: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/rule_external`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=delete&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=access_record.access_photo&version=v1 document }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=rule_external&version=v1 document }
-                 */
-                delete: async (
-                    payload?: {
-                        params: { rule_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/rule_external`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=device_bind&version=v1 click to debug }
+                 * 下载开门时的人脸识别图片
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=device_bind&project=acs&resource=rule_external&version=v1 document }
-                 */
-                deviceBind: async (
-                    payload?: {
-                        data: { device_id: string; rule_ids: Array<string> };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/rule_external/device_bind`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=rule_external&version=v1 document }
+                 * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录，对于使用人脸识别方式进行开门的识别记录，还会有抓拍图。;;可以用该接口下载开门时的人脸识别照片。
                  */
                 get: async (
                     payload?: {
-                        params?: {
-                            device_id?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    rules: Array<{
-                                        id?: string;
-                                        name?: string;
-                                        devices?: Array<{
-                                            id?: string;
-                                            name?: string;
-                                        }>;
-                                        user_count?: string;
-                                        users?: Array<{
-                                            user_type: number;
-                                            user_id?: string;
-                                            user_name?: string;
-                                            phone_num?: string;
-                                            department_id?: string;
-                                        }>;
-                                        visitor_count?: string;
-                                        visitors?: Array<{
-                                            user_type: number;
-                                            user_id?: string;
-                                            user_name?: string;
-                                            phone_num?: string;
-                                            department_id?: string;
-                                        }>;
-                                        remind_face?: boolean;
-                                        opening_time?: {
-                                            valid_day?: {
-                                                start_day: number;
-                                                end_day: number;
-                                            };
-                                            weekdays?: Array<number>;
-                                            day_times?: Array<{
-                                                start_hhmm: number;
-                                                end_hhmm: number;
-                                            }>;
-                                        };
-                                        is_temp?: boolean;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/rule_external`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * user.face
-             */
-            userFace: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user-face/get document }
-                 *
-                 * 下载人脸图片
-                 *
-                 * 对于已经录入人脸图片的用户，可以使用该接口下载用户人脸图片。
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            is_cropped?: boolean;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { user_id: string };
+                        path?: { access_record_id?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1607,7 +1320,7 @@ export default abstract class Client {
                     const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                                `${this.domain}/open-apis/acs/v1/access_records/:access_record_id/access_photo`,
                                 path
                             ),
                             method: "GET",
@@ -1655,48 +1368,46 @@ export default abstract class Client {
                         headers: res.headers,
                     };
                 },
+            },
+            /**
+             * user
+             */
+            user: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=update&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user-face/update document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=acs&resource=user&version=v1 document }
                  *
-                 * 上传人脸图片
+                 * 修改用户部分信息
                  *
-                 * 用户需要录入人脸图片才可以使用门禁考勤机。使用该 API 上传门禁用户的人脸图片。
+                 * 飞书智能门禁在人脸识别成功后会有韦根信号输出，输出用户的卡号。;对于使用韦根协议的门禁系统，企业可使用该接口录入用户卡号。
                  */
-                update: async (
+                patch: async (
                     payload?: {
-                        data: {
-                            files: Buffer | fs.ReadStream;
-                            file_type: string;
-                            file_name: string;
-                        };
+                        data?: { feature?: { card?: number } };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
-                        path: { user_id: string };
+                        path?: { user_id?: string };
                     },
                     options?: IRequestOptions
                 ) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    const res = await this.httpInstance
+                    return this.httpInstance
                         .request<
                             any,
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                                `${this.domain}/open-apis/acs/v1/users/:user_id`,
                                 path
                             ),
-                            method: "PUT",
+                            method: "PATCH",
                             data,
                             params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
+                            headers,
                             paramsSerializer: (params) =>
                                 stringify(params, { arrayFormat: "repeat" }),
                         })
@@ -1704,17 +1415,11 @@ export default abstract class Client {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-                    return res?.data || null;
                 },
-            },
-            /**
-             * 用户管理
-             */
-            user: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=user&version=v1 document }
                  *
                  * 获取单个用户信息
                  *
@@ -1866,7 +1571,7 @@ export default abstract class Client {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=acs&resource=user&version=v1 document }
                  *
                  * 获取用户列表
                  *
@@ -1922,22 +1627,236 @@ export default abstract class Client {
                             throw e;
                         });
                 },
+            },
+            /**
+             * user.face
+             */
+            userFace: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user&apiName=patch&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/patch document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=user.face&version=v1 document }
                  *
-                 * 修改用户部分信息
+                 * 下载人脸图片
                  *
-                 * 飞书智能门禁在人脸识别成功后会有韦根信号输出，输出用户的卡号。;对于使用韦根协议的门禁系统，企业可使用该接口录入用户卡号。
+                 * 对于已经录入人脸图片的用户，可以使用该接口下载用户人脸图片。
                  */
-                patch: async (
+                get: async (
                     payload?: {
-                        data?: { feature?: { card?: number } };
+                        params?: {
+                            is_cropped?: boolean;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { user_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=user.face&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=acs&resource=user.face&version=v1 document }
+                 *
+                 * 上传人脸图片
+                 *
+                 * 用户需要录入人脸图片才可以使用门禁考勤机。使用该 API 上传门禁用户的人脸图片。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            files: Buffer | fs.ReadStream;
+                            file_type: string;
+                            file_name: string;
+                        };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
-                        path?: { user_id?: string };
+                        path: { user_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * rule_external
+             */
+            ruleExternal: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=rule_external&version=v1 document }
+                 *
+                 * 获取权限组信息
+                 *
+                 * 获取权限组信息
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            device_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    rules: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        devices?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                        }>;
+                                        user_count?: string;
+                                        users?: Array<{
+                                            user_type: number;
+                                            user_id?: string;
+                                            user_name?: string;
+                                            phone_num?: string;
+                                            department_id?: string;
+                                        }>;
+                                        visitor_count?: string;
+                                        visitors?: Array<{
+                                            user_type: number;
+                                            user_id?: string;
+                                            user_name?: string;
+                                            phone_num?: string;
+                                            department_id?: string;
+                                        }>;
+                                        remind_face?: boolean;
+                                        opening_time?: {
+                                            valid_day?: {
+                                                start_day: number;
+                                                end_day: number;
+                                            };
+                                            weekdays?: Array<number>;
+                                            day_times?: Array<{
+                                                start_hhmm: number;
+                                                end_hhmm: number;
+                                            }>;
+                                        };
+                                        is_temp?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=rule_external&version=v1 document }
+                 *
+                 * 删除权限组
+                 *
+                 * 删除权限组
+                 */
+                delete: async (
+                    payload?: {
+                        params: { rule_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1950,10 +1869,131 @@ export default abstract class Client {
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/users/:user_id`,
+                                `${this.domain}/open-apis/acs/v1/rule_external`,
                                 path
                             ),
-                            method: "PATCH",
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=device_bind&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=device_bind&project=acs&resource=rule_external&version=v1 document }
+                 *
+                 * 设备绑定权限组
+                 *
+                 * 设备绑定权限组
+                 */
+                deviceBind: async (
+                    payload?: {
+                        data: { device_id: string; rule_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external/device_bind`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=rule_external&version=v1 document }
+                 *
+                 * 创建或更新权限组
+                 *
+                 * 创建或更新权限组
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            rule: {
+                                id?: string;
+                                name?: string;
+                                devices?: Array<{ id?: string; name?: string }>;
+                                user_count?: string;
+                                users?: Array<{
+                                    user_type: number;
+                                    user_id?: string;
+                                    user_name?: string;
+                                    phone_num?: string;
+                                    department_id?: string;
+                                }>;
+                                visitor_count?: string;
+                                visitors?: Array<{
+                                    user_type: number;
+                                    user_id?: string;
+                                    user_name?: string;
+                                    phone_num?: string;
+                                    department_id?: string;
+                                }>;
+                                remind_face?: boolean;
+                                opening_time?: {
+                                    valid_day?: {
+                                        start_day: number;
+                                        end_day: number;
+                                    };
+                                    weekdays?: Array<number>;
+                                    day_times?: Array<{
+                                        start_hhmm: number;
+                                        end_hhmm: number;
+                                    }>;
+                                };
+                                is_temp?: boolean;
+                            };
+                        };
+                        params?: {
+                            rule_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { rule_id: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -1971,9 +2011,55 @@ export default abstract class Client {
              */
             visitor: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=visitor&version=v1 document }
+                 *
+                 * 删除访客
+                 *
+                 * 删除访客
+                 */
+                delete: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { visitor_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/visitors/:visitor_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=create&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=visitor&version=v1 document }
+                 *
+                 * 添加访客
+                 *
+                 * 添加访客
                  */
                 create: async (
                     payload?: {
@@ -2009,44 +2095,6 @@ export default abstract class Client {
                                 path
                             ),
                             method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=visitor&version=v1 document }
-                 */
-                delete: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { visitor_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/acs/v1/visitors/:visitor_id`,
-                                path
-                            ),
-                            method: "DELETE",
                             data,
                             params,
                             headers,

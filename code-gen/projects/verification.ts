@@ -29,18 +29,18 @@ export default abstract class Client extends vc {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 认证信息
-     */
+         
+         */
     verification = {
         v1: {
             /**
-             * 认证信息
+             * verification
              */
             verification: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=verification&resource=verification&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/verification-v1/verification/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=verification&resource=verification&version=v1 document }
                  *
                  * 获取认证信息
                  *

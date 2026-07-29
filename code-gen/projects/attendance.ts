@@ -29,389 +29,21 @@ export default abstract class Client extends attendance_machine {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 打卡
-     */
+         
+         */
     attendance = {
         /**
-         * approval_info
-         */
-        approvalInfo: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_info&apiName=process&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process document }
-             *
-             * 通知审批状态更新
-             *
-             * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口更新写入飞书考勤系统中的三方系统审批状态，例如请假、加班、外出、出差、补卡等审批，状态包括通过、不通过、撤销等。
-             *
-             * 发起状态的审批才可以被更新为通过、不通过，已经通过的审批才可以被更新为撤销。
-             */
-            process: async (
-                payload?: {
-                    data: {
-                        approval_id: string;
-                        approval_type: string;
-                        status: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                approval_info?: {
-                                    approval_id: string;
-                                    approval_type:
-                                        | "leave"
-                                        | "overtime"
-                                        | "trip"
-                                        | "out"
-                                        | "remedy";
-                                    status: number;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * archive_rule
-         */
-        archiveRule: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_report&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_report&project=attendance&resource=archive_rule&version=v1 document }
-             */
-            delReport: async (
-                payload?: {
-                    data: {
-                        month: string;
-                        operator_id: string;
-                        archive_rule_id: string;
-                        user_ids?: Array<string>;
-                    };
-                    params: { employee_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/archive_rule/del_report`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/archive_rule`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    report_id?: string;
-                                                    report_name?: {
-                                                        zh?: string;
-                                                        en?: string;
-                                                        ja?: string;
-                                                    };
-                                                    archive_rule_id?: string;
-                                                    archive_rule_name?: {
-                                                        zh?: string;
-                                                        en?: string;
-                                                        ja?: string;
-                                                    };
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=archive_rule&version=v1 document }
-             */
-            list: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    report_id?: string;
-                                    report_name?: {
-                                        zh?: string;
-                                        en?: string;
-                                        ja?: string;
-                                    };
-                                    archive_rule_id?: string;
-                                    archive_rule_name?: {
-                                        zh?: string;
-                                        en?: string;
-                                        ja?: string;
-                                    };
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/archive_rule`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report&project=attendance&resource=archive_rule&version=v1 document }
-             */
-            uploadReport: async (
-                payload?: {
-                    data: {
-                        month: string;
-                        operator_id: string;
-                        archive_report_datas?: Array<{
-                            member_id: string;
-                            start_time: string;
-                            end_time: string;
-                            field_datas?: Array<{
-                                code: string;
-                                value?: string;
-                            }>;
-                        }>;
-                        archive_rule_id: string;
-                    };
-                    params: { employee_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                invalid_code?: Array<string>;
-                                invalid_member_id?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
-             */
-            userStatsFieldsQuery: async (
-                payload?: {
-                    data: {
-                        locale?: string;
-                        month: string;
-                        archive_rule_id: string;
-                        operator_id: string;
-                    };
-                    params: { employee_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                archive_report_fields?: Array<{
-                                    code?: string;
-                                    title?: string;
-                                    upper_titles?: Array<string>;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 文件
+         * file
          */
         file: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=download&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/file/download document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=attendance&resource=file&version=v1 document }
              *
-             * 下载文件
+             * 下载用户人脸识别照片
              *
-             * 通过文件 ID 下载指定的文件。
+             * 通过文件 ID 下载用户的头像照片文件。
              */
             download: async (
                 payload?: {
@@ -476,11 +108,11 @@ export default abstract class Client extends attendance_machine {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=upload&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/file/upload document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=attendance&resource=file&version=v1 document }
              *
-             * 上传文件
+             * 上传用户人脸识别照片
              *
-             * 上传文件并获取文件 ID，可用于“修改用户设置”接口中的 face_key 参数。
+             * 上传用户人脸照片并获取文件 ID，对应小程序端的人脸录入功能
              */
             upload: async (
                 payload?: {
@@ -523,19 +155,299 @@ export default abstract class Client extends attendance_machine {
             },
         },
         /**
-         * 考勤组管理
+         * group
          */
         group: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                group_list?: Array<{
+                                                    group_id: string;
+                                                    group_name: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=group&version=v1 document }
+             *
+             * 查询所有考勤组
+             *
+             * 翻页获取所有考勤组列表。列表中的数据为考勤组信息，字段包含考勤组名称和考勤组id
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                group_list?: Array<{
+                                    group_id: string;
+                                    group_name: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=attendance&resource=group&version=v1 document }
+             *
+             * 按名称查询考勤组
+             *
+             * 按考勤组名称查询考勤组摘要信息。查询条件支持名称精确匹配和模糊匹配两种方式。查询结果按考勤组修改时间 desc 排序，且最大记录数为 10 条。对应页面设置-假勤设置-[考勤组](https://example.feishu.cn/people/workforce-management/setting/group/list)的名称搜索功能
+             *
+             * 该接口依赖的数据和考勤组主数据间存在数据同步延时（正常数据同步 2 秒以内），因此在使用该接口时需注意评估数据延迟潜在风险。
+             */
+            search: async (
+                payload?: {
+                    data: { group_name: string; exactly_matched?: boolean };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                group_list?: Array<{
+                                    group_id: string;
+                                    group_name: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=attendance&resource=group&version=v1 document }
+             *
+             * 删除考勤组
+             *
+             * 通过考勤组 ID 删除考勤组。对应设置-假勤设置-[考勤组](https://example.feishu.cn/people/workforce-management/setting/group/list)操作列的删除功能
+             */
+            delete: async (
+                payload?: {
+                    path: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_user&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_user&project=attendance&resource=group&version=v1 document }
+             *
+             * 查询考勤组下所有成员
+             *
+             * 查询指定考勤组下的所有成员
+             */
+            listUser: async (
+                payload?: {
+                    params: {
+                        employee_type: string;
+                        dept_type: string;
+                        page_size?: number;
+                        page_token?: string;
+                        member_clock_type: number;
+                    };
+                    path: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                users?: Array<{
+                                    user_id?: string;
+                                    department_ids?: Array<string>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/:group_id/list_user`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=group&version=v1 document }
              *
              * 创建或修改考勤组
              *
-             * 考勤组，是对部门或者员工在某个特定场所及特定时间段内的出勤情况（包括上下班、迟到、早退、病假、婚假、丧假、公休、工作时间、加班情况等）的一种规则设定。;;通过设置考勤组，可以从部门、员工两个维度，来设定考勤方式、考勤时间、考勤地点等考勤规则。
+             * 考勤组，是对部门或者员工在某个特定场所及特定时间段内的出勤情况（包括上下班、迟到、早退、病假、婚假、丧假、公休、工作时间、加班情况等）的一种规则设定。;;通过设置考勤组，可以从部门、员工两个维度，来设定考勤方式、考勤时间、考勤地点等考勤规则。;;对应功能同设置-假勤设置-[考勤组](https://example.feishu.cn/people/workforce-management/setting/group/list)的“新建”功能
              *
-             * 出于安全考虑，目前通过该接口只允许修改自己创建的考勤组。
+             * 注意：此接口在修改时为数据覆盖，需要传入全部的考勤组信息;;出于安全考虑，如果传入操作人，该接口只允许修改操作人有权限的考勤组。
              */
             create: async (
                 payload?: {
@@ -915,49 +827,13 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/delete document }
-             *
-             * 删除考勤组
-             *
-             * 通过班次 ID 删除班次。
-             */
-            delete: async (
-                payload?: {
-                    path: { group_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=group&version=v1 document }
              *
-             * 获取考勤组详情
+             * 按 ID 查询考勤组
              *
-             * 通过考勤组 ID 获取考勤组详情。
+             * 通过考勤组 ID 获取考勤组详情。包含基本信息、考勤班次、考勤方式、考勤设置信息
              */
             get: async (
                 payload?: {
@@ -1165,6 +1041,403 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+        },
+        /**
+         * user_daily_shift
+         */
+        userDailyShift: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_daily_shift&version=v1 document }
+             *
+             * 查询班表信息
+             *
+             * 支持查询多个用户的排班情况，注意此接口返回的是用户维度的排班结果，与页面功能并不对应。可以通过返回结果中的group_id查询考勤组[按 ID 查询考勤组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/get) ，shift_id查询班次[按 ID 查询班次](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/get) 。查询的时间跨度不能超过 30 天。
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_date_from: number;
+                        check_date_to: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_daily_shifts?: Array<{
+                                    group_id: string;
+                                    shift_id: string;
+                                    month: number;
+                                    user_id: string;
+                                    day_no: number;
+                                    is_clear_schedule?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=attendance&resource=user_daily_shift&version=v1 document }
+             *
+             * 创建或修改排班表
+             *
+             * 排班表是用来描述考勤组内人员每天按哪个班次进行上班。目前排班表支持按x月y日对一位或多位人员进行排班。当用户的排班数据不存在时会进行创建，当用户的排班数据存在时会按照入参信息进行修改。注意：每人每天只能在一个考勤组中。
+             *
+             * 注意：如果返回code=0，但是msg返回如{人员：[日期，日期]}格式，代表人员在排班日期下未生效。这种一般是考勤组id与人员不匹配造成。
+             */
+            batchCreate: async (
+                payload?: {
+                    data: {
+                        user_daily_shifts: Array<{
+                            group_id: string;
+                            shift_id: string;
+                            month: number;
+                            user_id: string;
+                            day_no: number;
+                            is_clear_schedule?: boolean;
+                        }>;
+                        operator_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_daily_shifts?: Array<{
+                                    group_id: string;
+                                    shift_id: string;
+                                    month: number;
+                                    user_id: string;
+                                    day_no: number;
+                                    is_clear_schedule?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
+             *
+             * 创建或更改临时排班
+             *
+             * 可在排班表上创建或修改临时班次，并用于排班。目前支持按日期对一位或多位人员进行排临时班次。;临时排班为付费功能，如需使用请联系您的客户经理。
+             *
+             * 注意：如果返回code=0，且msg不为空，表示临时排班部分成功。 如msg返回{人员：[日期，日期]}格式，代表人员在排班日期下临时排班未成功。这种一般是考勤组id与人员不匹配造成的。
+             */
+            batchCreateTemp: async (
+                payload?: {
+                    data: {
+                        user_tmp_daily_shifts: Array<{
+                            group_id: string;
+                            user_id: string;
+                            date: number;
+                            shift_name: string;
+                            punch_time_simple_rules: Array<{
+                                on_time: string;
+                                off_time: string;
+                            }>;
+                        }>;
+                        operator_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_tmp_daily_shifts?: Array<{
+                                    group_id: string;
+                                    user_id: string;
+                                    date: number;
+                                    shift_name: string;
+                                    punch_time_simple_rules: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create_temp`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_task_remedy
+         */
+        userTaskRemedy: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 通知补卡审批发起
+             *
+             * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口，将在三方审批系统中发起的补卡审批数据，写入到飞书考勤系统中，状态为审批中。写入后可以由[通知审批状态更新](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process) 进行状态更新
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        remedy_date: number;
+                        punch_no: number;
+                        work_type: number;
+                        remedy_time: string;
+                        reason: string;
+                        time?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_remedy?: {
+                                    user_id: string;
+                                    remedy_date: number;
+                                    punch_no: number;
+                                    work_type: number;
+                                    approval_id?: string;
+                                    remedy_time: string;
+                                    status?: number;
+                                    reason: string;
+                                    time?: string;
+                                    time_zone?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_user_allowed_remedys&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_user_allowed_remedys&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 获取可补卡时间
+             *
+             * 获取用户某天可以补的第几次上 / 下班卡的时间。
+             */
+            queryUserAllowedRemedys: async (
+                payload?: {
+                    data: { user_id: string; remedy_date: number };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_allowed_remedys?: Array<{
+                                    user_id: string;
+                                    remedy_date: number;
+                                    is_free_punch?: boolean;
+                                    punch_no?: number;
+                                    work_type?: number;
+                                    punch_status?: string;
+                                    normal_punch_time?: string;
+                                    remedy_start_time?: string;
+                                    remedy_end_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 获取补卡记录
+             *
+             * 补卡：用户通过审批的方式，在某一次上/下班的打卡时间范围内，补充一条打卡记录，用以修正用户的考勤结果。本接口专用于获取员工的补卡记录（无页面功能对应）
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_time_from: string;
+                        check_time_to: string;
+                        check_date_type?:
+                            | "PeriodTime"
+                            | "CreateTime"
+                            | "UpdateTime";
+                        status?: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_remedys?: Array<{
+                                    user_id: string;
+                                    remedy_date: number;
+                                    punch_no: number;
+                                    work_type: number;
+                                    approval_id?: string;
+                                    remedy_time: string;
+                                    status?: number;
+                                    reason: string;
+                                    time?: string;
+                                    time_zone?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * shift
+         */
+        shift: {
             listWithIterator: async (
                 payload?: {
                     params?: { page_size?: number; page_token?: string };
@@ -1182,7 +1455,7 @@ export default abstract class Client extends attendance_machine {
                     const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/groups`,
+                                `${this.domain}/open-apis/attendance/v1/shifts`,
                                 path
                             ),
                             method: "GET",
@@ -1228,9 +1501,67 @@ export default abstract class Client extends attendance_machine {
                                             code?: number;
                                             msg?: string;
                                             data?: {
-                                                group_list?: Array<{
-                                                    group_id: string;
-                                                    group_name: string;
+                                                shift_list?: Array<{
+                                                    shift_id: string;
+                                                    shift_name: string;
+                                                    punch_times: number;
+                                                    sub_shift_leader_ids?: Array<string>;
+                                                    is_flexible?: boolean;
+                                                    flexible_minutes?: number;
+                                                    flexible_rule?: Array<{
+                                                        flexible_early_minutes: number;
+                                                        flexible_late_minutes: number;
+                                                    }>;
+                                                    no_need_off?: boolean;
+                                                    punch_time_rule: Array<{
+                                                        on_time: string;
+                                                        off_time: string;
+                                                        late_minutes_as_late: number;
+                                                        late_minutes_as_lack: number;
+                                                        on_advance_minutes: number;
+                                                        early_minutes_as_early: number;
+                                                        early_minutes_as_lack: number;
+                                                        off_delay_minutes: number;
+                                                        late_minutes_as_serious_late?: number;
+                                                        no_need_on?: boolean;
+                                                        no_need_off?: boolean;
+                                                    }>;
+                                                    late_off_late_on_rule?: Array<{
+                                                        late_off_minutes: number;
+                                                        late_on_minutes: number;
+                                                    }>;
+                                                    rest_time_rule?: Array<{
+                                                        rest_begin_time: string;
+                                                        rest_end_time: string;
+                                                    }>;
+                                                    overtime_rule?: Array<{
+                                                        on_overtime: string;
+                                                        off_overtime: string;
+                                                    }>;
+                                                    day_type?: number;
+                                                    overtime_rest_time_rule?: Array<{
+                                                        rest_begin_time: string;
+                                                        rest_end_time: string;
+                                                    }>;
+                                                    late_minutes_as_serious_late?: number;
+                                                    shift_middle_time_rule?: {
+                                                        middle_time_type?: number;
+                                                        fixed_middle_time?: string;
+                                                    };
+                                                    shift_attendance_time_config?: {
+                                                        attendance_time?: number;
+                                                        on_attendance_time?: number;
+                                                        off_attendance_time?: number;
+                                                    };
+                                                    late_off_late_on_setting?: {
+                                                        late_off_base_on_time_type?: number;
+                                                        late_on_base_on_time_type?: number;
+                                                    };
+                                                    id?: string;
+                                                    rest_time_flexible_configs?: Array<{
+                                                        need_flexible?: boolean;
+                                                        late_mins?: number;
+                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1253,13 +1584,13 @@ export default abstract class Client extends attendance_machine {
                 return Iterable;
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=shift&version=v1 document }
              *
-             * 获取考勤组列表
+             * 查询所有班次
              *
-             * 翻页获取所有考勤组列表。
+             * 飞书人事管理后台中假勤设置-[班次配置](https://example.feishu.cn/people/workforce-management/setting/group/shifts)中的翻页查询所有班次功能，展示班次名称、打卡规则、弹性班次规则、休息规则等
              */
             list: async (
                 payload?: {
@@ -1277,9 +1608,67 @@ export default abstract class Client extends attendance_machine {
                             code?: number;
                             msg?: string;
                             data?: {
-                                group_list?: Array<{
-                                    group_id: string;
-                                    group_name: string;
+                                shift_list?: Array<{
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
+                                    }>;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1287,7 +1676,7 @@ export default abstract class Client extends attendance_machine {
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/groups`,
+                            `${this.domain}/open-apis/attendance/v1/shifts`,
                             path
                         ),
                         method: "GET",
@@ -1303,20 +1692,53 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_user&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_user&project=attendance&resource=group&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=attendance&resource=shift&version=v1 document }
+             *
+             * 删除班次
+             *
+             * 通过班次 ID 删除班次。对应功能为假勤设置-[班次设置](https://example.feishu.cn/people/workforce-management/setting/group/shifts)班次列表中操作栏的删除按钮。
              */
-            listUser: async (
+            delete: async (
                 payload?: {
-                    params: {
-                        employee_type: string;
-                        dept_type: string;
-                        page_size?: number;
-                        page_token?: string;
-                        member_clock_type: number;
-                    };
-                    path: { group_id: string };
+                    path: { shift_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=shift&version=v1 document }
+             *
+             * 查询班次
+             *
+             * 通过班次 ID 获取班次详情。
+             */
+            get: async (
+                payload?: {
+                    path: { shift_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1330,17 +1752,71 @@ export default abstract class Client extends attendance_machine {
                             code?: number;
                             msg?: string;
                             data?: {
-                                users?: Array<{
-                                    user_id?: string;
-                                    department_ids?: Array<string>;
+                                shift_id: string;
+                                shift_name: string;
+                                punch_times: number;
+                                sub_shift_leader_ids?: Array<string>;
+                                is_flexible?: boolean;
+                                flexible_minutes?: number;
+                                flexible_rule?: Array<{
+                                    flexible_early_minutes: number;
+                                    flexible_late_minutes: number;
                                 }>;
-                                page_token?: string;
-                                has_more?: boolean;
+                                no_need_off?: boolean;
+                                punch_time_rule: Array<{
+                                    on_time: string;
+                                    off_time: string;
+                                    late_minutes_as_late: number;
+                                    late_minutes_as_lack: number;
+                                    on_advance_minutes: number;
+                                    early_minutes_as_early: number;
+                                    early_minutes_as_lack: number;
+                                    off_delay_minutes: number;
+                                    late_minutes_as_serious_late?: number;
+                                    no_need_on?: boolean;
+                                    no_need_off?: boolean;
+                                }>;
+                                late_off_late_on_rule?: Array<{
+                                    late_off_minutes: number;
+                                    late_on_minutes: number;
+                                }>;
+                                rest_time_rule?: Array<{
+                                    rest_begin_time: string;
+                                    rest_end_time: string;
+                                }>;
+                                overtime_rule?: Array<{
+                                    on_overtime: string;
+                                    off_overtime: string;
+                                }>;
+                                day_type?: number;
+                                overtime_rest_time_rule?: Array<{
+                                    rest_begin_time: string;
+                                    rest_end_time: string;
+                                }>;
+                                late_minutes_as_serious_late?: number;
+                                shift_middle_time_rule?: {
+                                    middle_time_type?: number;
+                                    fixed_middle_time?: string;
+                                };
+                                shift_attendance_time_config?: {
+                                    attendance_time?: number;
+                                    on_attendance_time?: number;
+                                    off_attendance_time?: number;
+                                };
+                                late_off_late_on_setting?: {
+                                    late_off_base_on_time_type?: number;
+                                    late_on_base_on_time_type?: number;
+                                };
+                                id?: string;
+                                rest_time_flexible_configs?: Array<{
+                                    need_flexible?: boolean;
+                                    late_mins?: number;
+                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/groups/:group_id/list_user`,
+                            `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
                             path
                         ),
                         method: "GET",
@@ -1356,19 +1832,17 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/search document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=shift&version=v1 document }
              *
-             * 按名称查询考勤组
+             * 按名称查询班次
              *
-             * 按考勤组名称查询考勤组摘要信息。查询条件支持名称精确匹配和模糊匹配两种方式。查询结果按考勤组修改时间 desc 排序，且最大记录数为 10 条。
-             *
-             * 该接口依赖的数据和考勤组主数据间存在数据同步延时（正常数据同步 2 秒以内），因此在使用该接口时需注意评估数据延迟潜在风险。
+             * 飞书人事管理后台中假勤设置-[班次配置](https://example.feishu.cn/people/workforce-management/setting/group/shifts)中的搜索班次名称功能，展示班次名称、打卡规则、弹性班次规则、休息规则等
              */
-            search: async (
+            query: async (
                 payload?: {
-                    data: { group_name: string; exactly_matched?: boolean };
+                    params: { shift_name: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1382,15 +1856,71 @@ export default abstract class Client extends attendance_machine {
                             code?: number;
                             msg?: string;
                             data?: {
-                                group_list?: Array<{
-                                    group_id: string;
-                                    group_name: string;
+                                shift_id: string;
+                                shift_name: string;
+                                punch_times: number;
+                                sub_shift_leader_ids?: Array<string>;
+                                is_flexible?: boolean;
+                                flexible_minutes?: number;
+                                flexible_rule?: Array<{
+                                    flexible_early_minutes: number;
+                                    flexible_late_minutes: number;
+                                }>;
+                                no_need_off?: boolean;
+                                punch_time_rule: Array<{
+                                    on_time: string;
+                                    off_time: string;
+                                    late_minutes_as_late: number;
+                                    late_minutes_as_lack: number;
+                                    on_advance_minutes: number;
+                                    early_minutes_as_early: number;
+                                    early_minutes_as_lack: number;
+                                    off_delay_minutes: number;
+                                    late_minutes_as_serious_late?: number;
+                                    no_need_on?: boolean;
+                                    no_need_off?: boolean;
+                                }>;
+                                late_off_late_on_rule?: Array<{
+                                    late_off_minutes: number;
+                                    late_on_minutes: number;
+                                }>;
+                                rest_time_rule?: Array<{
+                                    rest_begin_time: string;
+                                    rest_end_time: string;
+                                }>;
+                                overtime_rule?: Array<{
+                                    on_overtime: string;
+                                    off_overtime: string;
+                                }>;
+                                day_type?: number;
+                                overtime_rest_time_rule?: Array<{
+                                    rest_begin_time: string;
+                                    rest_end_time: string;
+                                }>;
+                                late_minutes_as_serious_late?: number;
+                                shift_middle_time_rule?: {
+                                    middle_time_type?: number;
+                                    fixed_middle_time?: string;
+                                };
+                                shift_attendance_time_config?: {
+                                    attendance_time?: number;
+                                    on_attendance_time?: number;
+                                    off_attendance_time?: number;
+                                };
+                                late_off_late_on_setting?: {
+                                    late_off_base_on_time_type?: number;
+                                    late_on_base_on_time_type?: number;
+                                };
+                                id?: string;
+                                rest_time_flexible_configs?: Array<{
+                                    need_flexible?: boolean;
+                                    late_mins?: number;
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/groups/search`,
+                            `${this.domain}/open-apis/attendance/v1/shifts/query`,
                             path
                         ),
                         method: "POST",
@@ -1405,177 +1935,14 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
-        },
-        /**
-         * leave_accrual_record
-         */
-        leaveAccrualRecord: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_accrual_record&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=attendance&resource=leave_accrual_record&version=v1 document }
-             */
-            patch: async (
-                payload?: {
-                    data: {
-                        leave_granting_record_id: string;
-                        employment_id: string;
-                        leave_type_id: string;
-                        reason: Array<{ lang: string; value: string }>;
-                        time_offset?: number;
-                        expiration_date?: string;
-                        quantity?: string;
-                        section_type?: number;
-                    };
-                    params?: {
-                        user_id_type?:
-                            | "open_id"
-                            | "people_corehr_id"
-                            | "union_id"
-                            | "user_id";
-                    };
-                    path?: { leave_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                record: {
-                                    id: string;
-                                    employment_id: string;
-                                    leave_type_id: string;
-                                    granting_quantity: string;
-                                    granting_unit: number;
-                                    effective_date: string;
-                                    expiration_date: string;
-                                    granted_by: number;
-                                    reason: Array<{
-                                        lang: string;
-                                        value: string;
-                                    }>;
-                                    created_at: string;
-                                    created_by: string;
-                                    updated_at: string;
-                                    updated_by: string;
-                                    section_type?: number;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/leave_accrual_record/:leave_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * leave_employ_expire_record
-         */
-        leaveEmployExpireRecord: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_employ_expire_record&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=leave_employ_expire_record&version=v1 document }
-             */
-            get: async (
-                payload?: {
-                    data: {
-                        employment_id: string;
-                        leave_type_id: string;
-                        start_expiration_date: string;
-                        end_expiration_date: string;
-                        time_offset?: number;
-                    };
-                    params?: {
-                        user_id_type?:
-                            | "open_id"
-                            | "people_corehr_id"
-                            | "union_id"
-                            | "user_id";
-                    };
-                    path?: { leave_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                records: Array<{
-                                    id: string;
-                                    employment_id: string;
-                                    leave_type_id: string;
-                                    granting_quantity: string;
-                                    left_granting_quantity: string;
-                                    granting_unit: number;
-                                    effective_date: string;
-                                    expiration_date: string;
-                                    reason: Array<{
-                                        lang: string;
-                                        value: string;
-                                    }>;
-                                    is_update_by_external: boolean;
-                                    accrual_source: number;
-                                    leave_sub_type_id: string;
-                                    section_type?: number;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/leave_employ_expire_records/:leave_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 考勤班次
-         */
-        shift: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=shift&version=v1 document }
              *
              * 创建班次
              *
-             * 班次是描述一次考勤任务时间规则的统称，比如一天打多少次卡，每次卡的上下班时间，晚到多长时间算迟到，晚到多长时间算缺卡等。
+             * 该接口用于创建企业的考勤班次。
              *
              * - 创建一个考勤组前，必须先创建一个或者多个班次。;- 一个公司内的班次是共享的，你可以直接引用他人创建的班次，但是需要注意的是，若他人修改了班次，会影响到你的考勤组及其考勤结果。
              */
@@ -1737,54 +2104,31 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+        },
+        /**
+         * user_stats_field
+         */
+        userStatsField: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=delete&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_field&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_stats_field&version=v1 document }
              *
-             * 删除班次
+             * 查询统计表头
              *
-             * 通过班次 ID 删除班次。
+             * 查询考勤统计支持的日度统计或月度统计的统计表头。报表的表头信息可以在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中查询到具体的报表信息，此接口专门用于查询表头数据
+             *
+             * 调用统计开放接口api目前不返回请假统计和加班统计的新增字段类型
              */
-            delete: async (
+            query: async (
                 payload?: {
-                    path: { shift_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/get document }
-             *
-             * 获取班次详情
-             *
-             * 通过班次 ID 获取班次详情。
-             */
-            get: async (
-                payload?: {
-                    path: { shift_id: string };
+                    data: {
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
+                        start_date: number;
+                        end_date: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1798,71 +2142,349 @@ export default abstract class Client extends attendance_machine {
                             code?: number;
                             msg?: string;
                             data?: {
-                                shift_id: string;
-                                shift_name: string;
-                                punch_times: number;
-                                sub_shift_leader_ids?: Array<string>;
-                                is_flexible?: boolean;
-                                flexible_minutes?: number;
-                                flexible_rule?: Array<{
-                                    flexible_early_minutes: number;
-                                    flexible_late_minutes: number;
-                                }>;
-                                no_need_off?: boolean;
-                                punch_time_rule: Array<{
-                                    on_time: string;
-                                    off_time: string;
-                                    late_minutes_as_late: number;
-                                    late_minutes_as_lack: number;
-                                    on_advance_minutes: number;
-                                    early_minutes_as_early: number;
-                                    early_minutes_as_lack: number;
-                                    off_delay_minutes: number;
-                                    late_minutes_as_serious_late?: number;
-                                    no_need_on?: boolean;
-                                    no_need_off?: boolean;
-                                }>;
-                                late_off_late_on_rule?: Array<{
-                                    late_off_minutes: number;
-                                    late_on_minutes: number;
-                                }>;
-                                rest_time_rule?: Array<{
-                                    rest_begin_time: string;
-                                    rest_end_time: string;
-                                }>;
-                                overtime_rule?: Array<{
-                                    on_overtime: string;
-                                    off_overtime: string;
-                                }>;
-                                day_type?: number;
-                                overtime_rest_time_rule?: Array<{
-                                    rest_begin_time: string;
-                                    rest_end_time: string;
-                                }>;
-                                late_minutes_as_serious_late?: number;
-                                shift_middle_time_rule?: {
-                                    middle_time_type?: number;
-                                    fixed_middle_time?: string;
+                                user_stats_field?: {
+                                    stats_type: "daily" | "month";
+                                    user_id: string;
+                                    fields: Array<{
+                                        code: string;
+                                        title: string;
+                                        child_fields?: Array<{
+                                            code: string;
+                                            title: string;
+                                            time_unit?: string;
+                                        }>;
+                                    }>;
                                 };
-                                shift_attendance_time_config?: {
-                                    attendance_time?: number;
-                                    on_attendance_time?: number;
-                                    off_attendance_time?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_fields/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_stats_view
+         */
+        userStatsView: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=attendance&resource=user_stats_view&version=v1 document }
+             *
+             * 更新统计设置
+             *
+             * 更新开发者定制的日度统计或月度统计的统计报表表头设置信息。报表的表头信息可以在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中查询到具体的报表信息，此接口专门用于更新表头信息。
+             *
+             * 本接口会对设置进行全量覆盖更新
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        view: {
+                            view_id: string;
+                            stats_type: "daily" | "month";
+                            user_id: string;
+                            items?: Array<{
+                                code: string;
+                                child_items?: Array<{
+                                    code: string;
+                                    value: string;
+                                }>;
+                            }>;
+                        };
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                    path: { user_stats_view_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                view?: {
+                                    view_id: string;
+                                    stats_type: "daily" | "month";
+                                    user_id: string;
+                                    items?: Array<{
+                                        code: string;
+                                        title?: string;
+                                        child_items?: Array<{
+                                            code: string;
+                                            value: string;
+                                            title?: string;
+                                            column_type?: number;
+                                            read_only?: boolean;
+                                            min_value?: string;
+                                            max_value?: string;
+                                        }>;
+                                    }>;
                                 };
-                                late_off_late_on_setting?: {
-                                    late_off_base_on_time_type?: number;
-                                    late_on_base_on_time_type?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_stats_view&version=v1 document }
+             *
+             * 查询统计设置
+             *
+             * 查询考勤统计支持的日度统计或月度统计的统计表头。报表的表头信息可以在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中查询到具体的报表信息，此接口专门用于查询表头数据。注意此接口和[查询统计表头](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_field/query)基本相同，区别点在于在兼容历史统计视图模型（历史统计数据模型可以按用户ID设置，后续统计升级为仅支持租户维度）
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
+                        user_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                view?: {
+                                    view_id: string;
+                                    stats_type: "daily" | "month";
+                                    user_id: string;
+                                    items?: Array<{
+                                        code: string;
+                                        title?: string;
+                                        child_items?: Array<{
+                                            code: string;
+                                            value: string;
+                                            title?: string;
+                                            column_type?: number;
+                                            read_only?: boolean;
+                                            min_value?: string;
+                                            max_value?: string;
+                                        }>;
+                                    }>;
                                 };
-                                id?: string;
-                                rest_time_flexible_configs?: Array<{
-                                    need_flexible?: boolean;
-                                    late_mins?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_views/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * approval_info
+         */
+        approvalInfo: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_info&apiName=process&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=process&project=attendance&resource=approval_info&version=v1 document }
+             *
+             * 通知审批状态更新
+             *
+             * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口更新写入飞书考勤系统中的三方系统审批状态，例如请假、加班、外出、出差、补卡等审批，状态包括通过、不通过、撤销等。
+             */
+            process: async (
+                payload?: {
+                    data: {
+                        approval_id: string;
+                        approval_type: string;
+                        status: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                approval_info?: {
+                                    approval_id: string;
+                                    approval_type:
+                                        | "leave"
+                                        | "overtime"
+                                        | "trip"
+                                        | "out"
+                                        | "remedy";
+                                    status: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_setting
+         */
+        userSetting: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=modify&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=attendance&resource=user_setting&version=v1 document }
+             *
+             * 修改用户人脸识别信息
+             *
+             * 修改授权内员工的用户设置信息，包括人脸照片文件 ID。修改用户人脸识别信息目前只支持 API 方式修改，管理后台已无法修改。
+             */
+            modify: async (
+                payload?: {
+                    data?: {
+                        user_setting?: {
+                            user_id: string;
+                            face_key: string;
+                            face_key_update_time?: string;
+                        };
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_setting?: {
+                                    user_id: string;
+                                    face_key: string;
+                                    face_key_update_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_settings/modify`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_setting&version=v1 document }
+             *
+             * 批量查询用户人脸识别信息
+             *
+             * 批量查询授权内员工的用户设置信息，包括人脸照片文件 ID、人脸照片更新时间。对应页面假勤设置-[人脸识别](https://example.feishu.cn/people/workforce-management/setting/group/security)。根据返回的face_key可以下载人脸信息[下载用户人脸识别照片;](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/file/download)
+             */
+            query: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_settings?: Array<{
+                                    user_id: string;
+                                    face_key: string;
+                                    face_key_update_time?: string;
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
+                            `${this.domain}/open-apis/attendance/v1/user_settings/query`,
                             path
                         ),
                         method: "GET",
@@ -1877,6 +2499,91 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+        },
+        /**
+         * user_stats_data
+         */
+        userStatsData: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_data&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_stats_data&version=v1 document }
+             *
+             * 查询统计数据
+             *
+             * 查询日度统计或月度统计的统计数据。字段包含基本信息、考勤组信息、出勤统计、异常统计、请假统计、加班统计、打卡时间、考勤结果和自定义字段。具体报表可在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中找到
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
+                        start_date: number;
+                        end_date: number;
+                        user_ids?: Array<string>;
+                        need_history?: boolean;
+                        current_group_only?: boolean;
+                        user_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_datas?: Array<{
+                                    name: string;
+                                    user_id: string;
+                                    datas?: Array<{
+                                        code: string;
+                                        value: string;
+                                        features?: Array<{
+                                            key: string;
+                                            value: string;
+                                        }>;
+                                        title?: string;
+                                        duration_num?: {
+                                            day?: string;
+                                            half_day?: string;
+                                            hour?: string;
+                                            half_hour?: string;
+                                            minute?: string;
+                                        };
+                                    }>;
+                                }>;
+                                invalid_user_list?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * archive_rule
+         */
+        archiveRule: {
             listWithIterator: async (
                 payload?: {
                     params?: { page_size?: number; page_token?: string };
@@ -1894,7 +2601,7 @@ export default abstract class Client extends attendance_machine {
                     const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/shifts`,
+                                `${this.domain}/open-apis/attendance/v1/archive_rule`,
                                 path
                             ),
                             method: "GET",
@@ -1940,67 +2647,19 @@ export default abstract class Client extends attendance_machine {
                                             code?: number;
                                             msg?: string;
                                             data?: {
-                                                shift_list?: Array<{
-                                                    shift_id: string;
-                                                    shift_name: string;
-                                                    punch_times: number;
-                                                    sub_shift_leader_ids?: Array<string>;
-                                                    is_flexible?: boolean;
-                                                    flexible_minutes?: number;
-                                                    flexible_rule?: Array<{
-                                                        flexible_early_minutes: number;
-                                                        flexible_late_minutes: number;
-                                                    }>;
-                                                    no_need_off?: boolean;
-                                                    punch_time_rule: Array<{
-                                                        on_time: string;
-                                                        off_time: string;
-                                                        late_minutes_as_late: number;
-                                                        late_minutes_as_lack: number;
-                                                        on_advance_minutes: number;
-                                                        early_minutes_as_early: number;
-                                                        early_minutes_as_lack: number;
-                                                        off_delay_minutes: number;
-                                                        late_minutes_as_serious_late?: number;
-                                                        no_need_on?: boolean;
-                                                        no_need_off?: boolean;
-                                                    }>;
-                                                    late_off_late_on_rule?: Array<{
-                                                        late_off_minutes: number;
-                                                        late_on_minutes: number;
-                                                    }>;
-                                                    rest_time_rule?: Array<{
-                                                        rest_begin_time: string;
-                                                        rest_end_time: string;
-                                                    }>;
-                                                    overtime_rule?: Array<{
-                                                        on_overtime: string;
-                                                        off_overtime: string;
-                                                    }>;
-                                                    day_type?: number;
-                                                    overtime_rest_time_rule?: Array<{
-                                                        rest_begin_time: string;
-                                                        rest_end_time: string;
-                                                    }>;
-                                                    late_minutes_as_serious_late?: number;
-                                                    shift_middle_time_rule?: {
-                                                        middle_time_type?: number;
-                                                        fixed_middle_time?: string;
+                                                items?: Array<{
+                                                    report_id?: string;
+                                                    report_name?: {
+                                                        zh?: string;
+                                                        en?: string;
+                                                        ja?: string;
                                                     };
-                                                    shift_attendance_time_config?: {
-                                                        attendance_time?: number;
-                                                        on_attendance_time?: number;
-                                                        off_attendance_time?: number;
+                                                    archive_rule_id?: string;
+                                                    archive_rule_name?: {
+                                                        zh?: string;
+                                                        en?: string;
+                                                        ja?: string;
                                                     };
-                                                    late_off_late_on_setting?: {
-                                                        late_off_base_on_time_type?: number;
-                                                        late_on_base_on_time_type?: number;
-                                                    };
-                                                    id?: string;
-                                                    rest_time_flexible_configs?: Array<{
-                                                        need_flexible?: boolean;
-                                                        late_mins?: number;
-                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -2023,13 +2682,13 @@ export default abstract class Client extends attendance_machine {
                 return Iterable;
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=list&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=archive_rule&version=v1 document }
              *
-             * 获取班次列表
+             * 查询所有归档规则
              *
-             * 翻页获取所有班次列表。
+             * 查询所有归档规则，对应后台假勤管理-考勤统计-报表-[归档报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)功能
              */
             list: async (
                 payload?: {
@@ -2047,67 +2706,19 @@ export default abstract class Client extends attendance_machine {
                             code?: number;
                             msg?: string;
                             data?: {
-                                shift_list?: Array<{
-                                    shift_id: string;
-                                    shift_name: string;
-                                    punch_times: number;
-                                    sub_shift_leader_ids?: Array<string>;
-                                    is_flexible?: boolean;
-                                    flexible_minutes?: number;
-                                    flexible_rule?: Array<{
-                                        flexible_early_minutes: number;
-                                        flexible_late_minutes: number;
-                                    }>;
-                                    no_need_off?: boolean;
-                                    punch_time_rule: Array<{
-                                        on_time: string;
-                                        off_time: string;
-                                        late_minutes_as_late: number;
-                                        late_minutes_as_lack: number;
-                                        on_advance_minutes: number;
-                                        early_minutes_as_early: number;
-                                        early_minutes_as_lack: number;
-                                        off_delay_minutes: number;
-                                        late_minutes_as_serious_late?: number;
-                                        no_need_on?: boolean;
-                                        no_need_off?: boolean;
-                                    }>;
-                                    late_off_late_on_rule?: Array<{
-                                        late_off_minutes: number;
-                                        late_on_minutes: number;
-                                    }>;
-                                    rest_time_rule?: Array<{
-                                        rest_begin_time: string;
-                                        rest_end_time: string;
-                                    }>;
-                                    overtime_rule?: Array<{
-                                        on_overtime: string;
-                                        off_overtime: string;
-                                    }>;
-                                    day_type?: number;
-                                    overtime_rest_time_rule?: Array<{
-                                        rest_begin_time: string;
-                                        rest_end_time: string;
-                                    }>;
-                                    late_minutes_as_serious_late?: number;
-                                    shift_middle_time_rule?: {
-                                        middle_time_type?: number;
-                                        fixed_middle_time?: string;
+                                items?: Array<{
+                                    report_id?: string;
+                                    report_name?: {
+                                        zh?: string;
+                                        en?: string;
+                                        ja?: string;
                                     };
-                                    shift_attendance_time_config?: {
-                                        attendance_time?: number;
-                                        on_attendance_time?: number;
-                                        off_attendance_time?: number;
+                                    archive_rule_id?: string;
+                                    archive_rule_name?: {
+                                        zh?: string;
+                                        en?: string;
+                                        ja?: string;
                                     };
-                                    late_off_late_on_setting?: {
-                                        late_off_base_on_time_type?: number;
-                                        late_on_base_on_time_type?: number;
-                                    };
-                                    id?: string;
-                                    rest_time_flexible_configs?: Array<{
-                                        need_flexible?: boolean;
-                                        late_mins?: number;
-                                    }>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -2115,7 +2726,7 @@ export default abstract class Client extends attendance_machine {
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/shifts`,
+                            `${this.domain}/open-apis/attendance/v1/archive_rule`,
                             path
                         ),
                         method: "GET",
@@ -2131,17 +2742,23 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=query&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
              *
-             * 按名称查询班次
+             * 查询归档报表表头
              *
-             * 通过班次的名称查询班次信息。
+             * 查询归档报表表头，对应后台假勤管理-考勤统计-报表-[归档报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中一个归档报表的表头信息。归档报表支持引用系统报表，可设置归档时间和数据归档周期，并且支持根据部门/人员、国家/地区、人员类型、工作地点、职级、序列、职务进行人员圈选。
              */
-            query: async (
+            userStatsFieldsQuery: async (
                 payload?: {
-                    params: { shift_name: string };
+                    data: {
+                        locale?: string;
+                        month: string;
+                        archive_rule_id: string;
+                        operator_id: string;
+                    };
+                    params: { employee_type: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2155,71 +2772,120 @@ export default abstract class Client extends attendance_machine {
                             code?: number;
                             msg?: string;
                             data?: {
-                                shift_id: string;
-                                shift_name: string;
-                                punch_times: number;
-                                sub_shift_leader_ids?: Array<string>;
-                                is_flexible?: boolean;
-                                flexible_minutes?: number;
-                                flexible_rule?: Array<{
-                                    flexible_early_minutes: number;
-                                    flexible_late_minutes: number;
-                                }>;
-                                no_need_off?: boolean;
-                                punch_time_rule: Array<{
-                                    on_time: string;
-                                    off_time: string;
-                                    late_minutes_as_late: number;
-                                    late_minutes_as_lack: number;
-                                    on_advance_minutes: number;
-                                    early_minutes_as_early: number;
-                                    early_minutes_as_lack: number;
-                                    off_delay_minutes: number;
-                                    late_minutes_as_serious_late?: number;
-                                    no_need_on?: boolean;
-                                    no_need_off?: boolean;
-                                }>;
-                                late_off_late_on_rule?: Array<{
-                                    late_off_minutes: number;
-                                    late_on_minutes: number;
-                                }>;
-                                rest_time_rule?: Array<{
-                                    rest_begin_time: string;
-                                    rest_end_time: string;
-                                }>;
-                                overtime_rule?: Array<{
-                                    on_overtime: string;
-                                    off_overtime: string;
-                                }>;
-                                day_type?: number;
-                                overtime_rest_time_rule?: Array<{
-                                    rest_begin_time: string;
-                                    rest_end_time: string;
-                                }>;
-                                late_minutes_as_serious_late?: number;
-                                shift_middle_time_rule?: {
-                                    middle_time_type?: number;
-                                    fixed_middle_time?: string;
-                                };
-                                shift_attendance_time_config?: {
-                                    attendance_time?: number;
-                                    on_attendance_time?: number;
-                                    off_attendance_time?: number;
-                                };
-                                late_off_late_on_setting?: {
-                                    late_off_base_on_time_type?: number;
-                                    late_on_base_on_time_type?: number;
-                                };
-                                id?: string;
-                                rest_time_flexible_configs?: Array<{
-                                    need_flexible?: boolean;
-                                    late_mins?: number;
+                                archive_report_fields?: Array<{
+                                    code?: string;
+                                    title?: string;
+                                    upper_titles?: Array<string>;
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/shifts/query`,
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_report&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_report&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 删除归档报表行数据
+             *
+             * 按月份、用户和归档规则ID直接删除归档报表行数据
+             *
+             * 页面无对应功能，页面是通过导入并全量覆盖完成数据删除的
+             */
+            delReport: async (
+                payload?: {
+                    data: {
+                        month: string;
+                        operator_id: string;
+                        archive_rule_id: string;
+                        user_ids?: Array<string>;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/del_report`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 写入归档报表结果
+             *
+             * 写入归档报表结果，对应假勤管理-考勤统计-报表-[归档报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)页签，点击报表名称进入后的导入功能。可以将数据直接写入归档报表。
+             */
+            uploadReport: async (
+                payload?: {
+                    data: {
+                        month: string;
+                        operator_id: string;
+                        archive_report_datas?: Array<{
+                            member_id: string;
+                            start_time: string;
+                            end_time: string;
+                            field_datas?: Array<{
+                                code: string;
+                                value?: string;
+                            }>;
+                        }>;
+                        archive_rule_id: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                invalid_code?: Array<string>;
+                                invalid_member_id?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
                             path
                         ),
                         method: "POST",
@@ -2236,19 +2902,509 @@ export default abstract class Client extends attendance_machine {
             },
         },
         /**
-         * 假勤审批
+         * leave_employ_expire_record
+         */
+        leaveEmployExpireRecord: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_employ_expire_record&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=leave_employ_expire_record&version=v1 document }
+             *
+             * 通过过期时间获取发放记录
+             *
+             * 只能获取到对应时间段过期的发放记录
+             *
+             * 仅飞书人事企业版可用
+             */
+            get: async (
+                payload?: {
+                    data: {
+                        employment_id: string;
+                        leave_type_id: string;
+                        start_expiration_date: string;
+                        end_expiration_date: string;
+                        time_offset?: number;
+                    };
+                    params?: {
+                        user_id_type?:
+                            | "open_id"
+                            | "people_corehr_id"
+                            | "union_id"
+                            | "user_id";
+                    };
+                    path?: { leave_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                records: Array<{
+                                    id: string;
+                                    employment_id: string;
+                                    leave_type_id: string;
+                                    granting_quantity: string;
+                                    left_granting_quantity: string;
+                                    granting_unit: number;
+                                    effective_date: string;
+                                    expiration_date: string;
+                                    reason: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    is_update_by_external: boolean;
+                                    accrual_source: number;
+                                    leave_sub_type_id: string;
+                                    section_type?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/leave_employ_expire_records/:leave_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * leave_accrual_record
+         */
+        leaveAccrualRecord: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_accrual_record&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=attendance&resource=leave_accrual_record&version=v1 document }
+             *
+             * 修改发放记录;
+             *
+             * 更新发放记录的发放数量和失效日期，对应假勤管理-休假管理-[发放记录](https://example.feishu.cn/people/workforce-management/manage/leave/leave_admin/granting_record)
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        leave_granting_record_id: string;
+                        employment_id: string;
+                        leave_type_id: string;
+                        reason: Array<{ lang: string; value: string }>;
+                        time_offset?: number;
+                        expiration_date?: string;
+                        quantity?: string;
+                        section_type?: number;
+                    };
+                    params?: {
+                        user_id_type?:
+                            | "open_id"
+                            | "people_corehr_id"
+                            | "union_id"
+                            | "user_id";
+                    };
+                    path?: { leave_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                record: {
+                                    id: string;
+                                    employment_id: string;
+                                    leave_type_id: string;
+                                    granting_quantity: string;
+                                    granting_unit: number;
+                                    effective_date: string;
+                                    expiration_date: string;
+                                    granted_by: number;
+                                    reason: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    created_at: string;
+                                    created_by: string;
+                                    updated_at: string;
+                                    updated_by: string;
+                                    section_type?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/leave_accrual_record/:leave_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_flow
+         */
+        userFlow: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_del&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_del&project=attendance&resource=user_flow&version=v1 document }
+             *
+             * 删除打卡流水
+             *
+             * 删除员工从开放平台导入的打卡记录。删除后会重新计算打卡记录对应考勤任务结果。
+             *
+             * 当返回结果fail_record_ids不为空时，msg字段返回对应失败原因，格式为：{"xx id": "xx reason"}
+             */
+            batchDel: async (
+                payload?: {
+                    data: { record_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                success_record_ids?: Array<string>;
+                                fail_record_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/batch_del`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=attendance&resource=user_flow&version=v1 document }
+             *
+             * 导入打卡流水
+             *
+             * 导入员工的打卡流水记录。导入后，会根据员工所在的考勤组班次规则，计算最终的打卡状态与结果。可在打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)中查询
+             *
+             * 适用于考勤机数据导入等场景。
+             */
+            batchCreate: async (
+                payload?: {
+                    data: {
+                        flow_records: Array<{
+                            user_id: string;
+                            creator_id: string;
+                            location_name: string;
+                            check_time: string;
+                            comment: string;
+                            record_id?: string;
+                            longitude?: number;
+                            latitude?: number;
+                            ssid?: string;
+                            bssid?: string;
+                            is_field?: boolean;
+                            is_wifi?: boolean;
+                            type?: number;
+                            photo_urls?: Array<string>;
+                            device_id?: string;
+                            check_result?:
+                                | "NoNeedCheck"
+                                | "SystemCheck"
+                                | "Normal"
+                                | "Early"
+                                | "Late"
+                                | "SeriousLate"
+                                | "Lack"
+                                | "Invalid"
+                                | "None"
+                                | "Todo";
+                            external_id?: string;
+                            idempotent_id?: string;
+                            create_time?: string;
+                        }>;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                flow_records?: Array<{
+                                    user_id: string;
+                                    creator_id: string;
+                                    location_name: string;
+                                    check_time: string;
+                                    comment: string;
+                                    record_id?: string;
+                                    longitude?: number;
+                                    latitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    is_field?: boolean;
+                                    is_wifi?: boolean;
+                                    type?: number;
+                                    photo_urls?: Array<string>;
+                                    device_id?: string;
+                                    check_result?:
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
+                                    external_id?: string;
+                                    idempotent_id?: string;
+                                    create_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_flow&version=v1 document }
+             *
+             * 批量查询打卡流水
+             *
+             * 通过用户 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（wifi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+             *
+             * 这里只返回有效的打卡流水，无效或待生效的不会返回;;如果只需获取打卡结果，而不需要详细的打卡数据，可使用“获取打卡结果”的接口。
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_time_from: string;
+                        check_time_to: string;
+                    };
+                    params: {
+                        employee_type: "employee_id" | "employee_no";
+                        include_terminated_user?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_flow_results?: Array<{
+                                    user_id: string;
+                                    creator_id: string;
+                                    location_name: string;
+                                    check_time: string;
+                                    comment: string;
+                                    record_id?: string;
+                                    longitude?: number;
+                                    latitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    is_field?: boolean;
+                                    is_wifi?: boolean;
+                                    type?: number;
+                                    photo_urls?: Array<string>;
+                                    device_id?: string;
+                                    check_result?:
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
+                                    external_id?: string;
+                                    idempotent_id?: string;
+                                    create_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=user_flow&version=v1 document }
+             *
+             * 查询打卡流水
+             *
+             * 通过打卡记录 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（Wi-Fi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+             */
+            get: async (
+                payload?: {
+                    params: { employee_type: "employee_id" | "employee_no" };
+                    path: { user_flow_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_id: string;
+                                creator_id: string;
+                                location_name: string;
+                                check_time: string;
+                                comment: string;
+                                record_id?: string;
+                                longitude?: number;
+                                latitude?: number;
+                                ssid?: string;
+                                bssid?: string;
+                                is_field?: boolean;
+                                is_wifi?: boolean;
+                                type?: number;
+                                photo_urls?: Array<string>;
+                                device_id?: string;
+                                check_result?:
+                                    | "NoNeedCheck"
+                                    | "SystemCheck"
+                                    | "Normal"
+                                    | "Early"
+                                    | "Late"
+                                    | "SeriousLate"
+                                    | "Lack"
+                                    | "Invalid"
+                                    | "None"
+                                    | "Todo";
+                                external_id?: string;
+                                idempotent_id?: string;
+                                create_time?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_approval
          */
         userApproval: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=user_approval&version=v1 document }
              *
              * 写入审批结果
              *
-             * 由于部分企业使用的是自己的审批系统，而不是飞书审批系统，因此员工的请假、加班等数据无法流入到飞书考勤系统中，导致员工在请假时间段内依然收到打卡提醒，并且被记为缺卡。;;对于这些只使用飞书考勤系统，而未使用飞书审批系统的企业，可以通过考勤开放接口的形式，将三方审批结果数据回写到飞书考勤系统中。
+             * 由于部分企业使用的是自己的审批系统，而不是飞书审批系统，因此员工的请假、加班等数据无法流入到飞书考勤系统中，导致员工在请假时间段内依然收到打卡提醒，并且被记为缺卡。;对于这些只使用飞书考勤系统，而未使用飞书审批系统的企业，可以通过考勤开放接口的形式，将三方审批结果数据回写到飞书考勤系统中。（请注意，如果在飞书审批、自助服务或假勤应用中发起加班，请勿使用该接口写入和系统同一天生成的加班数据，否则写入的数据不计入）
              *
-             * 目前支持写入加班、请假、出差和外出这四种审批结果，写入只会追加(insert)，不会覆盖(update)（开放接口导入的加班假期记录，在管理后台的假期加班里查不到，只能通过[获取审批通过数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query)来查询）
+             * 1. 目前支持写入加班、请假、出差和外出这四种审批结果，写入只会追加(insert)，不会覆盖(update)（开放接口导入的加班假期记录，在管理后台的假期加班里查不到，可以在考勤统计报表查看，或者通过[获取审批通过数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query)来查询）;2. 离职人员没有考勤组，所以写入和返回的时间会有差异
              */
             create: async (
                 payload?: {
@@ -2463,13 +3619,13 @@ export default abstract class Client extends attendance_machine {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_approval&version=v1 document }
              *
-             * 获取审批通过数据
+             * 获取审批数据
              *
-             * 获取员工在某段时间内的请假、加班、外出和出差四种审批的通过数据。
+             * 获取员工在某段时间内的请假、加班、外出和出差四种审批数据。
              *
-             * 请假的假期时长字段，暂未开放提供，待后续提供。
+             * 请假的假期时长字段，暂未开放提供，待后续提供。;;请假、加班：仅支持查询已通过和已撤回状态的审批数据;;外出、出差：支持查询所有状态的审批数据
              */
             query: async (
                 payload?: {
@@ -2613,933 +3769,19 @@ export default abstract class Client extends attendance_machine {
             },
         },
         /**
-         * 考勤排班
-         */
-        userDailyShift: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create document }
-             *
-             * 创建或修改班表
-             *
-             * 班表是用来描述考勤组内人员每天按哪个班次进行上班。目前班表支持按一个整月对一位或多位人员进行排班。
-             */
-            batchCreate: async (
-                payload?: {
-                    data: {
-                        user_daily_shifts: Array<{
-                            group_id: string;
-                            shift_id: string;
-                            month: number;
-                            user_id: string;
-                            day_no: number;
-                            is_clear_schedule?: boolean;
-                        }>;
-                        operator_id?: string;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_daily_shifts?: Array<{
-                                    group_id: string;
-                                    shift_id: string;
-                                    month: number;
-                                    user_id: string;
-                                    day_no: number;
-                                    is_clear_schedule?: boolean;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
-             */
-            batchCreateTemp: async (
-                payload?: {
-                    data: {
-                        user_tmp_daily_shifts: Array<{
-                            group_id: string;
-                            user_id: string;
-                            date: number;
-                            shift_name: string;
-                            punch_time_simple_rules: Array<{
-                                on_time: string;
-                                off_time: string;
-                            }>;
-                        }>;
-                        operator_id?: string;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_tmp_daily_shifts?: Array<{
-                                    group_id: string;
-                                    user_id: string;
-                                    date: number;
-                                    shift_name: string;
-                                    punch_time_simple_rules: Array<{
-                                        on_time: string;
-                                        off_time: string;
-                                    }>;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create_temp`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/query document }
-             *
-             * 查询班表信息
-             *
-             * 支持查询多个用户的排班情况，查询的时间跨度不能超过 30 天。
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        user_ids: Array<string>;
-                        check_date_from: number;
-                        check_date_to: number;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_daily_shifts?: Array<{
-                                    group_id: string;
-                                    shift_id: string;
-                                    month: number;
-                                    user_id: string;
-                                    day_no: number;
-                                    is_clear_schedule?: boolean;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * user_flow
-         */
-        userFlow: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/batch_create document }
-             *
-             * 导入打卡流水记录
-             *
-             * 导入授权内员工的打卡流水记录。导入后，会根据员工所在的考勤组班次规则，计算最终的打卡状态与结果。
-             *
-             * 适用于考勤机数据导入等场景。
-             */
-            batchCreate: async (
-                payload?: {
-                    data: {
-                        flow_records: Array<{
-                            user_id: string;
-                            creator_id: string;
-                            location_name: string;
-                            check_time: string;
-                            comment: string;
-                            record_id?: string;
-                            longitude?: number;
-                            latitude?: number;
-                            ssid?: string;
-                            bssid?: string;
-                            is_field?: boolean;
-                            is_wifi?: boolean;
-                            type?: number;
-                            photo_urls?: Array<string>;
-                            device_id?: string;
-                            check_result?:
-                                | "NoNeedCheck"
-                                | "SystemCheck"
-                                | "Normal"
-                                | "Early"
-                                | "Late"
-                                | "SeriousLate"
-                                | "Lack"
-                                | "Invalid"
-                                | "None"
-                                | "Todo";
-                            external_id?: string;
-                            idempotent_id?: string;
-                            create_time?: string;
-                        }>;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                flow_records?: Array<{
-                                    user_id: string;
-                                    creator_id: string;
-                                    location_name: string;
-                                    check_time: string;
-                                    comment: string;
-                                    record_id?: string;
-                                    longitude?: number;
-                                    latitude?: number;
-                                    ssid?: string;
-                                    bssid?: string;
-                                    is_field?: boolean;
-                                    is_wifi?: boolean;
-                                    type?: number;
-                                    photo_urls?: Array<string>;
-                                    device_id?: string;
-                                    check_result?:
-                                        | "NoNeedCheck"
-                                        | "SystemCheck"
-                                        | "Normal"
-                                        | "Early"
-                                        | "Late"
-                                        | "SeriousLate"
-                                        | "Lack"
-                                        | "Invalid"
-                                        | "None"
-                                        | "Todo";
-                                    external_id?: string;
-                                    idempotent_id?: string;
-                                    create_time?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_flows/batch_create`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_del&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_del&project=attendance&resource=user_flow&version=v1 document }
-             *
-             * 批量删除流水
-             */
-            batchDel: async (
-                payload?: {
-                    data: { record_ids: Array<string> };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                success_record_ids?: Array<string>;
-                                fail_record_ids?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_flows/batch_del`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/get document }
-             *
-             * 获取打卡流水记录
-             *
-             * 通过打卡记录 ID 获取用户的打卡流水记录。
-             */
-            get: async (
-                payload?: {
-                    params: { employee_type: "employee_id" | "employee_no" };
-                    path: { user_flow_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_id: string;
-                                creator_id: string;
-                                location_name: string;
-                                check_time: string;
-                                comment: string;
-                                record_id?: string;
-                                longitude?: number;
-                                latitude?: number;
-                                ssid?: string;
-                                bssid?: string;
-                                is_field?: boolean;
-                                is_wifi?: boolean;
-                                type?: number;
-                                photo_urls?: Array<string>;
-                                device_id?: string;
-                                check_result?:
-                                    | "NoNeedCheck"
-                                    | "SystemCheck"
-                                    | "Normal"
-                                    | "Early"
-                                    | "Late"
-                                    | "SeriousLate"
-                                    | "Lack"
-                                    | "Invalid"
-                                    | "None"
-                                    | "Todo";
-                                external_id?: string;
-                                idempotent_id?: string;
-                                create_time?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/query document }
-             *
-             * 批量查询打卡流水记录
-             *
-             * 批量查询授权内员工的实际打卡流水记录。例如，企业给一个员工设定的班次是上午 9 点和下午 6 点各打一次上下班卡，但是该员工在这期间打了多次卡，该接口会把所有的打卡记录都返回。
-             *
-             * 如果只需获取打卡结果，而不需要详细的打卡数据，可使用“获取打卡结果”的接口。
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        user_ids: Array<string>;
-                        check_time_from: string;
-                        check_time_to: string;
-                    };
-                    params: {
-                        employee_type: "employee_id" | "employee_no";
-                        include_terminated_user?: boolean;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_flow_results?: Array<{
-                                    user_id: string;
-                                    creator_id: string;
-                                    location_name: string;
-                                    check_time: string;
-                                    comment: string;
-                                    record_id?: string;
-                                    longitude?: number;
-                                    latitude?: number;
-                                    ssid?: string;
-                                    bssid?: string;
-                                    is_field?: boolean;
-                                    is_wifi?: boolean;
-                                    type?: number;
-                                    photo_urls?: Array<string>;
-                                    device_id?: string;
-                                    check_result?:
-                                        | "NoNeedCheck"
-                                        | "SystemCheck"
-                                        | "Normal"
-                                        | "Early"
-                                        | "Late"
-                                        | "SeriousLate"
-                                        | "Lack"
-                                        | "Invalid"
-                                        | "None"
-                                        | "Todo";
-                                    external_id?: string;
-                                    idempotent_id?: string;
-                                    create_time?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_flows/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 用户设置
-         */
-        userSetting: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=modify&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/modify document }
-             *
-             * 修改用户设置
-             *
-             * 修改授权内员工的用户设置信息，包括人脸照片文件 ID。
-             */
-            modify: async (
-                payload?: {
-                    data?: {
-                        user_setting?: {
-                            user_id: string;
-                            face_key: string;
-                            face_key_update_time?: string;
-                        };
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_setting?: {
-                                    user_id: string;
-                                    face_key: string;
-                                    face_key_update_time?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_settings/modify`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/query document }
-             *
-             * 批量查询用户设置
-             *
-             * 批量查询授权内员工的用户设置信息，包括人脸照片文件 ID、人脸照片更新时间。
-             */
-            query: async (
-                payload?: {
-                    data: { user_ids: Array<string> };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_settings?: Array<{
-                                    user_id: string;
-                                    face_key: string;
-                                    face_key_update_time?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_settings/query`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 考勤统计
-         */
-        userStatsData: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_data&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query document }
-             *
-             * 查询统计数据
-             *
-             * 查询日度统计或月度统计的统计数据。
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        locale: "en" | "ja" | "zh";
-                        stats_type: "daily" | "month";
-                        start_date: number;
-                        end_date: number;
-                        user_ids?: Array<string>;
-                        need_history?: boolean;
-                        current_group_only?: boolean;
-                        user_id?: string;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_datas?: Array<{
-                                    name: string;
-                                    user_id: string;
-                                    datas?: Array<{
-                                        code: string;
-                                        value: string;
-                                        features?: Array<{
-                                            key: string;
-                                            value: string;
-                                        }>;
-                                        title?: string;
-                                        duration_num?: {
-                                            day?: string;
-                                            half_day?: string;
-                                            hour?: string;
-                                            half_hour?: string;
-                                            minute?: string;
-                                        };
-                                    }>;
-                                }>;
-                                invalid_user_list?: Array<string>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * user_stats_field
-         */
-        userStatsField: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_field&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_field/query document }
-             *
-             * 查询统计表头
-             *
-             * 查询考勤统计支持的日度统计或月度统计的统计表头。
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        locale: "en" | "ja" | "zh";
-                        stats_type: "daily" | "month";
-                        start_date: number;
-                        end_date: number;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_stats_field?: {
-                                    stats_type: "daily" | "month";
-                                    user_id: string;
-                                    fields: Array<{
-                                        code: string;
-                                        title: string;
-                                        child_fields?: Array<{
-                                            code: string;
-                                            title: string;
-                                            time_unit?: string;
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_stats_fields/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * user_stats_view
-         */
-        userStatsView: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_view/query document }
-             *
-             * 查询统计设置
-             *
-             * 查询开发者定制的日度统计或月度统计的统计报表表头设置信息。
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        locale: "en" | "ja" | "zh";
-                        stats_type: "daily" | "month";
-                        user_id?: string;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                view?: {
-                                    view_id: string;
-                                    stats_type: "daily" | "month";
-                                    user_id: string;
-                                    items?: Array<{
-                                        code: string;
-                                        title?: string;
-                                        child_items?: Array<{
-                                            code: string;
-                                            value: string;
-                                            title?: string;
-                                            column_type?: number;
-                                            read_only?: boolean;
-                                            min_value?: string;
-                                            max_value?: string;
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_stats_views/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_view/update document }
-             *
-             * 更新统计设置
-             *
-             * 更新开发者定制的日度统计或月度统计的统计报表表头设置信息。
-             */
-            update: async (
-                payload?: {
-                    data: {
-                        view: {
-                            view_id: string;
-                            stats_type: "daily" | "month";
-                            user_id: string;
-                            items?: Array<{
-                                code: string;
-                                child_items?: Array<{
-                                    code: string;
-                                    value: string;
-                                }>;
-                            }>;
-                        };
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                    path: { user_stats_view_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                view?: {
-                                    view_id: string;
-                                    stats_type: "daily" | "month";
-                                    user_id: string;
-                                    items?: Array<{
-                                        code: string;
-                                        title?: string;
-                                        child_items?: Array<{
-                                            code: string;
-                                            value: string;
-                                            title?: string;
-                                            column_type?: number;
-                                            read_only?: boolean;
-                                            min_value?: string;
-                                            max_value?: string;
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 考勤记录
+         * user_task
          */
         userTask: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_task&version=v1 document }
              *
-             * 获取打卡结果
+             * 查询打卡结果
              *
-             * 获取企业内员工的实际打卡结果，包括上班打卡结果和下班打卡结果。
+             * 获取企业内员工的实际打卡结果，包括： * 打卡任务列表 * 打卡记录id * 用户信息 * 考勤组ID * 班次 ID * 考勤记录 * 上班记录 * 下班记录 * 上班打卡结果 * 下班打卡结果 * 上班打卡结果补充 * 下班打卡结果补充 * 上班打卡时间 * 下班打卡时间 * 无效用户 ID 列表 * 没有权限用户ID列表
              *
-             * - 如果企业给一个员工设定的班次是上午 9 点和下午 6 点各打一次上下班卡，即使员工在这期间打了多次卡，该接口也只会返回 1 条记录。;- 如果要获取打卡的详细数据，如打卡位置等信息，可使用“获取打卡流水记录”或“批量查询打卡流水记录”的接口。
+             * - 如果企业给一个员工设定的班次是上午 9 点和下午 6 点各打一次上下班卡，即使员工在这期间打了多次卡，该接口也只会返回 1 条记录。;- 如果要获取打卡的详细数据，如打卡位置等信息，可使用[查询打卡流水](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/get)或[批量查询打卡流水](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/query)的接口
              */
             query: async (
                 payload?: {
@@ -3702,588 +3944,19 @@ export default abstract class Client extends attendance_machine {
                     });
             },
         },
-        /**
-         * 考勤补卡
-         */
-        userTaskRemedy: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/create document }
-             *
-             * 通知补卡审批发起
-             *
-             * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口，将在三方审批系统中发起的补卡审批数据，写入到飞书考勤系统中，状态为审批中。写入后可以由[通知审批状态更新](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process) 进行状态更新
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        user_id: string;
-                        remedy_date: number;
-                        punch_no: number;
-                        work_type: number;
-                        remedy_time: string;
-                        reason: string;
-                        time?: string;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_remedy?: {
-                                    user_id: string;
-                                    remedy_date: number;
-                                    punch_no: number;
-                                    work_type: number;
-                                    approval_id?: string;
-                                    remedy_time: string;
-                                    status?: number;
-                                    reason: string;
-                                    time?: string;
-                                    time_zone?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_task_remedys`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/query document }
-             *
-             * 获取补卡记录
-             *
-             * 获取授权内员工的补卡记录。
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        user_ids: Array<string>;
-                        check_time_from: string;
-                        check_time_to: string;
-                        check_date_type?:
-                            | "PeriodTime"
-                            | "CreateTime"
-                            | "UpdateTime";
-                        status?: number;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_remedys?: Array<{
-                                    user_id: string;
-                                    remedy_date: number;
-                                    punch_no: number;
-                                    work_type: number;
-                                    approval_id?: string;
-                                    remedy_time: string;
-                                    status?: number;
-                                    reason: string;
-                                    time?: string;
-                                    time_zone?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_user_allowed_remedys&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/query_user_allowed_remedys document }
-             *
-             * 获取用户可补卡时间
-             *
-             * 获取用户某天可以补的第几次上 / 下班卡的时间。
-             */
-            queryUserAllowedRemedys: async (
-                payload?: {
-                    data: { user_id: string; remedy_date: number };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_allowed_remedys?: Array<{
-                                    user_id: string;
-                                    remedy_date: number;
-                                    is_free_punch?: boolean;
-                                    punch_no?: number;
-                                    work_type?: number;
-                                    punch_status?: string;
-                                    normal_punch_time?: string;
-                                    remedy_start_time?: string;
-                                    remedy_end_time?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
         v1: {
             /**
-             * approval_info
-             */
-            approvalInfo: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_info&apiName=process&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process document }
-                 *
-                 * 通知审批状态更新
-                 *
-                 * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口更新写入飞书考勤系统中的三方系统审批状态，例如请假、加班、外出、出差、补卡等审批，状态包括通过、不通过、撤销等。
-                 *
-                 * 发起状态的审批才可以被更新为通过、不通过，已经通过的审批才可以被更新为撤销。
-                 */
-                process: async (
-                    payload?: {
-                        data: {
-                            approval_id: string;
-                            approval_type: string;
-                            status: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    approval_info?: {
-                                        approval_id: string;
-                                        approval_type:
-                                            | "leave"
-                                            | "overtime"
-                                            | "trip"
-                                            | "out"
-                                            | "remedy";
-                                        status: number;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * archive_rule
-             */
-            archiveRule: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_report&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_report&project=attendance&resource=archive_rule&version=v1 document }
-                 */
-                delReport: async (
-                    payload?: {
-                        data: {
-                            month: string;
-                            operator_id: string;
-                            archive_rule_id: string;
-                            user_ids?: Array<string>;
-                        };
-                        params: { employee_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/archive_rule/del_report`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params?: { page_size?: number; page_token?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/attendance/v1/archive_rule`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        report_id?: string;
-                                                        report_name?: {
-                                                            zh?: string;
-                                                            en?: string;
-                                                            ja?: string;
-                                                        };
-                                                        archive_rule_id?: string;
-                                                        archive_rule_name?: {
-                                                            zh?: string;
-                                                            en?: string;
-                                                            ja?: string;
-                                                        };
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=archive_rule&version=v1 document }
-                 */
-                list: async (
-                    payload?: {
-                        params?: { page_size?: number; page_token?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        report_id?: string;
-                                        report_name?: {
-                                            zh?: string;
-                                            en?: string;
-                                            ja?: string;
-                                        };
-                                        archive_rule_id?: string;
-                                        archive_rule_name?: {
-                                            zh?: string;
-                                            en?: string;
-                                            ja?: string;
-                                        };
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/archive_rule`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report&project=attendance&resource=archive_rule&version=v1 document }
-                 */
-                uploadReport: async (
-                    payload?: {
-                        data: {
-                            month: string;
-                            operator_id: string;
-                            archive_report_datas?: Array<{
-                                member_id: string;
-                                start_time: string;
-                                end_time: string;
-                                field_datas?: Array<{
-                                    code: string;
-                                    value?: string;
-                                }>;
-                            }>;
-                            archive_rule_id: string;
-                        };
-                        params: { employee_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    invalid_code?: Array<string>;
-                                    invalid_member_id?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
-                 */
-                userStatsFieldsQuery: async (
-                    payload?: {
-                        data: {
-                            locale?: string;
-                            month: string;
-                            archive_rule_id: string;
-                            operator_id: string;
-                        };
-                        params: { employee_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    archive_report_fields?: Array<{
-                                        code?: string;
-                                        title?: string;
-                                        upper_titles?: Array<string>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 文件
+             * file
              */
             file: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=download&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/file/download document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=attendance&resource=file&version=v1 document }
                  *
-                 * 下载文件
+                 * 下载用户人脸识别照片
                  *
-                 * 通过文件 ID 下载指定的文件。
+                 * 通过文件 ID 下载用户的头像照片文件。
                  */
                 download: async (
                     payload?: {
@@ -4348,11 +4021,11 @@ export default abstract class Client extends attendance_machine {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=upload&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/file/upload document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=attendance&resource=file&version=v1 document }
                  *
-                 * 上传文件
+                 * 上传用户人脸识别照片
                  *
-                 * 上传文件并获取文件 ID，可用于“修改用户设置”接口中的 face_key 参数。
+                 * 上传用户人脸照片并获取文件 ID，对应小程序端的人脸录入功能
                  */
                 upload: async (
                     payload?: {
@@ -4395,19 +4068,304 @@ export default abstract class Client extends attendance_machine {
                 },
             },
             /**
-             * 考勤组管理
+             * group
              */
             group: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/groups`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    group_list?: Array<{
+                                                        group_id: string;
+                                                        group_name: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 查询所有考勤组
+                 *
+                 * 翻页获取所有考勤组列表。列表中的数据为考勤组信息，字段包含考勤组名称和考勤组id
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group_list?: Array<{
+                                        group_id: string;
+                                        group_name: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 按名称查询考勤组
+                 *
+                 * 按考勤组名称查询考勤组摘要信息。查询条件支持名称精确匹配和模糊匹配两种方式。查询结果按考勤组修改时间 desc 排序，且最大记录数为 10 条。对应页面设置-假勤设置-[考勤组](https://example.feishu.cn/people/workforce-management/setting/group/list)的名称搜索功能
+                 *
+                 * 该接口依赖的数据和考勤组主数据间存在数据同步延时（正常数据同步 2 秒以内），因此在使用该接口时需注意评估数据延迟潜在风险。
+                 */
+                search: async (
+                    payload?: {
+                        data: { group_name: string; exactly_matched?: boolean };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group_list?: Array<{
+                                        group_id: string;
+                                        group_name: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 删除考勤组
+                 *
+                 * 通过考勤组 ID 删除考勤组。对应设置-假勤设置-[考勤组](https://example.feishu.cn/people/workforce-management/setting/group/list)操作列的删除功能
+                 */
+                delete: async (
+                    payload?: {
+                        path: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_user&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_user&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 查询考勤组下所有成员
+                 *
+                 * 查询指定考勤组下的所有成员
+                 */
+                listUser: async (
+                    payload?: {
+                        params: {
+                            employee_type: string;
+                            dept_type: string;
+                            page_size?: number;
+                            page_token?: string;
+                            member_clock_type: number;
+                        };
+                        path: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    users?: Array<{
+                                        user_id?: string;
+                                        department_ids?: Array<string>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/:group_id/list_user`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=group&version=v1 document }
                  *
                  * 创建或修改考勤组
                  *
-                 * 考勤组，是对部门或者员工在某个特定场所及特定时间段内的出勤情况（包括上下班、迟到、早退、病假、婚假、丧假、公休、工作时间、加班情况等）的一种规则设定。;;通过设置考勤组，可以从部门、员工两个维度，来设定考勤方式、考勤时间、考勤地点等考勤规则。
+                 * 考勤组，是对部门或者员工在某个特定场所及特定时间段内的出勤情况（包括上下班、迟到、早退、病假、婚假、丧假、公休、工作时间、加班情况等）的一种规则设定。;;通过设置考勤组，可以从部门、员工两个维度，来设定考勤方式、考勤时间、考勤地点等考勤规则。;;对应功能同设置-假勤设置-[考勤组](https://example.feishu.cn/people/workforce-management/setting/group/list)的“新建”功能
                  *
-                 * 出于安全考虑，目前通过该接口只允许修改自己创建的考勤组。
+                 * 注意：此接口在修改时为数据覆盖，需要传入全部的考勤组信息;;出于安全考虑，如果传入操作人，该接口只允许修改操作人有权限的考勤组。
                  */
                 create: async (
                     payload?: {
@@ -4787,52 +4745,13 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/delete document }
-                 *
-                 * 删除考勤组
-                 *
-                 * 通过班次 ID 删除班次。
-                 */
-                delete: async (
-                    payload?: {
-                        path: { group_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=group&version=v1 document }
                  *
-                 * 获取考勤组详情
+                 * 按 ID 查询考勤组
                  *
-                 * 通过考勤组 ID 获取考勤组详情。
+                 * 通过考勤组 ID 获取考勤组详情。包含基本信息、考勤班次、考勤方式、考勤设置信息
                  */
                 get: async (
                     payload?: {
@@ -5040,6 +4959,415 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+            },
+            /**
+             * user_daily_shift
+             */
+            userDailyShift: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_daily_shift&version=v1 document }
+                 *
+                 * 查询班表信息
+                 *
+                 * 支持查询多个用户的排班情况，注意此接口返回的是用户维度的排班结果，与页面功能并不对应。可以通过返回结果中的group_id查询考勤组[按 ID 查询考勤组](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/get) ，shift_id查询班次[按 ID 查询班次](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/get) 。查询的时间跨度不能超过 30 天。
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_date_from: number;
+                            check_date_to: number;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_daily_shifts?: Array<{
+                                        group_id: string;
+                                        shift_id: string;
+                                        month: number;
+                                        user_id: string;
+                                        day_no: number;
+                                        is_clear_schedule?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=attendance&resource=user_daily_shift&version=v1 document }
+                 *
+                 * 创建或修改排班表
+                 *
+                 * 排班表是用来描述考勤组内人员每天按哪个班次进行上班。目前排班表支持按x月y日对一位或多位人员进行排班。当用户的排班数据不存在时会进行创建，当用户的排班数据存在时会按照入参信息进行修改。注意：每人每天只能在一个考勤组中。
+                 *
+                 * 注意：如果返回code=0，但是msg返回如{人员：[日期，日期]}格式，代表人员在排班日期下未生效。这种一般是考勤组id与人员不匹配造成。
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data: {
+                            user_daily_shifts: Array<{
+                                group_id: string;
+                                shift_id: string;
+                                month: number;
+                                user_id: string;
+                                day_no: number;
+                                is_clear_schedule?: boolean;
+                            }>;
+                            operator_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_daily_shifts?: Array<{
+                                        group_id: string;
+                                        shift_id: string;
+                                        month: number;
+                                        user_id: string;
+                                        day_no: number;
+                                        is_clear_schedule?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
+                 *
+                 * 创建或更改临时排班
+                 *
+                 * 可在排班表上创建或修改临时班次，并用于排班。目前支持按日期对一位或多位人员进行排临时班次。;临时排班为付费功能，如需使用请联系您的客户经理。
+                 *
+                 * 注意：如果返回code=0，且msg不为空，表示临时排班部分成功。 如msg返回{人员：[日期，日期]}格式，代表人员在排班日期下临时排班未成功。这种一般是考勤组id与人员不匹配造成的。
+                 */
+                batchCreateTemp: async (
+                    payload?: {
+                        data: {
+                            user_tmp_daily_shifts: Array<{
+                                group_id: string;
+                                user_id: string;
+                                date: number;
+                                shift_name: string;
+                                punch_time_simple_rules: Array<{
+                                    on_time: string;
+                                    off_time: string;
+                                }>;
+                            }>;
+                            operator_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_tmp_daily_shifts?: Array<{
+                                        group_id: string;
+                                        user_id: string;
+                                        date: number;
+                                        shift_name: string;
+                                        punch_time_simple_rules: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create_temp`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_task_remedy
+             */
+            userTaskRemedy: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 通知补卡审批发起
+                 *
+                 * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口，将在三方审批系统中发起的补卡审批数据，写入到飞书考勤系统中，状态为审批中。写入后可以由[通知审批状态更新](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process) 进行状态更新
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            remedy_date: number;
+                            punch_no: number;
+                            work_type: number;
+                            remedy_time: string;
+                            reason: string;
+                            time?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_remedy?: {
+                                        user_id: string;
+                                        remedy_date: number;
+                                        punch_no: number;
+                                        work_type: number;
+                                        approval_id?: string;
+                                        remedy_time: string;
+                                        status?: number;
+                                        reason: string;
+                                        time?: string;
+                                        time_zone?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_user_allowed_remedys&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_user_allowed_remedys&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 获取可补卡时间
+                 *
+                 * 获取用户某天可以补的第几次上 / 下班卡的时间。
+                 */
+                queryUserAllowedRemedys: async (
+                    payload?: {
+                        data: { user_id: string; remedy_date: number };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_allowed_remedys?: Array<{
+                                        user_id: string;
+                                        remedy_date: number;
+                                        is_free_punch?: boolean;
+                                        punch_no?: number;
+                                        work_type?: number;
+                                        punch_status?: string;
+                                        normal_punch_time?: string;
+                                        remedy_start_time?: string;
+                                        remedy_end_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 获取补卡记录
+                 *
+                 * 补卡：用户通过审批的方式，在某一次上/下班的打卡时间范围内，补充一条打卡记录，用以修正用户的考勤结果。本接口专用于获取员工的补卡记录（无页面功能对应）
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_time_from: string;
+                            check_time_to: string;
+                            check_date_type?:
+                                | "PeriodTime"
+                                | "CreateTime"
+                                | "UpdateTime";
+                            status?: number;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_remedys?: Array<{
+                                        user_id: string;
+                                        remedy_date: number;
+                                        punch_no: number;
+                                        work_type: number;
+                                        approval_id?: string;
+                                        remedy_time: string;
+                                        status?: number;
+                                        reason: string;
+                                        time?: string;
+                                        time_zone?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * shift
+             */
+            shift: {
                 listWithIterator: async (
                     payload?: {
                         params?: { page_size?: number; page_token?: string };
@@ -5057,7 +5385,7 @@ export default abstract class Client extends attendance_machine {
                         const res = await this.httpInstance
                             .request<any, any>({
                                 url: fillApiPath(
-                                    `${this.domain}/open-apis/attendance/v1/groups`,
+                                    `${this.domain}/open-apis/attendance/v1/shifts`,
                                     path
                                 ),
                                 method: "GET",
@@ -5105,9 +5433,67 @@ export default abstract class Client extends attendance_machine {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
-                                                    group_list?: Array<{
-                                                        group_id: string;
-                                                        group_name: string;
+                                                    shift_list?: Array<{
+                                                        shift_id: string;
+                                                        shift_name: string;
+                                                        punch_times: number;
+                                                        sub_shift_leader_ids?: Array<string>;
+                                                        is_flexible?: boolean;
+                                                        flexible_minutes?: number;
+                                                        flexible_rule?: Array<{
+                                                            flexible_early_minutes: number;
+                                                            flexible_late_minutes: number;
+                                                        }>;
+                                                        no_need_off?: boolean;
+                                                        punch_time_rule: Array<{
+                                                            on_time: string;
+                                                            off_time: string;
+                                                            late_minutes_as_late: number;
+                                                            late_minutes_as_lack: number;
+                                                            on_advance_minutes: number;
+                                                            early_minutes_as_early: number;
+                                                            early_minutes_as_lack: number;
+                                                            off_delay_minutes: number;
+                                                            late_minutes_as_serious_late?: number;
+                                                            no_need_on?: boolean;
+                                                            no_need_off?: boolean;
+                                                        }>;
+                                                        late_off_late_on_rule?: Array<{
+                                                            late_off_minutes: number;
+                                                            late_on_minutes: number;
+                                                        }>;
+                                                        rest_time_rule?: Array<{
+                                                            rest_begin_time: string;
+                                                            rest_end_time: string;
+                                                        }>;
+                                                        overtime_rule?: Array<{
+                                                            on_overtime: string;
+                                                            off_overtime: string;
+                                                        }>;
+                                                        day_type?: number;
+                                                        overtime_rest_time_rule?: Array<{
+                                                            rest_begin_time: string;
+                                                            rest_end_time: string;
+                                                        }>;
+                                                        late_minutes_as_serious_late?: number;
+                                                        shift_middle_time_rule?: {
+                                                            middle_time_type?: number;
+                                                            fixed_middle_time?: string;
+                                                        };
+                                                        shift_attendance_time_config?: {
+                                                            attendance_time?: number;
+                                                            on_attendance_time?: number;
+                                                            off_attendance_time?: number;
+                                                        };
+                                                        late_off_late_on_setting?: {
+                                                            late_off_base_on_time_type?: number;
+                                                            late_on_base_on_time_type?: number;
+                                                        };
+                                                        id?: string;
+                                                        rest_time_flexible_configs?: Array<{
+                                                            need_flexible?: boolean;
+                                                            late_mins?: number;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5130,13 +5516,13 @@ export default abstract class Client extends attendance_machine {
                     return Iterable;
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=shift&version=v1 document }
                  *
-                 * 获取考勤组列表
+                 * 查询所有班次
                  *
-                 * 翻页获取所有考勤组列表。
+                 * 飞书人事管理后台中假勤设置-[班次配置](https://example.feishu.cn/people/workforce-management/setting/group/shifts)中的翻页查询所有班次功能，展示班次名称、打卡规则、弹性班次规则、休息规则等
                  */
                 list: async (
                     payload?: {
@@ -5154,9 +5540,67 @@ export default abstract class Client extends attendance_machine {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    group_list?: Array<{
-                                        group_id: string;
-                                        group_name: string;
+                                    shift_list?: Array<{
+                                        shift_id: string;
+                                        shift_name: string;
+                                        punch_times: number;
+                                        sub_shift_leader_ids?: Array<string>;
+                                        is_flexible?: boolean;
+                                        flexible_minutes?: number;
+                                        flexible_rule?: Array<{
+                                            flexible_early_minutes: number;
+                                            flexible_late_minutes: number;
+                                        }>;
+                                        no_need_off?: boolean;
+                                        punch_time_rule: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                            late_minutes_as_late: number;
+                                            late_minutes_as_lack: number;
+                                            on_advance_minutes: number;
+                                            early_minutes_as_early: number;
+                                            early_minutes_as_lack: number;
+                                            off_delay_minutes: number;
+                                            late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
+                                        }>;
+                                        late_off_late_on_rule?: Array<{
+                                            late_off_minutes: number;
+                                            late_on_minutes: number;
+                                        }>;
+                                        rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        overtime_rule?: Array<{
+                                            on_overtime: string;
+                                            off_overtime: string;
+                                        }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
+                                        id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5164,7 +5608,7 @@ export default abstract class Client extends attendance_machine {
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/groups`,
+                                `${this.domain}/open-apis/attendance/v1/shifts`,
                                 path
                             ),
                             method: "GET",
@@ -5180,20 +5624,56 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_user&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_user&project=attendance&resource=group&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 删除班次
+                 *
+                 * 通过班次 ID 删除班次。对应功能为假勤设置-[班次设置](https://example.feishu.cn/people/workforce-management/setting/group/shifts)班次列表中操作栏的删除按钮。
                  */
-                listUser: async (
+                delete: async (
                     payload?: {
-                        params: {
-                            employee_type: string;
-                            dept_type: string;
-                            page_size?: number;
-                            page_token?: string;
-                            member_clock_type: number;
-                        };
-                        path: { group_id: string };
+                        path: { shift_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 查询班次
+                 *
+                 * 通过班次 ID 获取班次详情。
+                 */
+                get: async (
+                    payload?: {
+                        path: { shift_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5207,17 +5687,71 @@ export default abstract class Client extends attendance_machine {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    users?: Array<{
-                                        user_id?: string;
-                                        department_ids?: Array<string>;
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
                                     }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/groups/:group_id/list_user`,
+                                `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
                                 path
                             ),
                             method: "GET",
@@ -5233,19 +5767,17 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/search document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=shift&version=v1 document }
                  *
-                 * 按名称查询考勤组
+                 * 按名称查询班次
                  *
-                 * 按考勤组名称查询考勤组摘要信息。查询条件支持名称精确匹配和模糊匹配两种方式。查询结果按考勤组修改时间 desc 排序，且最大记录数为 10 条。
-                 *
-                 * 该接口依赖的数据和考勤组主数据间存在数据同步延时（正常数据同步 2 秒以内），因此在使用该接口时需注意评估数据延迟潜在风险。
+                 * 飞书人事管理后台中假勤设置-[班次配置](https://example.feishu.cn/people/workforce-management/setting/group/shifts)中的搜索班次名称功能，展示班次名称、打卡规则、弹性班次规则、休息规则等
                  */
-                search: async (
+                query: async (
                     payload?: {
-                        data: { group_name: string; exactly_matched?: boolean };
+                        params: { shift_name: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5259,15 +5791,71 @@ export default abstract class Client extends attendance_machine {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    group_list?: Array<{
-                                        group_id: string;
-                                        group_name: string;
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
+                                    }>;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/groups/search`,
+                                `${this.domain}/open-apis/attendance/v1/shifts/query`,
                                 path
                             ),
                             method: "POST",
@@ -5282,177 +5870,14 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
-            },
-            /**
-             * leave_accrual_record
-             */
-            leaveAccrualRecord: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_accrual_record&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=attendance&resource=leave_accrual_record&version=v1 document }
-                 */
-                patch: async (
-                    payload?: {
-                        data: {
-                            leave_granting_record_id: string;
-                            employment_id: string;
-                            leave_type_id: string;
-                            reason: Array<{ lang: string; value: string }>;
-                            time_offset?: number;
-                            expiration_date?: string;
-                            quantity?: string;
-                            section_type?: number;
-                        };
-                        params?: {
-                            user_id_type?:
-                                | "open_id"
-                                | "people_corehr_id"
-                                | "union_id"
-                                | "user_id";
-                        };
-                        path?: { leave_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    record: {
-                                        id: string;
-                                        employment_id: string;
-                                        leave_type_id: string;
-                                        granting_quantity: string;
-                                        granting_unit: number;
-                                        effective_date: string;
-                                        expiration_date: string;
-                                        granted_by: number;
-                                        reason: Array<{
-                                            lang: string;
-                                            value: string;
-                                        }>;
-                                        created_at: string;
-                                        created_by: string;
-                                        updated_at: string;
-                                        updated_by: string;
-                                        section_type?: number;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/leave_accrual_record/:leave_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * leave_employ_expire_record
-             */
-            leaveEmployExpireRecord: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_employ_expire_record&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=leave_employ_expire_record&version=v1 document }
-                 */
-                get: async (
-                    payload?: {
-                        data: {
-                            employment_id: string;
-                            leave_type_id: string;
-                            start_expiration_date: string;
-                            end_expiration_date: string;
-                            time_offset?: number;
-                        };
-                        params?: {
-                            user_id_type?:
-                                | "open_id"
-                                | "people_corehr_id"
-                                | "union_id"
-                                | "user_id";
-                        };
-                        path?: { leave_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    records: Array<{
-                                        id: string;
-                                        employment_id: string;
-                                        leave_type_id: string;
-                                        granting_quantity: string;
-                                        left_granting_quantity: string;
-                                        granting_unit: number;
-                                        effective_date: string;
-                                        expiration_date: string;
-                                        reason: Array<{
-                                            lang: string;
-                                            value: string;
-                                        }>;
-                                        is_update_by_external: boolean;
-                                        accrual_source: number;
-                                        leave_sub_type_id: string;
-                                        section_type?: number;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/leave_employ_expire_records/:leave_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 考勤班次
-             */
-            shift: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=shift&version=v1 document }
                  *
                  * 创建班次
                  *
-                 * 班次是描述一次考勤任务时间规则的统称，比如一天打多少次卡，每次卡的上下班时间，晚到多长时间算迟到，晚到多长时间算缺卡等。
+                 * 该接口用于创建企业的考勤班次。
                  *
                  * - 创建一个考勤组前，必须先创建一个或者多个班次。;- 一个公司内的班次是共享的，你可以直接引用他人创建的班次，但是需要注意的是，若他人修改了班次，会影响到你的考勤组及其考勤结果。
                  */
@@ -5616,57 +6041,33 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+            },
+            /**
+             * user_stats_field
+             */
+            userStatsField: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=delete&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_field&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_stats_field&version=v1 document }
                  *
-                 * 删除班次
+                 * 查询统计表头
                  *
-                 * 通过班次 ID 删除班次。
+                 * 查询考勤统计支持的日度统计或月度统计的统计表头。报表的表头信息可以在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中查询到具体的报表信息，此接口专门用于查询表头数据
+                 *
+                 * 调用统计开放接口api目前不返回请假统计和加班统计的新增字段类型
                  */
-                delete: async (
+                query: async (
                     payload?: {
-                        path: { shift_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/get document }
-                 *
-                 * 获取班次详情
-                 *
-                 * 通过班次 ID 获取班次详情。
-                 */
-                get: async (
-                    payload?: {
-                        path: { shift_id: string };
+                        data: {
+                            locale: "en" | "ja" | "zh";
+                            stats_type: "daily" | "month";
+                            start_date: number;
+                            end_date: number;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5680,71 +6081,357 @@ export default abstract class Client extends attendance_machine {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    shift_id: string;
-                                    shift_name: string;
-                                    punch_times: number;
-                                    sub_shift_leader_ids?: Array<string>;
-                                    is_flexible?: boolean;
-                                    flexible_minutes?: number;
-                                    flexible_rule?: Array<{
-                                        flexible_early_minutes: number;
-                                        flexible_late_minutes: number;
-                                    }>;
-                                    no_need_off?: boolean;
-                                    punch_time_rule: Array<{
-                                        on_time: string;
-                                        off_time: string;
-                                        late_minutes_as_late: number;
-                                        late_minutes_as_lack: number;
-                                        on_advance_minutes: number;
-                                        early_minutes_as_early: number;
-                                        early_minutes_as_lack: number;
-                                        off_delay_minutes: number;
-                                        late_minutes_as_serious_late?: number;
-                                        no_need_on?: boolean;
-                                        no_need_off?: boolean;
-                                    }>;
-                                    late_off_late_on_rule?: Array<{
-                                        late_off_minutes: number;
-                                        late_on_minutes: number;
-                                    }>;
-                                    rest_time_rule?: Array<{
-                                        rest_begin_time: string;
-                                        rest_end_time: string;
-                                    }>;
-                                    overtime_rule?: Array<{
-                                        on_overtime: string;
-                                        off_overtime: string;
-                                    }>;
-                                    day_type?: number;
-                                    overtime_rest_time_rule?: Array<{
-                                        rest_begin_time: string;
-                                        rest_end_time: string;
-                                    }>;
-                                    late_minutes_as_serious_late?: number;
-                                    shift_middle_time_rule?: {
-                                        middle_time_type?: number;
-                                        fixed_middle_time?: string;
+                                    user_stats_field?: {
+                                        stats_type: "daily" | "month";
+                                        user_id: string;
+                                        fields: Array<{
+                                            code: string;
+                                            title: string;
+                                            child_fields?: Array<{
+                                                code: string;
+                                                title: string;
+                                                time_unit?: string;
+                                            }>;
+                                        }>;
                                     };
-                                    shift_attendance_time_config?: {
-                                        attendance_time?: number;
-                                        on_attendance_time?: number;
-                                        off_attendance_time?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_fields/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_stats_view
+             */
+            userStatsView: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=attendance&resource=user_stats_view&version=v1 document }
+                 *
+                 * 更新统计设置
+                 *
+                 * 更新开发者定制的日度统计或月度统计的统计报表表头设置信息。报表的表头信息可以在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中查询到具体的报表信息，此接口专门用于更新表头信息。
+                 *
+                 * 本接口会对设置进行全量覆盖更新
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            view: {
+                                view_id: string;
+                                stats_type: "daily" | "month";
+                                user_id: string;
+                                items?: Array<{
+                                    code: string;
+                                    child_items?: Array<{
+                                        code: string;
+                                        value: string;
+                                    }>;
+                                }>;
+                            };
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                        path: { user_stats_view_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    view?: {
+                                        view_id: string;
+                                        stats_type: "daily" | "month";
+                                        user_id: string;
+                                        items?: Array<{
+                                            code: string;
+                                            title?: string;
+                                            child_items?: Array<{
+                                                code: string;
+                                                value: string;
+                                                title?: string;
+                                                column_type?: number;
+                                                read_only?: boolean;
+                                                min_value?: string;
+                                                max_value?: string;
+                                            }>;
+                                        }>;
                                     };
-                                    late_off_late_on_setting?: {
-                                        late_off_base_on_time_type?: number;
-                                        late_on_base_on_time_type?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_stats_view&version=v1 document }
+                 *
+                 * 查询统计设置
+                 *
+                 * 查询考勤统计支持的日度统计或月度统计的统计表头。报表的表头信息可以在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中查询到具体的报表信息，此接口专门用于查询表头数据。注意此接口和[查询统计表头](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_field/query)基本相同，区别点在于在兼容历史统计视图模型（历史统计数据模型可以按用户ID设置，后续统计升级为仅支持租户维度）
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            locale: "en" | "ja" | "zh";
+                            stats_type: "daily" | "month";
+                            user_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    view?: {
+                                        view_id: string;
+                                        stats_type: "daily" | "month";
+                                        user_id: string;
+                                        items?: Array<{
+                                            code: string;
+                                            title?: string;
+                                            child_items?: Array<{
+                                                code: string;
+                                                value: string;
+                                                title?: string;
+                                                column_type?: number;
+                                                read_only?: boolean;
+                                                min_value?: string;
+                                                max_value?: string;
+                                            }>;
+                                        }>;
                                     };
-                                    id?: string;
-                                    rest_time_flexible_configs?: Array<{
-                                        need_flexible?: boolean;
-                                        late_mins?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_views/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * approval_info
+             */
+            approvalInfo: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_info&apiName=process&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=process&project=attendance&resource=approval_info&version=v1 document }
+                 *
+                 * 通知审批状态更新
+                 *
+                 * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口更新写入飞书考勤系统中的三方系统审批状态，例如请假、加班、外出、出差、补卡等审批，状态包括通过、不通过、撤销等。
+                 */
+                process: async (
+                    payload?: {
+                        data: {
+                            approval_id: string;
+                            approval_type: string;
+                            status: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    approval_info?: {
+                                        approval_id: string;
+                                        approval_type:
+                                            | "leave"
+                                            | "overtime"
+                                            | "trip"
+                                            | "out"
+                                            | "remedy";
+                                        status: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_setting
+             */
+            userSetting: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=modify&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=attendance&resource=user_setting&version=v1 document }
+                 *
+                 * 修改用户人脸识别信息
+                 *
+                 * 修改授权内员工的用户设置信息，包括人脸照片文件 ID。修改用户人脸识别信息目前只支持 API 方式修改，管理后台已无法修改。
+                 */
+                modify: async (
+                    payload?: {
+                        data?: {
+                            user_setting?: {
+                                user_id: string;
+                                face_key: string;
+                                face_key_update_time?: string;
+                            };
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_setting?: {
+                                        user_id: string;
+                                        face_key: string;
+                                        face_key_update_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_settings/modify`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_setting&version=v1 document }
+                 *
+                 * 批量查询用户人脸识别信息
+                 *
+                 * 批量查询授权内员工的用户设置信息，包括人脸照片文件 ID、人脸照片更新时间。对应页面假勤设置-[人脸识别](https://example.feishu.cn/people/workforce-management/setting/group/security)。根据返回的face_key可以下载人脸信息[下载用户人脸识别照片;](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/file/download)
+                 */
+                query: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_settings?: Array<{
+                                        user_id: string;
+                                        face_key: string;
+                                        face_key_update_time?: string;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
+                                `${this.domain}/open-apis/attendance/v1/user_settings/query`,
                                 path
                             ),
                             method: "GET",
@@ -5759,6 +6446,93 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+            },
+            /**
+             * user_stats_data
+             */
+            userStatsData: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_data&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_stats_data&version=v1 document }
+                 *
+                 * 查询统计数据
+                 *
+                 * 查询日度统计或月度统计的统计数据。字段包含基本信息、考勤组信息、出勤统计、异常统计、请假统计、加班统计、打卡时间、考勤结果和自定义字段。具体报表可在考勤统计-[报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中找到
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            locale: "en" | "ja" | "zh";
+                            stats_type: "daily" | "month";
+                            start_date: number;
+                            end_date: number;
+                            user_ids?: Array<string>;
+                            need_history?: boolean;
+                            current_group_only?: boolean;
+                            user_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_datas?: Array<{
+                                        name: string;
+                                        user_id: string;
+                                        datas?: Array<{
+                                            code: string;
+                                            value: string;
+                                            features?: Array<{
+                                                key: string;
+                                                value: string;
+                                            }>;
+                                            title?: string;
+                                            duration_num?: {
+                                                day?: string;
+                                                half_day?: string;
+                                                hour?: string;
+                                                half_hour?: string;
+                                                minute?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    invalid_user_list?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * archive_rule
+             */
+            archiveRule: {
                 listWithIterator: async (
                     payload?: {
                         params?: { page_size?: number; page_token?: string };
@@ -5776,7 +6550,7 @@ export default abstract class Client extends attendance_machine {
                         const res = await this.httpInstance
                             .request<any, any>({
                                 url: fillApiPath(
-                                    `${this.domain}/open-apis/attendance/v1/shifts`,
+                                    `${this.domain}/open-apis/attendance/v1/archive_rule`,
                                     path
                                 ),
                                 method: "GET",
@@ -5824,67 +6598,19 @@ export default abstract class Client extends attendance_machine {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
-                                                    shift_list?: Array<{
-                                                        shift_id: string;
-                                                        shift_name: string;
-                                                        punch_times: number;
-                                                        sub_shift_leader_ids?: Array<string>;
-                                                        is_flexible?: boolean;
-                                                        flexible_minutes?: number;
-                                                        flexible_rule?: Array<{
-                                                            flexible_early_minutes: number;
-                                                            flexible_late_minutes: number;
-                                                        }>;
-                                                        no_need_off?: boolean;
-                                                        punch_time_rule: Array<{
-                                                            on_time: string;
-                                                            off_time: string;
-                                                            late_minutes_as_late: number;
-                                                            late_minutes_as_lack: number;
-                                                            on_advance_minutes: number;
-                                                            early_minutes_as_early: number;
-                                                            early_minutes_as_lack: number;
-                                                            off_delay_minutes: number;
-                                                            late_minutes_as_serious_late?: number;
-                                                            no_need_on?: boolean;
-                                                            no_need_off?: boolean;
-                                                        }>;
-                                                        late_off_late_on_rule?: Array<{
-                                                            late_off_minutes: number;
-                                                            late_on_minutes: number;
-                                                        }>;
-                                                        rest_time_rule?: Array<{
-                                                            rest_begin_time: string;
-                                                            rest_end_time: string;
-                                                        }>;
-                                                        overtime_rule?: Array<{
-                                                            on_overtime: string;
-                                                            off_overtime: string;
-                                                        }>;
-                                                        day_type?: number;
-                                                        overtime_rest_time_rule?: Array<{
-                                                            rest_begin_time: string;
-                                                            rest_end_time: string;
-                                                        }>;
-                                                        late_minutes_as_serious_late?: number;
-                                                        shift_middle_time_rule?: {
-                                                            middle_time_type?: number;
-                                                            fixed_middle_time?: string;
+                                                    items?: Array<{
+                                                        report_id?: string;
+                                                        report_name?: {
+                                                            zh?: string;
+                                                            en?: string;
+                                                            ja?: string;
                                                         };
-                                                        shift_attendance_time_config?: {
-                                                            attendance_time?: number;
-                                                            on_attendance_time?: number;
-                                                            off_attendance_time?: number;
+                                                        archive_rule_id?: string;
+                                                        archive_rule_name?: {
+                                                            zh?: string;
+                                                            en?: string;
+                                                            ja?: string;
                                                         };
-                                                        late_off_late_on_setting?: {
-                                                            late_off_base_on_time_type?: number;
-                                                            late_on_base_on_time_type?: number;
-                                                        };
-                                                        id?: string;
-                                                        rest_time_flexible_configs?: Array<{
-                                                            need_flexible?: boolean;
-                                                            late_mins?: number;
-                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5907,13 +6633,13 @@ export default abstract class Client extends attendance_machine {
                     return Iterable;
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=list&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=archive_rule&version=v1 document }
                  *
-                 * 获取班次列表
+                 * 查询所有归档规则
                  *
-                 * 翻页获取所有班次列表。
+                 * 查询所有归档规则，对应后台假勤管理-考勤统计-报表-[归档报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)功能
                  */
                 list: async (
                     payload?: {
@@ -5931,67 +6657,19 @@ export default abstract class Client extends attendance_machine {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    shift_list?: Array<{
-                                        shift_id: string;
-                                        shift_name: string;
-                                        punch_times: number;
-                                        sub_shift_leader_ids?: Array<string>;
-                                        is_flexible?: boolean;
-                                        flexible_minutes?: number;
-                                        flexible_rule?: Array<{
-                                            flexible_early_minutes: number;
-                                            flexible_late_minutes: number;
-                                        }>;
-                                        no_need_off?: boolean;
-                                        punch_time_rule: Array<{
-                                            on_time: string;
-                                            off_time: string;
-                                            late_minutes_as_late: number;
-                                            late_minutes_as_lack: number;
-                                            on_advance_minutes: number;
-                                            early_minutes_as_early: number;
-                                            early_minutes_as_lack: number;
-                                            off_delay_minutes: number;
-                                            late_minutes_as_serious_late?: number;
-                                            no_need_on?: boolean;
-                                            no_need_off?: boolean;
-                                        }>;
-                                        late_off_late_on_rule?: Array<{
-                                            late_off_minutes: number;
-                                            late_on_minutes: number;
-                                        }>;
-                                        rest_time_rule?: Array<{
-                                            rest_begin_time: string;
-                                            rest_end_time: string;
-                                        }>;
-                                        overtime_rule?: Array<{
-                                            on_overtime: string;
-                                            off_overtime: string;
-                                        }>;
-                                        day_type?: number;
-                                        overtime_rest_time_rule?: Array<{
-                                            rest_begin_time: string;
-                                            rest_end_time: string;
-                                        }>;
-                                        late_minutes_as_serious_late?: number;
-                                        shift_middle_time_rule?: {
-                                            middle_time_type?: number;
-                                            fixed_middle_time?: string;
+                                    items?: Array<{
+                                        report_id?: string;
+                                        report_name?: {
+                                            zh?: string;
+                                            en?: string;
+                                            ja?: string;
                                         };
-                                        shift_attendance_time_config?: {
-                                            attendance_time?: number;
-                                            on_attendance_time?: number;
-                                            off_attendance_time?: number;
+                                        archive_rule_id?: string;
+                                        archive_rule_name?: {
+                                            zh?: string;
+                                            en?: string;
+                                            ja?: string;
                                         };
-                                        late_off_late_on_setting?: {
-                                            late_off_base_on_time_type?: number;
-                                            late_on_base_on_time_type?: number;
-                                        };
-                                        id?: string;
-                                        rest_time_flexible_configs?: Array<{
-                                            need_flexible?: boolean;
-                                            late_mins?: number;
-                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5999,7 +6677,7 @@ export default abstract class Client extends attendance_machine {
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/shifts`,
+                                `${this.domain}/open-apis/attendance/v1/archive_rule`,
                                 path
                             ),
                             method: "GET",
@@ -6015,17 +6693,23 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=query&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
                  *
-                 * 按名称查询班次
+                 * 查询归档报表表头
                  *
-                 * 通过班次的名称查询班次信息。
+                 * 查询归档报表表头，对应后台假勤管理-考勤统计-报表-[归档报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)中一个归档报表的表头信息。归档报表支持引用系统报表，可设置归档时间和数据归档周期，并且支持根据部门/人员、国家/地区、人员类型、工作地点、职级、序列、职务进行人员圈选。
                  */
-                query: async (
+                userStatsFieldsQuery: async (
                     payload?: {
-                        params: { shift_name: string };
+                        data: {
+                            locale?: string;
+                            month: string;
+                            archive_rule_id: string;
+                            operator_id: string;
+                        };
+                        params: { employee_type: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -6039,71 +6723,123 @@ export default abstract class Client extends attendance_machine {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    shift_id: string;
-                                    shift_name: string;
-                                    punch_times: number;
-                                    sub_shift_leader_ids?: Array<string>;
-                                    is_flexible?: boolean;
-                                    flexible_minutes?: number;
-                                    flexible_rule?: Array<{
-                                        flexible_early_minutes: number;
-                                        flexible_late_minutes: number;
-                                    }>;
-                                    no_need_off?: boolean;
-                                    punch_time_rule: Array<{
-                                        on_time: string;
-                                        off_time: string;
-                                        late_minutes_as_late: number;
-                                        late_minutes_as_lack: number;
-                                        on_advance_minutes: number;
-                                        early_minutes_as_early: number;
-                                        early_minutes_as_lack: number;
-                                        off_delay_minutes: number;
-                                        late_minutes_as_serious_late?: number;
-                                        no_need_on?: boolean;
-                                        no_need_off?: boolean;
-                                    }>;
-                                    late_off_late_on_rule?: Array<{
-                                        late_off_minutes: number;
-                                        late_on_minutes: number;
-                                    }>;
-                                    rest_time_rule?: Array<{
-                                        rest_begin_time: string;
-                                        rest_end_time: string;
-                                    }>;
-                                    overtime_rule?: Array<{
-                                        on_overtime: string;
-                                        off_overtime: string;
-                                    }>;
-                                    day_type?: number;
-                                    overtime_rest_time_rule?: Array<{
-                                        rest_begin_time: string;
-                                        rest_end_time: string;
-                                    }>;
-                                    late_minutes_as_serious_late?: number;
-                                    shift_middle_time_rule?: {
-                                        middle_time_type?: number;
-                                        fixed_middle_time?: string;
-                                    };
-                                    shift_attendance_time_config?: {
-                                        attendance_time?: number;
-                                        on_attendance_time?: number;
-                                        off_attendance_time?: number;
-                                    };
-                                    late_off_late_on_setting?: {
-                                        late_off_base_on_time_type?: number;
-                                        late_on_base_on_time_type?: number;
-                                    };
-                                    id?: string;
-                                    rest_time_flexible_configs?: Array<{
-                                        need_flexible?: boolean;
-                                        late_mins?: number;
+                                    archive_report_fields?: Array<{
+                                        code?: string;
+                                        title?: string;
+                                        upper_titles?: Array<string>;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/shifts/query`,
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_report&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_report&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 删除归档报表行数据
+                 *
+                 * 按月份、用户和归档规则ID直接删除归档报表行数据
+                 *
+                 * 页面无对应功能，页面是通过导入并全量覆盖完成数据删除的
+                 */
+                delReport: async (
+                    payload?: {
+                        data: {
+                            month: string;
+                            operator_id: string;
+                            archive_rule_id: string;
+                            user_ids?: Array<string>;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/del_report`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 写入归档报表结果
+                 *
+                 * 写入归档报表结果，对应假勤管理-考勤统计-报表-[归档报表](https://example.feishu.cn/people/workforce-management/manage/statistics/report)页签，点击报表名称进入后的导入功能。可以将数据直接写入归档报表。
+                 */
+                uploadReport: async (
+                    payload?: {
+                        data: {
+                            month: string;
+                            operator_id: string;
+                            archive_report_datas?: Array<{
+                                member_id: string;
+                                start_time: string;
+                                end_time: string;
+                                field_datas?: Array<{
+                                    code: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            archive_rule_id: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invalid_code?: Array<string>;
+                                    invalid_member_id?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
                                 path
                             ),
                             method: "POST",
@@ -6120,19 +6856,513 @@ export default abstract class Client extends attendance_machine {
                 },
             },
             /**
-             * 假勤审批
+             * leave_employ_expire_record
+             */
+            leaveEmployExpireRecord: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_employ_expire_record&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=leave_employ_expire_record&version=v1 document }
+                 *
+                 * 通过过期时间获取发放记录
+                 *
+                 * 只能获取到对应时间段过期的发放记录
+                 *
+                 * 仅飞书人事企业版可用
+                 */
+                get: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            leave_type_id: string;
+                            start_expiration_date: string;
+                            end_expiration_date: string;
+                            time_offset?: number;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "open_id"
+                                | "people_corehr_id"
+                                | "union_id"
+                                | "user_id";
+                        };
+                        path?: { leave_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    records: Array<{
+                                        id: string;
+                                        employment_id: string;
+                                        leave_type_id: string;
+                                        granting_quantity: string;
+                                        left_granting_quantity: string;
+                                        granting_unit: number;
+                                        effective_date: string;
+                                        expiration_date: string;
+                                        reason: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        is_update_by_external: boolean;
+                                        accrual_source: number;
+                                        leave_sub_type_id: string;
+                                        section_type?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/leave_employ_expire_records/:leave_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * leave_accrual_record
+             */
+            leaveAccrualRecord: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_accrual_record&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=attendance&resource=leave_accrual_record&version=v1 document }
+                 *
+                 * 修改发放记录;
+                 *
+                 * 更新发放记录的发放数量和失效日期，对应假勤管理-休假管理-[发放记录](https://example.feishu.cn/people/workforce-management/manage/leave/leave_admin/granting_record)
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            leave_granting_record_id: string;
+                            employment_id: string;
+                            leave_type_id: string;
+                            reason: Array<{ lang: string; value: string }>;
+                            time_offset?: number;
+                            expiration_date?: string;
+                            quantity?: string;
+                            section_type?: number;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "open_id"
+                                | "people_corehr_id"
+                                | "union_id"
+                                | "user_id";
+                        };
+                        path?: { leave_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    record: {
+                                        id: string;
+                                        employment_id: string;
+                                        leave_type_id: string;
+                                        granting_quantity: string;
+                                        granting_unit: number;
+                                        effective_date: string;
+                                        expiration_date: string;
+                                        granted_by: number;
+                                        reason: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        created_at: string;
+                                        created_by: string;
+                                        updated_at: string;
+                                        updated_by: string;
+                                        section_type?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/leave_accrual_record/:leave_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_flow
+             */
+            userFlow: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_del&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_del&project=attendance&resource=user_flow&version=v1 document }
+                 *
+                 * 删除打卡流水
+                 *
+                 * 删除员工从开放平台导入的打卡记录。删除后会重新计算打卡记录对应考勤任务结果。
+                 *
+                 * 当返回结果fail_record_ids不为空时，msg字段返回对应失败原因，格式为：{"xx id": "xx reason"}
+                 */
+                batchDel: async (
+                    payload?: {
+                        data: { record_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    success_record_ids?: Array<string>;
+                                    fail_record_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/batch_del`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=attendance&resource=user_flow&version=v1 document }
+                 *
+                 * 导入打卡流水
+                 *
+                 * 导入员工的打卡流水记录。导入后，会根据员工所在的考勤组班次规则，计算最终的打卡状态与结果。可在打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)中查询
+                 *
+                 * 适用于考勤机数据导入等场景。
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data: {
+                            flow_records: Array<{
+                                user_id: string;
+                                creator_id: string;
+                                location_name: string;
+                                check_time: string;
+                                comment: string;
+                                record_id?: string;
+                                longitude?: number;
+                                latitude?: number;
+                                ssid?: string;
+                                bssid?: string;
+                                is_field?: boolean;
+                                is_wifi?: boolean;
+                                type?: number;
+                                photo_urls?: Array<string>;
+                                device_id?: string;
+                                check_result?:
+                                    | "NoNeedCheck"
+                                    | "SystemCheck"
+                                    | "Normal"
+                                    | "Early"
+                                    | "Late"
+                                    | "SeriousLate"
+                                    | "Lack"
+                                    | "Invalid"
+                                    | "None"
+                                    | "Todo";
+                                external_id?: string;
+                                idempotent_id?: string;
+                                create_time?: string;
+                            }>;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    flow_records?: Array<{
+                                        user_id: string;
+                                        creator_id: string;
+                                        location_name: string;
+                                        check_time: string;
+                                        comment: string;
+                                        record_id?: string;
+                                        longitude?: number;
+                                        latitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        is_field?: boolean;
+                                        is_wifi?: boolean;
+                                        type?: number;
+                                        photo_urls?: Array<string>;
+                                        device_id?: string;
+                                        check_result?:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "SeriousLate"
+                                            | "Lack"
+                                            | "Invalid"
+                                            | "None"
+                                            | "Todo";
+                                        external_id?: string;
+                                        idempotent_id?: string;
+                                        create_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_flow&version=v1 document }
+                 *
+                 * 批量查询打卡流水
+                 *
+                 * 通过用户 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（wifi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+                 *
+                 * 这里只返回有效的打卡流水，无效或待生效的不会返回;;如果只需获取打卡结果，而不需要详细的打卡数据，可使用“获取打卡结果”的接口。
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_time_from: string;
+                            check_time_to: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                            include_terminated_user?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_flow_results?: Array<{
+                                        user_id: string;
+                                        creator_id: string;
+                                        location_name: string;
+                                        check_time: string;
+                                        comment: string;
+                                        record_id?: string;
+                                        longitude?: number;
+                                        latitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        is_field?: boolean;
+                                        is_wifi?: boolean;
+                                        type?: number;
+                                        photo_urls?: Array<string>;
+                                        device_id?: string;
+                                        check_result?:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "SeriousLate"
+                                            | "Lack"
+                                            | "Invalid"
+                                            | "None"
+                                            | "Todo";
+                                        external_id?: string;
+                                        idempotent_id?: string;
+                                        create_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=user_flow&version=v1 document }
+                 *
+                 * 查询打卡流水
+                 *
+                 * 通过打卡记录 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（Wi-Fi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                        path: { user_flow_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_id: string;
+                                    creator_id: string;
+                                    location_name: string;
+                                    check_time: string;
+                                    comment: string;
+                                    record_id?: string;
+                                    longitude?: number;
+                                    latitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    is_field?: boolean;
+                                    is_wifi?: boolean;
+                                    type?: number;
+                                    photo_urls?: Array<string>;
+                                    device_id?: string;
+                                    check_result?:
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
+                                    external_id?: string;
+                                    idempotent_id?: string;
+                                    create_time?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_approval
              */
             userApproval: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=user_approval&version=v1 document }
                  *
                  * 写入审批结果
                  *
-                 * 由于部分企业使用的是自己的审批系统，而不是飞书审批系统，因此员工的请假、加班等数据无法流入到飞书考勤系统中，导致员工在请假时间段内依然收到打卡提醒，并且被记为缺卡。;;对于这些只使用飞书考勤系统，而未使用飞书审批系统的企业，可以通过考勤开放接口的形式，将三方审批结果数据回写到飞书考勤系统中。
+                 * 由于部分企业使用的是自己的审批系统，而不是飞书审批系统，因此员工的请假、加班等数据无法流入到飞书考勤系统中，导致员工在请假时间段内依然收到打卡提醒，并且被记为缺卡。;对于这些只使用飞书考勤系统，而未使用飞书审批系统的企业，可以通过考勤开放接口的形式，将三方审批结果数据回写到飞书考勤系统中。（请注意，如果在飞书审批、自助服务或假勤应用中发起加班，请勿使用该接口写入和系统同一天生成的加班数据，否则写入的数据不计入）
                  *
-                 * 目前支持写入加班、请假、出差和外出这四种审批结果，写入只会追加(insert)，不会覆盖(update)（开放接口导入的加班假期记录，在管理后台的假期加班里查不到，只能通过[获取审批通过数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query)来查询）
+                 * 1. 目前支持写入加班、请假、出差和外出这四种审批结果，写入只会追加(insert)，不会覆盖(update)（开放接口导入的加班假期记录，在管理后台的假期加班里查不到，可以在考勤统计报表查看，或者通过[获取审批通过数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query)来查询）;2. 离职人员没有考勤组，所以写入和返回的时间会有差异
                  */
                 create: async (
                     payload?: {
@@ -6347,13 +7577,13 @@ export default abstract class Client extends attendance_machine {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_approval&version=v1 document }
                  *
-                 * 获取审批通过数据
+                 * 获取审批数据
                  *
-                 * 获取员工在某段时间内的请假、加班、外出和出差四种审批的通过数据。
+                 * 获取员工在某段时间内的请假、加班、外出和出差四种审批数据。
                  *
-                 * 请假的假期时长字段，暂未开放提供，待后续提供。
+                 * 请假的假期时长字段，暂未开放提供，待后续提供。;;请假、加班：仅支持查询已通过和已撤回状态的审批数据;;外出、出差：支持查询所有状态的审批数据
                  */
                 query: async (
                     payload?: {
@@ -6497,955 +7727,19 @@ export default abstract class Client extends attendance_machine {
                 },
             },
             /**
-             * 考勤排班
-             */
-            userDailyShift: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create document }
-                 *
-                 * 创建或修改班表
-                 *
-                 * 班表是用来描述考勤组内人员每天按哪个班次进行上班。目前班表支持按一个整月对一位或多位人员进行排班。
-                 */
-                batchCreate: async (
-                    payload?: {
-                        data: {
-                            user_daily_shifts: Array<{
-                                group_id: string;
-                                shift_id: string;
-                                month: number;
-                                user_id: string;
-                                day_no: number;
-                                is_clear_schedule?: boolean;
-                            }>;
-                            operator_id?: string;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_daily_shifts?: Array<{
-                                        group_id: string;
-                                        shift_id: string;
-                                        month: number;
-                                        user_id: string;
-                                        day_no: number;
-                                        is_clear_schedule?: boolean;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
-                 */
-                batchCreateTemp: async (
-                    payload?: {
-                        data: {
-                            user_tmp_daily_shifts: Array<{
-                                group_id: string;
-                                user_id: string;
-                                date: number;
-                                shift_name: string;
-                                punch_time_simple_rules: Array<{
-                                    on_time: string;
-                                    off_time: string;
-                                }>;
-                            }>;
-                            operator_id?: string;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_tmp_daily_shifts?: Array<{
-                                        group_id: string;
-                                        user_id: string;
-                                        date: number;
-                                        shift_name: string;
-                                        punch_time_simple_rules: Array<{
-                                            on_time: string;
-                                            off_time: string;
-                                        }>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create_temp`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/query document }
-                 *
-                 * 查询班表信息
-                 *
-                 * 支持查询多个用户的排班情况，查询的时间跨度不能超过 30 天。
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            user_ids: Array<string>;
-                            check_date_from: number;
-                            check_date_to: number;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_daily_shifts?: Array<{
-                                        group_id: string;
-                                        shift_id: string;
-                                        month: number;
-                                        user_id: string;
-                                        day_no: number;
-                                        is_clear_schedule?: boolean;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * user_flow
-             */
-            userFlow: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/batch_create document }
-                 *
-                 * 导入打卡流水记录
-                 *
-                 * 导入授权内员工的打卡流水记录。导入后，会根据员工所在的考勤组班次规则，计算最终的打卡状态与结果。
-                 *
-                 * 适用于考勤机数据导入等场景。
-                 */
-                batchCreate: async (
-                    payload?: {
-                        data: {
-                            flow_records: Array<{
-                                user_id: string;
-                                creator_id: string;
-                                location_name: string;
-                                check_time: string;
-                                comment: string;
-                                record_id?: string;
-                                longitude?: number;
-                                latitude?: number;
-                                ssid?: string;
-                                bssid?: string;
-                                is_field?: boolean;
-                                is_wifi?: boolean;
-                                type?: number;
-                                photo_urls?: Array<string>;
-                                device_id?: string;
-                                check_result?:
-                                    | "NoNeedCheck"
-                                    | "SystemCheck"
-                                    | "Normal"
-                                    | "Early"
-                                    | "Late"
-                                    | "SeriousLate"
-                                    | "Lack"
-                                    | "Invalid"
-                                    | "None"
-                                    | "Todo";
-                                external_id?: string;
-                                idempotent_id?: string;
-                                create_time?: string;
-                            }>;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    flow_records?: Array<{
-                                        user_id: string;
-                                        creator_id: string;
-                                        location_name: string;
-                                        check_time: string;
-                                        comment: string;
-                                        record_id?: string;
-                                        longitude?: number;
-                                        latitude?: number;
-                                        ssid?: string;
-                                        bssid?: string;
-                                        is_field?: boolean;
-                                        is_wifi?: boolean;
-                                        type?: number;
-                                        photo_urls?: Array<string>;
-                                        device_id?: string;
-                                        check_result?:
-                                            | "NoNeedCheck"
-                                            | "SystemCheck"
-                                            | "Normal"
-                                            | "Early"
-                                            | "Late"
-                                            | "SeriousLate"
-                                            | "Lack"
-                                            | "Invalid"
-                                            | "None"
-                                            | "Todo";
-                                        external_id?: string;
-                                        idempotent_id?: string;
-                                        create_time?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_flows/batch_create`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_del&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_del&project=attendance&resource=user_flow&version=v1 document }
-                 *
-                 * 批量删除流水
-                 */
-                batchDel: async (
-                    payload?: {
-                        data: { record_ids: Array<string> };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    success_record_ids?: Array<string>;
-                                    fail_record_ids?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_flows/batch_del`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/get document }
-                 *
-                 * 获取打卡流水记录
-                 *
-                 * 通过打卡记录 ID 获取用户的打卡流水记录。
-                 */
-                get: async (
-                    payload?: {
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                        path: { user_flow_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_id: string;
-                                    creator_id: string;
-                                    location_name: string;
-                                    check_time: string;
-                                    comment: string;
-                                    record_id?: string;
-                                    longitude?: number;
-                                    latitude?: number;
-                                    ssid?: string;
-                                    bssid?: string;
-                                    is_field?: boolean;
-                                    is_wifi?: boolean;
-                                    type?: number;
-                                    photo_urls?: Array<string>;
-                                    device_id?: string;
-                                    check_result?:
-                                        | "NoNeedCheck"
-                                        | "SystemCheck"
-                                        | "Normal"
-                                        | "Early"
-                                        | "Late"
-                                        | "SeriousLate"
-                                        | "Lack"
-                                        | "Invalid"
-                                        | "None"
-                                        | "Todo";
-                                    external_id?: string;
-                                    idempotent_id?: string;
-                                    create_time?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/query document }
-                 *
-                 * 批量查询打卡流水记录
-                 *
-                 * 批量查询授权内员工的实际打卡流水记录。例如，企业给一个员工设定的班次是上午 9 点和下午 6 点各打一次上下班卡，但是该员工在这期间打了多次卡，该接口会把所有的打卡记录都返回。
-                 *
-                 * 如果只需获取打卡结果，而不需要详细的打卡数据，可使用“获取打卡结果”的接口。
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            user_ids: Array<string>;
-                            check_time_from: string;
-                            check_time_to: string;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                            include_terminated_user?: boolean;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_flow_results?: Array<{
-                                        user_id: string;
-                                        creator_id: string;
-                                        location_name: string;
-                                        check_time: string;
-                                        comment: string;
-                                        record_id?: string;
-                                        longitude?: number;
-                                        latitude?: number;
-                                        ssid?: string;
-                                        bssid?: string;
-                                        is_field?: boolean;
-                                        is_wifi?: boolean;
-                                        type?: number;
-                                        photo_urls?: Array<string>;
-                                        device_id?: string;
-                                        check_result?:
-                                            | "NoNeedCheck"
-                                            | "SystemCheck"
-                                            | "Normal"
-                                            | "Early"
-                                            | "Late"
-                                            | "SeriousLate"
-                                            | "Lack"
-                                            | "Invalid"
-                                            | "None"
-                                            | "Todo";
-                                        external_id?: string;
-                                        idempotent_id?: string;
-                                        create_time?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_flows/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 用户设置
-             */
-            userSetting: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=modify&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/modify document }
-                 *
-                 * 修改用户设置
-                 *
-                 * 修改授权内员工的用户设置信息，包括人脸照片文件 ID。
-                 */
-                modify: async (
-                    payload?: {
-                        data?: {
-                            user_setting?: {
-                                user_id: string;
-                                face_key: string;
-                                face_key_update_time?: string;
-                            };
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_setting?: {
-                                        user_id: string;
-                                        face_key: string;
-                                        face_key_update_time?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_settings/modify`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/query document }
-                 *
-                 * 批量查询用户设置
-                 *
-                 * 批量查询授权内员工的用户设置信息，包括人脸照片文件 ID、人脸照片更新时间。
-                 */
-                query: async (
-                    payload?: {
-                        data: { user_ids: Array<string> };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_settings?: Array<{
-                                        user_id: string;
-                                        face_key: string;
-                                        face_key_update_time?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_settings/query`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 考勤统计
-             */
-            userStatsData: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_data&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query document }
-                 *
-                 * 查询统计数据
-                 *
-                 * 查询日度统计或月度统计的统计数据。
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            locale: "en" | "ja" | "zh";
-                            stats_type: "daily" | "month";
-                            start_date: number;
-                            end_date: number;
-                            user_ids?: Array<string>;
-                            need_history?: boolean;
-                            current_group_only?: boolean;
-                            user_id?: string;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_datas?: Array<{
-                                        name: string;
-                                        user_id: string;
-                                        datas?: Array<{
-                                            code: string;
-                                            value: string;
-                                            features?: Array<{
-                                                key: string;
-                                                value: string;
-                                            }>;
-                                            title?: string;
-                                            duration_num?: {
-                                                day?: string;
-                                                half_day?: string;
-                                                hour?: string;
-                                                half_hour?: string;
-                                                minute?: string;
-                                            };
-                                        }>;
-                                    }>;
-                                    invalid_user_list?: Array<string>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * user_stats_field
-             */
-            userStatsField: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_field&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_field/query document }
-                 *
-                 * 查询统计表头
-                 *
-                 * 查询考勤统计支持的日度统计或月度统计的统计表头。
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            locale: "en" | "ja" | "zh";
-                            stats_type: "daily" | "month";
-                            start_date: number;
-                            end_date: number;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_stats_field?: {
-                                        stats_type: "daily" | "month";
-                                        user_id: string;
-                                        fields: Array<{
-                                            code: string;
-                                            title: string;
-                                            child_fields?: Array<{
-                                                code: string;
-                                                title: string;
-                                                time_unit?: string;
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_stats_fields/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * user_stats_view
-             */
-            userStatsView: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_view/query document }
-                 *
-                 * 查询统计设置
-                 *
-                 * 查询开发者定制的日度统计或月度统计的统计报表表头设置信息。
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            locale: "en" | "ja" | "zh";
-                            stats_type: "daily" | "month";
-                            user_id?: string;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    view?: {
-                                        view_id: string;
-                                        stats_type: "daily" | "month";
-                                        user_id: string;
-                                        items?: Array<{
-                                            code: string;
-                                            title?: string;
-                                            child_items?: Array<{
-                                                code: string;
-                                                value: string;
-                                                title?: string;
-                                                column_type?: number;
-                                                read_only?: boolean;
-                                                min_value?: string;
-                                                max_value?: string;
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_stats_views/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_view/update document }
-                 *
-                 * 更新统计设置
-                 *
-                 * 更新开发者定制的日度统计或月度统计的统计报表表头设置信息。
-                 */
-                update: async (
-                    payload?: {
-                        data: {
-                            view: {
-                                view_id: string;
-                                stats_type: "daily" | "month";
-                                user_id: string;
-                                items?: Array<{
-                                    code: string;
-                                    child_items?: Array<{
-                                        code: string;
-                                        value: string;
-                                    }>;
-                                }>;
-                            };
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                        path: { user_stats_view_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    view?: {
-                                        view_id: string;
-                                        stats_type: "daily" | "month";
-                                        user_id: string;
-                                        items?: Array<{
-                                            code: string;
-                                            title?: string;
-                                            child_items?: Array<{
-                                                code: string;
-                                                value: string;
-                                                title?: string;
-                                                column_type?: number;
-                                                read_only?: boolean;
-                                                min_value?: string;
-                                                max_value?: string;
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 考勤记录
+             * user_task
              */
             userTask: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_task&version=v1 document }
                  *
-                 * 获取打卡结果
+                 * 查询打卡结果
                  *
-                 * 获取企业内员工的实际打卡结果，包括上班打卡结果和下班打卡结果。
+                 * 获取企业内员工的实际打卡结果，包括： * 打卡任务列表 * 打卡记录id * 用户信息 * 考勤组ID * 班次 ID * 考勤记录 * 上班记录 * 下班记录 * 上班打卡结果 * 下班打卡结果 * 上班打卡结果补充 * 下班打卡结果补充 * 上班打卡时间 * 下班打卡时间 * 无效用户 ID 列表 * 没有权限用户ID列表
                  *
-                 * - 如果企业给一个员工设定的班次是上午 9 点和下午 6 点各打一次上下班卡，即使员工在这期间打了多次卡，该接口也只会返回 1 条记录。;- 如果要获取打卡的详细数据，如打卡位置等信息，可使用“获取打卡流水记录”或“批量查询打卡流水记录”的接口。
+                 * - 如果企业给一个员工设定的班次是上午 9 点和下午 6 点各打一次上下班卡，即使员工在这期间打了多次卡，该接口也只会返回 1 条记录。;- 如果要获取打卡的详细数据，如打卡位置等信息，可使用[查询打卡流水](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/get)或[批量查询打卡流水](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/query)的接口
                  */
                 query: async (
                     payload?: {
@@ -7593,208 +7887,6 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/user_tasks/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 考勤补卡
-             */
-            userTaskRemedy: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/create document }
-                 *
-                 * 通知补卡审批发起
-                 *
-                 * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口，将在三方审批系统中发起的补卡审批数据，写入到飞书考勤系统中，状态为审批中。写入后可以由[通知审批状态更新](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process) 进行状态更新
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            user_id: string;
-                            remedy_date: number;
-                            punch_no: number;
-                            work_type: number;
-                            remedy_time: string;
-                            reason: string;
-                            time?: string;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_remedy?: {
-                                        user_id: string;
-                                        remedy_date: number;
-                                        punch_no: number;
-                                        work_type: number;
-                                        approval_id?: string;
-                                        remedy_time: string;
-                                        status?: number;
-                                        reason: string;
-                                        time?: string;
-                                        time_zone?: string;
-                                        create_time?: string;
-                                        update_time?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_task_remedys`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/query document }
-                 *
-                 * 获取补卡记录
-                 *
-                 * 获取授权内员工的补卡记录。
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            user_ids: Array<string>;
-                            check_time_from: string;
-                            check_time_to: string;
-                            check_date_type?:
-                                | "PeriodTime"
-                                | "CreateTime"
-                                | "UpdateTime";
-                            status?: number;
-                        };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_remedys?: Array<{
-                                        user_id: string;
-                                        remedy_date: number;
-                                        punch_no: number;
-                                        work_type: number;
-                                        approval_id?: string;
-                                        remedy_time: string;
-                                        status?: number;
-                                        reason: string;
-                                        time?: string;
-                                        time_zone?: string;
-                                        create_time?: string;
-                                        update_time?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_user_allowed_remedys&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/query_user_allowed_remedys document }
-                 *
-                 * 获取用户可补卡时间
-                 *
-                 * 获取用户某天可以补的第几次上 / 下班卡的时间。
-                 */
-                queryUserAllowedRemedys: async (
-                    payload?: {
-                        data: { user_id: string; remedy_date: number };
-                        params: {
-                            employee_type: "employee_id" | "employee_no";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_allowed_remedys?: Array<{
-                                        user_id: string;
-                                        remedy_date: number;
-                                        is_free_punch?: boolean;
-                                        punch_no?: number;
-                                        work_type?: number;
-                                        punch_status?: string;
-                                        normal_punch_time?: string;
-                                        remedy_start_time?: string;
-                                        remedy_end_time?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys`,
                                 path
                             ),
                             method: "POST",

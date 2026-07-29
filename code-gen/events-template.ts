@@ -4,8 +4,6 @@ import { IOtherEventHandles } from "./other-event-handles";
 // auto gen
 export interface IHandles extends IOtherEventHandles {
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record/events/created document }
-     *
      * 新增门禁访问记录
      *
      * 门禁设备识别用户成功后发送该事件给订阅应用。
@@ -28,8 +26,6 @@ export interface IHandles extends IOtherEventHandles {
         access_time?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/events/updated document }
-     *
      * 用户信息变更
      *
      * 智能门禁用户特征值变化时，发送此事件。
@@ -49,8 +45,128 @@ export interface IHandles extends IOtherEventHandles {
         face_uploaded?: boolean;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/events/audit document }
+     * 新增应用反馈
      *
+     * 当应用收到新反馈时，触发该事件
+     */
+    "application.application.feedback.created_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        feedback_time?: string;
+        tenant_name?: string;
+        feedback_type?: number;
+        fault_type?: Array<number>;
+        fault_time?: string;
+        source?: number;
+        contact?: string;
+        description?: string;
+        images?: Array<string>;
+        feedback_id?: string;
+        feedback_path?: string;
+    }) => Promise<any> | any;
+    /**
+     * 撤回应用发布申请
+     *
+     * 通过订阅该事件，可接收应用撤回发布申请事件
+     */
+    "application.application.app_version.publish_revoke_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        creator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        version_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 反馈更新
+     *
+     * 当反馈的处理状态被更新时，触发该事件
+     */
+    "application.application.feedback.updated_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        feedback_ids?: Array<string>;
+        status?: number;
+        update_time?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 机器人自定义菜单事件
+     *
+     * 当用户点击类型为事件的机器人菜单时触发
+     */
+    "application.bot.menu_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operator?: {
+            operator_name?: string;
+            operator_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+        };
+        event_key?: string;
+        timestamp?: number;
+    }) => Promise<any> | any;
+    /**
+     * 应用创建
+     *
+     * 当企业内有新的自建应用被创建时推送此事件（创建就会产生此事件，不需要发版）
+     */
+    "application.application.created_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        name?: string;
+        description?: string;
+        avatar?: string;
+        app_scene_type?: number;
+        primary_language?: string;
+        create_source?:
+            | "developer_console"
+            | "base"
+            | "app_engine"
+            | "bot_builder"
+            | "aily"
+            | "unknown";
+    }) => Promise<any> | any;
+    /**
      * 应用审核
      *
      * 通过订阅该事件，可接收应用审核（通过 / 拒绝）事件
@@ -73,8 +189,24 @@ export interface IHandles extends IOtherEventHandles {
         audit_source?: "administrator" | "auto";
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/events/publish_apply document }
-     *
+         
+         */
+    "application.application.visibility.added_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        users?: Array<{
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        }>;
+        source?: number;
+    }) => Promise<any> | any;
+    /**
      * 申请发布应用
      *
      * 通过订阅该事件，可接收应用提交发布申请事件
@@ -371,158 +503,8 @@ export interface IHandles extends IOtherEventHandles {
         app_status?: number;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/events/publish_revoke document }
-     *
-     * 撤回应用发布申请
-     *
-     * 通过订阅该事件，可接收应用撤回发布申请事件
-     */
-    "application.application.app_version.publish_revoke_v6"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        creator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        version_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/events/created document }
-     *
-     * 应用创建
-     *
-     * 当企业内有新的应用被创建时推送此事件
-     */
-    "application.application.created_v6"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        name?: string;
-        description?: string;
-        avatar?: string;
-        app_scene_type?: number;
-        primary_language?: string;
-        create_source?:
-            | "developer_console"
-            | "base"
-            | "app_engine"
-            | "bot_builder"
-            | "aily"
-            | "unknown";
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/events/created document }
-     *
-     * 新增应用反馈
-     *
-     * 当应用收到新反馈时，触发该事件
-     */
-    "application.application.feedback.created_v6"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        feedback_time?: string;
-        tenant_name?: string;
-        feedback_type?: number;
-        fault_type?: Array<number>;
-        fault_time?: string;
-        source?: number;
-        contact?: string;
-        description?: string;
-        images?: Array<string>;
-        feedback_id?: string;
-        feedback_path?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/events/updated document }
-     *
-     * 反馈更新
-     *
-     * 当反馈的处理状态被更新时，触发该事件
-     */
-    "application.application.feedback.updated_v6"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        feedback_ids?: Array<string>;
-        status?: number;
-        update_time?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/event/app-availability-scope-extended document }
-     */
-    "application.application.visibility.added_v6"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        users?: Array<{
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        }>;
-        source?: number;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/bot/events/menu document }
-     *
-     * 机器人自定义菜单
-     *
-     * 当用户点击类型为事件的机器人菜单时触发
-     */
-    "application.bot.menu_v6"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        operator?: {
-            operator_name?: string;
-            operator_id?: {
-                union_id?: string;
-                user_id?: string;
-                open_id?: string;
-            };
-        };
-        event_key?: string;
-        timestamp?: number;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/custom-approval-event document }
-     */
+         
+         */
     "approval.approval.updated_v4"?: (data: {
         event_id?: string;
         token?: string;
@@ -545,8 +527,59 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 审批任务状态变更事件
+     *
+     * 审批任务状态发生变更时会触发该事件。状态变更包括：;;- 用户创建审批实例后，推送第一个审批节点的审批任务 `PENDING` 状态。;- 如果当前审批节点是会签（AND）节点：;   - 	任一审批任务被同意，推送该任务的 `APPROVED`（已通过）状态，并推送当前节点剩余任务的 `PENDING` 状态。;   - 	任一审批任务被拒绝，推送该任务的 `REJECTED`（已拒绝）状态，并推送当前节点剩余任务的 `DONE` 状态。;- 如果当前节点是或签（OR）节点：;   -    任一审批任务被同意，推送该任务的 `APPROVED`（已通过）状态，并推送当前节点剩余任务的 `DONE`（已完成）状态、下一个节点所有任务的 `PENDING`（进行中）状态。;   -    任一审批任务被拒绝，推送该任务的 `REJECTED`（已拒绝）状态，并推送当前节点剩余任务的 `DONE`（已完成）状态。;- 如果用户对审批任务进行转交，推送该任务的 `TRANSFERRED`（已转交）状态，和被转交人任务的 `PENDING`（进行中）状态。;- 发起人撤回审批后，推送剩余所有任务的 `DONE`（已完成）状态。;- 审批定义被管理员删除后，推送剩余所有任务的 `DONE`（已完成）状态。;- 如果用户对审批任务进行退回，推送该任务的 `ROLLBACK`（已退回）状态，和被退回人任务的 `PENDING`（进行中）状态。;- 如果进行中的审批任务超时未处理被关闭，推送该任务的 `OVERTIME_CLOSE`（超时未处理被关闭）状态。;- 如果超时已关闭的审批任务被手动恢复，推送该任务的 `OVERTIME_RECOVER`（超时已关闭的任务被手动恢复）状态。
+     */
+    "approval.task.status_changed_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        approval_code?: string;
+        instance_code?: string;
+        task_id?: string;
+        task_external_id?: string;
+        assigned_user?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        status?: string;
+        operate_time?: string;
+    }) => Promise<any> | any;
+    /**
+     * 审批实例状态变更事件
+     *
+     * 审批实例状态发生变更时会触发该事件。状态变更包括：;;- 用户创建审批后，触发该事件并推送 PENDING（审批中）状态。;- 审批实例内，任一审批人拒绝审批任务后，触发该事件并推送 REJECTED（已拒绝）状态。;- 审批实例内，所有审批任务均同意后，触发该事件并推送 APPROVED（已通过）状态。;- 发起人撤回审批后，推送 CANCELED（已撤回）状态。;- 审批定义下存在审批中的审批实例时，若该审批定义被管理员删除，则触发该事件并推送 DELETED（已删除）状态。;- 发起人撤销已通过的审批时，触发该事件并推送 REVERTED（已撤销）状态。;- 审批实例超时未处理被关闭，触发该事件并推送 OVERTIME_CLOSE（超时被关闭）状态。;- 已超时的审批实例被手动恢复，触发该事件并推送 OVERTIME_RECOVER（超时实例被恢复）状态。
+     */
+    "approval.instance.status_changed_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        approval_code?: string;
+        instance_code?: string;
+        external_id?: string;
+        status?: string;
+        operate_time?: string;
+        start_user?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 撤销用户授权事件
+     *
+     * 当用户 user_access_token 或 refresh_token 被撤销后，会触发此事件。
+     */
     "auth.user_access_token.revoked_v4"?: (data: {
         event_id?: string;
         token?: string;
@@ -564,100 +597,9 @@ export interface IHandles extends IOtherEventHandles {
         user_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-acl/events/created document }
-     *
-     * ACL新建
-     *
-     * 当被订阅的日历上有ACL被创建时触发此事件。
-     *
-     * 特殊说明：应用首先需要调用上述接口建立订阅关系。
-     */
-    "calendar.calendar.acl.created_v4"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        acl_id: string;
-        role: "unknown" | "free_busy_reader" | "reader" | "writer" | "owner";
-        scope: {
-            type: "user";
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        };
-        user_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-acl/events/deleted document }
-     *
-     * ACL移除
-     *
-     * 当被订阅的日历上有ACL被删除时触发此事件。
-     *
-     * 特殊说明：应用首先需要调用上述接口建立订阅关系。
-     */
-    "calendar.calendar.acl.deleted_v4"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        acl_id: string;
-        role: "unknown" | "free_busy_reader" | "reader" | "writer" | "owner";
-        scope: {
-            type: "user";
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        };
-        user_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/events/changed document }
-     *
-     * 日历变更
-     *
-     * 当订阅用户的日历列表有日历变动时触发此事件。
-     *
-     * 应用首先需要调用上述接口建立订阅关系。应用收到该事件后，使用事件的 user_list 字段中的用户对应的 user_access_token 调用[获取日历列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/list)接口拉取增量的变更数据
-     */
-    "calendar.calendar.changed_v4"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        user_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/events/changed document }
-     *
      * 日程变更
      *
-     * 当被订阅的用户日历下有日程变更时触发此事件。
-     *
-     * 应用首先需要调用[订阅日程变更事件接口](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/subscription)建立订阅关系。应用收到该事件后，使用事件的 user_list 字段中的用户对应的 user_access_token 调用[获取日程列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/list)接口拉取事件中 calendar_id 字段对应的日历下的日程数据
+     * 当用户订阅日程变更事件后，被订阅的日历下有日程发生变更时，将会触发该事件。
      */
     "calendar.calendar.event.changed_v4"?: (data: {
         event_id?: string;
@@ -687,8 +629,85 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 删除 ACL
+     *
+     * 当订阅的日历上有访问控制被删除时，将会触发此事件。
+     */
+    "calendar.calendar.acl.deleted_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        acl_id: string;
+        role: "unknown" | "free_busy_reader" | "reader" | "writer" | "owner";
+        scope: {
+            type: "user";
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        };
+        user_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 日历变更
+     *
+     * 当用户订阅日历变更事件后，如果用户日历列表内发生了日历变动，则会触发该事件。
+     */
+    "calendar.calendar.changed_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 创建 ACL
+     *
+     * 当订阅的日历上有访问控制被创建时，将会触发此事件。
+     */
+    "calendar.calendar.acl.created_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        acl_id: string;
+        role: "unknown" | "free_busy_reader" | "reader" | "writer" | "owner";
+        scope: {
+            type: "user";
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        };
+        user_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 薪资档案变更
+     *
+     * 当应用订阅该事件后，如果员工薪资档案发生变更（例如，通过管理后台对员工定薪、调薪、更正或删除），则会触发该事件。
+     */
     "compensation.archive.changed_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -706,119 +725,9 @@ export interface IHandles extends IOtherEventHandles {
         after_tid?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr_event/events/updated document }
+     * 部门信息变化
      *
-     * 成员字段变更
-     *
-     * 通过该事件订阅成员字段变更。old_object 展示更新字段的原始值。
-     *
-     * 触发事件的动作有「打开/关闭」开关、「增加/删除」成员字段。
-     */
-    "contact.custom_attr_event.updated_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            contact_field_key?: Array<string>;
-            allow_open_query?: boolean;
-        };
-        old_object?: {
-            contact_field_key?: Array<string>;
-            allow_open_query?: boolean;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/events/created document }
-     *
-     * 部门被创建
-     *
-     * 创建通讯录部门时发送该事件给订阅应用。
-     *
-     * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
-     */
-    "contact.department.created_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            name: string;
-            parent_department_id: string;
-            department_id?: string;
-            open_department_id?: string;
-            leader_user_id?: string;
-            chat_id?: string;
-            order?: number;
-            unit_ids?: Array<string>;
-            status?: { is_deleted?: boolean };
-            leaders?: Array<{ leaderType: number; leaderID: string }>;
-            department_hrbps?: Array<{
-                union_id?: string;
-                user_id?: string;
-                open_id?: string;
-            }>;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/events/deleted document }
-     *
-     * 部门被删除
-     *
-     * 订阅这一事件可以获得被删除部门的信息。
-     *
-     * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
-     */
-    "contact.department.deleted_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            name: string;
-            parent_department_id: string;
-            department_id?: string;
-            open_department_id?: string;
-            leader_user_id?: string;
-            chat_id?: string;
-            order?: number;
-            unit_ids?: Array<string>;
-            status?: { is_deleted?: boolean };
-            leaders?: Array<{ leaderType: number; leaderID: string }>;
-            department_hrbps?: Array<{
-                union_id?: string;
-                user_id?: string;
-                open_id?: string;
-            }>;
-        };
-        old_object?: {
-            status?: { is_deleted?: boolean };
-            open_department_id?: string;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/events/updated document }
-     *
-     * 部门信息被修改
-     *
-     * 通过该事件订阅部门更新。`old_object`只展示被更新字段的原始值。应用身份访问通讯录的权限为历史版本，不推荐申请。
-     *
-     * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
+     * 当应用订阅该事件后，如果部门信息发生变化，则会触发该事件。部门信息发生变化的范围包括：;;- 企业管理员在管理后台修改部门信息。;- 企业开发者调用;[修改部门部分信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/patch)、[更新部门所有信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/update)、[更新部门ID](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/update_department_id) API 修改部门信息。
      */
     "contact.department.updated_v3"?: (data: {
         event_id?: string;
@@ -866,11 +775,448 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/events/actived document }
+     * 成员字段变更
      *
-     * 启用人员类型事件
+     * 当成员字段发生变更时（变更动作包括「打开/关闭」开关、「增加/删除」成员字段），会触发该事件。事件体的 old_object 展示字段的原始值，object 展示字段的更新值。
+     */
+    "contact.custom_attr_event.updated_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            contact_field_key?: Array<string>;
+            allow_open_query?: boolean;
+        };
+        old_object?: {
+            contact_field_key?: Array<string>;
+            allow_open_query?: boolean;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 部门被删除
      *
-     * 启用人员类型会发出对应事件。
+     * 应用订阅该事件后，如果通讯录内有部门被删除，则会触发该事件。
+     */
+    "contact.department.deleted_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            name: string;
+            parent_department_id: string;
+            department_id?: string;
+            open_department_id?: string;
+            leader_user_id?: string;
+            chat_id?: string;
+            order?: number;
+            unit_ids?: Array<string>;
+            status?: { is_deleted?: boolean };
+            leaders?: Array<{ leaderType: number; leaderID: string }>;
+            department_hrbps?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
+        };
+        old_object?: {
+            status?: { is_deleted?: boolean };
+            open_department_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 员工离职
+     *
+     * 当应用订阅该事件后，如果有员工离职（例如，通过管理后台离职成员、调用删除用户 API），则会触发该事件。
+     */
+    "contact.user.deleted_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            open_id?: string;
+            union_id?: string;
+            user_id?: string;
+            name: string;
+            en_name?: string;
+            nickname?: string;
+            email?: string;
+            enterprise_email?: string;
+            job_title?: string;
+            mobile: string;
+            mobile_visible?: boolean;
+            gender?: number;
+            avatar?: {
+                avatar_72?: string;
+                avatar_240?: string;
+                avatar_640?: string;
+                avatar_origin?: string;
+            };
+            status?: {
+                is_frozen?: boolean;
+                is_resigned?: boolean;
+                is_activated?: boolean;
+                is_exited?: boolean;
+                is_unjoin?: boolean;
+            };
+            department_ids?: Array<string>;
+            leader_user_id?: string;
+            city?: string;
+            country?: string;
+            work_station?: string;
+            join_time?: number;
+            is_tenant_manager?: boolean;
+            employee_no?: string;
+            employee_type?: number;
+            positions?: Array<{
+                position_code?: string;
+                position_name?: string;
+                department_id?: string;
+                leader_user_id?: string;
+                leader_position_code?: string;
+                is_major?: boolean;
+            }>;
+            orders?: Array<{
+                department_id?: string;
+                user_order?: number;
+                department_order?: number;
+                is_primary_dept?: boolean;
+            }>;
+            time_zone?: string;
+            custom_attrs?: Array<{
+                type?: string;
+                id?: string;
+                value?: {
+                    text?: string;
+                    url?: string;
+                    pc_url?: string;
+                    option_id?: string;
+                    option_value?: string;
+                    name?: string;
+                    picture_url?: string;
+                    generic_user?: { id: string; type: number };
+                };
+            }>;
+            job_level_id?: string;
+            job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
+        };
+        old_object?: { department_ids?: Array<string>; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 部门新建
+     *
+     * 当应用订阅该事件后，如果通讯录内有部门被创建，则会触发该事件。
+     */
+    "contact.department.created_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            name: string;
+            parent_department_id: string;
+            department_id?: string;
+            open_department_id?: string;
+            leader_user_id?: string;
+            chat_id?: string;
+            order?: number;
+            unit_ids?: Array<string>;
+            status?: { is_deleted?: boolean };
+            leaders?: Array<{ leaderType: number; leaderID: string }>;
+            department_hrbps?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 员工入职
+     *
+     * 当应用订阅该事件后，如果有新员工入职（例如，通过管理后台添加成员、调用创建用户 API），则会触发该事件。
+     */
+    "contact.user.created_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            open_id?: string;
+            union_id?: string;
+            user_id?: string;
+            name: string;
+            en_name?: string;
+            nickname?: string;
+            email?: string;
+            enterprise_email?: string;
+            job_title?: string;
+            mobile: string;
+            mobile_visible?: boolean;
+            gender?: number;
+            avatar?: {
+                avatar_72?: string;
+                avatar_240?: string;
+                avatar_640?: string;
+                avatar_origin?: string;
+            };
+            status?: {
+                is_frozen?: boolean;
+                is_resigned?: boolean;
+                is_activated?: boolean;
+                is_exited?: boolean;
+                is_unjoin?: boolean;
+            };
+            department_ids?: Array<string>;
+            leader_user_id?: string;
+            city?: string;
+            country?: string;
+            work_station?: string;
+            join_time?: number;
+            is_tenant_manager?: boolean;
+            employee_no?: string;
+            employee_type?: number;
+            positions?: Array<{
+                position_code?: string;
+                position_name?: string;
+                department_id?: string;
+                leader_user_id?: string;
+                leader_position_code?: string;
+                is_major?: boolean;
+            }>;
+            orders?: Array<{
+                department_id?: string;
+                user_order?: number;
+                department_order?: number;
+                is_primary_dept?: boolean;
+            }>;
+            time_zone?: string;
+            custom_attrs?: Array<{
+                type?: string;
+                id?: string;
+                value?: {
+                    text?: string;
+                    url?: string;
+                    pc_url?: string;
+                    option_id?: string;
+                    option_value?: string;
+                    name?: string;
+                    picture_url?: string;
+                    generic_user?: { id: string; type: number };
+                };
+            }>;
+            job_level_id?: string;
+            job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 员工信息被修改
+     *
+     * 应用订阅该事件后，当员工信息（包括：ID、用户名、英文名、别名、邮箱、企业邮箱、职务、手机号、性别、头像、状态、所属部门、直属主管、城市、国家、工位、入职时间、工号、类型、排序、自定义字段、职级、序列、虚线上级）被修改时将会触发该事件。你可以在事件的 old_object 字段中查看修改前的用户信息；在事件的 object 字段中可以查看修改后的用户信息。
+     */
+    "contact.user.updated_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            open_id?: string;
+            union_id?: string;
+            user_id?: string;
+            name: string;
+            en_name?: string;
+            nickname?: string;
+            email?: string;
+            enterprise_email?: string;
+            job_title?: string;
+            mobile: string;
+            mobile_visible?: boolean;
+            gender?: number;
+            avatar?: {
+                avatar_72?: string;
+                avatar_240?: string;
+                avatar_640?: string;
+                avatar_origin?: string;
+            };
+            status?: {
+                is_frozen?: boolean;
+                is_resigned?: boolean;
+                is_activated?: boolean;
+                is_exited?: boolean;
+                is_unjoin?: boolean;
+            };
+            department_ids?: Array<string>;
+            leader_user_id?: string;
+            city?: string;
+            country?: string;
+            work_station?: string;
+            join_time?: number;
+            is_tenant_manager?: boolean;
+            employee_no?: string;
+            employee_type?: number;
+            positions?: Array<{
+                position_code?: string;
+                position_name?: string;
+                department_id?: string;
+                leader_user_id?: string;
+                leader_position_code?: string;
+                is_major?: boolean;
+            }>;
+            orders?: Array<{
+                department_id?: string;
+                user_order?: number;
+                department_order?: number;
+                is_primary_dept?: boolean;
+            }>;
+            time_zone?: string;
+            custom_attrs?: Array<{
+                type?: string;
+                id?: string;
+                value?: {
+                    text?: string;
+                    url?: string;
+                    pc_url?: string;
+                    option_id?: string;
+                    option_value?: string;
+                    name?: string;
+                    picture_url?: string;
+                    generic_user?: { id: string; type: number };
+                };
+            }>;
+            job_level_id?: string;
+            job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
+        };
+        old_object?: {
+            open_id?: string;
+            union_id?: string;
+            user_id?: string;
+            name: string;
+            en_name?: string;
+            nickname?: string;
+            email?: string;
+            enterprise_email?: string;
+            job_title?: string;
+            mobile: string;
+            mobile_visible?: boolean;
+            gender?: number;
+            avatar?: {
+                avatar_72?: string;
+                avatar_240?: string;
+                avatar_640?: string;
+                avatar_origin?: string;
+            };
+            status?: {
+                is_frozen?: boolean;
+                is_resigned?: boolean;
+                is_activated?: boolean;
+                is_exited?: boolean;
+                is_unjoin?: boolean;
+            };
+            department_ids?: Array<string>;
+            leader_user_id?: string;
+            city?: string;
+            country?: string;
+            work_station?: string;
+            join_time?: number;
+            is_tenant_manager?: boolean;
+            employee_no?: string;
+            employee_type?: number;
+            positions?: Array<{
+                position_code?: string;
+                position_name?: string;
+                department_id?: string;
+                leader_user_id?: string;
+                leader_position_code?: string;
+                is_major?: boolean;
+            }>;
+            orders?: Array<{
+                department_id?: string;
+                user_order?: number;
+                department_order?: number;
+                is_primary_dept?: boolean;
+            }>;
+            time_zone?: string;
+            custom_attrs?: Array<{
+                type?: string;
+                id?: string;
+                value?: {
+                    text?: string;
+                    url?: string;
+                    pc_url?: string;
+                    option_id?: string;
+                    option_value?: string;
+                    name?: string;
+                    picture_url?: string;
+                    generic_user?: { id: string; type: number };
+                };
+            }>;
+            job_level_id?: string;
+            job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除人员类型
+     *
+     * 当应用订阅该事件后，如果删除某一人员类型，则会触发该事件。
+     */
+    "contact.employee_type_enum.deleted_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        old_enum?: {
+            enum_id?: string;
+            enum_value?: string;
+            content: string;
+            enum_type: number;
+            enum_status: number;
+            i18n_content?: Array<{ locale?: string; value?: string }>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 启用人员类型
+     *
+     * 当应用订阅该事件后，如果将未激活的人员类型更新为激活状态，则会触发该事件。
      */
     "contact.employee_type_enum.actived_v3"?: (data: {
         event_id?: string;
@@ -900,97 +1246,9 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/events/created document }
+     * 修改人员类型名称
      *
-     * 新建人员类型事件
-     *
-     * 新建人员类型会发出对应事件。
-     */
-    "contact.employee_type_enum.created_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        new_enum?: {
-            enum_id?: string;
-            enum_value?: string;
-            content: string;
-            enum_type: number;
-            enum_status: number;
-            i18n_content?: Array<{ locale?: string; value?: string }>;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/events/deactivated document }
-     *
-     * 停用人员类型事件
-     *
-     * 停用人员类型会发出对应事件。
-     */
-    "contact.employee_type_enum.deactivated_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        old_enum?: {
-            enum_id?: string;
-            enum_value?: string;
-            content: string;
-            enum_type: number;
-            enum_status: number;
-            i18n_content?: Array<{ locale?: string; value?: string }>;
-        };
-        new_enum?: {
-            enum_id?: string;
-            enum_value?: string;
-            content: string;
-            enum_type: number;
-            enum_status: number;
-            i18n_content?: Array<{ locale?: string; value?: string }>;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/events/deleted document }
-     *
-     * 删除人员类型事件
-     *
-     * 删除人员类型会发出对应事件。
-     */
-    "contact.employee_type_enum.deleted_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        old_enum?: {
-            enum_id?: string;
-            enum_value?: string;
-            content: string;
-            enum_type: number;
-            enum_status: number;
-            i18n_content?: Array<{ locale?: string; value?: string }>;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/employee_type_enum/events/updated document }
-     *
-     * 修改人员类型名称事件
-     *
-     * 修改人员类型名称会发出对应事件。
+     * 当应用订阅该事件后，如果更新了人员类型的选项内容（包括默认内容 content 参数和国际化内容 i18n_content），则会触发该事件。
      */
     "contact.employee_type_enum.updated_v3"?: (data: {
         event_id?: string;
@@ -1020,11 +1278,9 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/scope/events/updated document }
+     * 通讯录权限范围变更
      *
-     * 通讯录范围权限被更新
-     *
-     * 当应用通讯录范围权限发生变更时，订阅这个事件的应用会收到事件。
+     * 当应用订阅该事件后，如果应用的通讯录权限范围发生变更，则会触发该事件。
      */
     "contact.scope.updated_v3"?: (data: {
         event_id?: string;
@@ -1290,15 +1546,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/events/created document }
+     * 新建人员类型
      *
-     * 员工入职
-     *
-     * 通过该事件订阅员工入职。
-     *
-     * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
+     * 当应用订阅该事件后，如果新增了人员类型中的选项，则会触发该事件。
      */
-    "contact.user.created_v3"?: (data: {
+    "contact.employee_type_enum.created_v3"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1308,85 +1560,21 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        object?: {
-            open_id?: string;
-            union_id?: string;
-            user_id?: string;
-            name: string;
-            en_name?: string;
-            nickname?: string;
-            email?: string;
-            enterprise_email?: string;
-            job_title?: string;
-            mobile: string;
-            mobile_visible?: boolean;
-            gender?: number;
-            avatar?: {
-                avatar_72?: string;
-                avatar_240?: string;
-                avatar_640?: string;
-                avatar_origin?: string;
-            };
-            status?: {
-                is_frozen?: boolean;
-                is_resigned?: boolean;
-                is_activated?: boolean;
-                is_exited?: boolean;
-                is_unjoin?: boolean;
-            };
-            department_ids?: Array<string>;
-            leader_user_id?: string;
-            city?: string;
-            country?: string;
-            work_station?: string;
-            join_time?: number;
-            is_tenant_manager?: boolean;
-            employee_no?: string;
-            employee_type?: number;
-            positions?: Array<{
-                position_code?: string;
-                position_name?: string;
-                department_id?: string;
-                leader_user_id?: string;
-                leader_position_code?: string;
-                is_major?: boolean;
-            }>;
-            orders?: Array<{
-                department_id?: string;
-                user_order?: number;
-                department_order?: number;
-                is_primary_dept?: boolean;
-            }>;
-            time_zone?: string;
-            custom_attrs?: Array<{
-                type?: string;
-                id?: string;
-                value?: {
-                    text?: string;
-                    url?: string;
-                    pc_url?: string;
-                    option_id?: string;
-                    option_value?: string;
-                    name?: string;
-                    picture_url?: string;
-                    generic_user?: { id: string; type: number };
-                };
-            }>;
-            job_level_id?: string;
-            job_family_id?: string;
-            dotted_line_leader_user_ids?: Array<string>;
+        new_enum?: {
+            enum_id?: string;
+            enum_value?: string;
+            content: string;
+            enum_type: number;
+            enum_status: number;
+            i18n_content?: Array<{ locale?: string; value?: string }>;
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/events/deleted document }
+     * 停用人员类型
      *
-     * 员工离职
-     *
-     * 通过该事件订阅员工离职。应用身份访问通讯录的权限为历史版本，不推荐申请。
-     *
-     * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
+     * 当应用订阅该事件后，如果将激活的人员类型更新为未激活状态，则会触发该事件。
      */
-    "contact.user.deleted_v3"?: (data: {
+    "contact.employee_type_enum.deactivated_v3"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1396,322 +1584,29 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        object?: {
-            open_id?: string;
-            union_id?: string;
-            user_id?: string;
-            name: string;
-            en_name?: string;
-            nickname?: string;
-            email?: string;
-            enterprise_email?: string;
-            job_title?: string;
-            mobile: string;
-            mobile_visible?: boolean;
-            gender?: number;
-            avatar?: {
-                avatar_72?: string;
-                avatar_240?: string;
-                avatar_640?: string;
-                avatar_origin?: string;
-            };
-            status?: {
-                is_frozen?: boolean;
-                is_resigned?: boolean;
-                is_activated?: boolean;
-                is_exited?: boolean;
-                is_unjoin?: boolean;
-            };
-            department_ids?: Array<string>;
-            leader_user_id?: string;
-            city?: string;
-            country?: string;
-            work_station?: string;
-            join_time?: number;
-            is_tenant_manager?: boolean;
-            employee_no?: string;
-            employee_type?: number;
-            positions?: Array<{
-                position_code?: string;
-                position_name?: string;
-                department_id?: string;
-                leader_user_id?: string;
-                leader_position_code?: string;
-                is_major?: boolean;
-            }>;
-            orders?: Array<{
-                department_id?: string;
-                user_order?: number;
-                department_order?: number;
-                is_primary_dept?: boolean;
-            }>;
-            time_zone?: string;
-            custom_attrs?: Array<{
-                type?: string;
-                id?: string;
-                value?: {
-                    text?: string;
-                    url?: string;
-                    pc_url?: string;
-                    option_id?: string;
-                    option_value?: string;
-                    name?: string;
-                    picture_url?: string;
-                    generic_user?: { id: string; type: number };
-                };
-            }>;
-            job_level_id?: string;
-            job_family_id?: string;
-            dotted_line_leader_user_ids?: Array<string>;
+        old_enum?: {
+            enum_id?: string;
+            enum_value?: string;
+            content: string;
+            enum_type: number;
+            enum_status: number;
+            i18n_content?: Array<{ locale?: string; value?: string }>;
         };
-        old_object?: { department_ids?: Array<string>; open_id?: string };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/events/updated document }
-     *
-     * 员工变更
-     *
-     * 通过该事件订阅员工变更。old_object中只展示更新的字段的原始值。
-     *
-     * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
-     */
-    "contact.user.updated_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            open_id?: string;
-            union_id?: string;
-            user_id?: string;
-            name: string;
-            en_name?: string;
-            nickname?: string;
-            email?: string;
-            enterprise_email?: string;
-            job_title?: string;
-            mobile: string;
-            mobile_visible?: boolean;
-            gender?: number;
-            avatar?: {
-                avatar_72?: string;
-                avatar_240?: string;
-                avatar_640?: string;
-                avatar_origin?: string;
-            };
-            status?: {
-                is_frozen?: boolean;
-                is_resigned?: boolean;
-                is_activated?: boolean;
-                is_exited?: boolean;
-                is_unjoin?: boolean;
-            };
-            department_ids?: Array<string>;
-            leader_user_id?: string;
-            city?: string;
-            country?: string;
-            work_station?: string;
-            join_time?: number;
-            is_tenant_manager?: boolean;
-            employee_no?: string;
-            employee_type?: number;
-            positions?: Array<{
-                position_code?: string;
-                position_name?: string;
-                department_id?: string;
-                leader_user_id?: string;
-                leader_position_code?: string;
-                is_major?: boolean;
-            }>;
-            orders?: Array<{
-                department_id?: string;
-                user_order?: number;
-                department_order?: number;
-                is_primary_dept?: boolean;
-            }>;
-            time_zone?: string;
-            custom_attrs?: Array<{
-                type?: string;
-                id?: string;
-                value?: {
-                    text?: string;
-                    url?: string;
-                    pc_url?: string;
-                    option_id?: string;
-                    option_value?: string;
-                    name?: string;
-                    picture_url?: string;
-                    generic_user?: { id: string; type: number };
-                };
-            }>;
-            job_level_id?: string;
-            job_family_id?: string;
-            dotted_line_leader_user_ids?: Array<string>;
-        };
-        old_object?: {
-            open_id?: string;
-            union_id?: string;
-            user_id?: string;
-            name: string;
-            en_name?: string;
-            nickname?: string;
-            email?: string;
-            enterprise_email?: string;
-            job_title?: string;
-            mobile: string;
-            mobile_visible?: boolean;
-            gender?: number;
-            avatar?: {
-                avatar_72?: string;
-                avatar_240?: string;
-                avatar_640?: string;
-                avatar_origin?: string;
-            };
-            status?: {
-                is_frozen?: boolean;
-                is_resigned?: boolean;
-                is_activated?: boolean;
-                is_exited?: boolean;
-                is_unjoin?: boolean;
-            };
-            department_ids?: Array<string>;
-            leader_user_id?: string;
-            city?: string;
-            country?: string;
-            work_station?: string;
-            join_time?: number;
-            is_tenant_manager?: boolean;
-            employee_no?: string;
-            employee_type?: number;
-            positions?: Array<{
-                position_code?: string;
-                position_name?: string;
-                department_id?: string;
-                leader_user_id?: string;
-                leader_position_code?: string;
-                is_major?: boolean;
-            }>;
-            orders?: Array<{
-                department_id?: string;
-                user_order?: number;
-                department_order?: number;
-                is_primary_dept?: boolean;
-            }>;
-            time_zone?: string;
-            custom_attrs?: Array<{
-                type?: string;
-                id?: string;
-                value?: {
-                    text?: string;
-                    url?: string;
-                    pc_url?: string;
-                    option_id?: string;
-                    option_value?: string;
-                    name?: string;
-                    picture_url?: string;
-                    generic_user?: { id: string; type: number };
-                };
-            }>;
-            job_level_id?: string;
-            job_family_id?: string;
-            dotted_line_leader_user_ids?: Array<string>;
+        new_enum?: {
+            enum_id?: string;
+            enum_value?: string;
+            content: string;
+            enum_type: number;
+            enum_status: number;
+            i18n_content?: Array<{ locale?: string; value?: string }>;
         };
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.common_data.id.user_mapping_changed_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        change_type?: string;
-        id_transform_type?: number;
-        corehr_id?: string;
-        people_admin_id?: string;
-        feishu_id?: { union_id?: string; user_id?: string; open_id?: string };
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.common_data.meta_data.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        api_name?: string;
-        field_changes?: Array<string>;
-        metadata_type?: string;
-        enum_value_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.contract.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        contract_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.contract.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        contract_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.contract.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        contract_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/created document }
+     * 入职信息变更(不推荐)
      *
-     * 部门创建
-     *
-     * 飞书人事中「部门被创建」时将触发此事件。触发时间为部门实际生效时间，如在 2022-01-01 创建部门，部门生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     * 待入职人员任职信息更新后，触发此事件，包括两种场景：;- 通过开放平台接口创建待入职、更新待入职;- 在飞书人事-入职系统，HR 补充任职信息;;如果有创建待入职后，更新数据的场景，请收到创建事件后延迟10s时间再执行更新操作
      */
-    "corehr.department.created_v1"?: (data: {
+    "corehr.pre_hire.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1721,56 +1616,15 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        department_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/deleted document }
-     *
-     * 部门删除
-     *
-     * 飞书人事中「部门被删除」时将触发此事件
-     */
-    "corehr.department.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        department_id?: string;
-        code?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/updated document }
-     *
-     * 部门更新
-     *
-     * 飞书人事中「部门信息被更新」时将触发此事件。触发时间为部门更新实际生效时间，如在 2022-01-01 更新部门，部门更新生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
-     */
-    "corehr.department.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        department_id?: string;
+        pre_hire_id?: string;
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/converted document }
+     * 任职信息创建
      *
-     * 员工转正
-     *
-     * 员工在飞书人事转正完成后将触发该事件
+     * 目前以下场景会触发该事件：;- 调用[【创建任职信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/create)、[【更新任职信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/patch)、[【添加人员】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/create)接口;- 人事系统【添加人员】、【发起异动】、【导入任职】、【创建兼职】功能
      */
-    "corehr.employment.converted_v1"?: (data: {
+    "corehr.job_data.created_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1780,16 +1634,14 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        employment_id?: string;
+        job_data_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/created document }
+     * 任职信息删除
      *
-     * 雇佣信息创建
-     *
-     * 员工在飞书人事的「雇佣信息被创建」时将触发此事件
+     * 目前以下场景会触发事件：;- 调用[【删除任职信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/delete)接口;- 人事系统【删除任职】【删除兼职】功能
      */
-    "corehr.employment.created_v1"?: (data: {
+    "corehr.job_data.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1799,21 +1651,14 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
+        job_data_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/deleted document }
+     * 任职信息更新
      *
-     * 雇佣信息删除
-     *
-     * 员工在飞书人事的「雇佣信息被删除」时将触发此事件
+     * 目前以下场景会触发该事件：;- 人事系统【编辑任职】【编辑兼职】【导入编辑任职】【发起异动】功能;- 仅对于当前生效的任职记录数据
      */
-    "corehr.employment.deleted_v1"?: (data: {
+    "corehr.job_data.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1823,21 +1668,14 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
+        job_data_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/resigned document }
+     * 【事件】更新个人信息
      *
-     * 员工完成离职
-     *
-     * 员工完成离职，即离职日期的次日凌晨时，员工雇佣状态更改为“离职”后触发该事件
+     * 员工个人信息发生变更时发送该事件，场景举例：;- 调用[【更新个人信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/person/patch)接口;- 人事系统【编辑个人信息】、【导入编辑人员】功能;- 计算字段变更;;注：籍贯、政治面貌、户口类型、户口所在地变化不会触发该事件
      */
-    "corehr.employment.resigned_v1"?: (data: {
+    "corehr.person.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1847,14 +1685,30 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        employment_id?: string;
+        person_id?: string;
+        field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/updated document }
+     * 【事件】个人信息创建
      *
-     * 雇佣信息更新
+     * 目前以下场景会触发该事件：;- 调用[【创建个人信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/person/create)、[【添加人员】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/create)接口;- 人事系统【添加人员】、【导入人员】功能
+     */
+    "corehr.person.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新雇佣信息
      *
-     * 员工在飞书人事的「雇佣信息被更新」时将触发此事件
+     * 员工雇佣信息变更时发送该事件，场景举例：;- 调用[【更新雇佣信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/patch)接口;- 人事系统【编辑工作信息】、【导入编辑人员】功能;- 计算字段变更
      */
     "corehr.employment.updated_v1"?: (data: {
         event_id?: string;
@@ -1875,56 +1729,80 @@ export interface IHandles extends IOtherEventHandles {
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.job.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_change/events/updated document }
+     * 【事件】创建雇佣信息
      *
-     * 异动状态变更事件
+     * 员工雇佣信息被创建时发送该事件，场景举例：;- 调用[【创建雇佣信息】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/create)、[【添加人员】](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/create)接口;- 人事系统【添加人员】、【导入人员】功能
+     */
+    "corehr.employment.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 离职申请状态变更
      *
-     * 在异动发起审批和产生审批结果时触发该事件，审批结果产生的场景包括撤销、审批通过、审批拒绝
+     * 在发起离职审批、产生审批结果、离职生效、离职状态回退等离职申请状态变更时触发该事件推送对应消息。审批结果产生的场景包括撤销、通过、拒绝审批。
+     */
+    "corehr.offboarding.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        process_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+     * 员工完成异动
+     *
+     * 员工在飞书人事异动生效后（到达异动生效时间）将触发该事件。
+     */
+    "corehr.job_data.changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        job_change_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 异动状态变更
+     *
+     * 在异动审批状态变更、异动生效时都会触发该事件，审批结果产生的场景包括撤销、审批通过、审批拒绝。本事件没有数据范围鉴权。
      */
     "corehr.job_change.updated_v1"?: (data: {
         event_id?: string;
@@ -1952,13 +1830,11 @@ export interface IHandles extends IOtherEventHandles {
         transfer_key?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/changed document }
+     * 元数据信息变更
      *
-     * 员工异动
-     *
-     * 员工在飞书人事异动完成后将触发该事件
+     * People元数据定义变更会对外推送事件。例如在People系统中，设置-人员档案配置-个人信息-基本信息 中添加一个字段。就会收到person相关的元数据变更推送。;;可通过[获取飞书人事对象列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/custom_field/list_object_api_name)查询对象列表，包括了预置对象的字段变更以及自定义对象的字段变更，不保证顺序，所以要使用的话当监听到变更事件后需要判断是否关心该对象然后查询对象的字段来做业务逻辑。
      */
-    "corehr.job_data.changed_v1"?: (data: {
+    "corehr.common_data.meta_data.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -1968,51 +1844,97 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        job_data_id?: string;
+        api_name?: string;
+        field_changes?: Array<string>;
+        metadata_type?: string;
+        enum_value_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 组织角色授权变更
+     *
+     * 当组织上的角色授权发生变更时，触发该事件。例如在部门上修改了角色，并在 2030-01-01 年生效，则事件将在 2030-01-01 触发。注意：当前事件只返回在飞书人事中组织角色的变化，下游组织的影响，可以通过 「获取组织类角色授权列表」获取。
+     */
+    "corehr.org_role_authorization.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        role_id?: string;
+        management_scope_list?: Array<{
+            management_dimension: string;
+            obj_id: string;
+        }>;
+        employment_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 用户ID映射变更
+     *
+     * 用户ID映射变更事件
+     */
+    "corehr.common_data.id.user_mapping_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        change_type?: string;
+        id_transform_type?: number;
+        corehr_id?: string;
+        people_admin_id?: string;
+        feishu_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 【事件】个人信息删除
+     *
+     * 个人信息删除
+     */
+    "corehr.person.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除雇佣信息
+     *
+     * 员工在飞书人事的「雇佣信息被删除」时将触发此事件。
+     */
+    "corehr.employment.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
         employment_id?: string;
         target_user_id?: {
             union_id?: string;
             user_id?: string;
             open_id?: string;
         };
-        job_change_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.job_data.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_data_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_data.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_data_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/employed document }
-     *
      * 员工完成入职
      *
-     * 在「飞书人事」将待入职员工手动操作“完成入职”后，触发该事件
+     * 以下业务场景会触发此事件：;- 开放平台[操作员工完成入职](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/pre_hire/complete)接口;- 开放平台[添加人员](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/employee/create)接口;- 「飞书人事-人员管理-入职」将待入职员工操作“完成入职”;- 「飞书人事-人员管理-花名册」操作”添加人员”或”导入人员”
      */
     "corehr.job_data.employed_v1"?: (data: {
         event_id?: string;
@@ -2033,9 +1955,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.job_data.updated_v1"?: (data: {
+     * 【事件】删除部门
+     *
+     * 飞书人事中「部门被删除」时将触发此事件。
+     */
+    "corehr.department.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2045,16 +1969,231 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        job_data_id?: string;
+        department_id?: string;
+        code?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated document }
+     * 员工完成转正
      *
-     * 离职状态变更事件
-     *
-     * 在离职发起审批和产生审批结果时触发该事件，审批结果产生的场景包括撤销、审批通过、审批拒绝
+     * 当员工转正生效时触发该事件
      */
-    "corehr.offboarding.updated_v1"?: (data: {
+    "corehr.employment.converted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新部门
+     *
+     * 飞书人事中「部门信息被更新」时将触发此事件。
+     */
+    "corehr.department.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建部门
+     *
+     * 飞书人事中「部门被创建」时将触发此事件。
+     */
+    "corehr.department.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新职务
+     *
+     * 飞书人事中「职务信息被更新」时将触发此事件。注意：触发时间为职务实际生效时间，如在 2022-01-01 更新职务，职务生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.job.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除职务
+     *
+     * 飞书人事中「职务被删除」时将触发此事件。
+     */
+    "corehr.job.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建职务
+     *
+     * 飞书人事中「职务被创建」时将触发此事件。注意：触发时间为职务实际生效时间，如在 2022-01-01 创建职务，职务生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.job.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 合同更新
+     *
+     * 通过开放平台更新合同或者在飞书人事系统进行变更和续约等业务操作时，会触发本事件
+     */
+    "corehr.contract.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 员工完成离职
+     *
+     * 员工完成离职，即离职日期的次日凌晨时，员工雇佣状态更改为“离职”后触发该事件。
+     */
+    "corehr.employment.resigned_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 合同删除
+     *
+     * 通过开放平台删除合同时，会触发该事件。注意：删除后，无法通过搜索接口查询到合同信息。
+     */
+    "corehr.contract.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 合同创建
+     *
+     * 通过开放平台创建合同或飞书人事系统中员工新签一份合同时，会触发合同创建事件
+     */
+    "corehr.contract.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 试用期状态变更
+     *
+     * 当试用期记录状态发生变更时，触发该事件。
+     */
+    "corehr.probation.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        probation_status?:
+            | "pending"
+            | "rejected"
+            | "waiting"
+            | "approved"
+            | "converted"
+            | "offboarded";
+        actual_probation_end_date?: string;
+    }) => Promise<any> | any;
+    /**
+     * 抄送单据状态变更
+     *
+     * 流程中生成抄送单据后会触发该事件。抄送节点会生成抄送单据任务。如果一个节点有多个人抄送人，则会生成多个抄送单据（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.cc.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        approver_id?: string;
+        status?: number;
+        biz_type?: string;
+    }) => Promise<any> | any;
+    /**
+     * 离职申请状态变更
+     *
+     * 在发起离职审批、产生审批结果、离职生效、离职状态回退等离职申请状态变更时触发该事件推送对应消息。审批结果产生的场景包括撤销、通过、拒绝审批。;- 与原事件[离职申请状态变更](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated)相比，该事件多了直接离职产生的事件，且支持「员工数据」范围控制
+     */
+    "corehr.offboarding.status_updated_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2075,63 +2214,11 @@ export interface IHandles extends IOtherEventHandles {
         status?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.org_role_authorization.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        role_id?: string;
-        management_scope_list?: Array<{
-            management_dimension: string;
-            obj_id: string;
-        }>;
-        employment_id_list?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.person.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        person_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.person.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        person_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/events/updated document }
+     * 删除岗位事件
      *
-     * 个人信息更新
-     *
-     * 员工在飞书人事的「个人信息被更新」时将触发此事件
+     * 飞书人事中「岗位被删除」时将触发此事件。
      */
-    "corehr.person.updated_v1"?: (data: {
+    "corehr.position.deleted_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2141,13 +2228,32 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        person_id?: string;
+        position_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 更新岗位事件
+     *
+     * 飞书人事中「岗位信息被更新」时将触发此事件。注意：触发时间为岗位更新实际生效时间，如在 2022-01-01 更新岗位，岗位更新生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.position.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.pre_hire.updated_v1"?: (data: {
+     * 离职流转状态变更
+     *
+     * 离职流转流程的状态变更消息，当离职流转流程发起和产生审批结果时，会触发该事件。离职流转流程是在离职申请审批通过之后发起的流程，一般用于审批核实离职员工的交接事宜。
+     */
+    "corehr.offboarding.checklist_updated_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2157,217 +2263,21 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        pre_hire_id?: string;
-        field_changes?: Array<string>;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        checklist_process_id?: string;
+        checklist_status?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.approval_groups.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        approval_group_id?: string;
-        process_id?: string;
-        approval_group_status?: number;
-        topic?: string;
-        adjust_reason?: string;
-        effective_date?: string;
-        created_by?: string;
-        draft_id?: string;
-        draft_status?: number;
-        approval_group_status_v2?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.company.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        company_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.company.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        company_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.company.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        company_id?: string;
-        field_changes?: Array<string>;
-        sub_events?: Array<{
-            id?: string;
-            entity?: string;
-            agg_entity?: string;
-            agg_entity_id?: string;
-            agg_entity_field?: string;
-            opt_type?: number;
-            field_changes?: Array<string>;
-        }>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.cost_center.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        cost_center_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.cost_center.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        cost_center_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.cost_center.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        cost_center_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.custom_org.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        org_id?: string;
-        object_api_name?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.custom_org.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        org_id?: string;
-        object_api_name?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.custom_org.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        org_id?: string;
-        field_changes?: Array<string>;
-        object_api_name?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.department.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        department_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.department.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        department_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 人员信息变更
+     *
+     * 人员领域事件变更，通过业务界面、开放平台接口对个人信息、工作信息（雇佣信息）、任职信息、兼职信息等进行操作时会触发相应事件
+     */
     "corehr.employee.domain_event_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2395,304 +2305,10 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.job_change.status_updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-        job_change_id?: string;
-        transfer_mode?: number;
-        transfer_type_unique_identifier?: string;
-        transfer_reason_unique_identifier?: string;
-        process_id?: string;
-        effective_date?: string;
-        status?: number;
-        original_status?: number;
-        transfer_key?: string;
-        details_of_job_status_change?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_change.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        employment_id?: string;
-        tenant_id?: string;
-        process_id?: string;
-        initiator?: string;
-        operator?: string;
-        updated_time?: string;
-        job_change_id?: string;
-        status?: number;
-        operate_reason?: string;
-        transfer_type?: number;
-        updated_fields?: Array<string>;
-        transform_type?: string;
-        transform_reason?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_family.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_family_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_family.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_family_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_family.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_family_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_grade.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_grade_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_grade.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_grade_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_grade.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_grade_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_level.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_level_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_level.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_level_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.job_level.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_level_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.location.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        location_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.location.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        location_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.location.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        location_id?: string;
-        field_changes?: Array<string>;
-        sub_events?: Array<{
-            id?: string;
-            entity?: string;
-            agg_entity?: string;
-            agg_entity_id?: string;
-            agg_entity_field?: string;
-            opt_type?: number;
-            field_changes?: Array<string>;
-        }>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.offboarding.checklist_updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-        offboarding_id?: string;
-        checklist_process_id?: string;
-        checklist_status?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.offboarding.status_updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-        offboarding_id?: string;
-        process_id?: string;
-        status?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 离职信息变更
+     *
+     * 当员工的离职信息变更会发送消息。例如在 [离职管理](https://people.feishu.cn/people/members/dimission/management) > 离职详情页 > 编辑 中修改了离职信息，该事件会推送对应变更的消息。
+     */
     "corehr.offboarding.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2720,8 +2336,368 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 【事件】删除地点
+     *
+     * 飞书人事中「地点被删除」时将触发此事件。
+     */
+    "corehr.location.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除职等
+     *
+     * 飞书人事中「职等被删除」时将触发此事件。;
+     */
+    "corehr.job_grade.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建职级;
+     *
+     * 飞书人事中「职级被创建」时将触发此事件。
+     */
+    "corehr.job_level.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建序列;
+     *
+     * 飞书人事中「序列被创建」时将触发此事件。
+     */
+    "corehr.job_family.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建成本中心
+     *
+     * 飞书人事中「成本中心被创建」时将触发此事件。
+     */
+    "corehr.cost_center.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 创建岗位事件
+     *
+     * 飞书人事中「岗位被创建」时将触发此事件。注意：触发时间为岗位实际生效时间，如在 2022-01-01 创建岗位，岗位生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.position.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新职级
+     *
+     * 飞书人事中「职级信息被更新」时将触发此事件。
+     */
+    "corehr.job_level.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新职等
+     *
+     * 飞书人事中「职等被更新」时将触发此事件。
+     */
+    "corehr.job_grade.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除成本中心
+     *
+     * 飞书人事中「成本中心被删除」时将触发此事件。;
+     */
+    "corehr.cost_center.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除公司
+     *
+     * 飞书人事中「公司被删除」时将触发此事件。;
+     */
+    "corehr.company.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新成本中心
+     *
+     * 飞书人事中「成本中心信息被更新」时将触发此事件。
+     */
+    "corehr.cost_center.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 电子签文件状态变更事件
+     *
+     * 当电子签文件状态发生变更的时候，会推送变更事件，包含文件变更前后的状态等信息
+     */
+    "corehr.signature_file.status_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        signature_file_id?: string;
+        before_status?: string;
+        after_status?: string;
+        biz_process_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建职等;
+     *
+     * 飞书人事中「职等被创建」时将触发此事件。
+     */
+    "corehr.job_grade.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除职级
+     *
+     * 飞书人事中「职级被删除」时将触发此事件。;
+     */
+    "corehr.job_level.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新序列
+     *
+     * 飞书人事中「序列信息被更新」时将触发此事件。
+     */
+    "corehr.job_family.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新地点
+     *
+     * 飞书人事中「地点被更新」时将触发此事件。
+     */
+    "corehr.location.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+        field_changes?: Array<string>;
+        sub_events?: Array<{
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            agg_entity_field?: string;
+            opt_type?: number;
+            field_changes?: Array<string>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新部门
+     *
+     * 飞书人事中「部门信息被更新」时将触发此事件。
+     */
+    "corehr.department.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除序列
+     *
+     * 飞书人事中「序列被删除」时将触发此事件。;
+     */
+    "corehr.job_family.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建地点
+     *
+     * 飞书人事中「地点被创建」时将触发此事件。
+     */
+    "corehr.location.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 创建公司
+     *
+     * 飞书人事中「公司被创建」时将触发此事件。
+     */
+    "corehr.company.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 通道创建事件
+     *
+     * 通道创建后会发送该事件
+     */
     "corehr.pathway.created_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2735,9 +2711,11 @@ export interface IHandles extends IOtherEventHandles {
         pathway_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.pathway.deleted_v2"?: (data: {
+     * 【事件】删除自定义组织
+     *
+     * 飞书人事中「自定义组织被删除」时将触发此事件。
+     */
+    "corehr.custom_org.deleted_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2747,11 +2725,124 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        pathway_id?: string;
+        org_id?: string;
+        object_api_name?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 【事件】更新自定义组织
+     *
+     * 飞书人事中「自定义组织被更新」时将触发此事件。
+     */
+    "corehr.custom_org.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        org_id?: string;
+        field_changes?: Array<string>;
+        object_api_name?: string;
+    }) => Promise<any> | any;
+    /**
+     * 流程实例状态变化
+     *
+     * 流程实例是指用户发起的具体流程(process_id是其唯一标识)，流程实例状态变化时会触发该事件（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.status.update_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        status?: number;
+        biz_type?: string;
+        flow_definition_id?: string;
+        properties?: number;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建部门
+     *
+     * 飞书人事中「部门被创建」时将触发此事件。
+     */
+    "corehr.department.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 组织架构调整状态变更事件
+     *
+     * - 当用户在『飞书人事-我的团队/人员管理-组织架构』，查看调整链接可以获取到 该用户发起的所有组织架构调整， 进入可找到审批流程。;- 当该审批单状态发生变更后， 用户会收到流程状态变更事件。 ;- 延迟说明：数据库主从延迟2s以内，即：用户接收到流程状态变更消息后2s内调用查询状态接口可能查不到变更信息。;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
+     */
+    "corehr.approval_groups.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        approval_group_id?: string;
+        process_id?: string;
+        approval_group_status?: number;
+        topic?: string;
+        adjust_reason?: string;
+        effective_date?: string;
+        created_by?: string;
+        draft_id?: string;
+        draft_status?: number;
+        approval_group_status_v2?: number;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新公司
+     *
+     * 飞书人事中「公司被更新」时将触发此事件。
+     */
+    "corehr.company.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+        field_changes?: Array<string>;
+        sub_events?: Array<{
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            agg_entity_field?: string;
+            opt_type?: number;
+            field_changes?: Array<string>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 通道更新事件
+     *
+     * 通道更新后会发送该事件
+     */
     "corehr.pathway.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2766,9 +2857,11 @@ export interface IHandles extends IOtherEventHandles {
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.position.created_v2"?: (data: {
+     * 通道删除事件
+     *
+     * 通道删除后会发送该事件
+     */
+    "corehr.pathway.deleted_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2778,12 +2871,14 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        position_id?: string;
+        pathway_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.position.deleted_v2"?: (data: {
+     * 【事件】创建自定义组织
+     *
+     * 飞书人事中「自定义组织被创建」时将触发此事件。
+     */
+    "corehr.custom_org.created_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2793,27 +2888,14 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        position_id?: string;
+        org_id?: string;
+        object_api_name?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.position.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        position_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 入职流程状态变更
+     *
+     * 待入职员工的入职流程流转时，例如调用[流转入职任务](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/corehr-v2/pre_hire/transit_task)接口会触发本事件。
+     */
     "corehr.pre_hire.onboarding_task_changed_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2855,9 +2937,11 @@ export interface IHandles extends IOtherEventHandles {
         flow_info?: { id?: string; name?: { zh_cn?: string; en_us?: string } };
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.probation.updated_v2"?: (data: {
+     * 流程实例信息变更
+     *
+     * 流程实例是指用户发起的具体流程(process_id是其唯一标识)，流程实例在以下时机会触发信息变更事件：流程中有审批人操作、流程数据更新、流程状态变化等。;;注意事项：若节点中有多个人时，可能会同时触发多个事件。例如流程运行到该节点，同时为多个人都生成了待办任务，就会导致触发多次事件（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2867,19 +2951,40 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        employment_id?: string;
-        probation_status?:
-            | "pending"
-            | "rejected"
-            | "waiting"
-            | "approved"
-            | "converted"
-            | "offboarded";
-        actual_probation_end_date?: string;
+        process_id?: string;
+        status?: number;
+        biz_type?: string;
+        flow_definition_id?: string;
+        properties?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 流程节点状态变更
+     *
+     * 流程中节点状态发生变化会触发该事件。配置的节点为节点定义（node_definition_id 是唯一标识）。在流程实例中，每个流程实例生成的节点实例会不同（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.node.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        flow_definition_id?: string;
+        node_definition_id?: string;
+        process_id?: string;
+        process_node_id?: string;
+        node_type?: number;
+        node_status?: number;
+        biz_type?: string;
+    }) => Promise<any> | any;
+    /**
+     * 审批任务状态变更
+     *
+     * 单个审批任务的状态变化会触发该事件。例如，审批任务从待办变为已完成。审批任务（approver_id 是唯一标识），比如一个多人会签节点，会分别生成多人的审批任务（此功能不受数据权限范围控制）。
+     */
     "corehr.process.approver.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2900,85 +3005,10 @@ export interface IHandles extends IOtherEventHandles {
         node_id_str?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.process.cc.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        process_id?: string;
-        approver_id?: string;
-        status?: number;
-        biz_type?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.process.node.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        flow_definition_id?: string;
-        node_definition_id?: string;
-        process_id?: string;
-        process_node_id?: string;
-        node_type?: number;
-        node_status?: number;
-        biz_type?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.process.status.update_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        process_id?: string;
-        status?: number;
-        biz_type?: string;
-        flow_definition_id?: string;
-        properties?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "corehr.process.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        process_id?: string;
-        status?: number;
-        biz_type?: string;
-        flow_definition_id?: string;
-        properties?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 流程评论事件
+     *
+     * 流程新增评论时会触发该事件，该事件包含评论所在的流程ID（process_id是其唯一标识）和评论唯一ID（comment_id）,此功能不受数据权限范围控制
+     */
     "corehr.process_comment_info.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2993,9 +3023,11 @@ export interface IHandles extends IOtherEventHandles {
         comment_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "corehr.signature_file.status_updated_v2"?: (data: {
+     * 异动状态变更
+     *
+     * 在异动审批状态变更、异动生效时都会触发该事件，审批结果产生的场景包括撤销、审批通过、审批拒绝;
+     */
+    "corehr.job_change.status_updated_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3005,17 +3037,237 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        signature_file_id?: string;
-        before_status?: string;
-        after_status?: string;
-        biz_process_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        job_change_id?: string;
+        transfer_mode?: number;
+        transfer_type_unique_identifier?: string;
+        transfer_reason_unique_identifier?: string;
+        process_id?: string;
+        effective_date?: string;
+        status?: number;
+        original_status?: number;
+        transfer_key?: string;
+        details_of_job_status_change?: Array<string>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
+     * 异动信息变更
      *
+     * 员工发起异动后，异动信息变更会触发该事件
+     */
+    "corehr.job_change.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        tenant_id?: string;
+        process_id?: string;
+        initiator?: string;
+        operator?: string;
+        updated_time?: string;
+        job_change_id?: string;
+        status?: number;
+        operate_reason?: string;
+        transfer_type?: number;
+        updated_fields?: Array<string>;
+        transform_type?: string;
+        transform_reason?: string;
+    }) => Promise<any> | any;
+    /**
+     * 文件夹下文件创建
+     *
+     * 当用户订阅的文件夹下有新建文件时将触发此事件。
+     */
+    "drive.file.created_in_folder_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        folder_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.title_updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.trashed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.edit_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        sheet_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 多维表格记录变更
+     *
+     * 多维表格记录变更事件。被订阅的多维表格记录发生变更时，将会触发此事件。了解事件订阅的配置流程和使用场景，参考[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
+     */
+    "drive.file.bitable_record_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        table_id?: string;
+        revision?: number;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        action_list?: Array<{
+            record_id: string;
+            action: string;
+            before_value?: Array<{
+                field_id: string;
+                field_value: string;
+                field_identity_value?: {
+                    users?: Array<{
+                        user_id: {
+                            union_id?: string;
+                            user_id?: string;
+                            open_id?: string;
+                        };
+                        name: string;
+                        en_name: string;
+                        avatar_url: string;
+                    }>;
+                };
+            }>;
+            after_value?: Array<{
+                field_id: string;
+                field_value: string;
+                field_identity_value?: {
+                    users?: Array<{
+                        user_id: {
+                            union_id?: string;
+                            user_id?: string;
+                            open_id?: string;
+                        };
+                        name: string;
+                        en_name: string;
+                        avatar_url: string;
+                    }>;
+                };
+            }>;
+        }>;
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
      * 多维表格字段变更
      *
-     * 多维表格字段变更
+     * 多维表格字段变更事件。被订阅的多维表格字段发生变更时，将会触发此事件。了解事件订阅的配置流程和使用场景，参考[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
      */
     "drive.file.bitable_field_changed_v1"?: (data: {
         event_id?: string;
@@ -3100,140 +3352,7 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
-    "drive.file.bitable_record_changed_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        table_id?: string;
-        revision?: number;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        action_list?: Array<{
-            record_id: string;
-            action: string;
-            before_value?: Array<{
-                field_id: string;
-                field_value: string;
-                field_identity_value?: {
-                    users?: Array<{
-                        user_id: {
-                            union_id?: string;
-                            user_id?: string;
-                            open_id?: string;
-                        };
-                        name: string;
-                        en_name: string;
-                        avatar_url: string;
-                    }>;
-                };
-            }>;
-            after_value?: Array<{
-                field_id: string;
-                field_value: string;
-                field_identity_value?: {
-                    users?: Array<{
-                        user_id: {
-                            union_id?: string;
-                            user_id?: string;
-                            open_id?: string;
-                        };
-                        name: string;
-                        en_name: string;
-                        avatar_url: string;
-                    }>;
-                };
-            }>;
-        }>;
-        subscriber_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-        update_time?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "drive.file.created_in_folder_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        folder_token?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        subscriber_ids?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-deleted-completely document }
-     */
-    "drive.file.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        subscriber_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-edited document }
-     */
-    "drive.file.edit_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        operator_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-        subscriber_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-        sheet_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-collaborator-add document }
-     */
-    "drive.file.permission_member_added_v1"?: (data: {
+    "drive.file.permission_member_removed_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3262,6 +3381,34 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "drive.file.read_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 文件协作者权限申请
+     *
+     * 当用户发起申请文件协作者权限时将触发此事件，协作者权限包括阅读、编辑和管理权限。
+     */
     "drive.file.permission_member_applied_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -3292,9 +3439,9 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-collaborator-remove document }
-     */
-    "drive.file.permission_member_removed_v1"?: (data: {
+         
+         */
+    "drive.file.permission_member_added_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3321,78 +3468,10 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-read document }
+     * 添加评论、回复通知事件
+     *
+     * 当用户有新文档评论或回复通知会触发此事件。
      */
-    "drive.file.read_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        operator_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-        subscriber_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-title-update document }
-     */
-    "drive.file.title_updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        subscriber_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/delete-file-to-trash-can document }
-     */
-    "drive.file.trashed_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        file_type?: string;
-        file_token?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        subscriber_id_list?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
     "drive.notice.comment_add_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -3429,57 +3508,10 @@ export interface IHandles extends IOtherEventHandles {
         is_mentioned?: boolean;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "elearning.course_registration.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        course_id?: string;
-        learner?: {
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-            email?: string;
-            phone?: string;
-        };
-        enroll_at?: number;
-        enroll_type?: number;
-        learning_duration?: number;
-        finished_at?: number;
-        learning_state?: number;
-        compulsory_lesson_ids?: Array<string>;
-        learned_compulsory_lesson_ids?: Array<string>;
-        optional_lesson_ids?: Array<string>;
-        learned_optional_lesson_ids?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "elearning.course_registration.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        course_id?: string;
-        learner?: {
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-            email?: string;
-            phone?: string;
-        };
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 课程学习进度更新事件
+     *
+     * 课程学习进度更新时触发
+     */
     "elearning.course_registration.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -3507,11 +3539,62 @@ export interface IHandles extends IOtherEventHandles {
         learned_optional_lesson_ids?: Array<string>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/events/approve document }
+     * 课程学习进度新增事件
      *
-     * 审核事件
+     * 课程学习进度新增时触发
+     */
+    "elearning.course_registration.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        course_id?: string;
+        learner?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            email?: string;
+            phone?: string;
+        };
+        enroll_at?: number;
+        enroll_type?: number;
+        learning_duration?: number;
+        finished_at?: number;
+        learning_state?: number;
+        compulsory_lesson_ids?: Array<string>;
+        learned_compulsory_lesson_ids?: Array<string>;
+        optional_lesson_ids?: Array<string>;
+        learned_optional_lesson_ids?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 课程学习进度删除事件
      *
-     * Push审核状态通知事件
+     * 课程学习进度删除时触发
+     */
+    "elearning.course_registration.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        course_id?: string;
+        learner?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            email?: string;
+            phone?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 推送审核通知
+     *
+     * 推送审核状态通知事件。
      */
     "helpdesk.notification.approve_v1"?: (data: {
         event_id?: string;
@@ -3528,11 +3611,9 @@ export interface IHandles extends IOtherEventHandles {
         approve_status?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/events/created document }
+     * 创建工单
      *
-     * 工单创建事件
-     *
-     * 可监听服务台的工单创建事件。需使用订阅接口订阅：[事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/overview)
+     * 可监听服务台的工单创建事件。需使用订阅接口订阅：[事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/subscribe)
      */
     "helpdesk.ticket.created_v1"?: (data: {
         event_id?: string;
@@ -3570,56 +3651,9 @@ export interface IHandles extends IOtherEventHandles {
         chat_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/events/updated document }
-     *
-     * 工单状态变更事件
-     *
-     * 可监听工单状态和阶段变更事件。需使用订阅接口订阅：[事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/overview)
-     */
-    "helpdesk.ticket.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            ticket_id: string;
-            helpdesk_id?: string;
-            guest?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                name?: string;
-            };
-            stage?: number;
-            status?: number;
-            score?: number;
-            created_at?: number;
-            updated_at?: number;
-            closed_at?: number;
-            channel?: number;
-            solve?: number;
-            customized_fields?: Array<{
-                id?: string;
-                value?: string;
-                key_name?: string;
-                display_name?: string;
-                position?: number;
-                required?: boolean;
-                editable?: boolean;
-            }>;
-            chat_id?: string;
-        };
-        old_object?: { stage?: number; status?: number; updated_at?: number };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket_message/events/created document }
-     *
      * 工单消息事件
      *
-     * 该消息事件属于工单消息事件。需使用订阅接口订阅：[事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/overview)
+     * 该消息事件属于工单消息事件。需使用订阅接口订阅：[事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/subscribe)。
      */
     "helpdesk.ticket_message.created_v1"?: (data: {
         token?: string;
@@ -3691,13 +3725,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/events/deleted document }
+     * 工单状态变更
      *
-     * 删除投递
-     *
-     * 删除投递
+     * 可监听工单状态和阶段变更事件。需使用订阅接口订阅：[事件订阅](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/event/subscribe)。;;:::note;如果你需要监听工单的阶段变更，可以使用该事件。例如，使用该事件监听工单阶段由机器人变更为人工。
      */
-    "hire.application.deleted_v1"?: (data: {
+    "helpdesk.ticket.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3707,32 +3739,38 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        application_ids?: Array<string>;
+        object?: {
+            ticket_id: string;
+            helpdesk_id?: string;
+            guest?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                name?: string;
+            };
+            stage?: number;
+            status?: number;
+            score?: number;
+            created_at?: number;
+            updated_at?: number;
+            closed_at?: number;
+            channel?: number;
+            solve?: number;
+            customized_fields?: Array<{
+                id?: string;
+                value?: string;
+                key_name?: string;
+                display_name?: string;
+                position?: number;
+                required?: boolean;
+                editable?: boolean;
+            }>;
+            chat_id?: string;
+        };
+        old_object?: { stage?: number; status?: number; updated_at?: number };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/event/application-stage-changed document }
-     */
-    "hire.application.stage_changed_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        application_id?: string;
-        origin_stage_id?: string;
-        target_stage_id?: string;
-        update_time?: number;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account/events/created document }
+     * 账号绑定
      *
-     * 帐号绑定
-     *
-     * 招聘管理员添加三方服务商帐号时，系统会推送事件给应用开发者，开发者可根据事件获取用户添加的帐号类型（背调 或 笔试）和 帐号自定义字段信息，并根据这些信息识别用户在服务商处的身份，完成三方服务商帐号 和 招聘帐号之间的绑定，并根据用户服务商身份推送对应的背调套餐或试卷列表。
+     * 飞书招聘客户在「飞书招聘」-「设置」-「生态对接」-「笔试/背景调查」添加三方服务商账号时，系统会推送「账号绑定」事件给服务商。服务商可通过本事件获取客户添加的**账号类型**、**飞书招聘账号 ID** 和 **账号自定义字段信息**，并根据这些信息识别出客户在服务商处的身份，从而完成客户的服务商账号和飞书招聘账号之间的绑定。之后服务商可依据账号绑定关系向客户推送对应的背调套餐或试卷列表。
      */
     "hire.eco_account.created_v1"?: (data: {
         event_id?: string;
@@ -3751,13 +3789,11 @@ export interface IHandles extends IOtherEventHandles {
         custom_field_list?: Array<{ key?: string; value?: string }>;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/events/canceled document }
+     * Offer 状态变更
      *
-     * 终止背调
-     *
-     * 用户在招聘系统终止背调后，系统会推送事件给对应的应用开发者。开发者可根据事件获取背调 ID，完成在三方服务商处的订单取消等后续操作。
+     * 当 Offer 状态发生变更时发送该事件。除 Offer 创建时不会发送以外，其它 Offer 状态变更均会发送事件，Offer 状态变更场景可参考「Offer 状态流转图」。注意：仅推送正式 Offer 的状态变更信息，实习 Offer 相关状态不推送。
      */
-    "hire.eco_background_check.canceled_v1"?: (data: {
+    "hire.offer.status_changed_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3767,15 +3803,77 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        background_check_id?: string;
-        termination_reason?: string;
+        offer_id?: string;
+        offer_status?: number;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/events/created document }
+     * 投递删除
      *
+     * 当投递被删除时，触发该事件的推送。;;
+     */
+    "hire.application.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        application_ids?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 删除人才
+     *
+     * 当人才被删除时，触发该事件。
+     */
+    "hire.talent.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        talent_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 导入 e-HR
+     *
+     * 当用户在招聘系统中对候选人的投递操作「导入 e-HR」后，将会触发该事件，推送候选人信息至订阅系统。如需接收到该事件，则需先配置事件订阅。详情参考 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
+     */
+    "hire.ehr_import_task.imported_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        application_id?: string;
+        ehr_department_id?: string;
+        ehr_requirement_id?: string;
+        operator_id?: string;
+        operator_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        ehr_department?: {
+            department_id?: string;
+            open_department_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
      * 创建背调
      *
-     * 用户在招聘系统安排背调后，系统会推送事件给对应的应用开发者。开发者可根据事件获取候选人信息、委托人信息和自定义字段信息，并根据这些信息完成在三方服务商处的背调订单创建。
+     * 飞书招聘客户在招聘系统给候选人安排背调后，系统会推送「创建背调」事件给对应的背调服务商。服务商可根据此事件获取该背调的候选人、委托人和自定义字段等信息，并根据这些信息完成内部的背调订单的创建和绑定，之后可通过[更新背调订单进度](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/update_progress)、[回传背调订单的最终结果](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/update_result)将背调信息回传给招聘系统。
      */
     "hire.eco_background_check.created_v1"?: (data: {
         event_id?: string;
@@ -3807,60 +3905,10 @@ export interface IHandles extends IOtherEventHandles {
         custom_field_list?: Array<{ key?: string; value?: string }>;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "hire.eco_exam.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        exam_id?: string;
-        account_id?: string;
-        paper_id?: string;
-        candidate_info?: {
-            name?: string;
-            mobile?: { code?: string; number?: string };
-            email?: string;
-        };
-        talent_id?: string;
-        application_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/event/import-ehr document }
+     * 导入 e-HR（实习 Offer）
+     *
+     * 飞书招聘系统内用户选择实习 Offer 导入 e-HR 系统之后，将通过该事件推送候选人信息。
      */
-    "hire.ehr_import_task.imported_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        task_id?: string;
-        application_id?: string;
-        ehr_department_id?: string;
-        ehr_requirement_id?: string;
-        operator_id?: string;
-        operator_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-        ehr_department?: {
-            department_id?: string;
-            open_department_id?: string;
-        };
-    }) => Promise<any> | any;
-    /**
-         
-         */
     "hire.ehr_import_task_for_internship_offer.imported_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -3888,13 +3936,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer/events/status_changed document }
+     * 终止背调
      *
-     * Offer 状态变更
-     *
-     * 当 Offer 状态发生变更时将触发该事件。
+     * 飞书招聘客户在招聘系统内终止背调后，系统会推送「终止背调」事件给对应的背调服务商，服务商可根据此事件获取背调 ID，完成服务商内部的订单取消等后续操作。
      */
-    "hire.offer.status_changed_v1"?: (data: {
+    "hire.eco_background_check.canceled_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3904,61 +3950,14 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        offer_id?: string;
-        offer_status?: number;
+        background_check_id?: string;
+        termination_reason?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "hire.referral_account.assets_update_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        account_id?: string;
-        assets?: {
-            confirmed_bonus?: {
-                bonus_type?: number;
-                point_bonus?: number;
-                cash?: { currency_type: string; amount: number };
-                cash_bonus?: Array<{ currency_type: string; amount: number }>;
-            };
-            paid_bonus?: {
-                bonus_type?: number;
-                point_bonus?: number;
-                cash?: { currency_type: string; amount: number };
-                cash_bonus?: Array<{ currency_type: string; amount: number }>;
-            };
-        };
-        modify_time?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/events/deleted document }
+     * 人才进展变更事件
      *
-     * 删除人才
-     *
-     * 删除人才
+     * 支持单独订阅有指定标签的人才进展，人才进展包括阶段变更、锁定、解锁，需要提前在「飞书招聘」-「设置」- 「候选人标签管理」里对指定标签勾选支持事件订阅
      */
-    "hire.talent.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        talent_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
     "hire.talent.tag_subscription_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -3987,9 +3986,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
-    "im.chat.access_event.bot_p2p_chat_entered_v1"?: (data: {
+     * 内推账户余额变更事件
+     *
+     * 当内推账户余额发生变更（增加或者减少）时，触发该事件。该事件将推送变更后的账户余额信息。收到事件后，如需将余额提现到三方平台发放给用户，请使用接口 [全额提取内推账户余额](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/referral_account/withdraw)。
+     */
+    "hire.referral_account.assets_update_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -3999,21 +4000,29 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        chat_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        last_message_id?: string;
-        last_message_create_time?: string;
+        account_id?: string;
+        assets?: {
+            confirmed_bonus?: {
+                bonus_type?: number;
+                point_bonus?: number;
+                cash?: { currency_type: string; amount: number };
+                cash_bonus?: Array<{ currency_type: string; amount: number }>;
+            };
+            paid_bonus?: {
+                bonus_type?: number;
+                point_bonus?: number;
+                cash?: { currency_type: string; amount: number };
+                cash_bonus?: Array<{ currency_type: string; amount: number }>;
+            };
+        };
+        modify_time?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/disbanded document }
+     * 投递阶段变更
      *
-     * 群解散
-     *
-     * 群组被解散后触发此事件。
-     *
-     * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 需要订阅 ==消息与群组== 分类下的 ==解散群== 事件;- 事件会向群内订阅了该事件的机器人进行推送
+     * 当投递阶段发生变更时，会触发此事件。了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
      */
-    "im.chat.disbanded_v1"?: (data: {
+    "hire.application.stage_changed_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -4023,23 +4032,17 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        chat_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        external?: boolean;
-        operator_tenant_key?: string;
-        name?: string;
-        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+        application_id?: string;
+        origin_stage_id?: string;
+        target_stage_id?: string;
+        update_time?: number;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-bot/events/added document }
+     * 创建笔试
      *
-     * 机器人进群
-     *
-     * 机器人被用户添加至群聊时触发此事件。
-     *
-     * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 需要订阅 ==消息与群组== 分类下的 ==机器人进群== 事件;- 事件会向进群的机器人进行推送;- 机器人邀请机器人不会触发事件
+     * 飞书招聘客户在招聘系统安排笔试后，系统会推送「创建笔试」事件给对应的笔试服务商应用。服务商可根据此事件获取该场笔试的候选人信息和试卷信息，并根据这些信息为候选人安排笔试，之后可通过[回传笔试安排结果](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_exam/login_info)将笔试安排结果回传给招聘系统。
      */
-    "im.chat.member.bot.added_v1"?: (data: {
+    "hire.eco_exam.created_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -4049,78 +4052,47 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        chat_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        external?: boolean;
-        operator_tenant_key?: string;
-        name?: string;
-        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-bot/events/deleted document }
-     *
-     * 机器人被移出群
-     *
-     * 机器人被移出群聊后触发此事件。
-     *
-     * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 需要订阅 ==消息与群组== 分类下的 ==机器人被移出群== 事件;- 事件会向被移出群的机器人进行推送
-     */
-    "im.chat.member.bot.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        chat_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        external?: boolean;
-        operator_tenant_key?: string;
-        name?: string;
-        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/added document }
-     *
-     * 用户进群
-     *
-     * 新用户进群（包含话题群）触发此事件。
-     *
-     * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 需要订阅 ==消息与群组== 分类下的 ==用户进群== 事件;- 事件会向群内订阅了该事件的机器人进行推送
-     */
-    "im.chat.member.user.added_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        chat_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        external?: boolean;
-        operator_tenant_key?: string;
-        users?: Array<{
+        exam_id?: string;
+        account_id?: string;
+        paper_id?: string;
+        candidate_info?: {
             name?: string;
-            tenant_key?: string;
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        }>;
-        name?: string;
-        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+            mobile?: { code?: string; number?: string };
+            email?: string;
+        };
+        talent_id?: string;
+        application_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/deleted document }
+     * 消息已读
      *
+     * 用户阅读机器人发送的单聊消息后触发此事件。
+     */
+    "im.message.message_read_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        reader?: {
+            reader_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            read_time: string;
+            tenant_key?: string;
+        };
+        message_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
      * 用户出群
      *
-     * 用户主动退群或被移出群聊时推送事件。
-     *
-     * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)并且机器人所在群发生上述变化;- 机器人需要订阅 ==消息与群组== 分类下的 ==用户主动退群或被移出群聊== 事件;- 事件会向群内订阅了该事件的机器人进行推送
+     * 用户主动退出群聊或被移出群聊时推触发此事件，在群组内的、已订阅该事件的机器人会收到事件数据。
      */
     "im.chat.member.user.deleted_v1"?: (data: {
         event_id?: string;
@@ -4145,15 +4117,11 @@ export interface IHandles extends IOtherEventHandles {
         i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/withdrawn document }
+     * 删除消息表情回复
      *
-     * 撤销拉用户进群
-     *
-     * 撤销拉用户进群后触发此事件。
-     *
-     * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 需要订阅 ==消息与群组== 分类下的 ==撤销拉用户进群== 事件;- 事件会向群内订阅了该事件的机器人进行推送
+     * 应用订阅该事件后，消息被删除表情回复时会触发此事件。事件体包含被删除表情回复的消息 message_id、删除表情回复的操作人 ID、表情类型、添加时间等信息。
      */
-    "im.chat.member.user.withdrawn_v1"?: (data: {
+    "im.message.reaction.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -4163,26 +4131,16 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        chat_id?: string;
-        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
-        external?: boolean;
-        operator_tenant_key?: string;
-        users?: Array<{
-            name?: string;
-            tenant_key?: string;
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        }>;
-        name?: string;
-        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+        message_id?: string;
+        reaction_type?: { emoji_type: string };
+        operator_type?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        action_time?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/updated document }
-     *
      * 群配置修改
      *
-     * 群组配置被修改后触发此事件，包含：;- 群主转移;- 群基本信息修改(群头像/群名称/群描述/群国际化名称);- 群权限修改(加人入群权限/群编辑权限/at所有人权限/群分享权限)。
-     *
-     * 注意事项：; - 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 需要订阅 ==消息与群组== 分类下的 ==群配置修改== 事件;- 事件会向群内订阅了该事件的机器人进行推送
+     * 群组配置被修改后触发此事件，在该群组内的、已订阅当前事件的应用机器人将会收到事件通知。修改操作包含：;;- 转移群主;- 修改群基本信息，包括：群头像、群名称、群描述、群国际化名称;- 修改群权限，包括：加人入群权限、群编辑权限、at 所有人权限、群分享权限等
      */
     "im.chat.updated_v1"?: (data: {
         event_id?: string;
@@ -4276,15 +4234,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/message_read document }
+     * 撤销拉用户进群
      *
-     * 消息已读
-     *
-     * 用户阅读机器人发送的单聊消息后触发此事件。
-     *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 需要订阅 ==消息与群组== 分类下的 ==消息已读== 事件
+     * 撤销拉用户进群后触发此事件，在群组内的、已订阅该事件的机器人会收到事件消息。撤销操作是指如下图所示的群内 **撤销邀请**。;;![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/2faba42d3e4203e1dd899931da6dbfc8_DFXlHNscdw.png?height=278&maxWidth=550&width=1383)
      */
-    "im.message.message_read_v1"?: (data: {
+    "im.chat.member.user.withdrawn_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -4294,25 +4248,42 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        reader?: {
-            reader_id?: {
-                union_id?: string;
-                user_id?: string;
-                open_id?: string;
-            };
-            read_time: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        external?: boolean;
+        operator_tenant_key?: string;
+        users?: Array<{
+            name?: string;
             tenant_key?: string;
-        };
-        message_id_list?: Array<string>;
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        }>;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/events/created document }
+     * 用户进入与机器人的会话
      *
+     * 用户进入与机器人的会话时触发此事件。
+     */
+    "im.chat.access_event.bot_p2p_chat_entered_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        last_message_id?: string;
+        last_message_create_time?: string;
+    }) => Promise<any> | any;
+    /**
      * 新增消息表情回复
      *
-     * 消息被添加某一个表情回复后触发此事件
-     *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 具备==获取单聊、群组消息== 或 ==获取与发送单聊、群组消息==权限，并订阅 ==消息与群组== 分类下的 ==消息被reaction== 事件才可接收推送;- 机器人只能收到所在群聊内的消息被添加表情回复事件
+     * 应用订阅该事件后，消息被添加表情回复时会触发此事件。事件体包含被添加表情回复的消息 message_id、添加表情回复的操作人 ID、表情类型、添加时间等信息。
      */
     "im.message.reaction.created_v1"?: (data: {
         event_id?: string;
@@ -4331,36 +4302,9 @@ export interface IHandles extends IOtherEventHandles {
         action_time?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/events/deleted document }
+     * 撤回消息
      *
-     * 删除消息表情回复
-     *
-     * 消息被删除某一个表情回复后触发此事件
-     *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 具备==获取单聊、群组消息== 或 ==获取与发送单聊、群组消息==权限，并订阅 ==消息与群组== 分类下的 ==消息被取消reaction== 事件才可接收推送;- 机器人只能收到所在群聊内的消息被删除表情回复事件
-     */
-    "im.message.reaction.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        message_id?: string;
-        reaction_type?: { emoji_type: string };
-        operator_type?: string;
-        user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        action_time?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/recalled document }
-     *
-     * 消息撤回事件
-     *
-     * 消息被撤回后触发此事件。
+     * 机器人所在会话内的消息被撤回时触发此事件。
      */
     "im.message.recalled_v1"?: (data: {
         event_id?: string;
@@ -4382,13 +4326,102 @@ export interface IHandles extends IOtherEventHandles {
             | "enterprise_manager";
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive document }
+     * 机器人进群
      *
+     * 机器人被用户添加至群聊时触发此事件，在群组内的、已订阅该事件的机器人会收到事件消息。
+     */
+    "im.chat.member.bot.added_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        external?: boolean;
+        operator_tenant_key?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+    }) => Promise<any> | any;
+    /**
+     * 机器人被移出群
+     *
+     * 机器人被移出群聊后触发此事件，仅被移除群组且订阅该事件的机器人会收到事件数据。
+     */
+    "im.chat.member.bot.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        external?: boolean;
+        operator_tenant_key?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+    }) => Promise<any> | any;
+    /**
+     * 用户进群
+     *
+     * 新用户进群（包含话题群）时触发此事件，在群组内的、已订阅该事件的机器人会收到事件数据。
+     */
+    "im.chat.member.user.added_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        external?: boolean;
+        operator_tenant_key?: string;
+        users?: Array<{
+            name?: string;
+            tenant_key?: string;
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        }>;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+    }) => Promise<any> | any;
+    /**
+     * 群解散
+     *
+     * 群组被解散后触发此事件，在该群组内的、已订阅当前事件的应用机器人将会收到事件通知。
+     */
+    "im.chat.disbanded_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        external?: boolean;
+        operator_tenant_key?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+    }) => Promise<any> | any;
+    /**
      * 接收消息
      *
-     * 机器人接收到用户发送的消息后触发此事件。
-     *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)，并订阅 ==消息与群组== 分类下的 ==接收消息v2.0== 事件才可接收推送;- 同时，将根据应用具备的权限，判断可推送的信息：;	- 当具备==获取用户发给机器人的单聊消息==权限或者==读取用户发给机器人的单聊消息（历史权限）==，可接收与机器人单聊会话中用户发送的所有消息;	- 当具备==获取群组中所有消息== 权限时，可接收与机器人所在群聊会话中用户发送的所有消息;	- 当具备==获取用户在群组中@机器人的消息== 权限或者==获取用户在群聊中@机器人的消息（历史权限）==，可接收机器人所在群聊中用户 @ 机器人的消息
+     * 机器人接收到用户/机器人发送的消息后触发此事件。
      */
     "im.message.receive_v1"?: (data: {
         event_id?: string;
@@ -4432,8 +4465,10 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 收信通知
+     *
+     * ## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见 [事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
+     */
     "mail.user_mailbox.event.message_received_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4456,24 +4491,10 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
-    "meeting_room.meeting_room.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room_name?: string;
-        room_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 会议室删除
+     *
+     * 会议室被删除将触发此事件。
+     */
     "meeting_room.meeting_room.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4488,13 +4509,45 @@ export interface IHandles extends IOtherEventHandles {
         room_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/meeting_room-v1/meeting_room/events/status_changed document }
+     * 会议室属性变更
      *
+     * 会议室属性更新将触发此事件。
+     */
+    "meeting_room.meeting_room.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_name?: string;
+        room_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 会议室创建
+     *
+     * 会议室被创建将触发此事件。
+     */
+    "meeting_room.meeting_room.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_name?: string;
+        room_id?: string;
+    }) => Promise<any> | any;
+    /**
      * 会议室状态信息变更
      *
-     * 会议室状态信息变更将触发此事件。
-     *
-     * 了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)
+     * 会议室被创建、更新、删除或者被预定时，将会触发此事件。
      */
     "meeting_room.meeting_room.status_changed_v1"?: (data: {
         event_id?: string;
@@ -4510,24 +4563,10 @@ export interface IHandles extends IOtherEventHandles {
         room_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "meeting_room.meeting_room.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room_name?: string;
-        room_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 妙记生成
+     *
+     * 当与用户有关联的妙记生成后，将会触发该事件。;;用户关联的妙记包括：;- 参与的会议所生成的妙记;- 录音或者上传音视频文件所生成的妙记
+     */
     "minutes.minute.generated_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4547,8 +4586,85 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 删除评论
+     *
+     * 公司圈用户删除评论时触发此事件。
+     */
+    "moments.comment.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+        post_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 发布帖子
+     *
+     * 公司圈用户发布帖子时触发此事件。
+     */
+    "moments.post.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        category_ids?: Array<string>;
+        link?: string;
+        user_type?: number;
+    }) => Promise<any> | any;
+    /**
+     * 删除帖子
+     *
+     * 公司圈用户删除帖子时触发此事件。
+     */
+    "moments.post.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 帖子统计数据变更
+     *
+     * 公司圈帖子统计数据变更时触发此事件。
+     */
+    "moments.post_statistics.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        post_id?: string;
+        statistics_type?: number;
+        statistics?: { share_count?: number };
+    }) => Promise<any> | any;
+    /**
+     * 发布评论
+     *
+     * 公司圈用户发布评论时触发此事件。
+     */
     "moments.comment.created_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4567,94 +4683,10 @@ export interface IHandles extends IOtherEventHandles {
         user_type?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "moments.comment.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        id?: string;
-        post_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "moments.post.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        id?: string;
-        user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        category_ids?: Array<string>;
-        link?: string;
-        user_type?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "moments.post.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "moments.post_statistics.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        post_id?: string;
-        statistics_type?: number;
-        statistics?: { share_count?: number };
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "moments.reaction.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        entity_id?: string;
-        id?: string;
-        entity_type?: number;
-        user_type?: number;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 取消表情互动
+     *
+     * 公司圈用户取消表情互动时触发此事件。
+     */
     "moments.reaction.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4672,8 +4704,31 @@ export interface IHandles extends IOtherEventHandles {
         user_type?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 表情互动
+     *
+     * 公司圈用户表情互动时触发此事件。
+     */
+    "moments.reaction.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        entity_id?: string;
+        id?: string;
+        entity_type?: number;
+        user_type?: number;
+    }) => Promise<any> | any;
+    /**
+     * 发薪活动封存
+     *
+     * 当发薪活动封存后，订阅这个事件的应用会收到事件。;;;一个发薪活动封存后，可能会向事件监听方发送多条 `activity_id` 相同的事件通知，事件监听方需要针对  `activity_id` 做好幂等处理。;
+     */
     "payroll.payment_activity.approved_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4687,8 +4742,10 @@ export interface IHandles extends IOtherEventHandles {
         activity_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 发薪活动变更事件
+     *
+     * 当发薪活动发生变更后，订阅这个事件的应用会收到事件。当前仅审批通过、审批撤销、跳过审批、封存、取消封存，会发送该事件。
+     */
     "payroll.payment_activity.status_changed_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4703,8 +4760,32 @@ export interface IHandles extends IOtherEventHandles {
         status?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 绩效结果开通
+     *
+     * 当员工的绩效结果开通时，订阅这个事件的应用会收到该事件。
+     */
+    "performance.stage_task.open_result_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        items?: Array<{
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            semester_id?: string;
+            activity_id?: string;
+            open_time?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 绩效详情变更
+     *
+     * 当员工的绩效详情发生变更时，订阅这个事件的应用会收到该事件。
+     */
     "performance.review_data.changed_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -4740,28 +4821,10 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "performance.stage_task.open_result_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        items?: Array<{
-            user_id?: { union_id?: string; user_id?: string; open_id?: string };
-            semester_id?: string;
-            activity_id?: string;
-            open_time?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 设备申报事件
+     *
+     * 订阅此事件后，成员提交设备自主申报后会收到通知，通知包含申报设备的参数以及申报人等信息
+     */
     "security_and_compliance.device_apply_record.device_apply_event_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -4809,8 +4872,10 @@ export interface IHandles extends IOtherEventHandles {
         apply_reason?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 设备信息变更事件
+     *
+     * 使用该接口，可以订阅接收设备管理变更记录通知，包含设备新增、设备删除、设备归属变更、可信状态变更、设备特征如生产序列号、硬盘序列号等相关信息发生变化时事件通知
+     */
     "security_and_compliance.device_record.device_change_event_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -4882,31 +4947,7 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/task-v1/task-comment/events/updated document }
-     *
-     * 任务评论信息变更
-     *
-     * 当 APP 创建的任务评论信息发生变更时触发此事件，包括任务评论的创建、回复、更新、删除。
-     */
-    "task.task.comment.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        task_id?: string;
-        comment_id?: string;
-        parent_id?: string;
-        obj_type?: number;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/task-v1/task/events/update_tenant document }
-     *
-     * 任务信息变更（租户维度）
+     * 任务信息变更
      *
      * APP 订阅此事件后可接收到该 APP 所在租户的所有来源接口创建的任务的变更事件。事件体为发生变更任务的相关用户的 open_id，可用此 open_id ，通过 获取任务列表接口获取与该用户相关的所有任务。
      */
@@ -4931,11 +4972,29 @@ export interface IHandles extends IOtherEventHandles {
         object_type?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/task-v1/task/events/updated document }
+     * 任务评论信息变更
      *
+     * 当 APP 创建的任务评论信息发生变更时触发此事件，包括任务评论的创建、回复、更新、删除。;;**特别注意**: 订阅该事件只能接收到该 APP 创建的任务发生的评论信息变更，如果订阅后未收到事件，可以检查是否是下面几种不会推送的情况:;- 任务是user_access_token方式创建或者其他应用创建的。;- 任务是通过客户端或者文档创建的。
+     */
+    "task.task.comment.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        comment_id?: string;
+        parent_id?: string;
+        obj_type?: number;
+    }) => Promise<any> | any;
+    /**
      * 任务信息变更
      *
-     * 当 APP 订阅此事件后可以接收到由该 APP 创建的任务发生的变更，包括任务标题、描述、截止时间、协作者、关注者、提醒时间、状态（完成或取消完成）。
+     * 当 APP 订阅此事件后可以接收到由该 APP 创建的任务发生的变更，包括任务标题、描述、截止时间、协作者、关注者、提醒时间、状态（完成或取消完成）。;;;;**特别注意**: 订阅该事件只能接收到该 APP 创建的任务发生的变更，如果订阅后未收到事件，可以检查是否是下面几种不会推送的情况:;  - 任务是user_access_token方式创建或者其他应用创建的。;  - 任务是通过客户端或者文档创建的。;
      */
     "task.task.updated_v1"?: (data: {
         event_id?: string;
@@ -4951,8 +5010,10 @@ export interface IHandles extends IOtherEventHandles {
         obj_type?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 任务事件
+     *
+     * 任务事件，事件类型包括： 任务创建、任务删除、任务标题变更、任务负责人变更、任务完整状态变更、任务描述变更、任务关注人变更、任务提醒事件变更、任务开始和截止时间变更
+     */
     "task.task.update_user_access_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -4967,59 +5028,10 @@ export interface IHandles extends IOtherEventHandles {
         task_guid?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "vc.meeting.all_meeting_ended_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            calendar_event_id?: string;
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
-        };
-    }) => Promise<any> | any;
-    /**
-         
-         */
+     * 企业会议开始
+     *
+     * 发生在会议开始时，包含企业内所有会议开始事件。
+     */
     "vc.meeting.all_meeting_started_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -5069,11 +5081,9 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/join_meeting document }
-     *
      * 加入会议
      *
-     * 发生在有人加入会议时
+     * 发生在有人加入会议时【仅通过Open API预约的会议会产生此类事件】
      */
     "vc.meeting.join_meeting_v1"?: (data: {
         event_id?: string;
@@ -5123,11 +5133,493 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/leave_meeting document }
+     * 结束屏幕共享
      *
+     * 发生在屏幕共享结束时【仅通过Open API预约的会议会产生此类事件】
+     */
+    "vc.meeting.share_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 开始屏幕共享
+     *
+     * 发生在屏幕共享开始时【仅通过Open API预约的会议会产生此类事件】
+     */
+    "vc.meeting.share_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 企业会议结束
+     *
+     * 发生在会议结束时，包含企业内所有会议结束事件。
+     */
+    "vc.meeting.all_meeting_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 开始录制
+     *
+     * 发生在开始录制时【仅通过Open API预约的会议会产生此类事件】
+     */
+    "vc.meeting.recording_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 更新会议室
+     *
+     * 当更新会议室时，会触发该事件。
+     */
+    "vc.room.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room?: {
+            room_id?: string;
+            name?: string;
+            capacity?: number;
+            description?: string;
+            display_id?: string;
+            custom_room_id?: string;
+            room_level_id?: string;
+            path?: Array<string>;
+            room_status?: {
+                status: boolean;
+                schedule_status?: boolean;
+                disable_start_time?: string;
+                disable_end_time?: string;
+                disable_reason?: string;
+                contact_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                disable_notice?: boolean;
+                resume_notice?: boolean;
+            };
+            device?: Array<{ name: string }>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 创建会议室
+     *
+     * 当创建会议室时，会触发该事件。
+     */
+    "vc.room.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room?: {
+            room_id?: string;
+            name?: string;
+            capacity?: number;
+            description?: string;
+            display_id?: string;
+            custom_room_id?: string;
+            room_level_id?: string;
+            path?: Array<string>;
+            room_status?: {
+                status: boolean;
+                schedule_status?: boolean;
+                disable_start_time?: string;
+                disable_end_time?: string;
+                disable_reason?: string;
+                contact_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                disable_notice?: boolean;
+                resume_notice?: boolean;
+            };
+            device?: Array<{ name: string }>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 停止录制
+     *
+     * 发生在录制结束时【仅通过Open API预约的会议会产生此类事件】
+     */
+    "vc.meeting.recording_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除会议室
+     *
+     * 当删除会议室时，会触发该事件。
+     */
+    "vc.room.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room?: { room_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 会议开始
+     *
+     * 发生在会议开始时【仅通过Open API预约的会议会产生此类事件】
+     */
+    "vc.meeting.meeting_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除会议室层级
+     *
+     * 当删除会议室层级时，会触发该事件。
+     */
+    "vc.room_level.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_level_id: string;
+        delete_child?: boolean;
+    }) => Promise<any> | any;
+    /**
+     * 会议结束
+     *
+     * 发生在会议结束时【仅通过Open API预约的会议会产生此类事件】
+     */
+    "vc.meeting.meeting_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
      * 离开会议
      *
-     * 发生在有人离开会议时
+     * 发生在有人离开会议时【仅通过Open API预约的会议会产生此类事件】
      */
     "vc.meeting.leave_meeting_v1"?: (data: {
         event_id?: string;
@@ -5183,13 +5675,11 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/meeting_ended document }
+     * 完成录制
      *
-     * 会议结束
-     *
-     * 发生在会议结束时
+     * 发生在录制文件上传完毕时【仅通过Open API预约的会议会产生此类事件】
      */
-    "vc.meeting.meeting_ended_v1"?: (data: {
+    "vc.meeting.recording_ready_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -5204,19 +5694,9 @@ export interface IHandles extends IOtherEventHandles {
             topic?: string;
             meeting_no?: string;
             meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
             owner?: {
                 id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
             };
-            calendar_event_id?: string;
             meeting_sub_type?: number;
             security_setting?: {
                 security_level?: number;
@@ -5231,20 +5711,15 @@ export interface IHandles extends IOtherEventHandles {
             };
             webinar_setting?: { webinar_type?: number };
         };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
-        };
+        url?: string;
+        duration?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/meeting_started document }
+     * 更新会议室层级
      *
-     * 会议开始
-     *
-     * 发生在会议开始时，目前仅提供预约会议的相关事件。
+     * 当更新会议室层级时，会触发该事件。
      */
-    "vc.meeting.meeting_started_v1"?: (data: {
+    "vc.room_level.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -5254,47 +5729,119 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            calendar_event_id?: string;
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
+        room_level?: {
+            room_level_id?: string;
+            name?: string;
+            parent_id?: string;
+            path?: Array<string>;
+            has_child?: boolean;
+            custom_group_id?: string;
         };
     }) => Promise<any> | any;
     /**
-         
-         */
+     * 创建会议室层级
+     *
+     * 当创建会议室层级时，会触发该事件。
+     */
+    "vc.room_level.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_level?: {
+            room_level_id?: string;
+            name?: string;
+            parent_id?: string;
+            path?: Array<string>;
+            has_child?: boolean;
+            custom_group_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 更新会议室预定限制
+     *
+     * 当更新会议室预定限制时，会触发该事件。
+     */
+    "vc.reserve_config.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        scope_id?: string;
+        scope_type?: number;
+        approve_config?: {
+            approval_switch?: number;
+            approval_condition?: number;
+            meeting_duration?: number;
+            approvers?: Array<{
+                user_id?: {
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                };
+            }>;
+        };
+        time_config?: {
+            if_cover_child_scope?: boolean;
+            time_switch: number;
+            days_in_advance?: number;
+            opening_hour?: string;
+            start_time?: string;
+            end_time?: string;
+            max_duration?: number;
+        };
+        reserve_scope_config?: {
+            allow_all_users?: number;
+            allow_users?: Array<{
+                user_id?: {
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                };
+            }>;
+            allow_depts?: Array<{
+                department_id: string;
+                department_name?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 纪要生成
+     *
+     * 当与用户有关联的纪要生成后，将会触发该事件。;;用户关联的纪要包括：;- 参与的会议所生成的纪要;- 录音或者上传音视频文件所生成的纪要
+     */
+    "vc.note.generated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        note_id?: string;
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 参与的会议结束
+     *
+     * 当用户加入过的会议结束后，将会触发该事件。
+     */
     "vc.meeting.participant_meeting_ended_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -5347,501 +5894,5 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: string;
             open_id?: string;
         }>;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/recording_ended document }
-     *
-     * 录制停止
-     *
-     * 发生在录制结束时
-     */
-    "vc.meeting.recording_ended_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/recording_ready document }
-     *
-     * 录制完成
-     *
-     * 发生在录制文件上传完毕时
-     *
-     * 收到该事件后，方可进行录制文件获取、授权等操作
-     */
-    "vc.meeting.recording_ready_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-            };
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        url?: string;
-        duration?: string;
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/recording_started document }
-     *
-     * 录制开始
-     *
-     * 发生在开始录制时
-     */
-    "vc.meeting.recording_started_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/share_ended document }
-     *
-     * 屏幕共享结束
-     *
-     * 发生在屏幕共享结束时
-     */
-    "vc.meeting.share_ended_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/share_started document }
-     *
-     * 屏幕共享开始
-     *
-     * 发生在屏幕共享开始时
-     */
-    "vc.meeting.share_started_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        meeting?: {
-            id?: string;
-            topic?: string;
-            meeting_no?: string;
-            meeting_source?: number;
-            start_time?: string;
-            end_time?: string;
-            host_user?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            owner?: {
-                id?: { union_id?: string; user_id?: string; open_id?: string };
-                user_role?: number;
-                user_type?: number;
-            };
-            meeting_sub_type?: number;
-            security_setting?: {
-                security_level?: number;
-                group_ids?: Array<string>;
-                user_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                room_ids?: Array<string>;
-                has_set_security_contacts_and_group?: boolean;
-            };
-            webinar_setting?: { webinar_type?: number };
-        };
-        operator?: {
-            id?: { union_id?: string; user_id?: string; open_id?: string };
-            user_role?: number;
-            user_type?: number;
-        };
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "vc.note.generated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        note_id?: string;
-        subscriber_ids?: Array<{
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        }>;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "vc.reserve_config.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        scope_id?: string;
-        scope_type?: number;
-        approve_config?: {
-            approval_switch?: number;
-            approval_condition?: number;
-            meeting_duration?: number;
-            approvers?: Array<{
-                user_id?: {
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                };
-            }>;
-        };
-        time_config?: {
-            if_cover_child_scope?: boolean;
-            time_switch: number;
-            days_in_advance?: number;
-            opening_hour?: string;
-            start_time?: string;
-            end_time?: string;
-            max_duration?: number;
-        };
-        reserve_scope_config?: {
-            allow_all_users?: number;
-            allow_users?: Array<{
-                user_id?: {
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                };
-            }>;
-            allow_depts?: Array<{
-                department_id: string;
-                department_name?: string;
-            }>;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/created document }
-     *
-     * 创建会议室
-     *
-     * 当创建会议室时，会触发该事件
-     */
-    "vc.room.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room?: {
-            room_id?: string;
-            name?: string;
-            capacity?: number;
-            description?: string;
-            display_id?: string;
-            custom_room_id?: string;
-            room_level_id?: string;
-            path?: Array<string>;
-            room_status?: {
-                status: boolean;
-                schedule_status?: boolean;
-                disable_start_time?: string;
-                disable_end_time?: string;
-                disable_reason?: string;
-                contact_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                disable_notice?: boolean;
-                resume_notice?: boolean;
-            };
-            device?: Array<{ name: string }>;
-        };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/deleted document }
-     *
-     * 删除会议室
-     *
-     * 当删除会议室时，会触发该事件
-     */
-    "vc.room.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room?: { room_id?: string };
-    }) => Promise<any> | any;
-    /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/updated document }
-     *
-     * 更新会议室
-     *
-     * 当更新会议室时，会触发该事件
-     */
-    "vc.room.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room?: {
-            room_id?: string;
-            name?: string;
-            capacity?: number;
-            description?: string;
-            display_id?: string;
-            custom_room_id?: string;
-            room_level_id?: string;
-            path?: Array<string>;
-            room_status?: {
-                status: boolean;
-                schedule_status?: boolean;
-                disable_start_time?: string;
-                disable_end_time?: string;
-                disable_reason?: string;
-                contact_ids?: Array<{
-                    union_id?: string;
-                    user_id?: string;
-                    open_id?: string;
-                }>;
-                disable_notice?: boolean;
-                resume_notice?: boolean;
-            };
-            device?: Array<{ name: string }>;
-        };
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "vc.room_level.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room_level?: {
-            room_level_id?: string;
-            name?: string;
-            parent_id?: string;
-            path?: Array<string>;
-            has_child?: boolean;
-            custom_group_id?: string;
-        };
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "vc.room_level.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room_level_id: string;
-        delete_child?: boolean;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "vc.room_level.updated_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        room_level?: {
-            room_level_id?: string;
-            name?: string;
-            parent_id?: string;
-            path?: Array<string>;
-            has_child?: boolean;
-            custom_group_id?: string;
-        };
     }) => Promise<any> | any;
 }

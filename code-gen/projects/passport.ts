@@ -29,17 +29,21 @@ export default abstract class Client extends partner_ai {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 帐号
-     */
+         
+         */
     passport = {
         /**
-         * 登录态
+         * session
          */
         session: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=logout&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=logout&project=passport&resource=session&version=v1 document }
+             *
+             * 退出登录
+             *
+             * 该接口用于退出用户的登录态
              */
             logout: async (
                 payload?: {
@@ -81,11 +85,11 @@ export default abstract class Client extends partner_ai {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=passport&resource=session&version=v1 document }
              *
-             * 批量获取用户登录信息（脱敏）
+             * 批量获取脱敏的用户登录信息
              *
-             * 该接口用于查询用户的登录信息
+             * 该接口用于查询用户的登录信息。
              */
             query: async (
                 payload?: {
@@ -132,15 +136,67 @@ export default abstract class Client extends partner_ai {
                     });
             },
         },
+        /**
+         * password
+         */
+        password: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=passport&resource=password&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=passport&resource=password&version=v1 document }
+             *
+             * 重置登录密码
+             *
+             * 当用户忘记密码、密码已过期或账号存在安全风险时，管理员可以为用户重置密码。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        password?: string;
+                        require_reset?: boolean;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/passport/v1/password`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
-             * 登录态
+             * session
              */
             session: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=logout&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=logout&project=passport&resource=session&version=v1 document }
+                 *
+                 * 退出登录
+                 *
+                 * 该接口用于退出用户的登录态
                  */
                 logout: async (
                     payload?: {
@@ -185,11 +241,11 @@ export default abstract class Client extends partner_ai {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=passport&resource=session&version=v1 document }
                  *
-                 * 批量获取用户登录信息（脱敏）
+                 * 批量获取脱敏的用户登录信息
                  *
-                 * 该接口用于查询用户的登录信息
+                 * 该接口用于查询用户的登录信息。
                  */
                 query: async (
                     payload?: {
@@ -224,6 +280,57 @@ export default abstract class Client extends partner_ai {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * password
+             */
+            password: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=passport&resource=password&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=passport&resource=password&version=v1 document }
+                 *
+                 * 重置登录密码
+                 *
+                 * 当用户忘记密码、密码已过期或账号存在安全风险时，管理员可以为用户重置密码。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            password?: string;
+                            require_reset?: boolean;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/passport/v1/password`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,
