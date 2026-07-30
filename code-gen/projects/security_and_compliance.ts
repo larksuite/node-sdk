@@ -29,52 +29,9 @@ export default abstract class Client extends search {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 安全合规
-     */
-    security_and_compliance = {
-        /**
-         * multi_geo_entity.tenant
+         
          */
-        multiGeoEntityTenant: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=multi_geo_entity.tenant&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=multi_geo_entity.tenant&version=v1 document }
-             */
-            get: async (payload?: {}, options?: IRequestOptions) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                tenant?: {
-                                    available_geo_locations: Array<string>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/security_and_compliance/v1/multi_geo_entity/tenant`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
+    security_and_compliance = {
         /**
          * openapi_log
          */
@@ -83,6 +40,10 @@ export default abstract class Client extends search {
              * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=openapi_log&apiName=list_data&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_data&project=security_and_compliance&resource=openapi_log&version=v1 document }
+             *
+             * 获取OpenAPI审计日志数据
+             *
+             * 该接口用于获取OpenAPI审计日志数据
              */
             listData: async (
                 payload?: {
@@ -145,13 +106,17 @@ export default abstract class Client extends search {
             },
         },
         /**
-         * 用户迁移
+         * user_migration
          */
         userMigration: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=cancel&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/cancel document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel&project=security_and_compliance&resource=user_migration&version=v1 document }
+             *
+             * 取消用户迁移任务
+             *
+             * 取消用户迁移任务，仅能对未启动迁移的用户做此操作。用户迁移状态可通过「获取单个用户迁移状态」查询。
              */
             cancel: async (
                 payload?: {
@@ -184,59 +149,13 @@ export default abstract class Client extends search {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/create document }
-             */
-            create: async (
-                payload?: {
-                    data: { user_ids: Array<string>; dest_geo: string };
-                    params: {
-                        user_id_type: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_migrations?: Array<{
-                                    user_id?: string;
-                                    dest_geo?: string;
-                                    task_id?: string;
-                                    status?: "0" | "1" | "2";
-                                    progress?: number;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/security_and_compliance/v1/user_migrations`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=user_migration&version=v1 document }
+             *
+             * 获取单个用户迁移状态
+             *
+             * 通过user_id获取指定用户当前的迁移状态
              */
             get: async (
                 payload?: {
@@ -286,7 +205,11 @@ export default abstract class Client extends search {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=search&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/search document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=security_and_compliance&resource=user_migration&version=v1 document }
+             *
+             * 批量获取用户迁移状态
+             *
+             * 传入用户 ID 列表，批量获取用户迁移状态
              */
             search: async (
                 payload?: {
@@ -333,51 +256,109 @@ export default abstract class Client extends search {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=security_and_compliance&resource=user_migration&version=v1 document }
+             *
+             * 迁移用户数据驻留位置
+             *
+             * 将用户的数据驻留位置迁移到目标地理位置。
+             */
+            create: async (
+                payload?: {
+                    data: { user_ids: Array<string>; dest_geo: string };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_migrations?: Array<{
+                                    user_id?: string;
+                                    dest_geo?: string;
+                                    task_id?: string;
+                                    status?: "0" | "1" | "2";
+                                    progress?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/user_migrations`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * multi_geo_entity.tenant
+         */
+        multiGeoEntityTenant: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=multi_geo_entity.tenant&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=multi_geo_entity.tenant&version=v1 document }
+             *
+             * 获取数据驻留地理位置列表
+             *
+             * 获取租户可用的数据驻留地理位置列表
+             */
+            get: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tenant?: {
+                                    available_geo_locations: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/multi_geo_entity/tenant`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         v1: {
-            /**
-             * multi_geo_entity.tenant
-             */
-            multiGeoEntityTenant: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=multi_geo_entity.tenant&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=multi_geo_entity.tenant&version=v1 document }
-                 */
-                get: async (payload?: {}, options?: IRequestOptions) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tenant?: {
-                                        available_geo_locations: Array<string>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/security_and_compliance/v1/multi_geo_entity/tenant`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
             /**
              * openapi_log
              */
@@ -386,6 +367,10 @@ export default abstract class Client extends search {
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=openapi_log&apiName=list_data&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_data&project=security_and_compliance&resource=openapi_log&version=v1 document }
+                 *
+                 * 获取OpenAPI审计日志数据
+                 *
+                 * 该接口用于获取OpenAPI审计日志数据
                  */
                 listData: async (
                     payload?: {
@@ -448,13 +433,17 @@ export default abstract class Client extends search {
                 },
             },
             /**
-             * 用户迁移
+             * user_migration
              */
             userMigration: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=cancel&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/cancel document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel&project=security_and_compliance&resource=user_migration&version=v1 document }
+                 *
+                 * 取消用户迁移任务
+                 *
+                 * 取消用户迁移任务，仅能对未启动迁移的用户做此操作。用户迁移状态可通过「获取单个用户迁移状态」查询。
                  */
                 cancel: async (
                     payload?: {
@@ -490,59 +479,13 @@ export default abstract class Client extends search {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/create document }
-                 */
-                create: async (
-                    payload?: {
-                        data: { user_ids: Array<string>; dest_geo: string };
-                        params: {
-                            user_id_type: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    user_migrations?: Array<{
-                                        user_id?: string;
-                                        dest_geo?: string;
-                                        task_id?: string;
-                                        status?: "0" | "1" | "2";
-                                        progress?: number;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/security_and_compliance/v1/user_migrations`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=user_migration&version=v1 document }
+                 *
+                 * 获取单个用户迁移状态
+                 *
+                 * 通过user_id获取指定用户当前的迁移状态
                  */
                 get: async (
                     payload?: {
@@ -592,7 +535,11 @@ export default abstract class Client extends search {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=search&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/search document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=security_and_compliance&resource=user_migration&version=v1 document }
+                 *
+                 * 批量获取用户迁移状态
+                 *
+                 * 传入用户 ID 列表，批量获取用户迁移状态
                  */
                 search: async (
                     payload?: {
@@ -639,6 +586,107 @@ export default abstract class Client extends search {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=security_and_compliance&resource=user_migration&version=v1 document }
+                 *
+                 * 迁移用户数据驻留位置
+                 *
+                 * 将用户的数据驻留位置迁移到目标地理位置。
+                 */
+                create: async (
+                    payload?: {
+                        data: { user_ids: Array<string>; dest_geo: string };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_migrations?: Array<{
+                                        user_id?: string;
+                                        dest_geo?: string;
+                                        task_id?: string;
+                                        status?: "0" | "1" | "2";
+                                        progress?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/user_migrations`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * multi_geo_entity.tenant
+             */
+            multiGeoEntityTenant: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=multi_geo_entity.tenant&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=multi_geo_entity.tenant&version=v1 document }
+                 *
+                 * 获取数据驻留地理位置列表
+                 *
+                 * 获取租户可用的数据驻留地理位置列表
+                 */
+                get: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tenant?: {
+                                        available_geo_locations: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/multi_geo_entity/tenant`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
         },
         v2: {
@@ -650,6 +698,10 @@ export default abstract class Client extends search {
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_apply_record&apiName=update&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=security_and_compliance&resource=device_apply_record&version=v2 document }
+                 *
+                 * 审批设备申报
+                 *
+                 * 使用该接口在设备管理中通过或驳回一条成员自主申报申请
                  */
                 update: async (
                     payload?: {
@@ -688,9 +740,139 @@ export default abstract class Client extends search {
              */
             deviceRecord: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=security_and_compliance&resource=device_record&version=v2 document }
+                 *
+                 * 删除设备
+                 *
+                 * 使用该接口在设备管理中删除一台设备
+                 */
+                delete: async (
+                    payload?: {
+                        path: { device_record_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v2/device_records/:device_record_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=mine&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mine&project=security_and_compliance&resource=device_record&version=v2 document }
+                 *
+                 * 获取设备认证信息
+                 *
+                 * 通过客户端授权信息获取对应设备认证信息，包含设备归属、可信状态等
+                 */
+                mine: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    device_record_id?: string;
+                                    device_ownership?: number;
+                                    device_status?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v2/device_records/mine`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=security_and_compliance&resource=device_record&version=v2 document }
+                 *
+                 * 更新设备
+                 *
+                 * 使用该接口在设备管理中修改一台设备的设备归属、设备状态等信息
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            device_ownership?: number;
+                            device_status?: number;
+                            is_public?: boolean;
+                        };
+                        params: { version: string };
+                        path: { device_record_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v2/device_records/:device_record_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=create&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=security_and_compliance&resource=device_record&version=v2 document }
+                 *
+                 * 新增设备
+                 *
+                 * 使用该接口在设备管理中新增一台设备。新增设备的类型为管理员导入
                  */
                 create: async (
                     payload?: {
@@ -739,44 +921,13 @@ export default abstract class Client extends search {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=security_and_compliance&resource=device_record&version=v2 document }
-                 */
-                delete: async (
-                    payload?: {
-                        path: { device_record_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/security_and_compliance/v2/device_records/:device_record_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=get&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=device_record&version=v2 document }
+                 *
+                 * 获取设备信息
+                 *
+                 * 使用该接口在设备管理中获取设备的设备参数、设备归属、设备状态等信息
                  */
                 get: async (
                     payload?: {
@@ -1000,6 +1151,10 @@ export default abstract class Client extends search {
                  * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=list&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=security_and_compliance&resource=device_record&version=v2 document }
+                 *
+                 * 查询设备信息
+                 *
+                 * 使用该接口可分页查询设备列表信息
                  */
                 list: async (
                     payload?: {
@@ -1089,85 +1244,6 @@ export default abstract class Client extends search {
                                 path
                             ),
                             method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=mine&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mine&project=security_and_compliance&resource=device_record&version=v2 document }
-                 */
-                mine: async (payload?: {}, options?: IRequestOptions) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    device_record_id?: string;
-                                    device_ownership?: number;
-                                    device_status?: number;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/security_and_compliance/v2/device_records/mine`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=device_record&apiName=update&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=security_and_compliance&resource=device_record&version=v2 document }
-                 */
-                update: async (
-                    payload?: {
-                        data?: {
-                            device_ownership?: number;
-                            device_status?: number;
-                            is_public?: boolean;
-                        };
-                        params: { version: string };
-                        path: { device_record_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/security_and_compliance/v2/device_records/:device_record_id`,
-                                path
-                            ),
-                            method: "PUT",
                             data,
                             params,
                             headers,

@@ -32,11 +32,69 @@ export default abstract class Client extends task {
          
          */
     tenant = {
+        tenant: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant&apiName=query&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=tenant&resource=tenant&version=v2 document }
+             *
+             * 获取企业信息
+             *
+             * 获取企业名称、企业编号等企业信息
+             */
+            query: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tenant?: {
+                                    name: string;
+                                    display_id: string;
+                                    tenant_tag: number;
+                                    tenant_key: string;
+                                    avatar: {
+                                        avatar_origin?: string;
+                                        avatar_72?: string;
+                                        avatar_240?: string;
+                                        avatar_640?: string;
+                                    };
+                                    domain?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/tenant/v2/tenant/query`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         tenantProductAssignInfo: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant.product_assign_info&apiName=query&version=v2 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=tenant&resource=tenant.product_assign_info&version=v2 document }
+             *
+             * 获取企业席位信息
+             *
+             * 获取租户下待分配的席位列表（仅返回未满的席位），包含席位名称、席位ID、数量及对应有效期。;返回的待分配席位范围为：​;1. 客户当前已订阅且处于生效状态的席位（注：不包含增购的、尚未生效的未来席位）；​;2. 客户已订阅且未来生效的全新订阅席位。​;;即增购的未来席位不在本接口返回的待分配席位列表范围内。
              */
             query: async (payload?: {}, options?: IRequestOptions) => {
                 const { headers, params, data, path } =
@@ -83,63 +141,64 @@ export default abstract class Client extends task {
                     });
             },
         },
-        tenant: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant&apiName=query&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/tenant-v2/tenant/query document }
-             *
-             * 获取企业信息
-             *
-             * 获取企业名称、企业编号等企业信息
-             *
-             * 如果ISV应用是企业创建时默认安装，并且180天内企业未打开或使用过此应用，则无法通过此接口获取到企业信息。
-             */
-            query: async (payload?: {}, options?: IRequestOptions) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                tenant?: {
-                                    name: string;
-                                    display_id: string;
-                                    tenant_tag: number;
-                                    tenant_key: string;
-                                    avatar: {
-                                        avatar_origin?: string;
-                                        avatar_72?: string;
-                                        avatar_240?: string;
-                                        avatar_640?: string;
-                                    };
-                                    domain?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/tenant/v2/tenant/query`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
         v2: {
+            /**
+             * tenant
+             */
+            tenant: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=tenant&resource=tenant&version=v2 document }
+                 *
+                 * 获取企业信息
+                 *
+                 * 获取企业名称、企业编号等企业信息
+                 */
+                query: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tenant?: {
+                                        name: string;
+                                        display_id: string;
+                                        tenant_tag: number;
+                                        tenant_key: string;
+                                        avatar: {
+                                            avatar_origin?: string;
+                                            avatar_72?: string;
+                                            avatar_240?: string;
+                                            avatar_640?: string;
+                                        };
+                                        domain?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/tenant/v2/tenant/query`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * tenant.product_assign_info
              */
@@ -148,6 +207,10 @@ export default abstract class Client extends task {
                  * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant.product_assign_info&apiName=query&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=tenant&resource=tenant.product_assign_info&version=v2 document }
+                 *
+                 * 获取企业席位信息
+                 *
+                 * 获取租户下待分配的席位列表（仅返回未满的席位），包含席位名称、席位ID、数量及对应有效期。;返回的待分配席位范围为：​;1. 客户当前已订阅且处于生效状态的席位（注：不包含增购的、尚未生效的未来席位）；​;2. 客户已订阅且未来生效的全新订阅席位。​;;即增购的未来席位不在本接口返回的待分配席位列表范围内。
                  */
                 query: async (payload?: {}, options?: IRequestOptions) => {
                     const { headers, params, data, path } =
@@ -179,65 +242,6 @@ export default abstract class Client extends task {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/tenant/v2/tenant/assign_info_list/query`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 企业信息
-             */
-            tenant: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant&apiName=query&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/tenant-v2/tenant/query document }
-                 *
-                 * 获取企业信息
-                 *
-                 * 获取企业名称、企业编号等企业信息
-                 *
-                 * 如果ISV应用是企业创建时默认安装，并且180天内企业未打开或使用过此应用，则无法通过此接口获取到企业信息。
-                 */
-                query: async (payload?: {}, options?: IRequestOptions) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tenant?: {
-                                        name: string;
-                                        display_id: string;
-                                        tenant_tag: number;
-                                        tenant_key: string;
-                                        avatar: {
-                                            avatar_origin?: string;
-                                            avatar_72?: string;
-                                            avatar_240?: string;
-                                            avatar_640?: string;
-                                        };
-                                        domain?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/tenant/v2/tenant/query`,
                                 path
                             ),
                             method: "GET",

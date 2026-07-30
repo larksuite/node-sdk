@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import personal_settings from "./personal_settings";
+import profile from "./profile";
 
 // auto gen
-export default abstract class Client extends personal_settings {
+export default abstract class Client extends profile {
     declare tokenManager;
 
     declare domain;
@@ -29,21 +29,21 @@ export default abstract class Client extends personal_settings {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 汇报
-     */
+         
+         */
     report = {
         /**
-         * 规则
+         * rule
          */
         rule: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=report&resource=rule&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/report/report-v1/rule/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=report&resource=rule&version=v1 document }
              *
-             * 规则查询
+             * 查询规则
              *
-             * 规则查询
+             * 查询规则。
              */
             query: async (
                 payload?: {
@@ -120,13 +120,13 @@ export default abstract class Client extends personal_settings {
             },
         },
         /**
-         * 规则看板
+         * rule.view
          */
         ruleView: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=report&resource=rule.view&apiName=remove&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/report/report-v1/rule-view/remove document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove&project=report&resource=rule.view&version=v1 document }
              *
              * 移除规则看板
              *
@@ -165,17 +165,19 @@ export default abstract class Client extends personal_settings {
             },
         },
         /**
-         * 任务
+         * task
          */
         task: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=report&resource=task&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/report/report-v1/task/query document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=report&resource=task&version=v1 document }
              *
-             * 任务查询
+             * 查询任务
              *
-             * 任务查询
+             * 查询任务。
+             *
+             * **注意**：;1. 请求参数 page_token 为必填字段，首次调用接口时必须传空值，表示从头开始遍历。;2. 当使用user access token访问时，表示获取当前用户发起以及收到的汇报，且结果不分页
              */
             query: async (
                 payload?: {
@@ -244,17 +246,17 @@ export default abstract class Client extends personal_settings {
         },
         v1: {
             /**
-             * 规则
+             * rule
              */
             rule: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=report&resource=rule&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/report/report-v1/rule/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=report&resource=rule&version=v1 document }
                  *
-                 * 规则查询
+                 * 查询规则
                  *
-                 * 规则查询
+                 * 查询规则。
                  */
                 query: async (
                     payload?: {
@@ -331,13 +333,13 @@ export default abstract class Client extends personal_settings {
                 },
             },
             /**
-             * 规则看板
+             * rule.view
              */
             ruleView: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=report&resource=rule.view&apiName=remove&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/report/report-v1/rule-view/remove document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove&project=report&resource=rule.view&version=v1 document }
                  *
                  * 移除规则看板
                  *
@@ -379,17 +381,19 @@ export default abstract class Client extends personal_settings {
                 },
             },
             /**
-             * 任务
+             * task
              */
             task: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=report&resource=task&apiName=query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/report/report-v1/task/query document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=report&resource=task&version=v1 document }
                  *
-                 * 任务查询
+                 * 查询任务
                  *
-                 * 任务查询
+                 * 查询任务。
+                 *
+                 * **注意**：;1. 请求参数 page_token 为必填字段，首次调用接口时必须传空值，表示从头开始遍历。;2. 当使用user access token访问时，表示获取当前用户发起以及收到的汇报，且结果不分页
                  */
                 query: async (
                     payload?: {

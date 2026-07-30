@@ -29,61 +29,17 @@ export default abstract class Client extends mcp {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 主数据
-     */
+         
+         */
     mdm = {
         /**
-         * 数据维度
+         * user_auth_data_relation
          */
         userAuthDataRelation: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=user_auth_data_relation&apiName=bind&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/mdm-v1/user_auth_data_relation/bind document }
-             *
-             * 用户数据维度绑定
-             *
-             * 通过该接口，可为指定应用下的用户绑定一类数据维度，支持批量给多个用户同时增量授权。
-             */
-            bind: async (
-                payload?: {
-                    data: {
-                        root_dimension_type: string;
-                        sub_dimension_types: Array<string>;
-                        authorized_user_ids: Array<string>;
-                        uams_app_id: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/mdm/v1/user_auth_data_relations/bind`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=user_auth_data_relation&apiName=unbind&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/mdm-v1/user_auth_data_relation/unbind document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unbind&project=mdm&resource=user_auth_data_relation&version=v1 document }
              *
              * 用户数据维度解绑
              *
@@ -124,63 +80,60 @@ export default abstract class Client extends mcp {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=user_auth_data_relation&apiName=bind&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bind&project=mdm&resource=user_auth_data_relation&version=v1 document }
+             *
+             * 用户数据维度绑定
+             *
+             * 通过该接口，可为指定应用下的用户绑定一类数据维度，支持批量给多个用户同时增量授权。
+             */
+            bind: async (
+                payload?: {
+                    data: {
+                        root_dimension_type: string;
+                        sub_dimension_types: Array<string>;
+                        authorized_user_ids: Array<string>;
+                        uams_app_id: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mdm/v1/user_auth_data_relations/bind`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         v1: {
             /**
-             * 数据维度
+             * user_auth_data_relation
              */
             userAuthDataRelation: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=user_auth_data_relation&apiName=bind&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/mdm-v1/user_auth_data_relation/bind document }
-                 *
-                 * 用户数据维度绑定
-                 *
-                 * 通过该接口，可为指定应用下的用户绑定一类数据维度，支持批量给多个用户同时增量授权。
-                 */
-                bind: async (
-                    payload?: {
-                        data: {
-                            root_dimension_type: string;
-                            sub_dimension_types: Array<string>;
-                            authorized_user_ids: Array<string>;
-                            uams_app_id: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/mdm/v1/user_auth_data_relations/bind`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=user_auth_data_relation&apiName=unbind&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/mdm-v1/user_auth_data_relation/unbind document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unbind&project=mdm&resource=user_auth_data_relation&version=v1 document }
                  *
                  * 用户数据维度解绑
                  *
@@ -224,27 +177,25 @@ export default abstract class Client extends mcp {
                             throw e;
                         });
                 },
-            },
-        },
-        v3: {
-            /**
-             * batch_country_region
-             */
-            batchCountryRegion: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=batch_country_region&apiName=get&version=v3 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=user_auth_data_relation&apiName=bind&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mdm&resource=batch_country_region&version=v3 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bind&project=mdm&resource=user_auth_data_relation&version=v1 document }
                  *
-                 * 查询国家 / 地区
+                 * 用户数据维度绑定
+                 *
+                 * 通过该接口，可为指定应用下的用户绑定一类数据维度，支持批量给多个用户同时增量授权。
                  */
-                get: async (
+                bind: async (
                     payload?: {
-                        data?: { common?: { tenant_id?: string } };
-                        params: {
-                            fields: Array<string>;
-                            ids: Array<string>;
-                            languages: Array<string>;
+                        data: {
+                            root_dimension_type: string;
+                            sub_dimension_types: Array<string>;
+                            authorized_user_ids: Array<string>;
+                            uams_app_id: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
                     options?: IRequestOptions
@@ -255,49 +206,13 @@ export default abstract class Client extends mcp {
                     return this.httpInstance
                         .request<
                             any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    data?: Array<{
-                                        alpha_3_code?: string;
-                                        alpha_2_code?: string;
-                                        numeric_code?: string;
-                                        name?: {
-                                            value?: string;
-                                            multilingual_value?: Record<
-                                                string,
-                                                string
-                                            >;
-                                            return_language?: string;
-                                        };
-                                        mdm_code?: string;
-                                        full_name?: {
-                                            value?: string;
-                                            multilingual_value?: Record<
-                                                string,
-                                                string
-                                            >;
-                                            return_language?: string;
-                                        };
-                                        global_code?: string;
-                                        status?: string;
-                                        continents?: {
-                                            value: string;
-                                            multilingual_name?: Record<
-                                                string,
-                                                string
-                                            >;
-                                        };
-                                    }>;
-                                };
-                            }
+                            { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/mdm/v3/batch_country_region`,
+                                `${this.domain}/open-apis/mdm/v1/user_auth_data_relations/bind`,
                                 path
                             ),
-                            method: "GET",
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -310,6 +225,8 @@ export default abstract class Client extends mcp {
                         });
                 },
             },
+        },
+        v3: {
             /**
              * country_region
              */
@@ -319,16 +236,31 @@ export default abstract class Client extends mcp {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mdm&resource=country_region&version=v3 document }
                  *
-                 * 搜索国家 / 地区
+                 * 分页批量查询国家/地区
+                 *
+                 * 分页批量查询国家/地区。资源介绍请参考[概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/mdm-v3/country_region/resource-definition)。
                  */
                 list: async (
                     payload?: {
                         data?: {
                             filter?: {
-                                logic: string;
+                                logic: "0" | "1";
                                 expressions?: Array<{
                                     field: string;
-                                    operator: string;
+                                    operator:
+                                        | "0"
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5"
+                                        | "6"
+                                        | "7"
+                                        | "8"
+                                        | "9"
+                                        | "10"
+                                        | "11"
+                                        | "12";
                                     value: {
                                         string_value?: string;
                                         bool_value?: boolean;
@@ -399,6 +331,91 @@ export default abstract class Client extends mcp {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mdm/v3/country_regions`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * batch_country_region
+             */
+            batchCountryRegion: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=batch_country_region&apiName=get&version=v3 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mdm&resource=batch_country_region&version=v3 document }
+                 *
+                 * 通过mdmcode批量查询国家/地区信息
+                 *
+                 * 通过mdmcode批量查询国家/地区信息。资源介绍请参考[概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/mdm-v3/country_region/resource-definition)。
+                 */
+                get: async (
+                    payload?: {
+                        data?: { common?: { tenant_id?: string } };
+                        params: {
+                            fields: Array<string>;
+                            ids: Array<string>;
+                            languages: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data?: Array<{
+                                        alpha_3_code?: string;
+                                        alpha_2_code?: string;
+                                        numeric_code?: string;
+                                        name?: {
+                                            value?: string;
+                                            multilingual_value?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            return_language?: string;
+                                        };
+                                        mdm_code?: string;
+                                        full_name?: {
+                                            value?: string;
+                                            multilingual_value?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            return_language?: string;
+                                        };
+                                        global_code?: string;
+                                        status?: string;
+                                        continents?: {
+                                            value: string;
+                                            multilingual_name?: Record<
+                                                string,
+                                                string
+                                            >;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mdm/v3/batch_country_region`,
                                 path
                             ),
                             method: "GET",

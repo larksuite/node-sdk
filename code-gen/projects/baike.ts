@@ -29,541 +29,27 @@ export default abstract class Client extends aweme_ecosystem {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 企业百科
-     */
+         
+         */
     baike = {
         /**
-         * 分类
-         */
-        classification: {
-            listWithIterator: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/classifications`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    id: string;
-                                                    name?: string;
-                                                    father_id?: string;
-                                                }>;
-                                                page_token?: string;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=classification&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list document }
-             *
-             * 获取百科分类
-             *
-             * 获取企业百科当前分类。;企业百科目前为二级分类体系，每个词条可添加多个二级分类，但每个一级分类下只能添加一个分类。
-             */
-            list: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    id: string;
-                                    name?: string;
-                                    father_id?: string;
-                                }>;
-                                page_token?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/classifications`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 草稿
-         */
-        draft: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/create document }
-             *
-             * 创建草稿
-             *
-             * 草稿并非百科词条，而是指通过 API 发起创建新词条或更新现有词条的申请。百科管理员审核通过后，草稿将变为新的词条或覆盖已有词条。
-             *
-             * · 创建新的百科词条时，无需传入 entity_id 字段;· 更新已有百科词条时，请传入对应词条的 entity_id 或 outer_info
-             *
-             * 以用户身份创建草稿（即 Authorization 使用 user_access_token），对应用户将收到由企业百科 Bot 发送的审核结果；以应用身份创建草稿（即 Authorization 使用 tenant_access_toke），不会收到任何通知。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        id?: string;
-                        main_keys: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        full_names?: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        aliases?: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        description?: string;
-                        related_meta?: {
-                            users?: Array<{ id: string; title?: string }>;
-                            chats?: Array<{ id: string }>;
-                            docs?: Array<{ title?: string; url?: string }>;
-                            oncalls?: Array<{ id: string }>;
-                            links?: Array<{ title?: string; url?: string }>;
-                            abbreviations?: Array<{ id?: string }>;
-                            classifications?: Array<{
-                                id: string;
-                                father_id?: string;
-                            }>;
-                            images?: Array<{ token: string }>;
-                        };
-                        outer_info?: { provider: string; outer_id: string };
-                        rich_text?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                draft?: {
-                                    draft_id?: string;
-                                    entity?: {
-                                        id?: string;
-                                        main_keys: Array<{
-                                            key: string;
-                                            display_status: {
-                                                allow_highlight: boolean;
-                                                allow_search: boolean;
-                                            };
-                                        }>;
-                                        full_names?: Array<{
-                                            key: string;
-                                            display_status: {
-                                                allow_highlight: boolean;
-                                                allow_search: boolean;
-                                            };
-                                        }>;
-                                        aliases?: Array<{
-                                            key: string;
-                                            display_status: {
-                                                allow_highlight: boolean;
-                                                allow_search: boolean;
-                                            };
-                                        }>;
-                                        description?: string;
-                                        creator?: string;
-                                        create_time?: string;
-                                        updater?: string;
-                                        update_time?: string;
-                                        related_meta?: {
-                                            users?: Array<{
-                                                id: string;
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            chats?: Array<{
-                                                id: string;
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            docs?: Array<{
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            oncalls?: Array<{
-                                                id: string;
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            links?: Array<{
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            abbreviations?: Array<{
-                                                id?: string;
-                                            }>;
-                                            classifications?: Array<{
-                                                id: string;
-                                                name?: string;
-                                                father_id?: string;
-                                            }>;
-                                            images?: Array<{ token: string }>;
-                                        };
-                                        statistics?: {
-                                            like_count: number;
-                                            dislike_count: number;
-                                        };
-                                        outer_info?: {
-                                            provider: string;
-                                            outer_id: string;
-                                        };
-                                        rich_text?: string;
-                                        source?: number;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/drafts`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/update document }
-             *
-             * 更新草稿
-             *
-             * 根据 draft_id 更新草稿内容，已审批的草稿无法编辑
-             */
-            update: async (
-                payload?: {
-                    data: {
-                        id?: string;
-                        main_keys: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        full_names?: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        aliases?: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        description?: string;
-                        related_meta?: {
-                            users?: Array<{ id: string; title?: string }>;
-                            chats?: Array<{ id: string }>;
-                            docs?: Array<{ title?: string; url?: string }>;
-                            oncalls?: Array<{ id: string }>;
-                            links?: Array<{ title?: string; url?: string }>;
-                            abbreviations?: Array<{ id?: string }>;
-                            classifications?: Array<{
-                                id: string;
-                                father_id?: string;
-                            }>;
-                            images?: Array<{ token: string }>;
-                        };
-                        rich_text?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { draft_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                draft?: {
-                                    draft_id?: string;
-                                    entity?: {
-                                        id?: string;
-                                        main_keys: Array<{
-                                            key: string;
-                                            display_status: {
-                                                allow_highlight: boolean;
-                                                allow_search: boolean;
-                                            };
-                                        }>;
-                                        full_names?: Array<{
-                                            key: string;
-                                            display_status: {
-                                                allow_highlight: boolean;
-                                                allow_search: boolean;
-                                            };
-                                        }>;
-                                        aliases?: Array<{
-                                            key: string;
-                                            display_status: {
-                                                allow_highlight: boolean;
-                                                allow_search: boolean;
-                                            };
-                                        }>;
-                                        description?: string;
-                                        creator?: string;
-                                        create_time?: string;
-                                        updater?: string;
-                                        update_time?: string;
-                                        related_meta?: {
-                                            users?: Array<{
-                                                id: string;
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            chats?: Array<{
-                                                id: string;
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            docs?: Array<{
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            oncalls?: Array<{
-                                                id: string;
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            links?: Array<{
-                                                title?: string;
-                                                url?: string;
-                                            }>;
-                                            abbreviations?: Array<{
-                                                id?: string;
-                                            }>;
-                                            classifications?: Array<{
-                                                id: string;
-                                                name?: string;
-                                                father_id?: string;
-                                            }>;
-                                            images?: Array<{ token: string }>;
-                                        };
-                                        statistics?: {
-                                            like_count: number;
-                                            dislike_count: number;
-                                        };
-                                        outer_info?: {
-                                            provider: string;
-                                            outer_id: string;
-                                        };
-                                        rich_text?: string;
-                                        source?: number;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/drafts/:draft_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 词条
+         * entity
          */
         entity: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=match&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=match&project=baike&resource=entity&version=v1 document }
              *
-             * 创建免审词条
+             * 精准搜索词条
              *
-             * 通过此接口创建的词条，不需要百科管理员审核可直接写入词库，请慎重使用【租户管理员请慎重审批】。
+             * 将关键词与词条名、别名精准匹配，并返回对应的 词条 ID。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/match)
              */
-            create: async (
+            match: async (
                 payload?: {
-                    data: {
-                        main_keys: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        full_names?: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        aliases?: Array<{
-                            key: string;
-                            display_status: {
-                                allow_highlight: boolean;
-                                allow_search: boolean;
-                            };
-                        }>;
-                        description?: string;
-                        related_meta?: {
-                            users?: Array<{ id: string; title?: string }>;
-                            chats?: Array<{ id: string }>;
-                            docs?: Array<{ title?: string; url?: string }>;
-                            oncalls?: Array<{ id: string }>;
-                            links?: Array<{ title?: string; url?: string }>;
-                            abbreviations?: Array<{ id?: string }>;
-                            classifications?: Array<{
-                                id: string;
-                                father_id?: string;
-                            }>;
-                            images?: Array<{ token: string }>;
-                        };
-                        outer_info?: { provider: string; outer_id: string };
-                        rich_text?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
+                    data: { word: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -577,82 +63,15 @@ export default abstract class Client extends aweme_ecosystem {
                             code?: number;
                             msg?: string;
                             data?: {
-                                entity?: {
-                                    id?: string;
-                                    main_keys: Array<{
-                                        key: string;
-                                        display_status: {
-                                            allow_highlight: boolean;
-                                            allow_search: boolean;
-                                        };
-                                    }>;
-                                    full_names?: Array<{
-                                        key: string;
-                                        display_status: {
-                                            allow_highlight: boolean;
-                                            allow_search: boolean;
-                                        };
-                                    }>;
-                                    aliases?: Array<{
-                                        key: string;
-                                        display_status: {
-                                            allow_highlight: boolean;
-                                            allow_search: boolean;
-                                        };
-                                    }>;
-                                    description?: string;
-                                    creator?: string;
-                                    create_time?: string;
-                                    updater?: string;
-                                    update_time?: string;
-                                    related_meta?: {
-                                        users?: Array<{
-                                            id: string;
-                                            title?: string;
-                                            url?: string;
-                                        }>;
-                                        chats?: Array<{
-                                            id: string;
-                                            title?: string;
-                                            url?: string;
-                                        }>;
-                                        docs?: Array<{
-                                            title?: string;
-                                            url?: string;
-                                        }>;
-                                        oncalls?: Array<{
-                                            id: string;
-                                            title?: string;
-                                            url?: string;
-                                        }>;
-                                        links?: Array<{
-                                            title?: string;
-                                            url?: string;
-                                        }>;
-                                        abbreviations?: Array<{ id?: string }>;
-                                        classifications?: Array<{
-                                            id: string;
-                                            name?: string;
-                                            father_id?: string;
-                                        }>;
-                                        images?: Array<{ token: string }>;
-                                    };
-                                    statistics?: {
-                                        like_count: number;
-                                        dislike_count: number;
-                                    };
-                                    outer_info?: {
-                                        provider: string;
-                                        outer_id: string;
-                                    };
-                                    rich_text?: string;
-                                    source?: number;
-                                };
+                                results?: Array<{
+                                    entity_id?: string;
+                                    type?: number;
+                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/entities`,
+                            `${this.domain}/open-apis/baike/v1/entities/match`,
                             path
                         ),
                         method: "POST",
@@ -668,17 +87,19 @@ export default abstract class Client extends aweme_ecosystem {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=extract&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=highlight&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=highlight&project=baike&resource=entity&version=v1 document }
              *
-             * 提取潜在的百科词条
+             * 词条高亮
              *
-             * 提取文本中可能成为百科词条的词语，且不会过滤已经成为百科词条的词语。同时，会返回推荐的别名。
+             * 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现词条智能高亮。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/highlight)
              */
-            extract: async (
+            highlight: async (
                 payload?: {
-                    data?: { text?: string };
+                    data: { text: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -692,15 +113,16 @@ export default abstract class Client extends aweme_ecosystem {
                             code?: number;
                             msg?: string;
                             data?: {
-                                entity_word: Array<{
+                                phrases?: Array<{
                                     name: string;
-                                    aliases?: Array<string>;
+                                    entity_ids: Array<string>;
+                                    span: { start: number; end: number };
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/entities/extract`,
+                            `${this.domain}/open-apis/baike/v1/entities/highlight`,
                             path
                         ),
                         method: "POST",
@@ -718,13 +140,13 @@ export default abstract class Client extends aweme_ecosystem {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=baike&resource=entity&version=v1 document }
              *
              * 获取词条详情
              *
              * 通过词条 id 拉取对应的词条详情信息。
              *
-             * 也支持通过 provider 和 outer_id 返回对应实体的详情数据。此时路径中的 entity_id 为固定的 enterprise_0
+             * 也支持通过 provider 和 outer_id 返回对应实体的详情数据。此时路径中的 entity_id 为固定的 enterprise_0;;为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/get)
              */
             get: async (
                 payload?: {
@@ -826,55 +248,6 @@ export default abstract class Client extends aweme_ecosystem {
                             path
                         ),
                         method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=highlight&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/highlight document }
-             *
-             * 词条高亮
-             *
-             * 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现百科词条智能高亮。
-             */
-            highlight: async (
-                payload?: {
-                    data: { text: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                phrases?: Array<{
-                                    name: string;
-                                    entity_ids: Array<string>;
-                                    span: { start: number; end: number };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/entities/highlight`,
-                            path
-                        ),
-                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1051,11 +424,13 @@ export default abstract class Client extends aweme_ecosystem {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=baike&resource=entity&version=v1 document }
              *
              * 获取词条列表
              *
              * 分页拉取词条列表数据，支持拉取租户内的全部词条。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/list)
              */
             list: async (
                 payload?: {
@@ -1170,17 +545,19 @@ export default abstract class Client extends aweme_ecosystem {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=match&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=extract&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/match document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=extract&project=baike&resource=entity&version=v1 document }
              *
-             * 精准搜索词条
+             * 提取潜在的词条
              *
-             * 将关键词与词条名、别名精准匹配，并返回对应的 词条 ID。
+             * 提取文本中可能成为词条的词语，且不会过滤已经成为词条的词语。同时返回推荐的别名。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/extract)
              */
-            match: async (
+            extract: async (
                 payload?: {
-                    data: { word: string };
+                    data?: { text?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1194,15 +571,15 @@ export default abstract class Client extends aweme_ecosystem {
                             code?: number;
                             msg?: string;
                             data?: {
-                                results?: Array<{
-                                    entity_id?: string;
-                                    type?: number;
+                                entity_word: Array<{
+                                    name: string;
+                                    aliases?: Array<string>;
                                 }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/entities/match`,
+                            `${this.domain}/open-apis/baike/v1/entities/extract`,
                             path
                         ),
                         method: "POST",
@@ -1390,11 +767,13 @@ export default abstract class Client extends aweme_ecosystem {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=search&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/search document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=baike&resource=entity&version=v1 document }
              *
              * 模糊搜索词条
              *
              * 传入关键词，与词条名、别名、释义等信息进行模糊匹配，返回搜到的词条信息。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/search)
              */
             search: async (
                 payload?: {
@@ -1517,13 +896,173 @@ export default abstract class Client extends aweme_ecosystem {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=baike&resource=entity&version=v1 document }
+             *
+             * 创建免审词条
+             *
+             * 通过此接口创建的词条，无需经过词典管理员审核，直接写入词库。因此，调用此接口时，应当慎重操作。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create)
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        main_keys: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        full_names?: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        aliases?: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        description?: string;
+                        related_meta?: {
+                            users?: Array<{ id: string; title?: string }>;
+                            chats?: Array<{ id: string }>;
+                            docs?: Array<{ title?: string; url?: string }>;
+                            oncalls?: Array<{ id: string }>;
+                            links?: Array<{ title?: string; url?: string }>;
+                            abbreviations?: Array<{ id?: string }>;
+                            classifications?: Array<{
+                                id: string;
+                                father_id?: string;
+                            }>;
+                            images?: Array<{ token: string }>;
+                        };
+                        outer_info?: { provider: string; outer_id: string };
+                        rich_text?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                entity?: {
+                                    id?: string;
+                                    main_keys: Array<{
+                                        key: string;
+                                        display_status: {
+                                            allow_highlight: boolean;
+                                            allow_search: boolean;
+                                        };
+                                    }>;
+                                    full_names?: Array<{
+                                        key: string;
+                                        display_status: {
+                                            allow_highlight: boolean;
+                                            allow_search: boolean;
+                                        };
+                                    }>;
+                                    aliases?: Array<{
+                                        key: string;
+                                        display_status: {
+                                            allow_highlight: boolean;
+                                            allow_search: boolean;
+                                        };
+                                    }>;
+                                    description?: string;
+                                    creator?: string;
+                                    create_time?: string;
+                                    updater?: string;
+                                    update_time?: string;
+                                    related_meta?: {
+                                        users?: Array<{
+                                            id: string;
+                                            title?: string;
+                                            url?: string;
+                                        }>;
+                                        chats?: Array<{
+                                            id: string;
+                                            title?: string;
+                                            url?: string;
+                                        }>;
+                                        docs?: Array<{
+                                            title?: string;
+                                            url?: string;
+                                        }>;
+                                        oncalls?: Array<{
+                                            id: string;
+                                            title?: string;
+                                            url?: string;
+                                        }>;
+                                        links?: Array<{
+                                            title?: string;
+                                            url?: string;
+                                        }>;
+                                        abbreviations?: Array<{ id?: string }>;
+                                        classifications?: Array<{
+                                            id: string;
+                                            name?: string;
+                                            father_id?: string;
+                                        }>;
+                                        images?: Array<{ token: string }>;
+                                    };
+                                    statistics?: {
+                                        like_count: number;
+                                        dislike_count: number;
+                                    };
+                                    outer_info?: {
+                                        provider: string;
+                                        outer_id: string;
+                                    };
+                                    rich_text?: string;
+                                    source?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/entities`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=update&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/update document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=baike&resource=entity&version=v1 document }
              *
              * 更新免审词条
              *
-             * 通过此接口更新已有的词条，不需要百科管理员审核可直接写入词库，请慎重使用【租户管理员请慎重审批】。
+             * 通过此接口更新已有的词条，无需经过词典管理员审核，直接写入词库。;因此，调用该接口时应当慎重操作。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/update)
              */
             update: async (
                 payload?: {
@@ -1675,17 +1214,212 @@ export default abstract class Client extends aweme_ecosystem {
             },
         },
         /**
-         * 文件
+         * classification
+         */
+        classification: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/baike/v1/classifications`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id: string;
+                                                    name?: string;
+                                                    father_id?: string;
+                                                }>;
+                                                page_token?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=classification&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=baike&resource=classification&version=v1 document }
+             *
+             * 获取词典分类
+             *
+             * 获取飞书词典当前分类。;飞书词典目前为二级分类体系，每个词条可添加多个二级分类，但选择的二级分类必须从属于不同的一级分类。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/classification/list)
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id: string;
+                                    name?: string;
+                                    father_id?: string;
+                                }>;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/classifications`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * file
          */
         file: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=upload&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=baike&resource=file&version=v1 document }
+             *
+             * 上传图片
+             *
+             * 词条图片资源上传。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload)
+             */
+            upload: async (
+                payload?: {
+                    data: { name: string; file: Buffer | fs.ReadStream };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_token?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/files/upload`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=download&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/download document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=baike&resource=file&version=v1 document }
              *
-             * 图片下载
+             * 下载图片
              *
-             * 通过 file_token 下载原图片
+             * 通过 file_token 下载原图片。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/download)
              */
             download: async (
                 payload?: {
@@ -1747,606 +1481,82 @@ export default abstract class Client extends aweme_ecosystem {
                     headers: res.headers,
                 };
             },
+        },
+        /**
+         * draft
+         */
+        draft: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=upload&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/upload document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=baike&resource=draft&version=v1 document }
              *
-             * 图片上传
+             * 创建草稿
              *
-             * 百科词条图片资源上传。
+             * 草稿并非词条，而是指通过 API 发起创建新词条或更新现有词条的申请。;词典管理员审核通过后，草稿将变为新的词条或覆盖已有词条。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/create);;以用户身份创建草稿（即 Authorization 使用 user_access_token），对应用户将收到由飞书词典 Bot 发送的审核结果；以应用身份创建草稿（即 Authorization 使用 tenant_access_toke），不会收到任何通知。;;- 创建新的词条时，无需传入 entity_id 字段;- 更新已有词条时，请传入对应词条的 entity_id 或 outer_info
              */
-            upload: async (
+            create: async (
                 payload?: {
-                    data: { name: string; file: Buffer | fs.ReadStream };
+                    data: {
+                        id?: string;
+                        main_keys: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        full_names?: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        aliases?: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        description?: string;
+                        related_meta?: {
+                            users?: Array<{ id: string; title?: string }>;
+                            chats?: Array<{ id: string }>;
+                            docs?: Array<{ title?: string; url?: string }>;
+                            oncalls?: Array<{ id: string }>;
+                            links?: Array<{ title?: string; url?: string }>;
+                            abbreviations?: Array<{ id?: string }>;
+                            classifications?: Array<{
+                                id: string;
+                                father_id?: string;
+                            }>;
+                            images?: Array<{ token: string }>;
+                        };
+                        outer_info?: { provider: string; outer_id: string };
+                        rich_text?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await this.httpInstance
+                return this.httpInstance
                     .request<
                         any,
                         {
                             code?: number;
                             msg?: string;
-                            data?: { file_token?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/baike/v1/files/upload`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-        },
-        v1: {
-            /**
-             * 分类
-             */
-            classification: {
-                listWithIterator: async (
-                    payload?: {
-                        params?: { page_size?: number; page_token?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/baike/v1/classifications`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        id: string;
-                                                        name?: string;
-                                                        father_id?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=classification&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/classification/list document }
-                 *
-                 * 获取百科分类
-                 *
-                 * 获取企业百科当前分类。;企业百科目前为二级分类体系，每个词条可添加多个二级分类，但每个一级分类下只能添加一个分类。
-                 */
-                list: async (
-                    payload?: {
-                        params?: { page_size?: number; page_token?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        id: string;
-                                        name?: string;
-                                        father_id?: string;
-                                    }>;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/classifications`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 草稿
-             */
-            draft: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/create document }
-                 *
-                 * 创建草稿
-                 *
-                 * 草稿并非百科词条，而是指通过 API 发起创建新词条或更新现有词条的申请。百科管理员审核通过后，草稿将变为新的词条或覆盖已有词条。
-                 *
-                 * · 创建新的百科词条时，无需传入 entity_id 字段;· 更新已有百科词条时，请传入对应词条的 entity_id 或 outer_info
-                 *
-                 * 以用户身份创建草稿（即 Authorization 使用 user_access_token），对应用户将收到由企业百科 Bot 发送的审核结果；以应用身份创建草稿（即 Authorization 使用 tenant_access_toke），不会收到任何通知。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            id?: string;
-                            main_keys: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            full_names?: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            aliases?: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            description?: string;
-                            related_meta?: {
-                                users?: Array<{ id: string; title?: string }>;
-                                chats?: Array<{ id: string }>;
-                                docs?: Array<{ title?: string; url?: string }>;
-                                oncalls?: Array<{ id: string }>;
-                                links?: Array<{ title?: string; url?: string }>;
-                                abbreviations?: Array<{ id?: string }>;
-                                classifications?: Array<{
-                                    id: string;
-                                    father_id?: string;
-                                }>;
-                                images?: Array<{ token: string }>;
-                            };
-                            outer_info?: { provider: string; outer_id: string };
-                            rich_text?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    draft?: {
-                                        draft_id?: string;
-                                        entity?: {
-                                            id?: string;
-                                            main_keys: Array<{
-                                                key: string;
-                                                display_status: {
-                                                    allow_highlight: boolean;
-                                                    allow_search: boolean;
-                                                };
-                                            }>;
-                                            full_names?: Array<{
-                                                key: string;
-                                                display_status: {
-                                                    allow_highlight: boolean;
-                                                    allow_search: boolean;
-                                                };
-                                            }>;
-                                            aliases?: Array<{
-                                                key: string;
-                                                display_status: {
-                                                    allow_highlight: boolean;
-                                                    allow_search: boolean;
-                                                };
-                                            }>;
-                                            description?: string;
-                                            creator?: string;
-                                            create_time?: string;
-                                            updater?: string;
-                                            update_time?: string;
-                                            related_meta?: {
-                                                users?: Array<{
-                                                    id: string;
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                chats?: Array<{
-                                                    id: string;
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                docs?: Array<{
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                oncalls?: Array<{
-                                                    id: string;
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                links?: Array<{
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                abbreviations?: Array<{
-                                                    id?: string;
-                                                }>;
-                                                classifications?: Array<{
-                                                    id: string;
-                                                    name?: string;
-                                                    father_id?: string;
-                                                }>;
-                                                images?: Array<{
-                                                    token: string;
-                                                }>;
-                                            };
-                                            statistics?: {
-                                                like_count: number;
-                                                dislike_count: number;
-                                            };
-                                            outer_info?: {
-                                                provider: string;
-                                                outer_id: string;
-                                            };
-                                            rich_text?: string;
-                                            source?: number;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/drafts`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/draft/update document }
-                 *
-                 * 更新草稿
-                 *
-                 * 根据 draft_id 更新草稿内容，已审批的草稿无法编辑
-                 */
-                update: async (
-                    payload?: {
-                        data: {
-                            id?: string;
-                            main_keys: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            full_names?: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            aliases?: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            description?: string;
-                            related_meta?: {
-                                users?: Array<{ id: string; title?: string }>;
-                                chats?: Array<{ id: string }>;
-                                docs?: Array<{ title?: string; url?: string }>;
-                                oncalls?: Array<{ id: string }>;
-                                links?: Array<{ title?: string; url?: string }>;
-                                abbreviations?: Array<{ id?: string }>;
-                                classifications?: Array<{
-                                    id: string;
-                                    father_id?: string;
-                                }>;
-                                images?: Array<{ token: string }>;
-                            };
-                            rich_text?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { draft_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    draft?: {
-                                        draft_id?: string;
-                                        entity?: {
-                                            id?: string;
-                                            main_keys: Array<{
-                                                key: string;
-                                                display_status: {
-                                                    allow_highlight: boolean;
-                                                    allow_search: boolean;
-                                                };
-                                            }>;
-                                            full_names?: Array<{
-                                                key: string;
-                                                display_status: {
-                                                    allow_highlight: boolean;
-                                                    allow_search: boolean;
-                                                };
-                                            }>;
-                                            aliases?: Array<{
-                                                key: string;
-                                                display_status: {
-                                                    allow_highlight: boolean;
-                                                    allow_search: boolean;
-                                                };
-                                            }>;
-                                            description?: string;
-                                            creator?: string;
-                                            create_time?: string;
-                                            updater?: string;
-                                            update_time?: string;
-                                            related_meta?: {
-                                                users?: Array<{
-                                                    id: string;
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                chats?: Array<{
-                                                    id: string;
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                docs?: Array<{
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                oncalls?: Array<{
-                                                    id: string;
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                links?: Array<{
-                                                    title?: string;
-                                                    url?: string;
-                                                }>;
-                                                abbreviations?: Array<{
-                                                    id?: string;
-                                                }>;
-                                                classifications?: Array<{
-                                                    id: string;
-                                                    name?: string;
-                                                    father_id?: string;
-                                                }>;
-                                                images?: Array<{
-                                                    token: string;
-                                                }>;
-                                            };
-                                            statistics?: {
-                                                like_count: number;
-                                                dislike_count: number;
-                                            };
-                                            outer_info?: {
-                                                provider: string;
-                                                outer_id: string;
-                                            };
-                                            rich_text?: string;
-                                            source?: number;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/drafts/:draft_id`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 词条
-             */
-            entity: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/create document }
-                 *
-                 * 创建免审词条
-                 *
-                 * 通过此接口创建的词条，不需要百科管理员审核可直接写入词库，请慎重使用【租户管理员请慎重审批】。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            main_keys: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            full_names?: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            aliases?: Array<{
-                                key: string;
-                                display_status: {
-                                    allow_highlight: boolean;
-                                    allow_search: boolean;
-                                };
-                            }>;
-                            description?: string;
-                            related_meta?: {
-                                users?: Array<{ id: string; title?: string }>;
-                                chats?: Array<{ id: string }>;
-                                docs?: Array<{ title?: string; url?: string }>;
-                                oncalls?: Array<{ id: string }>;
-                                links?: Array<{ title?: string; url?: string }>;
-                                abbreviations?: Array<{ id?: string }>;
-                                classifications?: Array<{
-                                    id: string;
-                                    father_id?: string;
-                                }>;
-                                images?: Array<{ token: string }>;
-                            };
-                            outer_info?: { provider: string; outer_id: string };
-                            rich_text?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
+                            data?: {
+                                draft?: {
+                                    draft_id?: string;
                                     entity?: {
                                         id?: string;
                                         main_keys: Array<{
@@ -2421,10 +1631,231 @@ export default abstract class Client extends aweme_ecosystem {
                                         source?: number;
                                     };
                                 };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/drafts`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=baike&resource=draft&version=v1 document }
+             *
+             * 更新草稿
+             *
+             * 根据 draft_id 更新草稿内容，已审批的草稿无法编辑。
+             *
+             * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/update)
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        id?: string;
+                        main_keys: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        full_names?: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        aliases?: Array<{
+                            key: string;
+                            display_status: {
+                                allow_highlight: boolean;
+                                allow_search: boolean;
+                            };
+                        }>;
+                        description?: string;
+                        related_meta?: {
+                            users?: Array<{ id: string; title?: string }>;
+                            chats?: Array<{ id: string }>;
+                            docs?: Array<{ title?: string; url?: string }>;
+                            oncalls?: Array<{ id: string }>;
+                            links?: Array<{ title?: string; url?: string }>;
+                            abbreviations?: Array<{ id?: string }>;
+                            classifications?: Array<{
+                                id: string;
+                                father_id?: string;
+                            }>;
+                            images?: Array<{ token: string }>;
+                        };
+                        rich_text?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { draft_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                draft?: {
+                                    draft_id?: string;
+                                    entity?: {
+                                        id?: string;
+                                        main_keys: Array<{
+                                            key: string;
+                                            display_status: {
+                                                allow_highlight: boolean;
+                                                allow_search: boolean;
+                                            };
+                                        }>;
+                                        full_names?: Array<{
+                                            key: string;
+                                            display_status: {
+                                                allow_highlight: boolean;
+                                                allow_search: boolean;
+                                            };
+                                        }>;
+                                        aliases?: Array<{
+                                            key: string;
+                                            display_status: {
+                                                allow_highlight: boolean;
+                                                allow_search: boolean;
+                                            };
+                                        }>;
+                                        description?: string;
+                                        creator?: string;
+                                        create_time?: string;
+                                        updater?: string;
+                                        update_time?: string;
+                                        related_meta?: {
+                                            users?: Array<{
+                                                id: string;
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            chats?: Array<{
+                                                id: string;
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            docs?: Array<{
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            oncalls?: Array<{
+                                                id: string;
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            links?: Array<{
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            abbreviations?: Array<{
+                                                id?: string;
+                                            }>;
+                                            classifications?: Array<{
+                                                id: string;
+                                                name?: string;
+                                                father_id?: string;
+                                            }>;
+                                            images?: Array<{ token: string }>;
+                                        };
+                                        statistics?: {
+                                            like_count: number;
+                                            dislike_count: number;
+                                        };
+                                        outer_info?: {
+                                            provider: string;
+                                            outer_id: string;
+                                        };
+                                        rich_text?: string;
+                                        source?: number;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/drafts/:draft_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        v1: {
+            /**
+             * entity
+             */
+            entity: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=match&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=match&project=baike&resource=entity&version=v1 document }
+                 *
+                 * 精准搜索词条
+                 *
+                 * 将关键词与词条名、别名精准匹配，并返回对应的 词条 ID。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/match)
+                 */
+                match: async (
+                    payload?: {
+                        data: { word: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    results?: Array<{
+                                        entity_id?: string;
+                                        type?: number;
+                                    }>;
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/entities`,
+                                `${this.domain}/open-apis/baike/v1/entities/match`,
                                 path
                             ),
                             method: "POST",
@@ -2440,17 +1871,19 @@ export default abstract class Client extends aweme_ecosystem {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=extract&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=highlight&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=highlight&project=baike&resource=entity&version=v1 document }
                  *
-                 * 提取潜在的百科词条
+                 * 词条高亮
                  *
-                 * 提取文本中可能成为百科词条的词语，且不会过滤已经成为百科词条的词语。同时，会返回推荐的别名。
+                 * 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现词条智能高亮。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/highlight)
                  */
-                extract: async (
+                highlight: async (
                     payload?: {
-                        data?: { text?: string };
+                        data: { text: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -2464,15 +1897,16 @@ export default abstract class Client extends aweme_ecosystem {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    entity_word: Array<{
+                                    phrases?: Array<{
                                         name: string;
-                                        aliases?: Array<string>;
+                                        entity_ids: Array<string>;
+                                        span: { start: number; end: number };
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/entities/extract`,
+                                `${this.domain}/open-apis/baike/v1/entities/highlight`,
                                 path
                             ),
                             method: "POST",
@@ -2490,13 +1924,13 @@ export default abstract class Client extends aweme_ecosystem {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=baike&resource=entity&version=v1 document }
                  *
                  * 获取词条详情
                  *
                  * 通过词条 id 拉取对应的词条详情信息。
                  *
-                 * 也支持通过 provider 和 outer_id 返回对应实体的详情数据。此时路径中的 entity_id 为固定的 enterprise_0
+                 * 也支持通过 provider 和 outer_id 返回对应实体的详情数据。此时路径中的 entity_id 为固定的 enterprise_0;;为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/get)
                  */
                 get: async (
                     payload?: {
@@ -2600,55 +2034,6 @@ export default abstract class Client extends aweme_ecosystem {
                                 path
                             ),
                             method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=highlight&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/highlight document }
-                 *
-                 * 词条高亮
-                 *
-                 * 传入一句话，智能识别句中对应的词条，并返回词条位置和 entity_id，可在外部系统中快速实现百科词条智能高亮。
-                 */
-                highlight: async (
-                    payload?: {
-                        data: { text: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    phrases?: Array<{
-                                        name: string;
-                                        entity_ids: Array<string>;
-                                        span: { start: number; end: number };
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/entities/highlight`,
-                                path
-                            ),
-                            method: "POST",
                             data,
                             params,
                             headers,
@@ -2827,11 +2212,13 @@ export default abstract class Client extends aweme_ecosystem {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=baike&resource=entity&version=v1 document }
                  *
                  * 获取词条列表
                  *
                  * 分页拉取词条列表数据，支持拉取租户内的全部词条。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/list)
                  */
                 list: async (
                     payload?: {
@@ -2948,17 +2335,19 @@ export default abstract class Client extends aweme_ecosystem {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=match&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=extract&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/match document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=extract&project=baike&resource=entity&version=v1 document }
                  *
-                 * 精准搜索词条
+                 * 提取潜在的词条
                  *
-                 * 将关键词与词条名、别名精准匹配，并返回对应的 词条 ID。
+                 * 提取文本中可能成为词条的词语，且不会过滤已经成为词条的词语。同时返回推荐的别名。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/extract)
                  */
-                match: async (
+                extract: async (
                     payload?: {
-                        data: { word: string };
+                        data?: { text?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -2972,15 +2361,15 @@ export default abstract class Client extends aweme_ecosystem {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    results?: Array<{
-                                        entity_id?: string;
-                                        type?: number;
+                                    entity_word: Array<{
+                                        name: string;
+                                        aliases?: Array<string>;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/entities/match`,
+                                `${this.domain}/open-apis/baike/v1/entities/extract`,
                                 path
                             ),
                             method: "POST",
@@ -3170,11 +2559,13 @@ export default abstract class Client extends aweme_ecosystem {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=search&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/search document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=baike&resource=entity&version=v1 document }
                  *
                  * 模糊搜索词条
                  *
                  * 传入关键词，与词条名、别名、释义等信息进行模糊匹配，返回搜到的词条信息。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/search)
                  */
                 search: async (
                     payload?: {
@@ -3299,13 +2690,175 @@ export default abstract class Client extends aweme_ecosystem {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=baike&resource=entity&version=v1 document }
+                 *
+                 * 创建免审词条
+                 *
+                 * 通过此接口创建的词条，无需经过词典管理员审核，直接写入词库。因此，调用此接口时，应当慎重操作。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/create)
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            main_keys: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            full_names?: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            aliases?: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            description?: string;
+                            related_meta?: {
+                                users?: Array<{ id: string; title?: string }>;
+                                chats?: Array<{ id: string }>;
+                                docs?: Array<{ title?: string; url?: string }>;
+                                oncalls?: Array<{ id: string }>;
+                                links?: Array<{ title?: string; url?: string }>;
+                                abbreviations?: Array<{ id?: string }>;
+                                classifications?: Array<{
+                                    id: string;
+                                    father_id?: string;
+                                }>;
+                                images?: Array<{ token: string }>;
+                            };
+                            outer_info?: { provider: string; outer_id: string };
+                            rich_text?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    entity?: {
+                                        id?: string;
+                                        main_keys: Array<{
+                                            key: string;
+                                            display_status: {
+                                                allow_highlight: boolean;
+                                                allow_search: boolean;
+                                            };
+                                        }>;
+                                        full_names?: Array<{
+                                            key: string;
+                                            display_status: {
+                                                allow_highlight: boolean;
+                                                allow_search: boolean;
+                                            };
+                                        }>;
+                                        aliases?: Array<{
+                                            key: string;
+                                            display_status: {
+                                                allow_highlight: boolean;
+                                                allow_search: boolean;
+                                            };
+                                        }>;
+                                        description?: string;
+                                        creator?: string;
+                                        create_time?: string;
+                                        updater?: string;
+                                        update_time?: string;
+                                        related_meta?: {
+                                            users?: Array<{
+                                                id: string;
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            chats?: Array<{
+                                                id: string;
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            docs?: Array<{
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            oncalls?: Array<{
+                                                id: string;
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            links?: Array<{
+                                                title?: string;
+                                                url?: string;
+                                            }>;
+                                            abbreviations?: Array<{
+                                                id?: string;
+                                            }>;
+                                            classifications?: Array<{
+                                                id: string;
+                                                name?: string;
+                                                father_id?: string;
+                                            }>;
+                                            images?: Array<{ token: string }>;
+                                        };
+                                        statistics?: {
+                                            like_count: number;
+                                            dislike_count: number;
+                                        };
+                                        outer_info?: {
+                                            provider: string;
+                                            outer_id: string;
+                                        };
+                                        rich_text?: string;
+                                        source?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/baike/v1/entities`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=update&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/update document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=baike&resource=entity&version=v1 document }
                  *
                  * 更新免审词条
                  *
-                 * 通过此接口更新已有的词条，不需要百科管理员审核可直接写入词库，请慎重使用【租户管理员请慎重审批】。
+                 * 通过此接口更新已有的词条，无需经过词典管理员审核，直接写入词库。;因此，调用该接口时应当慎重操作。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/update)
                  */
                 update: async (
                     payload?: {
@@ -3459,17 +3012,214 @@ export default abstract class Client extends aweme_ecosystem {
                 },
             },
             /**
-             * 文件
+             * classification
+             */
+            classification: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/baike/v1/classifications`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id: string;
+                                                        name?: string;
+                                                        father_id?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=classification&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=baike&resource=classification&version=v1 document }
+                 *
+                 * 获取词典分类
+                 *
+                 * 获取飞书词典当前分类。;飞书词典目前为二级分类体系，每个词条可添加多个二级分类，但选择的二级分类必须从属于不同的一级分类。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/classification/list)
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id: string;
+                                        name?: string;
+                                        father_id?: string;
+                                    }>;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/baike/v1/classifications`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * file
              */
             file: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=upload&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=baike&resource=file&version=v1 document }
+                 *
+                 * 上传图片
+                 *
+                 * 词条图片资源上传。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/upload)
+                 */
+                upload: async (
+                    payload?: {
+                        data: { name: string; file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_token?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/baike/v1/files/upload`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=download&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/download document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=baike&resource=file&version=v1 document }
                  *
-                 * 图片下载
+                 * 下载图片
                  *
-                 * 通过 file_token 下载原图片
+                 * 通过 file_token 下载原图片。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/file/download)
                  */
                 download: async (
                     payload?: {
@@ -3531,44 +3281,169 @@ export default abstract class Client extends aweme_ecosystem {
                         headers: res.headers,
                     };
                 },
+            },
+            /**
+             * draft
+             */
+            draft: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=upload&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/file/upload document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=baike&resource=draft&version=v1 document }
                  *
-                 * 图片上传
+                 * 创建草稿
                  *
-                 * 百科词条图片资源上传。
+                 * 草稿并非词条，而是指通过 API 发起创建新词条或更新现有词条的申请。;词典管理员审核通过后，草稿将变为新的词条或覆盖已有词条。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/create);;以用户身份创建草稿（即 Authorization 使用 user_access_token），对应用户将收到由飞书词典 Bot 发送的审核结果；以应用身份创建草稿（即 Authorization 使用 tenant_access_toke），不会收到任何通知。;;- 创建新的词条时，无需传入 entity_id 字段;- 更新已有词条时，请传入对应词条的 entity_id 或 outer_info
                  */
-                upload: async (
+                create: async (
                     payload?: {
-                        data: { name: string; file: Buffer | fs.ReadStream };
+                        data: {
+                            id?: string;
+                            main_keys: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            full_names?: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            aliases?: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            description?: string;
+                            related_meta?: {
+                                users?: Array<{ id: string; title?: string }>;
+                                chats?: Array<{ id: string }>;
+                                docs?: Array<{ title?: string; url?: string }>;
+                                oncalls?: Array<{ id: string }>;
+                                links?: Array<{ title?: string; url?: string }>;
+                                abbreviations?: Array<{ id?: string }>;
+                                classifications?: Array<{
+                                    id: string;
+                                    father_id?: string;
+                                }>;
+                                images?: Array<{ token: string }>;
+                            };
+                            outer_info?: { provider: string; outer_id: string };
+                            rich_text?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    const res = await this.httpInstance
+                    return this.httpInstance
                         .request<
                             any,
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { file_token?: string };
+                                data?: {
+                                    draft?: {
+                                        draft_id?: string;
+                                        entity?: {
+                                            id?: string;
+                                            main_keys: Array<{
+                                                key: string;
+                                                display_status: {
+                                                    allow_highlight: boolean;
+                                                    allow_search: boolean;
+                                                };
+                                            }>;
+                                            full_names?: Array<{
+                                                key: string;
+                                                display_status: {
+                                                    allow_highlight: boolean;
+                                                    allow_search: boolean;
+                                                };
+                                            }>;
+                                            aliases?: Array<{
+                                                key: string;
+                                                display_status: {
+                                                    allow_highlight: boolean;
+                                                    allow_search: boolean;
+                                                };
+                                            }>;
+                                            description?: string;
+                                            creator?: string;
+                                            create_time?: string;
+                                            updater?: string;
+                                            update_time?: string;
+                                            related_meta?: {
+                                                users?: Array<{
+                                                    id: string;
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                chats?: Array<{
+                                                    id: string;
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                docs?: Array<{
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                oncalls?: Array<{
+                                                    id: string;
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                links?: Array<{
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                abbreviations?: Array<{
+                                                    id?: string;
+                                                }>;
+                                                classifications?: Array<{
+                                                    id: string;
+                                                    name?: string;
+                                                    father_id?: string;
+                                                }>;
+                                                images?: Array<{
+                                                    token: string;
+                                                }>;
+                                            };
+                                            statistics?: {
+                                                like_count: number;
+                                                dislike_count: number;
+                                            };
+                                            outer_info?: {
+                                                provider: string;
+                                                outer_id: string;
+                                            };
+                                            rich_text?: string;
+                                            source?: number;
+                                        };
+                                    };
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/baike/v1/files/upload`,
+                                `${this.domain}/open-apis/baike/v1/drafts`,
                                 path
                             ),
                             method: "POST",
                             data,
                             params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
+                            headers,
                             paramsSerializer: (params) =>
                                 stringify(params, { arrayFormat: "repeat" }),
                         })
@@ -3576,7 +3451,172 @@ export default abstract class Client extends aweme_ecosystem {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=baike&resource=draft&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=baike&resource=draft&version=v1 document }
+                 *
+                 * 更新草稿
+                 *
+                 * 根据 draft_id 更新草稿内容，已审批的草稿无法编辑。
+                 *
+                 * 为了更好地提升接口文档的的易理解性，我们对文档进行了升级，请尽快迁移至[新版本>>](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/draft/update)
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            id?: string;
+                            main_keys: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            full_names?: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            aliases?: Array<{
+                                key: string;
+                                display_status: {
+                                    allow_highlight: boolean;
+                                    allow_search: boolean;
+                                };
+                            }>;
+                            description?: string;
+                            related_meta?: {
+                                users?: Array<{ id: string; title?: string }>;
+                                chats?: Array<{ id: string }>;
+                                docs?: Array<{ title?: string; url?: string }>;
+                                oncalls?: Array<{ id: string }>;
+                                links?: Array<{ title?: string; url?: string }>;
+                                abbreviations?: Array<{ id?: string }>;
+                                classifications?: Array<{
+                                    id: string;
+                                    father_id?: string;
+                                }>;
+                                images?: Array<{ token: string }>;
+                            };
+                            rich_text?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { draft_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    draft?: {
+                                        draft_id?: string;
+                                        entity?: {
+                                            id?: string;
+                                            main_keys: Array<{
+                                                key: string;
+                                                display_status: {
+                                                    allow_highlight: boolean;
+                                                    allow_search: boolean;
+                                                };
+                                            }>;
+                                            full_names?: Array<{
+                                                key: string;
+                                                display_status: {
+                                                    allow_highlight: boolean;
+                                                    allow_search: boolean;
+                                                };
+                                            }>;
+                                            aliases?: Array<{
+                                                key: string;
+                                                display_status: {
+                                                    allow_highlight: boolean;
+                                                    allow_search: boolean;
+                                                };
+                                            }>;
+                                            description?: string;
+                                            creator?: string;
+                                            create_time?: string;
+                                            updater?: string;
+                                            update_time?: string;
+                                            related_meta?: {
+                                                users?: Array<{
+                                                    id: string;
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                chats?: Array<{
+                                                    id: string;
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                docs?: Array<{
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                oncalls?: Array<{
+                                                    id: string;
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                links?: Array<{
+                                                    title?: string;
+                                                    url?: string;
+                                                }>;
+                                                abbreviations?: Array<{
+                                                    id?: string;
+                                                }>;
+                                                classifications?: Array<{
+                                                    id: string;
+                                                    name?: string;
+                                                    father_id?: string;
+                                                }>;
+                                                images?: Array<{
+                                                    token: string;
+                                                }>;
+                                            };
+                                            statistics?: {
+                                                like_count: number;
+                                                dislike_count: number;
+                                            };
+                                            outer_info?: {
+                                                provider: string;
+                                                outer_id: string;
+                                            };
+                                            rich_text?: string;
+                                            source?: number;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/baike/v1/drafts/:draft_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
                 },
             },
         },

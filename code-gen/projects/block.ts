@@ -29,17 +29,17 @@ export default abstract class Client extends bitable {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 小组件
-     */
+         
+         */
     block = {
         /**
-         * 服务端 API
+         * entity
          */
         entity: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=block&resource=entity&apiName=create&version=v2 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/entity/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=block&resource=entity&version=v2 document }
              *
              * 创建 BlockEntity
              *
@@ -111,7 +111,7 @@ export default abstract class Client extends bitable {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=block&resource=entity&apiName=update&version=v2 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/entity/update document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=block&resource=entity&version=v2 document }
              *
              * 更新BlockEntity
              *
@@ -160,13 +160,13 @@ export default abstract class Client extends bitable {
             },
         },
         /**
-         * 服务端 API
+         * message
          */
         message: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=block&resource=message&apiName=create&version=v2 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/message/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=block&resource=message&version=v2 document }
              *
              * Block协同数据推送
              *
@@ -208,13 +208,13 @@ export default abstract class Client extends bitable {
         },
         v2: {
             /**
-             * 服务端 API
+             * entity
              */
             entity: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=block&resource=entity&apiName=create&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/entity/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=block&resource=entity&version=v2 document }
                  *
                  * 创建 BlockEntity
                  *
@@ -286,7 +286,7 @@ export default abstract class Client extends bitable {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=block&resource=entity&apiName=update&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/entity/update document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=block&resource=entity&version=v2 document }
                  *
                  * 更新BlockEntity
                  *
@@ -338,13 +338,13 @@ export default abstract class Client extends bitable {
                 },
             },
             /**
-             * 服务端 API
+             * message
              */
             message: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=block&resource=message&apiName=create&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/message/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=block&resource=message&version=v2 document }
                  *
                  * Block协同数据推送
                  *

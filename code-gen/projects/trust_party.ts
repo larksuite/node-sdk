@@ -29,86 +29,10 @@ export default abstract class Client extends trust_layer {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 关联组织
-     */
+         
+         */
     trust_party = {
         v1: {
-            /**
-             * collaboration_tenant.collaboration_department
-             */
-            collaborationTenantCollaborationDepartment: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=trust_party&resource=collaboration_tenant.collaboration_department&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=trust_party&resource=collaboration_tenant.collaboration_department&version=v1 document }
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            target_department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                        path: {
-                            target_tenant_key: string;
-                            target_department_id: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    target_department: {
-                                        open_department_id?: string;
-                                        department_id?: string;
-                                        name?: string;
-                                        i18n_name?: {
-                                            zh_cn?: string;
-                                            ja_jp?: string;
-                                            en_us?: string;
-                                        };
-                                        order?: string;
-                                        leaders?: Array<{
-                                            leader_type: number;
-                                            id: {
-                                                user_id?: string;
-                                                open_id?: string;
-                                                union_id?: string;
-                                            };
-                                        }>;
-                                        parent_department_id?: {
-                                            department_id?: string;
-                                            open_department_id?: string;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/trust_party/v1/collaboration_tenants/:target_tenant_key/collaboration_departments/:target_department_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
             /**
              * collaboration_tenant.collaboration_user
              */
@@ -117,6 +41,12 @@ export default abstract class Client extends trust_layer {
                  * {@link https://open.feishu.cn/api-explorer?project=trust_party&resource=collaboration_tenant.collaboration_user&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=trust_party&resource=collaboration_tenant.collaboration_user&version=v1 document }
+                 *
+                 * 获取关联组织成员详情
+                 *
+                 * 获取关联组织成员详情，需要对关联组织成员有权限才可以获取。
+                 *
+                 * ## 提示;使用 user_access_token 时，按照 admin 管理后台关联组织列表中针对用户设置的可见性规则进行校验，使用 tenant_access_token 时，按照应用互通界面中针对应用设置的可见性规则进行校验。
                  */
                 get: async (
                     payload?: {
@@ -218,13 +148,101 @@ export default abstract class Client extends trust_layer {
                 },
             },
             /**
-             * 关联组织（灰度租户可见）
+             * collaboration_tenant.collaboration_department
+             */
+            collaborationTenantCollaborationDepartment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=trust_party&resource=collaboration_tenant.collaboration_department&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=trust_party&resource=collaboration_tenant.collaboration_department&version=v1 document }
+                 *
+                 * 获取关联组织部门详情
+                 *
+                 * 获取对方的关联组织部门详情，需要对部门有可见性权限才可以获取。;
+                 *
+                 * ## 提示;使用 user_access_token 时，按照 admin 管理后台关联组织列表中针对用户设置的可见性规则进行校验，使用 tenant_access_token 时，按照应用互通界面中针对应用设置的可见性规则进行校验。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            target_department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: {
+                            target_tenant_key: string;
+                            target_department_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    target_department: {
+                                        open_department_id?: string;
+                                        department_id?: string;
+                                        name?: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            ja_jp?: string;
+                                            en_us?: string;
+                                        };
+                                        order?: string;
+                                        leaders?: Array<{
+                                            leader_type: number;
+                                            id: {
+                                                user_id?: string;
+                                                open_id?: string;
+                                                union_id?: string;
+                                            };
+                                        }>;
+                                        parent_department_id?: {
+                                            department_id?: string;
+                                            open_department_id?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/trust_party/v1/collaboration_tenants/:target_tenant_key/collaboration_departments/:target_department_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * collaboration_tenant
              */
             collaborationTenant: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=trust_party&resource=collaboration_tenant&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=trust_party&resource=collaboration_tenant&version=v1 document }
+                 *
+                 * 获取关联组织详情
+                 *
+                 * 基于组织tenant key获取关联组织详情，需要对对方组织有可见权限才可以获取。
+                 *
+                 * ## 提示;使用 user_access_token 时，按照 admin 管理后台关联组织列表中针对用户设置的可见性规则进行校验，使用 tenant_access_token 时，按照应用互通界面中针对应用设置的可见性规则进行校验。
                  */
                 get: async (
                     payload?: {
@@ -293,11 +311,13 @@ export default abstract class Client extends trust_layer {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=trust_party&resource=collaboration_tenant&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/trust_party-v1/collaboration_tenant/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=trust_party&resource=collaboration_tenant&version=v1 document }
                  *
-                 * 获取关联租户的列表
+                 * 获取可见关联组织的列表
                  *
-                 * 分页获取用户可见的关联租户列表。
+                 * 分页获取用户可见的关联列表。
+                 *
+                 * ## 提示;;使用 user_access_token 时，按照 admin 管理后台关联组织列表中针对用户设置的可见性规则进行校验，使用 tenant_access_token 时，按照应用互通界面中针对应用设置的可见性规则进行校验。
                  */
                 list: async (
                     payload?: {
@@ -368,11 +388,13 @@ export default abstract class Client extends trust_layer {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=trust_party&resource=collaboration_tenant&apiName=visible_organization&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/trust_party-v1/collaboration_tenant/visible_organization document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=visible_organization&project=trust_party&resource=collaboration_tenant&version=v1 document }
                  *
-                 * 获取关联组织的部门和成员信息
+                 * 获取关联组织的成员信息
                  *
-                 * 该接口会返回用户在外部部门下可见的下级部门和用户
+                 * 该接口会返回用户在外部部门下可见的下级部门、用户、用户组。
+                 *
+                 * ## 提示;;使用 user_access_token 时，按照 admin 管理后台关联组织列表中针对用户设置的可见性规则进行校验；使用 tenant_access_token 时，按照应用互通界面中针对应用设置的可见性规则进行校验。
                  */
                 visibleOrganization: async (
                     payload?: {

@@ -37,189 +37,6 @@ export default abstract class Client extends baike {
              * app.role
              */
             appRole: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=base&resource=app.role&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=base&resource=app.role&version=v2 document }
-                 *
-                 * 新增自定义角色
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            role_name: string;
-                            table_roles: Array<{
-                                table_perm: number;
-                                table_name?: string;
-                                table_id?: string;
-                                rec_rule?: {
-                                    conditions?: Array<{
-                                        field_name: string;
-                                        operator?:
-                                            | "is"
-                                            | "isNot"
-                                            | "contains"
-                                            | "doesNotContain"
-                                            | "isEmpty"
-                                            | "isNotEmpty";
-                                        value?: Array<string>;
-                                    }>;
-                                    conjunction?: "and" | "or";
-                                    other_perm?: number;
-                                    condition_groups?: Array<{
-                                        condition_type?: number;
-                                        conditions?: Array<{
-                                            field_name: string;
-                                            operator?:
-                                                | "is"
-                                                | "isNot"
-                                                | "contains"
-                                                | "doesNotContain"
-                                                | "isEmpty"
-                                                | "isNotEmpty";
-                                            value?: Array<string>;
-                                        }>;
-                                        conjunction?: "and" | "or";
-                                    }>;
-                                    display_rec_rule_version?: number;
-                                };
-                                other_rec_rule?: {
-                                    conditions?: Array<{
-                                        field_name: string;
-                                        operator?:
-                                            | "is"
-                                            | "isNot"
-                                            | "contains"
-                                            | "doesNotContain"
-                                            | "isEmpty"
-                                            | "isNotEmpty";
-                                        value?: Array<string>;
-                                    }>;
-                                    conjunction?: "and" | "or";
-                                };
-                                field_perm?: Record<string, number>;
-                                allow_add_record?: boolean;
-                                allow_delete_record?: boolean;
-                                view_perm?: number;
-                                view_rules?: Record<string, number>;
-                                field_action_rules?: Record<
-                                    string,
-                                    Record<string, number>
-                                >;
-                            }>;
-                            block_roles?: Array<{
-                                block_id: string;
-                                block_perm: number;
-                            }>;
-                            base_rule?: Record<string, number>;
-                        };
-                        path: { app_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    role?: {
-                                        role_name: string;
-                                        table_roles: Array<{
-                                            table_perm: number;
-                                            table_name?: string;
-                                            table_id?: string;
-                                            rec_rule?: {
-                                                conditions?: Array<{
-                                                    field_name: string;
-                                                    operator?:
-                                                        | "is"
-                                                        | "isNot"
-                                                        | "contains"
-                                                        | "doesNotContain"
-                                                        | "isEmpty"
-                                                        | "isNotEmpty";
-                                                    value?: Array<string>;
-                                                    field_type?: number;
-                                                }>;
-                                                conjunction?: "and" | "or";
-                                                perm?: number;
-                                                other_perm?: number;
-                                                condition_groups?: Array<{
-                                                    condition_type?: number;
-                                                    conditions?: Array<{
-                                                        field_name: string;
-                                                        operator?:
-                                                            | "is"
-                                                            | "isNot"
-                                                            | "contains"
-                                                            | "doesNotContain"
-                                                            | "isEmpty"
-                                                            | "isNotEmpty";
-                                                        value?: Array<string>;
-                                                        field_type?: number;
-                                                    }>;
-                                                    conjunction?: "and" | "or";
-                                                }>;
-                                                display_rec_rule_version?: number;
-                                            };
-                                            other_rec_rule?: {
-                                                conditions?: Array<{
-                                                    field_name: string;
-                                                    operator?:
-                                                        | "is"
-                                                        | "isNot"
-                                                        | "contains"
-                                                        | "doesNotContain"
-                                                        | "isEmpty"
-                                                        | "isNotEmpty";
-                                                    value?: Array<string>;
-                                                    field_type?: number;
-                                                }>;
-                                                conjunction?: "and" | "or";
-                                                perm?: number;
-                                            };
-                                            field_perm?: Record<string, number>;
-                                            allow_add_record?: boolean;
-                                            allow_delete_record?: boolean;
-                                            view_perm?: number;
-                                            view_rules?: Record<string, number>;
-                                            field_action_rules?: Record<
-                                                string,
-                                                Record<string, number>
-                                            >;
-                                        }>;
-                                        role_id?: string;
-                                        block_roles?: Array<{
-                                            block_id: string;
-                                            block_perm: number;
-                                            block_type?: "dashboard";
-                                        }>;
-                                        base_rule?: Record<string, number>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/base/v2/apps/:app_token/roles`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
                 listWithIterator: async (
                     payload?: {
                         params?: { page_size?: number; page_token?: string };
@@ -404,7 +221,11 @@ export default abstract class Client extends baike {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=base&resource=app.role&version=v2 document }
                  *
-                 * 列出自定义角色
+                 * 列出自定义角色(新版)
+                 *
+                 * 列出多维表格高级权限中用户自定义的角色。
+                 *
+                 * ## 前提条件;;要调用自定义角色相关接口，你需确保多维表格已开启高级权限。你可通过[更新多维表格元数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update)接口开启高级权限。
                  */
                 list: async (
                     payload?: {
@@ -520,11 +341,202 @@ export default abstract class Client extends baike {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=base&resource=app.role&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=base&resource=app.role&version=v2 document }
+                 *
+                 * 新增自定义角色(新版)
+                 *
+                 * 新增多维表格高级权限中自定义的角色。
+                 *
+                 * ## 前提条件;;要调用自定义角色相关接口，你需确保多维表格已开启高级权限。你可通过[更新多维表格元数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update)接口开启高级权限。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            role_name: string;
+                            table_roles: Array<{
+                                table_perm: number;
+                                table_name?: string;
+                                table_id?: string;
+                                rec_rule?: {
+                                    conditions?: Array<{
+                                        field_name: string;
+                                        operator?:
+                                            | "is"
+                                            | "isNot"
+                                            | "contains"
+                                            | "doesNotContain"
+                                            | "isEmpty"
+                                            | "isNotEmpty";
+                                        value?: Array<string>;
+                                    }>;
+                                    conjunction?: "and" | "or";
+                                    other_perm?: number;
+                                    condition_groups?: Array<{
+                                        condition_type?: number;
+                                        conditions?: Array<{
+                                            field_name: string;
+                                            operator?:
+                                                | "is"
+                                                | "isNot"
+                                                | "contains"
+                                                | "doesNotContain"
+                                                | "isEmpty"
+                                                | "isNotEmpty";
+                                            value?: Array<string>;
+                                        }>;
+                                        conjunction?: "and" | "or";
+                                    }>;
+                                    display_rec_rule_version?: number;
+                                };
+                                other_rec_rule?: {
+                                    conditions?: Array<{
+                                        field_name: string;
+                                        operator?:
+                                            | "is"
+                                            | "isNot"
+                                            | "contains"
+                                            | "doesNotContain"
+                                            | "isEmpty"
+                                            | "isNotEmpty";
+                                        value?: Array<string>;
+                                    }>;
+                                    conjunction?: "and" | "or";
+                                };
+                                field_perm?: Record<string, number>;
+                                allow_add_record?: boolean;
+                                allow_delete_record?: boolean;
+                                view_perm?: number;
+                                view_rules?: Record<string, number>;
+                                field_action_rules?: Record<
+                                    string,
+                                    Record<string, number>
+                                >;
+                            }>;
+                            block_roles?: Array<{
+                                block_id: string;
+                                block_perm: number;
+                            }>;
+                            base_rule?: Record<string, number>;
+                        };
+                        path: { app_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    role?: {
+                                        role_name: string;
+                                        table_roles: Array<{
+                                            table_perm: number;
+                                            table_name?: string;
+                                            table_id?: string;
+                                            rec_rule?: {
+                                                conditions?: Array<{
+                                                    field_name: string;
+                                                    operator?:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty";
+                                                    value?: Array<string>;
+                                                    field_type?: number;
+                                                }>;
+                                                conjunction?: "and" | "or";
+                                                perm?: number;
+                                                other_perm?: number;
+                                                condition_groups?: Array<{
+                                                    condition_type?: number;
+                                                    conditions?: Array<{
+                                                        field_name: string;
+                                                        operator?:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty";
+                                                        value?: Array<string>;
+                                                        field_type?: number;
+                                                    }>;
+                                                    conjunction?: "and" | "or";
+                                                }>;
+                                                display_rec_rule_version?: number;
+                                            };
+                                            other_rec_rule?: {
+                                                conditions?: Array<{
+                                                    field_name: string;
+                                                    operator?:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty";
+                                                    value?: Array<string>;
+                                                    field_type?: number;
+                                                }>;
+                                                conjunction?: "and" | "or";
+                                                perm?: number;
+                                            };
+                                            field_perm?: Record<string, number>;
+                                            allow_add_record?: boolean;
+                                            allow_delete_record?: boolean;
+                                            view_perm?: number;
+                                            view_rules?: Record<string, number>;
+                                            field_action_rules?: Record<
+                                                string,
+                                                Record<string, number>
+                                            >;
+                                        }>;
+                                        role_id?: string;
+                                        block_roles?: Array<{
+                                            block_id: string;
+                                            block_perm: number;
+                                            block_type?: "dashboard";
+                                        }>;
+                                        base_rule?: Record<string, number>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/base/v2/apps/:app_token/roles`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=base&resource=app.role&apiName=update&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=base&resource=app.role&version=v2 document }
                  *
-                 * 更新自定义角色
+                 * 更新自定义角色(新版)
+                 *
+                 * 更新多维表格高级权限中自定义的角色。
+                 *
+                 * 更新自定义角色为增量更新，仅对传值的字段进行更新，不传值则不更新。;;## 前提条件;;要调用自定义角色相关接口，你需确保多维表格已开启高级权限。你可通过[更新多维表格元数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update)接口开启高级权限。
                  */
                 update: async (
                     payload?: {

@@ -40,6 +40,10 @@ export default abstract class Client extends minutes {
              * {@link https://open.feishu.cn/api-explorer?project=moments&resource=post&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=moments&resource=post&version=v1 document }
+             *
+             * 查询帖子信息
+             *
+             * 通过 ID 查询帖子实体数据信息
              */
             get: async (
                 payload?: {
@@ -110,6 +114,10 @@ export default abstract class Client extends minutes {
                  * {@link https://open.feishu.cn/api-explorer?project=moments&resource=post&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=moments&resource=post&version=v1 document }
+                 *
+                 * 查询帖子信息
+                 *
+                 * 通过 ID 查询帖子实体数据信息
                  */
                 get: async (
                     payload?: {

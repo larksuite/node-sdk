@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import meeting_room from "./meeting_room";
+import mindnote from "./mindnote";
 
 // auto gen
-export default abstract class Client extends meeting_room {
+export default abstract class Client extends mindnote {
     declare tokenManager;
 
     declare domain;
@@ -34,18 +34,102 @@ export default abstract class Client extends meeting_room {
     minutes = {
         v1: {
             /**
-             * minute
+             * minute.transcript
              */
-            minute: {
+            minuteTranscript: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=artifacts&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.transcript&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=artifacts&project=minutes&resource=minute&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute.transcript&version=v1 document }
                  *
-                 * 返回妙记AI产物
+                 * 导出妙记文字记录
+                 *
+                 * 获取妙记的对话文本
                  */
-                artifacts: async (
+                get: async (
                     payload?: {
+                        params?: {
+                            need_speaker?: boolean;
+                            need_timestamp?: boolean;
+                            file_format?: string;
+                        };
+                        path: { minute_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/transcript`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+            },
+            /**
+             * minute.statistics
+             */
+            minuteStatistics: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.statistics&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute.statistics&version=v1 document }
+                 *
+                 * 获取妙记统计数据
+                 *
+                 * 通过这个接口，可以获得妙记的访问情况统计，包含PV、UV、访问过的 user id、访问过的 user timestamp。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                         path: { minute_token: string };
                     },
                     options?: IRequestOptions
@@ -60,30 +144,153 @@ export default abstract class Client extends meeting_room {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    summary?: string;
-                                    minute_chapters?: Array<{
-                                        title?: string;
-                                        start_ms?: string;
-                                        stop_ms?: string;
-                                        summary_content?: string;
-                                    }>;
-                                    minute_todos?: Array<{
-                                        content?: string;
-                                        assignees?: Array<string>;
-                                        is_done?: boolean;
-                                        todo_id?: string;
-                                        operation?: string;
-                                    }>;
-                                    keywords?: Array<string>;
-                                    transcript?: string;
+                                    statistics?: {
+                                        user_view_count?: string;
+                                        page_view_count?: string;
+                                        user_view_list?: Array<{
+                                            user_id?: string;
+                                            view_time?: string;
+                                        }>;
+                                    };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/artifacts`,
+                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/statistics`,
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * minute.media
+             */
+            minuteMedia: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.media&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute.media&version=v1 document }
+                 *
+                 * 下载妙记音视频文件
+                 *
+                 * 获取妙记的音视频文件
+                 */
+                get: async (
+                    payload?: {
+                        path: { minute_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { download_url?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/media`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * minute
+             */
+            minute: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=minutes&resource=minute&version=v1 document }
+                 *
+                 * 订阅妙记变更事件
+                 *
+                 * 订阅当前用户身份相关的妙记资源变更事件。通过指定事件类型，来订阅妙记资源不同的事件变更。
+                 */
+                subscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/minutes/v1/minutes/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=unsubscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=minutes&resource=minute&version=v1 document }
+                 *
+                 * 取消订阅妙记变更事件
+                 *
+                 * 取消订阅当前用户身份相关的妙记资源变更事件。通过指定事件类型，来取消订阅妙记资源对应的事件变更。
+                 */
+                unsubscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/minutes/v1/minutes/unsubscription`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -100,7 +307,9 @@ export default abstract class Client extends meeting_room {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute&version=v1 document }
                  *
-                 * 获取妙记的基础概括信息
+                 * 获取单个妙记信息
+                 *
+                 * 获取一篇妙记的基础概述信息，包含 `owner_id`（妙记所有者）、`create_time`（妙记创建时间）、标题、封面、时长和 URL
                  */
                 get: async (
                     payload?: {
@@ -268,6 +477,8 @@ export default abstract class Client extends meeting_room {
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=minutes&resource=minute&version=v1 document }
                  *
                  * 搜索妙记
+                 *
+                 * 根据关键词、时间范围等条件搜索妙记，返回符合条件的妙记列表，包含妙记 token（用于标识妙记的唯一身份）、标题、开始时间等信息。
                  */
                 search: async (
                     payload?: {
@@ -334,142 +545,16 @@ export default abstract class Client extends meeting_room {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=subscription&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=artifacts&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=minutes&resource=minute&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=artifacts&project=minutes&resource=minute&version=v1 document }
                  *
-                 * 订阅妙记变更事件
+                 * 获取妙记AI产物
+                 *
+                 * 通过妙记唯一标识minute_token获取AI产物
                  */
-                subscription: async (
+                artifacts: async (
                     payload?: {
-                        data?: { event_type?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/subscription`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=unsubscription&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=minutes&resource=minute&version=v1 document }
-                 *
-                 * 取消订阅妙记变更事件
-                 */
-                unsubscription: async (
-                    payload?: {
-                        data?: { event_type?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/unsubscription`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * minute.media
-             */
-            minuteMedia: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.media&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute.media&version=v1 document }
-                 *
-                 * 获取妙记的音视频文件
-                 */
-                get: async (
-                    payload?: {
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { download_url?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/media`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * minute.statistics
-             */
-            minuteStatistics: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.statistics&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute.statistics&version=v1 document }
-                 *
-                 * 获取妙记的访问统计数据
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
                         path: { minute_token: string };
                     },
                     options?: IRequestOptions
@@ -484,19 +569,27 @@ export default abstract class Client extends meeting_room {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    statistics?: {
-                                        user_view_count?: string;
-                                        page_view_count?: string;
-                                        user_view_list?: Array<{
-                                            user_id?: string;
-                                            view_time?: string;
-                                        }>;
-                                    };
+                                    summary?: string;
+                                    minute_chapters?: Array<{
+                                        title?: string;
+                                        start_ms?: string;
+                                        stop_ms?: string;
+                                        summary_content?: string;
+                                    }>;
+                                    minute_todos?: Array<{
+                                        content?: string;
+                                        assignees?: Array<string>;
+                                        is_done?: boolean;
+                                        todo_id?: string;
+                                        operation?: string;
+                                    }>;
+                                    keywords?: Array<string>;
+                                    transcript?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/statistics`,
+                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/artifacts`,
                                 path
                             ),
                             method: "GET",
@@ -510,83 +603,6 @@ export default abstract class Client extends meeting_room {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-                },
-            },
-            /**
-             * minute.transcript
-             */
-            minuteTranscript: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.transcript&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=minutes&resource=minute.transcript&version=v1 document }
-                 *
-                 * 获取妙记的对话文本，成功时返回文件二进制流
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            need_speaker?: boolean;
-                            need_timestamp?: boolean;
-                            file_format?: string;
-                        };
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/transcript`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
                 },
             },
         },

@@ -32,28 +32,300 @@ export default abstract class Client extends apaas {
          
          */
     application = {
-        appBadge: {
+        applicationAppUsage: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=overview&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_badge/set document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=overview&project=application&resource=application.app_usage&version=v6 document }
              *
-             * 更新应用红点
+             * 获取应用使用概览
              *
-             * 更新应用红点信息，用于工作台场景
+             * 查看应用在某一天/某一周/某一个月的使用数据，可以查看租户整体对应用的使用情况，也可以分部门查看。
+             *
+             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;5. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;6. 调用频控为100次/分
              */
-            set: async (
+            overview: async (
                 payload?: {
                     data: {
-                        user_id: string;
-                        version: string;
-                        extra?: string;
-                        pc?: { web_app?: number; gadget?: number };
-                        mobile?: { web_app?: number; gadget?: number };
+                        date: string;
+                        cycle_type: number;
+                        department_id?: string;
+                        ability: "app" | "mp" | "h5" | "bot";
                     };
                     params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
                     };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    metric_name: string;
+                                    metric_value: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/overview`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=message_push_overview&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=message_push_overview&project=application&resource=application.app_usage&version=v6 document }
+             *
+             * 获取消息推送概览
+             *
+             * 目标：查看应用在某一天/某一周/某一个月的机器人消息推送数据，可以根据部门做筛选
+             *
+             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出两天前的数据。;3. 已经支持的指标包括：消息推送给用户的次数、消息触达的人数、消息1小时阅读量、消息12小时阅读量;4. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;5. 调用频控为100次/分
+             */
+            messagePushOverview: async (
+                payload?: {
+                    data: {
+                        date: string;
+                        cycle_type: number;
+                        department_id?: string;
+                    };
+                    params?: {
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    metric_name: string;
+                                    metric_value: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/message_push_overview`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=department_overview&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=department_overview&project=application&resource=application.app_usage&version=v6 document }
+             *
+             * 获取多部门应用使用概览
+             *
+             * 查看应用在某一天/某一周/某一个月的使用数据，可以根据部门做多层子部门的筛选
+             *
+             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 按照部门查看数据时，可以分别展示当前部门以及其子部门的使用情况;5. 如果查询的部门在查询日期没有使用过应用，只返回指标：应用的活跃用户数指标;6. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;7. 调用频控为100次/分
+             */
+            departmentOverview: async (
+                payload?: {
+                    data: {
+                        date: string;
+                        cycle_type: number;
+                        department_id?: string;
+                        recursion?: number;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    params?: {
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    department_id?: string;
+                                    app?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                    gadget?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                    webapp?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                    bot?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/department_overview`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        applicationFeedback: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application.feedback&version=v6 document }
+             *
+             * 获取应用反馈列表
+             *
+             * 查询应用的反馈数据
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        from_date?: string;
+                        to_date?: string;
+                        feedback_type?: number;
+                        status?: number;
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                feedback_list?: Array<{
+                                    feedback_id: string;
+                                    app_id: string;
+                                    feedback_time: string;
+                                    tenant_name?: string;
+                                    feedback_type: number;
+                                    status: number;
+                                    fault_type?: Array<number>;
+                                    fault_time?: string;
+                                    source?: number;
+                                    contact?: string;
+                                    update_time?: string;
+                                    description: string;
+                                    user_id?: string;
+                                    operator_id?: string;
+                                    images?: Array<string>;
+                                    feedback_path?: string;
+                                }>;
+                                has_more: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=patch&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.feedback&version=v6 document }
+             *
+             * 更新应用反馈
+             *
+             * 更新应用的反馈数据
+             */
+            patch: async (
+                payload?: {
+                    params: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        status: number;
+                        operator_id: string;
+                    };
+                    path: { app_id: string; feedback_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -63,10 +335,10 @@ export default abstract class Client extends apaas {
                 return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/app_badge/set`,
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
                             path
                         ),
-                        method: "POST",
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -229,7 +501,7 @@ export default abstract class Client extends apaas {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_recommend_rule&apiName=list&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_recommend_rule/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=app_recommend_rule&version=v6 document }
              *
              * 获取当前设置的推荐规则列表
              *
@@ -332,32 +604,28 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        applicationAppUsage: {
+        /**
+         * application
+         */
+        application: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=department_overview&version=v6 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=contacts_range_configuration&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/department_overview document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_configuration&project=application&resource=application&version=v6 document }
              *
-             * 获取多部门应用使用概览（灰度租户可见）
+             * 获取应用通讯录权限范围配置
              *
-             * 查看应用在某一天/某一周/某一个月的使用数据，可以根据部门做多层子部门的筛选
-             *
-             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 按照部门查看数据时，可以分别展示当前部门以及其子部门的使用情况;5. 如果查询的部门在查询日期没有使用过应用，只返回指标：应用的活跃用户数指标;6. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;7. 调用频控为100次/分
+             * 获取当前企业内某个自建应用线上实际生效的通讯录权限范围配置。
              */
-            departmentOverview: async (
+            contactsRangeConfiguration: async (
                 payload?: {
-                    data: {
-                        date: string;
-                        cycle_type: number;
-                        department_id?: string;
-                        recursion?: number;
+                    params?: {
                         page_size?: number;
                         page_token?: string;
-                    };
-                    params?: {
                         department_id_type?:
                             | "department_id"
                             | "open_department_id";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_id: string };
                 },
@@ -373,35 +641,378 @@ export default abstract class Client extends apaas {
                             code?: number;
                             msg?: string;
                             data?: {
+                                contacts_range?: {
+                                    contacts_scope_type?:
+                                        | "equal_to_availability"
+                                        | "some"
+                                        | "all";
+                                    visible_list?: {
+                                        open_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
+                                };
                                 has_more?: boolean;
                                 page_token?: string;
-                                items?: Array<{
-                                    department_id?: string;
-                                    app?: Array<{
-                                        metric_name: string;
-                                        metric_value: number;
-                                    }>;
-                                    gadget?: Array<{
-                                        metric_name: string;
-                                        metric_value: number;
-                                    }>;
-                                    webapp?: Array<{
-                                        metric_name: string;
-                                        metric_value: number;
-                                    }>;
-                                    bot?: Array<{
-                                        metric_name: string;
-                                        metric_value: number;
-                                    }>;
-                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/department_overview`,
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range_configuration`,
                             path
                         ),
-                        method: "POST",
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: string;
+                        lang: string;
+                        status?: number;
+                        payment_type?: number;
+                        owner_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                app_list?: Array<{
+                                                    app_id: string;
+                                                    creator_id?: string;
+                                                    status?: number;
+                                                    scene_type?: number;
+                                                    payment_type?: number;
+                                                    create_source?:
+                                                        | "developer_console"
+                                                        | "base"
+                                                        | "app_engine"
+                                                        | "bot_builder"
+                                                        | "aily"
+                                                        | "unknown";
+                                                    redirect_urls?: Array<string>;
+                                                    online_version_id?: string;
+                                                    unaudit_version_id?: string;
+                                                    app_name?: string;
+                                                    avatar_url?: string;
+                                                    description?: string;
+                                                    scopes?: Array<{
+                                                        scope: string;
+                                                        description?: string;
+                                                        level?: number;
+                                                        token_types?: Array<
+                                                            "tenant" | "user"
+                                                        >;
+                                                    }>;
+                                                    back_home_url?: string;
+                                                    i18n?: Array<{
+                                                        i18n_key:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "id_id"
+                                                            | "ms_my"
+                                                            | "de_de"
+                                                            | "es_es"
+                                                            | "fr_fr"
+                                                            | "it_it"
+                                                            | "pt_br"
+                                                            | "vi_vn"
+                                                            | "ru_ru"
+                                                            | "th_th"
+                                                            | "ko_kr";
+                                                        name?: string;
+                                                        description?: string;
+                                                        help_use?: string;
+                                                    }>;
+                                                    primary_language?:
+                                                        | "zh_cn"
+                                                        | "en_us"
+                                                        | "ja_jp";
+                                                    common_categories?: Array<string>;
+                                                    owner?: {
+                                                        type: number;
+                                                        owner_id?: string;
+                                                        name?: string;
+                                                        help_desk?: string;
+                                                        email?: string;
+                                                        phone?: string;
+                                                        customer_service_account?: string;
+                                                    };
+                                                    mobile_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                    pc_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                    secret?: string;
+                                                    event?: {
+                                                        subscription_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_events?: Array<string>;
+                                                    };
+                                                    callback?: {
+                                                        callback_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
+                                                    encryption?: {
+                                                        encryption_key?: string;
+                                                        verification_token?: string;
+                                                    };
+                                                    security?: {
+                                                        redirect_urls?: Array<string>;
+                                                        allowed_ips?: Array<string>;
+                                                        h5_trusted_domains?: Array<string>;
+                                                        web_view_trusted_domains?: Array<string>;
+                                                        allowed_schemas?: Array<string>;
+                                                        allowed_server_domains?: Array<string>;
+                                                    };
+                                                    allow_refresh_token?: boolean;
+                                                    callback_info?: {
+                                                        callback_type?:
+                                                            | "webhook"
+                                                            | "websocket";
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                total_count?: number;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application&version=v6 document }
+             *
+             * 获取企业安装的应用
+             *
+             * 该接口用于查询企业安装的应用列表，只能被企业自建应用调用。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: string;
+                        lang: string;
+                        status?: number;
+                        payment_type?: number;
+                        owner_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app_list?: Array<{
+                                    app_id: string;
+                                    creator_id?: string;
+                                    status?: number;
+                                    scene_type?: number;
+                                    payment_type?: number;
+                                    create_source?:
+                                        | "developer_console"
+                                        | "base"
+                                        | "app_engine"
+                                        | "bot_builder"
+                                        | "aily"
+                                        | "unknown";
+                                    redirect_urls?: Array<string>;
+                                    online_version_id?: string;
+                                    unaudit_version_id?: string;
+                                    app_name?: string;
+                                    avatar_url?: string;
+                                    description?: string;
+                                    scopes?: Array<{
+                                        scope: string;
+                                        description?: string;
+                                        level?: number;
+                                        token_types?: Array<"tenant" | "user">;
+                                    }>;
+                                    back_home_url?: string;
+                                    i18n?: Array<{
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
+                                        name?: string;
+                                        description?: string;
+                                        help_use?: string;
+                                    }>;
+                                    primary_language?:
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp";
+                                    common_categories?: Array<string>;
+                                    owner?: {
+                                        type: number;
+                                        owner_id?: string;
+                                        name?: string;
+                                        help_desk?: string;
+                                        email?: string;
+                                        phone?: string;
+                                        customer_service_account?: string;
+                                    };
+                                    mobile_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    pc_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    secret?: string;
+                                    event?: {
+                                        subscription_type?: string;
+                                        request_url?: string;
+                                        subscribed_events?: Array<string>;
+                                    };
+                                    callback?: {
+                                        callback_type?: string;
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                    encryption?: {
+                                        encryption_key?: string;
+                                        verification_token?: string;
+                                    };
+                                    security?: {
+                                        redirect_urls?: Array<string>;
+                                        allowed_ips?: Array<string>;
+                                        h5_trusted_domains?: Array<string>;
+                                        web_view_trusted_domains?: Array<string>;
+                                        allowed_schemas?: Array<string>;
+                                        allowed_server_domains?: Array<string>;
+                                    };
+                                    allow_refresh_token?: boolean;
+                                    callback_info?: {
+                                        callback_type?: "webhook" | "websocket";
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                total_count?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -414,27 +1025,21 @@ export default abstract class Client extends apaas {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=message_push_overview&version=v6 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=get&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/message_push_overview document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application&version=v6 document }
              *
-             * 获取消息推送概览（灰度租户可见）
+             * 获取应用信息
              *
-             * 目标：查看应用在某一天/某一周/某一个月的机器人消息推送数据，可以根据部门做筛选
+             * 根据app_id获取应用的基础信息
              *
-             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出两天前的数据。;3. 已经支持的指标包括：消息推送给用户的次数、消息触达的人数、消息1小时阅读量、消息12小时阅读量;4. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;5. 调用频控为100次/分
+             * 商店应用必须正式发布版本后，才可以调用该接口获取应用信息。如果灰度发布应用，调用该接口将会报错 210504 错误码。
              */
-            messagePushOverview: async (
+            get: async (
                 payload?: {
-                    data: {
-                        date: string;
-                        cycle_type: number;
-                        department_id?: string;
-                    };
-                    params?: {
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
+                    params: {
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_id: string };
                 },
@@ -450,18 +1055,114 @@ export default abstract class Client extends apaas {
                             code?: number;
                             msg?: string;
                             data?: {
-                                items?: Array<{
-                                    metric_name: string;
-                                    metric_value: number;
-                                }>;
+                                app?: {
+                                    app_id: string;
+                                    creator_id?: string;
+                                    status?: number;
+                                    scene_type?: number;
+                                    payment_type?: number;
+                                    create_source?:
+                                        | "developer_console"
+                                        | "base"
+                                        | "app_engine"
+                                        | "bot_builder"
+                                        | "aily"
+                                        | "unknown";
+                                    redirect_urls?: Array<string>;
+                                    online_version_id?: string;
+                                    unaudit_version_id?: string;
+                                    app_name?: string;
+                                    avatar_url?: string;
+                                    description?: string;
+                                    scopes?: Array<{
+                                        scope: string;
+                                        description?: string;
+                                        level?: number;
+                                        token_types?: Array<"tenant" | "user">;
+                                    }>;
+                                    back_home_url?: string;
+                                    i18n?: Array<{
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
+                                        name?: string;
+                                        description?: string;
+                                        help_use?: string;
+                                    }>;
+                                    primary_language?:
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp";
+                                    common_categories?: Array<string>;
+                                    owner?: {
+                                        type: number;
+                                        owner_id?: string;
+                                        name?: string;
+                                        help_desk?: string;
+                                        email?: string;
+                                        phone?: string;
+                                        customer_service_account?: string;
+                                    };
+                                    mobile_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    pc_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    secret?: string;
+                                    event?: {
+                                        subscription_type?: string;
+                                        request_url?: string;
+                                        subscribed_events?: Array<string>;
+                                    };
+                                    callback?: {
+                                        callback_type?: string;
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                    encryption?: {
+                                        encryption_key?: string;
+                                        verification_token?: string;
+                                    };
+                                    security?: {
+                                        redirect_urls?: Array<string>;
+                                        allowed_ips?: Array<string>;
+                                        h5_trusted_domains?: Array<string>;
+                                        web_view_trusted_domains?: Array<string>;
+                                        allowed_schemas?: Array<string>;
+                                        allowed_server_domains?: Array<string>;
+                                    };
+                                    allow_refresh_token?: boolean;
+                                    callback_info?: {
+                                        callback_type?: "webhook" | "websocket";
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                };
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/message_push_overview`,
+                            `${this.domain}/open-apis/application/v6/applications/:app_id`,
                             path
                         ),
-                        method: "POST",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -474,30 +1175,283 @@ export default abstract class Client extends apaas {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=overview&version=v6 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=patch&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/overview document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application&version=v6 document }
              *
-             * 获取应用使用概览
+             * 更新应用分组信息
              *
-             * 查看应用在某一天/某一周/某一个月的使用数据，可以查看租户整体对应用的使用情况，也可以分部门查看。
-             *
-             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;5. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;6. 调用频控为100次/分
+             * 更新应用的分组信息（分组会影响应用在工作台中的分类情况，请谨慎更新）
              */
-            overview: async (
+            patch: async (
                 payload?: {
-                    data: {
-                        date: string;
-                        cycle_type: number;
-                        department_id?: string;
-                        ability: "app" | "mp" | "h5" | "bot";
+                    data?: {
+                        common_categories?: Array<string>;
+                        secret?: string;
+                        event?: {
+                            subscription_type?: string;
+                            request_url?: string;
+                            subscribed_events?: Array<string>;
+                        };
+                        callback?: {
+                            callback_type?: string;
+                            request_url?: string;
+                            subscribed_callbacks?: Array<string>;
+                        };
+                        encryption?: {
+                            encryption_key?: string;
+                            verification_token?: string;
+                        };
+                        security?: {
+                            redirect_urls?: Array<string>;
+                            allowed_ips?: Array<string>;
+                            h5_trusted_domains?: Array<string>;
+                            web_view_trusted_domains?: Array<string>;
+                            allowed_schemas?: Array<string>;
+                            allowed_server_domains?: Array<string>;
+                        };
+                        allow_refresh_token?: boolean;
+                        callback_info?: {
+                            callback_type?: "webhook" | "websocket";
+                            request_url?: string;
+                            subscribed_callbacks?: Array<string>;
+                        };
                     };
-                    params?: {
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                    };
+                    params: { lang: "zh_cn" | "en_us" | "ja_jp" };
                     path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            underauditlistWithIterator: async (
+                payload?: {
+                    params: {
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/underauditlist`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items: Array<{
+                                                    app_id: string;
+                                                    creator_id?: string;
+                                                    status?: number;
+                                                    scene_type?: number;
+                                                    payment_type?: number;
+                                                    create_source?:
+                                                        | "developer_console"
+                                                        | "base"
+                                                        | "app_engine"
+                                                        | "bot_builder"
+                                                        | "aily"
+                                                        | "unknown";
+                                                    redirect_urls?: Array<string>;
+                                                    online_version_id?: string;
+                                                    unaudit_version_id?: string;
+                                                    app_name?: string;
+                                                    avatar_url?: string;
+                                                    description?: string;
+                                                    scopes?: Array<{
+                                                        scope: string;
+                                                        description?: string;
+                                                        level?: number;
+                                                        token_types?: Array<
+                                                            "tenant" | "user"
+                                                        >;
+                                                    }>;
+                                                    back_home_url?: string;
+                                                    i18n?: Array<{
+                                                        i18n_key:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "id_id"
+                                                            | "ms_my"
+                                                            | "de_de"
+                                                            | "es_es"
+                                                            | "fr_fr"
+                                                            | "it_it"
+                                                            | "pt_br"
+                                                            | "vi_vn"
+                                                            | "ru_ru"
+                                                            | "th_th"
+                                                            | "ko_kr";
+                                                        name?: string;
+                                                        description?: string;
+                                                        help_use?: string;
+                                                    }>;
+                                                    primary_language?:
+                                                        | "zh_cn"
+                                                        | "en_us"
+                                                        | "ja_jp";
+                                                    common_categories?: Array<string>;
+                                                    owner?: {
+                                                        type: number;
+                                                        owner_id?: string;
+                                                        name?: string;
+                                                        help_desk?: string;
+                                                        email?: string;
+                                                        phone?: string;
+                                                        customer_service_account?: string;
+                                                    };
+                                                    mobile_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                    pc_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                    secret?: string;
+                                                    event?: {
+                                                        subscription_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_events?: Array<string>;
+                                                    };
+                                                    callback?: {
+                                                        callback_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
+                                                    encryption?: {
+                                                        encryption_key?: string;
+                                                        verification_token?: string;
+                                                    };
+                                                    security?: {
+                                                        redirect_urls?: Array<string>;
+                                                        allowed_ips?: Array<string>;
+                                                        h5_trusted_domains?: Array<string>;
+                                                        web_view_trusted_domains?: Array<string>;
+                                                        allowed_schemas?: Array<string>;
+                                                        allowed_server_domains?: Array<string>;
+                                                    };
+                                                    allow_refresh_token?: boolean;
+                                                    callback_info?: {
+                                                        callback_type?:
+                                                            | "webhook"
+                                                            | "websocket";
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
+                                                }>;
+                                                has_more: boolean;
+                                                page_token?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=underauditlist&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=underauditlist&project=application&resource=application&version=v6 document }
+             *
+             * 查看待审核的应用列表
+             *
+             * 查看本企业下所有待审核的自建应用列表
+             */
+            underauditlist: async (
+                payload?: {
+                    params: {
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -511,18 +1465,116 @@ export default abstract class Client extends apaas {
                             code?: number;
                             msg?: string;
                             data?: {
-                                items?: Array<{
-                                    metric_name: string;
-                                    metric_value: number;
+                                items: Array<{
+                                    app_id: string;
+                                    creator_id?: string;
+                                    status?: number;
+                                    scene_type?: number;
+                                    payment_type?: number;
+                                    create_source?:
+                                        | "developer_console"
+                                        | "base"
+                                        | "app_engine"
+                                        | "bot_builder"
+                                        | "aily"
+                                        | "unknown";
+                                    redirect_urls?: Array<string>;
+                                    online_version_id?: string;
+                                    unaudit_version_id?: string;
+                                    app_name?: string;
+                                    avatar_url?: string;
+                                    description?: string;
+                                    scopes?: Array<{
+                                        scope: string;
+                                        description?: string;
+                                        level?: number;
+                                        token_types?: Array<"tenant" | "user">;
+                                    }>;
+                                    back_home_url?: string;
+                                    i18n?: Array<{
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
+                                        name?: string;
+                                        description?: string;
+                                        help_use?: string;
+                                    }>;
+                                    primary_language?:
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp";
+                                    common_categories?: Array<string>;
+                                    owner?: {
+                                        type: number;
+                                        owner_id?: string;
+                                        name?: string;
+                                        help_desk?: string;
+                                        email?: string;
+                                        phone?: string;
+                                        customer_service_account?: string;
+                                    };
+                                    mobile_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    pc_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    secret?: string;
+                                    event?: {
+                                        subscription_type?: string;
+                                        request_url?: string;
+                                        subscribed_events?: Array<string>;
+                                    };
+                                    callback?: {
+                                        callback_type?: string;
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                    encryption?: {
+                                        encryption_key?: string;
+                                        verification_token?: string;
+                                    };
+                                    security?: {
+                                        redirect_urls?: Array<string>;
+                                        allowed_ips?: Array<string>;
+                                        h5_trusted_domains?: Array<string>;
+                                        web_view_trusted_domains?: Array<string>;
+                                        allowed_schemas?: Array<string>;
+                                        allowed_server_domains?: Array<string>;
+                                    };
+                                    allow_refresh_token?: boolean;
+                                    callback_info?: {
+                                        callback_type?: "webhook" | "websocket";
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
                                 }>;
+                                has_more: boolean;
+                                page_token?: string;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/overview`,
+                            `${this.domain}/open-apis/application/v6/applications/underauditlist`,
                             path
                         ),
-                        method: "POST",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -541,7 +1593,11 @@ export default abstract class Client extends apaas {
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_suggest&project=application&resource=application.app_version&version=v6 document }
              *
-             * 获取应用版本通讯录权限范围建议
+             * 获取应用版本中开发者申请的通讯录权限范围
+             *
+             * 该接口用于根据应用的 App ID 和版本 ID 获取企业自建应用某个版本的通讯录权限范围。
+             *
+             * 由于通讯录权限范围需要提交发布新的应用版本，并且企业管理员审核通过后才会生效，因此该权限范围可能与实际生效的权限范围有差别，如需获取线上实际生效的通讯录权限范围，可通过[获取应用通讯录权限范围配置](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/contacts_range_configuration) 获取。
              */
             contactsRangeSuggest: async (
                 payload?: {
@@ -596,9 +1652,51 @@ export default abstract class Client extends apaas {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=patch&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.app_version&version=v6 document }
+             *
+             * 更新应用审核状态
+             *
+             * 通过接口来更新应用版本的审核结果：通过后应用可以直接上架；拒绝后则开发者可以看到拒绝理由，并在修改后再次申请发布。
+             */
+            patch: async (
+                payload?: {
+                    data?: { status?: number };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                        operator_id: string;
+                        reject_reason?: string;
+                    };
+                    path: { app_id: string; version_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=get&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/get document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.app_version&version=v6 document }
              *
              * 获取应用版本信息
              *
@@ -1060,7 +2158,7 @@ export default abstract class Client extends apaas {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=list&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application.app_version&version=v6 document }
              *
              * 获取应用版本列表
              *
@@ -1271,1370 +2369,16 @@ export default abstract class Client extends apaas {
                         throw e;
                     });
             },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=patch&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/patch document }
-             *
-             * 更新应用审核状态
-             *
-             * 通过接口来更新应用版本的审核结果：通过后应用可以直接上架；拒绝后则开发者可以看到拒绝理由，并在修改后再次申请发布。
-             */
-            patch: async (
-                payload?: {
-                    data?: { status?: number };
-                    params: {
-                        user_id_type: "user_id" | "union_id" | "open_id";
-                        operator_id: string;
-                        reject_reason?: string;
-                    };
-                    path: { app_id: string; version_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        applicationCollaborators: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.collaborators&version=v6 document }
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                collaborators?: Array<{
-                                    type:
-                                        | "administrator"
-                                        | "developer"
-                                        | "operator";
-                                    user_id: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=update&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.collaborators&version=v6 document }
-             */
-            update: async (
-                payload?: {
-                    data?: {
-                        adds?: Array<{
-                            type: "administrator" | "developer" | "operator";
-                            user_id: string;
-                        }>;
-                        removes?: Array<string>;
-                    };
-                    params?: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        applicationContactsRange: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.contacts_range&apiName=patch&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.contacts_range&version=v6 document }
-             */
-            patch: async (
-                payload?: {
-                    data: {
-                        contacts_range_type:
-                            | "equal_to_availability"
-                            | "some"
-                            | "all";
-                        add_visible_list?: {
-                            user_ids?: Array<string>;
-                            department_ids?: Array<string>;
-                            group_ids?: Array<string>;
-                        };
-                        del_visible_list?: {
-                            user_ids?: Array<string>;
-                            department_ids?: Array<string>;
-                            group_ids?: Array<string>;
-                        };
-                    };
-                    params?: {
-                        user_id_type?: "open_id" | "user_id" | "union_id";
-                        department_id_type?:
-                            | "open_department_id"
-                            | "department_id";
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * application
-         */
-        application: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=contacts_range_configuration&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_configuration&project=application&resource=application&version=v6 document }
-             */
-            contactsRangeConfiguration: async (
-                payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                contacts_range?: {
-                                    contacts_scope_type?:
-                                        | "equal_to_availability"
-                                        | "some"
-                                        | "all";
-                                    visible_list?: {
-                                        open_ids?: Array<string>;
-                                        department_ids?: Array<string>;
-                                        group_ids?: Array<string>;
-                                    };
-                                };
-                                has_more?: boolean;
-                                page_token?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range_configuration`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=get&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/get document }
-             *
-             * 获取应用信息
-             *
-             * 根据app_id获取应用的基础信息
-             */
-            get: async (
-                payload?: {
-                    params: {
-                        lang: "zh_cn" | "en_us" | "ja_jp";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                app?: {
-                                    app_id: string;
-                                    creator_id?: string;
-                                    status?: number;
-                                    scene_type?: number;
-                                    payment_type?: number;
-                                    create_source?:
-                                        | "developer_console"
-                                        | "base"
-                                        | "app_engine"
-                                        | "bot_builder"
-                                        | "aily"
-                                        | "unknown";
-                                    redirect_urls?: Array<string>;
-                                    online_version_id?: string;
-                                    unaudit_version_id?: string;
-                                    app_name?: string;
-                                    avatar_url?: string;
-                                    description?: string;
-                                    scopes?: Array<{
-                                        scope: string;
-                                        description?: string;
-                                        level?: number;
-                                        token_types?: Array<"tenant" | "user">;
-                                    }>;
-                                    back_home_url?: string;
-                                    i18n?: Array<{
-                                        i18n_key:
-                                            | "zh_cn"
-                                            | "en_us"
-                                            | "ja_jp"
-                                            | "zh_hk"
-                                            | "zh_tw"
-                                            | "id_id"
-                                            | "ms_my"
-                                            | "de_de"
-                                            | "es_es"
-                                            | "fr_fr"
-                                            | "it_it"
-                                            | "pt_br"
-                                            | "vi_vn"
-                                            | "ru_ru"
-                                            | "th_th"
-                                            | "ko_kr";
-                                        name?: string;
-                                        description?: string;
-                                        help_use?: string;
-                                    }>;
-                                    primary_language?:
-                                        | "zh_cn"
-                                        | "en_us"
-                                        | "ja_jp";
-                                    common_categories?: Array<string>;
-                                    owner?: {
-                                        type: number;
-                                        owner_id?: string;
-                                        name?: string;
-                                        help_desk?: string;
-                                        email?: string;
-                                        phone?: string;
-                                        customer_service_account?: string;
-                                    };
-                                    mobile_default_ability?:
-                                        | "gadget"
-                                        | "web_app"
-                                        | "bot";
-                                    pc_default_ability?:
-                                        | "gadget"
-                                        | "web_app"
-                                        | "bot";
-                                    secret?: string;
-                                    event?: {
-                                        subscription_type?: string;
-                                        request_url?: string;
-                                        subscribed_events?: Array<string>;
-                                    };
-                                    callback?: {
-                                        callback_type?: string;
-                                        request_url?: string;
-                                        subscribed_callbacks?: Array<string>;
-                                    };
-                                    encryption?: {
-                                        encryption_key?: string;
-                                        verification_token?: string;
-                                    };
-                                    security?: {
-                                        redirect_urls?: Array<string>;
-                                        allowed_ips?: Array<string>;
-                                        h5_trusted_domains?: Array<string>;
-                                        web_view_trusted_domains?: Array<string>;
-                                        allowed_schemas?: Array<string>;
-                                        allowed_server_domains?: Array<string>;
-                                    };
-                                    allow_refresh_token?: boolean;
-                                    callback_info?: {
-                                        callback_type?: "webhook" | "websocket";
-                                        request_url?: string;
-                                        subscribed_callbacks?: Array<string>;
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        page_size?: number;
-                        page_token?: string;
-                        user_id_type?: string;
-                        lang: string;
-                        status?: number;
-                        payment_type?: number;
-                        owner_type?: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                app_list?: Array<{
-                                                    app_id: string;
-                                                    creator_id?: string;
-                                                    status?: number;
-                                                    scene_type?: number;
-                                                    payment_type?: number;
-                                                    create_source?:
-                                                        | "developer_console"
-                                                        | "base"
-                                                        | "app_engine"
-                                                        | "bot_builder"
-                                                        | "aily"
-                                                        | "unknown";
-                                                    redirect_urls?: Array<string>;
-                                                    online_version_id?: string;
-                                                    unaudit_version_id?: string;
-                                                    app_name?: string;
-                                                    avatar_url?: string;
-                                                    description?: string;
-                                                    scopes?: Array<{
-                                                        scope: string;
-                                                        description?: string;
-                                                        level?: number;
-                                                        token_types?: Array<
-                                                            "tenant" | "user"
-                                                        >;
-                                                    }>;
-                                                    back_home_url?: string;
-                                                    i18n?: Array<{
-                                                        i18n_key:
-                                                            | "zh_cn"
-                                                            | "en_us"
-                                                            | "ja_jp"
-                                                            | "zh_hk"
-                                                            | "zh_tw"
-                                                            | "id_id"
-                                                            | "ms_my"
-                                                            | "de_de"
-                                                            | "es_es"
-                                                            | "fr_fr"
-                                                            | "it_it"
-                                                            | "pt_br"
-                                                            | "vi_vn"
-                                                            | "ru_ru"
-                                                            | "th_th"
-                                                            | "ko_kr";
-                                                        name?: string;
-                                                        description?: string;
-                                                        help_use?: string;
-                                                    }>;
-                                                    primary_language?:
-                                                        | "zh_cn"
-                                                        | "en_us"
-                                                        | "ja_jp";
-                                                    common_categories?: Array<string>;
-                                                    owner?: {
-                                                        type: number;
-                                                        owner_id?: string;
-                                                        name?: string;
-                                                        help_desk?: string;
-                                                        email?: string;
-                                                        phone?: string;
-                                                        customer_service_account?: string;
-                                                    };
-                                                    mobile_default_ability?:
-                                                        | "gadget"
-                                                        | "web_app"
-                                                        | "bot";
-                                                    pc_default_ability?:
-                                                        | "gadget"
-                                                        | "web_app"
-                                                        | "bot";
-                                                    secret?: string;
-                                                    event?: {
-                                                        subscription_type?: string;
-                                                        request_url?: string;
-                                                        subscribed_events?: Array<string>;
-                                                    };
-                                                    callback?: {
-                                                        callback_type?: string;
-                                                        request_url?: string;
-                                                        subscribed_callbacks?: Array<string>;
-                                                    };
-                                                    encryption?: {
-                                                        encryption_key?: string;
-                                                        verification_token?: string;
-                                                    };
-                                                    security?: {
-                                                        redirect_urls?: Array<string>;
-                                                        allowed_ips?: Array<string>;
-                                                        h5_trusted_domains?: Array<string>;
-                                                        web_view_trusted_domains?: Array<string>;
-                                                        allowed_schemas?: Array<string>;
-                                                        allowed_server_domains?: Array<string>;
-                                                    };
-                                                    allow_refresh_token?: boolean;
-                                                    callback_info?: {
-                                                        callback_type?:
-                                                            | "webhook"
-                                                            | "websocket";
-                                                        request_url?: string;
-                                                        subscribed_callbacks?: Array<string>;
-                                                    };
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                                total_count?: number;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=list&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/list document }
-             *
-             * 获取企业安装的应用
-             *
-             * 该接口用于查询企业安装的应用列表，只能被企业自建应用调用。
-             */
-            list: async (
-                payload?: {
-                    params: {
-                        page_size?: number;
-                        page_token?: string;
-                        user_id_type?: string;
-                        lang: string;
-                        status?: number;
-                        payment_type?: number;
-                        owner_type?: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                app_list?: Array<{
-                                    app_id: string;
-                                    creator_id?: string;
-                                    status?: number;
-                                    scene_type?: number;
-                                    payment_type?: number;
-                                    create_source?:
-                                        | "developer_console"
-                                        | "base"
-                                        | "app_engine"
-                                        | "bot_builder"
-                                        | "aily"
-                                        | "unknown";
-                                    redirect_urls?: Array<string>;
-                                    online_version_id?: string;
-                                    unaudit_version_id?: string;
-                                    app_name?: string;
-                                    avatar_url?: string;
-                                    description?: string;
-                                    scopes?: Array<{
-                                        scope: string;
-                                        description?: string;
-                                        level?: number;
-                                        token_types?: Array<"tenant" | "user">;
-                                    }>;
-                                    back_home_url?: string;
-                                    i18n?: Array<{
-                                        i18n_key:
-                                            | "zh_cn"
-                                            | "en_us"
-                                            | "ja_jp"
-                                            | "zh_hk"
-                                            | "zh_tw"
-                                            | "id_id"
-                                            | "ms_my"
-                                            | "de_de"
-                                            | "es_es"
-                                            | "fr_fr"
-                                            | "it_it"
-                                            | "pt_br"
-                                            | "vi_vn"
-                                            | "ru_ru"
-                                            | "th_th"
-                                            | "ko_kr";
-                                        name?: string;
-                                        description?: string;
-                                        help_use?: string;
-                                    }>;
-                                    primary_language?:
-                                        | "zh_cn"
-                                        | "en_us"
-                                        | "ja_jp";
-                                    common_categories?: Array<string>;
-                                    owner?: {
-                                        type: number;
-                                        owner_id?: string;
-                                        name?: string;
-                                        help_desk?: string;
-                                        email?: string;
-                                        phone?: string;
-                                        customer_service_account?: string;
-                                    };
-                                    mobile_default_ability?:
-                                        | "gadget"
-                                        | "web_app"
-                                        | "bot";
-                                    pc_default_ability?:
-                                        | "gadget"
-                                        | "web_app"
-                                        | "bot";
-                                    secret?: string;
-                                    event?: {
-                                        subscription_type?: string;
-                                        request_url?: string;
-                                        subscribed_events?: Array<string>;
-                                    };
-                                    callback?: {
-                                        callback_type?: string;
-                                        request_url?: string;
-                                        subscribed_callbacks?: Array<string>;
-                                    };
-                                    encryption?: {
-                                        encryption_key?: string;
-                                        verification_token?: string;
-                                    };
-                                    security?: {
-                                        redirect_urls?: Array<string>;
-                                        allowed_ips?: Array<string>;
-                                        h5_trusted_domains?: Array<string>;
-                                        web_view_trusted_domains?: Array<string>;
-                                        allowed_schemas?: Array<string>;
-                                        allowed_server_domains?: Array<string>;
-                                    };
-                                    allow_refresh_token?: boolean;
-                                    callback_info?: {
-                                        callback_type?: "webhook" | "websocket";
-                                        request_url?: string;
-                                        subscribed_callbacks?: Array<string>;
-                                    };
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                                total_count?: number;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=patch&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/patch document }
-             *
-             * 更新应用分组信息
-             *
-             * 更新应用的分组信息（分组会影响应用在工作台中的分类情况，请谨慎更新）
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        common_categories?: Array<string>;
-                        secret?: string;
-                        event?: {
-                            subscription_type?: string;
-                            request_url?: string;
-                            subscribed_events?: Array<string>;
-                        };
-                        callback?: {
-                            callback_type?: string;
-                            request_url?: string;
-                            subscribed_callbacks?: Array<string>;
-                        };
-                        encryption?: {
-                            encryption_key?: string;
-                            verification_token?: string;
-                        };
-                        security?: {
-                            redirect_urls?: Array<string>;
-                            allowed_ips?: Array<string>;
-                            h5_trusted_domains?: Array<string>;
-                            web_view_trusted_domains?: Array<string>;
-                            allowed_schemas?: Array<string>;
-                            allowed_server_domains?: Array<string>;
-                        };
-                        allow_refresh_token?: boolean;
-                        callback_info?: {
-                            callback_type?: "webhook" | "websocket";
-                            request_url?: string;
-                            subscribed_callbacks?: Array<string>;
-                        };
-                    };
-                    params: { lang: "zh_cn" | "en_us" | "ja_jp" };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            underauditlistWithIterator: async (
-                payload?: {
-                    params: {
-                        lang: "zh_cn" | "en_us" | "ja_jp";
-                        page_token?: string;
-                        page_size?: number;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/underauditlist`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items: Array<{
-                                                    app_id: string;
-                                                    creator_id?: string;
-                                                    status?: number;
-                                                    scene_type?: number;
-                                                    payment_type?: number;
-                                                    create_source?:
-                                                        | "developer_console"
-                                                        | "base"
-                                                        | "app_engine"
-                                                        | "bot_builder"
-                                                        | "aily"
-                                                        | "unknown";
-                                                    redirect_urls?: Array<string>;
-                                                    online_version_id?: string;
-                                                    unaudit_version_id?: string;
-                                                    app_name?: string;
-                                                    avatar_url?: string;
-                                                    description?: string;
-                                                    scopes?: Array<{
-                                                        scope: string;
-                                                        description?: string;
-                                                        level?: number;
-                                                        token_types?: Array<
-                                                            "tenant" | "user"
-                                                        >;
-                                                    }>;
-                                                    back_home_url?: string;
-                                                    i18n?: Array<{
-                                                        i18n_key:
-                                                            | "zh_cn"
-                                                            | "en_us"
-                                                            | "ja_jp"
-                                                            | "zh_hk"
-                                                            | "zh_tw"
-                                                            | "id_id"
-                                                            | "ms_my"
-                                                            | "de_de"
-                                                            | "es_es"
-                                                            | "fr_fr"
-                                                            | "it_it"
-                                                            | "pt_br"
-                                                            | "vi_vn"
-                                                            | "ru_ru"
-                                                            | "th_th"
-                                                            | "ko_kr";
-                                                        name?: string;
-                                                        description?: string;
-                                                        help_use?: string;
-                                                    }>;
-                                                    primary_language?:
-                                                        | "zh_cn"
-                                                        | "en_us"
-                                                        | "ja_jp";
-                                                    common_categories?: Array<string>;
-                                                    owner?: {
-                                                        type: number;
-                                                        owner_id?: string;
-                                                        name?: string;
-                                                        help_desk?: string;
-                                                        email?: string;
-                                                        phone?: string;
-                                                        customer_service_account?: string;
-                                                    };
-                                                    mobile_default_ability?:
-                                                        | "gadget"
-                                                        | "web_app"
-                                                        | "bot";
-                                                    pc_default_ability?:
-                                                        | "gadget"
-                                                        | "web_app"
-                                                        | "bot";
-                                                    secret?: string;
-                                                    event?: {
-                                                        subscription_type?: string;
-                                                        request_url?: string;
-                                                        subscribed_events?: Array<string>;
-                                                    };
-                                                    callback?: {
-                                                        callback_type?: string;
-                                                        request_url?: string;
-                                                        subscribed_callbacks?: Array<string>;
-                                                    };
-                                                    encryption?: {
-                                                        encryption_key?: string;
-                                                        verification_token?: string;
-                                                    };
-                                                    security?: {
-                                                        redirect_urls?: Array<string>;
-                                                        allowed_ips?: Array<string>;
-                                                        h5_trusted_domains?: Array<string>;
-                                                        web_view_trusted_domains?: Array<string>;
-                                                        allowed_schemas?: Array<string>;
-                                                        allowed_server_domains?: Array<string>;
-                                                    };
-                                                    allow_refresh_token?: boolean;
-                                                    callback_info?: {
-                                                        callback_type?:
-                                                            | "webhook"
-                                                            | "websocket";
-                                                        request_url?: string;
-                                                        subscribed_callbacks?: Array<string>;
-                                                    };
-                                                }>;
-                                                has_more: boolean;
-                                                page_token?: string;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=underauditlist&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/underauditlist document }
-             *
-             * 查看待审核的应用列表
-             *
-             * 查看本企业下所有待审核的自建应用列表
-             */
-            underauditlist: async (
-                payload?: {
-                    params: {
-                        lang: "zh_cn" | "en_us" | "ja_jp";
-                        page_token?: string;
-                        page_size?: number;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items: Array<{
-                                    app_id: string;
-                                    creator_id?: string;
-                                    status?: number;
-                                    scene_type?: number;
-                                    payment_type?: number;
-                                    create_source?:
-                                        | "developer_console"
-                                        | "base"
-                                        | "app_engine"
-                                        | "bot_builder"
-                                        | "aily"
-                                        | "unknown";
-                                    redirect_urls?: Array<string>;
-                                    online_version_id?: string;
-                                    unaudit_version_id?: string;
-                                    app_name?: string;
-                                    avatar_url?: string;
-                                    description?: string;
-                                    scopes?: Array<{
-                                        scope: string;
-                                        description?: string;
-                                        level?: number;
-                                        token_types?: Array<"tenant" | "user">;
-                                    }>;
-                                    back_home_url?: string;
-                                    i18n?: Array<{
-                                        i18n_key:
-                                            | "zh_cn"
-                                            | "en_us"
-                                            | "ja_jp"
-                                            | "zh_hk"
-                                            | "zh_tw"
-                                            | "id_id"
-                                            | "ms_my"
-                                            | "de_de"
-                                            | "es_es"
-                                            | "fr_fr"
-                                            | "it_it"
-                                            | "pt_br"
-                                            | "vi_vn"
-                                            | "ru_ru"
-                                            | "th_th"
-                                            | "ko_kr";
-                                        name?: string;
-                                        description?: string;
-                                        help_use?: string;
-                                    }>;
-                                    primary_language?:
-                                        | "zh_cn"
-                                        | "en_us"
-                                        | "ja_jp";
-                                    common_categories?: Array<string>;
-                                    owner?: {
-                                        type: number;
-                                        owner_id?: string;
-                                        name?: string;
-                                        help_desk?: string;
-                                        email?: string;
-                                        phone?: string;
-                                        customer_service_account?: string;
-                                    };
-                                    mobile_default_ability?:
-                                        | "gadget"
-                                        | "web_app"
-                                        | "bot";
-                                    pc_default_ability?:
-                                        | "gadget"
-                                        | "web_app"
-                                        | "bot";
-                                    secret?: string;
-                                    event?: {
-                                        subscription_type?: string;
-                                        request_url?: string;
-                                        subscribed_events?: Array<string>;
-                                    };
-                                    callback?: {
-                                        callback_type?: string;
-                                        request_url?: string;
-                                        subscribed_callbacks?: Array<string>;
-                                    };
-                                    encryption?: {
-                                        encryption_key?: string;
-                                        verification_token?: string;
-                                    };
-                                    security?: {
-                                        redirect_urls?: Array<string>;
-                                        allowed_ips?: Array<string>;
-                                        h5_trusted_domains?: Array<string>;
-                                        web_view_trusted_domains?: Array<string>;
-                                        allowed_schemas?: Array<string>;
-                                        allowed_server_domains?: Array<string>;
-                                    };
-                                    allow_refresh_token?: boolean;
-                                    callback_info?: {
-                                        callback_type?: "webhook" | "websocket";
-                                        request_url?: string;
-                                        subscribed_callbacks?: Array<string>;
-                                    };
-                                }>;
-                                has_more: boolean;
-                                page_token?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/underauditlist`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        applicationFeedback: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/list document }
-             *
-             * 获取应用反馈列表
-             *
-             * 查询应用的反馈数据
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        from_date?: string;
-                        to_date?: string;
-                        feedback_type?: number;
-                        status?: number;
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        page_token?: string;
-                        page_size?: number;
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                feedback_list?: Array<{
-                                    feedback_id: string;
-                                    app_id: string;
-                                    feedback_time: string;
-                                    tenant_name?: string;
-                                    feedback_type: number;
-                                    status: number;
-                                    fault_type?: Array<number>;
-                                    fault_time?: string;
-                                    source?: number;
-                                    contact?: string;
-                                    update_time?: string;
-                                    description: string;
-                                    user_id?: string;
-                                    operator_id?: string;
-                                    images?: Array<string>;
-                                    feedback_path?: string;
-                                }>;
-                                has_more: boolean;
-                                page_token?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=patch&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/patch document }
-             *
-             * 更新应用反馈
-             *
-             * 更新应用的反馈数据
-             */
-            patch: async (
-                payload?: {
-                    params: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        status: number;
-                        operator_id: string;
-                    };
-                    path: { app_id: string; feedback_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        applicationManagement: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.management&version=v6 document }
-             */
-            update: async (
-                payload?: {
-                    data?: { enable?: boolean };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        applicationOwner: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.owner&version=v6 document }
-             */
-            update: async (
-                payload?: {
-                    data: { owner_id: string };
-                    params?: {
-                        user_id_type?: "open_id" | "user_id" | "union_id";
-                    };
-                    path: { app_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/owner`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
         },
         applicationVisibility: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.visibility&apiName=check_white_black_list&version=v6 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=check_white_black_list&project=application&resource=application.visibility&version=v6 document }
+             *
+             * 查询用户或部门是否在应用的可用或禁用名单
+             *
+             * 该接口用于查询用户、部门、用户组是否在应用的可用或禁用名单中
              */
             checkWhiteBlackList: async (
                 payload?: {
@@ -2702,6 +2446,10 @@ export default abstract class Client extends apaas {
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.visibility&apiName=patch&version=v6 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.visibility&version=v6 document }
+             *
+             * 更新应用可用范围
+             *
+             * 调用该接口更新指定应用的可用范围，支持更新当前企业内自建应用的可用范围，或者已安装的商店应用的可用范围，包括可用人员与禁用人员。更新可用范围后对线上立即生效。
              */
             patch: async (
                 payload?: {
@@ -2760,23 +2508,110 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        scope: {
+        applicationContactsRange: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=apply&version=v6 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.contacts_range&apiName=patch&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=application&resource=scope&version=v6 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.contacts_range&version=v6 document }
+             *
+             * 更新应用通讯录权限范围配置
+             *
+             * 该接口用于更新当前企业内自建应用或已安装的商店应用的通讯录权限范围配置。更新后线上立即生效。
              */
-            apply: async (payload?: {}, options?: IRequestOptions) => {
+            patch: async (
+                payload?: {
+                    data: {
+                        contacts_range_type:
+                            | "equal_to_availability"
+                            | "some"
+                            | "all";
+                        add_visible_list?: {
+                            user_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            group_ids?: Array<string>;
+                        };
+                        del_visible_list?: {
+                            user_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            group_ids?: Array<string>;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/scopes/apply`,
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range`,
                             path
                         ),
-                        method: "POST",
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        applicationCollaborators: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.collaborators&version=v6 document }
+             *
+             * 获取应用协作者列表
+             *
+             * 根据 app_id 获取应用（包括自建应用和商店应用）的协作者信息，包括应用的所有者、管理员、开发者、运营人员
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                collaborators?: Array<{
+                                    type:
+                                        | "administrator"
+                                        | "developer"
+                                        | "operator";
+                                    user_id: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2789,9 +2624,146 @@ export default abstract class Client extends apaas {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=update&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.collaborators&version=v6 document }
+             *
+             * 更新应用协作者
+             *
+             * 某个应用（包括自建应用和商店应用）中添加/移除应用协作者，添加后协作者将会收到添加通知。
+             *
+             * 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用的所有者或管理员，否则无法操作成功。
+             */
+            update: async (
+                payload?: {
+                    data?: {
+                        adds?: Array<{
+                            type: "administrator" | "developer" | "operator";
+                            user_id: string;
+                        }>;
+                        removes?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        applicationOwner: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.owner&version=v6 document }
+             *
+             * 转移应用所有者
+             *
+             * 将某个自建应用的所有者转移给另外一个人。
+             *
+             * 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用当前的所有者，否则无法操作成功。
+             */
+            update: async (
+                payload?: {
+                    data: { owner_id: string };
+                    params?: {
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/owner`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        applicationManagement: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.management&version=v6 document }
+             *
+             * 启停用应用
+             *
+             * 可停用或启用企业内已安装的自建应用与商店应用。
+             */
+            update: async (
+                payload?: {
+                    data?: { enable?: boolean };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        scope: {
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=list&version=v6 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=scope&version=v6 document }
+             *
+             * 查询租户授权状态
+             *
+             * 调用该接口查询当前应用向租户申请授权的状态。
              */
             list: async (payload?: {}, options?: IRequestOptions) => {
                 const { headers, params, data, path } =
@@ -2817,6 +2789,86 @@ export default abstract class Client extends apaas {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=apply&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=application&resource=scope&version=v6 document }
+             *
+             * 向管理员申请授权
+             *
+             * 调用该接口以应用身份向租户管理员申请应用内需要审核的 API 权限。
+             *
+             * **注意**：同一租户下，其他员工在一个应用的同一个版本向管理员申请授权的次数不能超过 10 次。
+             */
+            apply: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/scopes/apply`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        appBadge: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=set&project=application&resource=app_badge&version=v6 document }
+             *
+             * 更新应用红点
+             *
+             * 更新应用红点信息，用于工作台场景
+             */
+            set: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        version: string;
+                        extra?: string;
+                        pc?: { web_app?: number; gadget?: number };
+                        mobile?: { web_app?: number; gadget?: number };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/app_badge/set`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2946,6 +2998,10 @@ export default abstract class Client extends apaas {
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=favourite&version=v5 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=favourite&project=application&resource=application&version=v5 document }
+                 *
+                 * 获取用户自定义常用的应用
+                 *
+                 * 获取用户自定义常用的应用。
                  */
                 favourite: async (
                     payload?: {
@@ -3121,6 +3177,10 @@ export default abstract class Client extends apaas {
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=recommend&version=v5 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recommend&project=application&resource=application&version=v5 document }
+                 *
+                 * 获取管理员推荐的应用
+                 *
+                 * 获取管理员推荐的应用。
                  */
                 recommend: async (
                     payload?: {
@@ -3188,30 +3248,34 @@ export default abstract class Client extends apaas {
         },
         v6: {
             /**
-             * 应用红点
+             * application.app_usage
              */
-            appBadge: {
+            applicationAppUsage: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=overview&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_badge/set document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=overview&project=application&resource=application.app_usage&version=v6 document }
                  *
-                 * 更新应用红点
+                 * 获取应用使用概览
                  *
-                 * 更新应用红点信息，用于工作台场景
+                 * 查看应用在某一天/某一周/某一个月的使用数据，可以查看租户整体对应用的使用情况，也可以分部门查看。
+                 *
+                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;5. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;6. 调用频控为100次/分
                  */
-                set: async (
+                overview: async (
                     payload?: {
                         data: {
-                            user_id: string;
-                            version: string;
-                            extra?: string;
-                            pc?: { web_app?: number; gadget?: number };
-                            mobile?: { web_app?: number; gadget?: number };
+                            date: string;
+                            cycle_type: number;
+                            department_id?: string;
+                            ability: "app" | "mp" | "h5" | "bot";
                         };
                         params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
                         };
+                        path: { app_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -3221,10 +3285,159 @@ export default abstract class Client extends apaas {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                };
+                            }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/app_badge/set`,
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/overview`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=message_push_overview&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=message_push_overview&project=application&resource=application.app_usage&version=v6 document }
+                 *
+                 * 获取消息推送概览
+                 *
+                 * 目标：查看应用在某一天/某一周/某一个月的机器人消息推送数据，可以根据部门做筛选
+                 *
+                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出两天前的数据。;3. 已经支持的指标包括：消息推送给用户的次数、消息触达的人数、消息1小时阅读量、消息12小时阅读量;4. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;5. 调用频控为100次/分
+                 */
+                messagePushOverview: async (
+                    payload?: {
+                        data: {
+                            date: string;
+                            cycle_type: number;
+                            department_id?: string;
+                        };
+                        params?: {
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/message_push_overview`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=department_overview&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=department_overview&project=application&resource=application.app_usage&version=v6 document }
+                 *
+                 * 获取多部门应用使用概览
+                 *
+                 * 查看应用在某一天/某一周/某一个月的使用数据，可以根据部门做多层子部门的筛选
+                 *
+                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 按照部门查看数据时，可以分别展示当前部门以及其子部门的使用情况;5. 如果查询的部门在查询日期没有使用过应用，只返回指标：应用的活跃用户数指标;6. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;7. 调用频控为100次/分
+                 */
+                departmentOverview: async (
+                    payload?: {
+                        data: {
+                            date: string;
+                            cycle_type: number;
+                            department_id?: string;
+                            recursion?: number;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        params?: {
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        department_id?: string;
+                                        app?: Array<{
+                                            metric_name: string;
+                                            metric_value: number;
+                                        }>;
+                                        gadget?: Array<{
+                                            metric_name: string;
+                                            metric_value: number;
+                                        }>;
+                                        webapp?: Array<{
+                                            metric_name: string;
+                                            metric_value: number;
+                                        }>;
+                                        bot?: Array<{
+                                            metric_name: string;
+                                            metric_value: number;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/department_overview`,
                                 path
                             ),
                             method: "POST",
@@ -3241,7 +3454,129 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * 我的常用推荐规则
+             * application.feedback
+             */
+            applicationFeedback: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application.feedback&version=v6 document }
+                 *
+                 * 获取应用反馈列表
+                 *
+                 * 查询应用的反馈数据
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            from_date?: string;
+                            to_date?: string;
+                            feedback_type?: number;
+                            status?: number;
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    feedback_list?: Array<{
+                                        feedback_id: string;
+                                        app_id: string;
+                                        feedback_time: string;
+                                        tenant_name?: string;
+                                        feedback_type: number;
+                                        status: number;
+                                        fault_type?: Array<number>;
+                                        fault_time?: string;
+                                        source?: number;
+                                        contact?: string;
+                                        update_time?: string;
+                                        description: string;
+                                        user_id?: string;
+                                        operator_id?: string;
+                                        images?: Array<string>;
+                                        feedback_path?: string;
+                                    }>;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=patch&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.feedback&version=v6 document }
+                 *
+                 * 更新应用反馈
+                 *
+                 * 更新应用的反馈数据
+                 */
+                patch: async (
+                    payload?: {
+                        params: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            status: number;
+                            operator_id: string;
+                        };
+                        path: { app_id: string; feedback_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * app_recommend_rule
              */
             appRecommendRule: {
                 listWithIterator: async (
@@ -3397,7 +3732,7 @@ export default abstract class Client extends apaas {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_recommend_rule&apiName=list&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_recommend_rule/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=app_recommend_rule&version=v6 document }
                  *
                  * 获取当前设置的推荐规则列表
                  *
@@ -3501,34 +3836,27 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * 应用使用情况
+             * application
              */
-            applicationAppUsage: {
+            application: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=department_overview&version=v6 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=contacts_range_configuration&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/department_overview document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_configuration&project=application&resource=application&version=v6 document }
                  *
-                 * 获取多部门应用使用概览（灰度租户可见）
+                 * 获取应用通讯录权限范围配置
                  *
-                 * 查看应用在某一天/某一周/某一个月的使用数据，可以根据部门做多层子部门的筛选
-                 *
-                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 按照部门查看数据时，可以分别展示当前部门以及其子部门的使用情况;5. 如果查询的部门在查询日期没有使用过应用，只返回指标：应用的活跃用户数指标;6. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;7. 调用频控为100次/分
+                 * 获取当前企业内某个自建应用线上实际生效的通讯录权限范围配置。
                  */
-                departmentOverview: async (
+                contactsRangeConfiguration: async (
                     payload?: {
-                        data: {
-                            date: string;
-                            cycle_type: number;
-                            department_id?: string;
-                            recursion?: number;
+                        params?: {
                             page_size?: number;
                             page_token?: string;
-                        };
-                        params?: {
                             department_id_type?:
                                 | "department_id"
                                 | "open_department_id";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { app_id: string };
                     },
@@ -3544,35 +3872,385 @@ export default abstract class Client extends apaas {
                                 code?: number;
                                 msg?: string;
                                 data?: {
+                                    contacts_range?: {
+                                        contacts_scope_type?:
+                                            | "equal_to_availability"
+                                            | "some"
+                                            | "all";
+                                        visible_list?: {
+                                            open_ids?: Array<string>;
+                                            department_ids?: Array<string>;
+                                            group_ids?: Array<string>;
+                                        };
+                                    };
                                     has_more?: boolean;
                                     page_token?: string;
-                                    items?: Array<{
-                                        department_id?: string;
-                                        app?: Array<{
-                                            metric_name: string;
-                                            metric_value: number;
-                                        }>;
-                                        gadget?: Array<{
-                                            metric_name: string;
-                                            metric_value: number;
-                                        }>;
-                                        webapp?: Array<{
-                                            metric_name: string;
-                                            metric_value: number;
-                                        }>;
-                                        bot?: Array<{
-                                            metric_name: string;
-                                            metric_value: number;
-                                        }>;
-                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/department_overview`,
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range_configuration`,
                                 path
                             ),
-                            method: "POST",
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: string;
+                            lang: string;
+                            status?: number;
+                            payment_type?: number;
+                            owner_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/application/v6/applications`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    app_list?: Array<{
+                                                        app_id: string;
+                                                        creator_id?: string;
+                                                        status?: number;
+                                                        scene_type?: number;
+                                                        payment_type?: number;
+                                                        create_source?:
+                                                            | "developer_console"
+                                                            | "base"
+                                                            | "app_engine"
+                                                            | "bot_builder"
+                                                            | "aily"
+                                                            | "unknown";
+                                                        redirect_urls?: Array<string>;
+                                                        online_version_id?: string;
+                                                        unaudit_version_id?: string;
+                                                        app_name?: string;
+                                                        avatar_url?: string;
+                                                        description?: string;
+                                                        scopes?: Array<{
+                                                            scope: string;
+                                                            description?: string;
+                                                            level?: number;
+                                                            token_types?: Array<
+                                                                | "tenant"
+                                                                | "user"
+                                                            >;
+                                                        }>;
+                                                        back_home_url?: string;
+                                                        i18n?: Array<{
+                                                            i18n_key:
+                                                                | "zh_cn"
+                                                                | "en_us"
+                                                                | "ja_jp"
+                                                                | "zh_hk"
+                                                                | "zh_tw"
+                                                                | "id_id"
+                                                                | "ms_my"
+                                                                | "de_de"
+                                                                | "es_es"
+                                                                | "fr_fr"
+                                                                | "it_it"
+                                                                | "pt_br"
+                                                                | "vi_vn"
+                                                                | "ru_ru"
+                                                                | "th_th"
+                                                                | "ko_kr";
+                                                            name?: string;
+                                                            description?: string;
+                                                            help_use?: string;
+                                                        }>;
+                                                        primary_language?:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp";
+                                                        common_categories?: Array<string>;
+                                                        owner?: {
+                                                            type: number;
+                                                            owner_id?: string;
+                                                            name?: string;
+                                                            help_desk?: string;
+                                                            email?: string;
+                                                            phone?: string;
+                                                            customer_service_account?: string;
+                                                        };
+                                                        mobile_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                        pc_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                        secret?: string;
+                                                        event?: {
+                                                            subscription_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_events?: Array<string>;
+                                                        };
+                                                        callback?: {
+                                                            callback_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
+                                                        encryption?: {
+                                                            encryption_key?: string;
+                                                            verification_token?: string;
+                                                        };
+                                                        security?: {
+                                                            redirect_urls?: Array<string>;
+                                                            allowed_ips?: Array<string>;
+                                                            h5_trusted_domains?: Array<string>;
+                                                            web_view_trusted_domains?: Array<string>;
+                                                            allowed_schemas?: Array<string>;
+                                                            allowed_server_domains?: Array<string>;
+                                                        };
+                                                        allow_refresh_token?: boolean;
+                                                        callback_info?: {
+                                                            callback_type?:
+                                                                | "webhook"
+                                                                | "websocket";
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    total_count?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=list&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application&version=v6 document }
+                 *
+                 * 获取企业安装的应用
+                 *
+                 * 该接口用于查询企业安装的应用列表，只能被企业自建应用调用。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: string;
+                            lang: string;
+                            status?: number;
+                            payment_type?: number;
+                            owner_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    app_list?: Array<{
+                                        app_id: string;
+                                        creator_id?: string;
+                                        status?: number;
+                                        scene_type?: number;
+                                        payment_type?: number;
+                                        create_source?:
+                                            | "developer_console"
+                                            | "base"
+                                            | "app_engine"
+                                            | "bot_builder"
+                                            | "aily"
+                                            | "unknown";
+                                        redirect_urls?: Array<string>;
+                                        online_version_id?: string;
+                                        unaudit_version_id?: string;
+                                        app_name?: string;
+                                        avatar_url?: string;
+                                        description?: string;
+                                        scopes?: Array<{
+                                            scope: string;
+                                            description?: string;
+                                            level?: number;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
+                                        }>;
+                                        back_home_url?: string;
+                                        i18n?: Array<{
+                                            i18n_key:
+                                                | "zh_cn"
+                                                | "en_us"
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
+                                            name?: string;
+                                            description?: string;
+                                            help_use?: string;
+                                        }>;
+                                        primary_language?:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp";
+                                        common_categories?: Array<string>;
+                                        owner?: {
+                                            type: number;
+                                            owner_id?: string;
+                                            name?: string;
+                                            help_desk?: string;
+                                            email?: string;
+                                            phone?: string;
+                                            customer_service_account?: string;
+                                        };
+                                        mobile_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        pc_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        secret?: string;
+                                        event?: {
+                                            subscription_type?: string;
+                                            request_url?: string;
+                                            subscribed_events?: Array<string>;
+                                        };
+                                        callback?: {
+                                            callback_type?: string;
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                        encryption?: {
+                                            encryption_key?: string;
+                                            verification_token?: string;
+                                        };
+                                        security?: {
+                                            redirect_urls?: Array<string>;
+                                            allowed_ips?: Array<string>;
+                                            h5_trusted_domains?: Array<string>;
+                                            web_view_trusted_domains?: Array<string>;
+                                            allowed_schemas?: Array<string>;
+                                            allowed_server_domains?: Array<string>;
+                                        };
+                                        allow_refresh_token?: boolean;
+                                        callback_info?: {
+                                            callback_type?:
+                                                | "webhook"
+                                                | "websocket";
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    total_count?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -3585,27 +4263,21 @@ export default abstract class Client extends apaas {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=message_push_overview&version=v6 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=get&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/message_push_overview document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application&version=v6 document }
                  *
-                 * 获取消息推送概览（灰度租户可见）
+                 * 获取应用信息
                  *
-                 * 目标：查看应用在某一天/某一周/某一个月的机器人消息推送数据，可以根据部门做筛选
+                 * 根据app_id获取应用的基础信息
                  *
-                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出两天前的数据。;3. 已经支持的指标包括：消息推送给用户的次数、消息触达的人数、消息1小时阅读量、消息12小时阅读量;4. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;5. 调用频控为100次/分
+                 * 商店应用必须正式发布版本后，才可以调用该接口获取应用信息。如果灰度发布应用，调用该接口将会报错 210504 错误码。
                  */
-                messagePushOverview: async (
+                get: async (
                     payload?: {
-                        data: {
-                            date: string;
-                            cycle_type: number;
-                            department_id?: string;
-                        };
-                        params?: {
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
+                        params: {
+                            lang: "zh_cn" | "en_us" | "ja_jp";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { app_id: string };
                     },
@@ -3621,18 +4293,118 @@ export default abstract class Client extends apaas {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    items?: Array<{
-                                        metric_name: string;
-                                        metric_value: number;
-                                    }>;
+                                    app?: {
+                                        app_id: string;
+                                        creator_id?: string;
+                                        status?: number;
+                                        scene_type?: number;
+                                        payment_type?: number;
+                                        create_source?:
+                                            | "developer_console"
+                                            | "base"
+                                            | "app_engine"
+                                            | "bot_builder"
+                                            | "aily"
+                                            | "unknown";
+                                        redirect_urls?: Array<string>;
+                                        online_version_id?: string;
+                                        unaudit_version_id?: string;
+                                        app_name?: string;
+                                        avatar_url?: string;
+                                        description?: string;
+                                        scopes?: Array<{
+                                            scope: string;
+                                            description?: string;
+                                            level?: number;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
+                                        }>;
+                                        back_home_url?: string;
+                                        i18n?: Array<{
+                                            i18n_key:
+                                                | "zh_cn"
+                                                | "en_us"
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
+                                            name?: string;
+                                            description?: string;
+                                            help_use?: string;
+                                        }>;
+                                        primary_language?:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp";
+                                        common_categories?: Array<string>;
+                                        owner?: {
+                                            type: number;
+                                            owner_id?: string;
+                                            name?: string;
+                                            help_desk?: string;
+                                            email?: string;
+                                            phone?: string;
+                                            customer_service_account?: string;
+                                        };
+                                        mobile_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        pc_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        secret?: string;
+                                        event?: {
+                                            subscription_type?: string;
+                                            request_url?: string;
+                                            subscribed_events?: Array<string>;
+                                        };
+                                        callback?: {
+                                            callback_type?: string;
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                        encryption?: {
+                                            encryption_key?: string;
+                                            verification_token?: string;
+                                        };
+                                        security?: {
+                                            redirect_urls?: Array<string>;
+                                            allowed_ips?: Array<string>;
+                                            h5_trusted_domains?: Array<string>;
+                                            web_view_trusted_domains?: Array<string>;
+                                            allowed_schemas?: Array<string>;
+                                            allowed_server_domains?: Array<string>;
+                                        };
+                                        allow_refresh_token?: boolean;
+                                        callback_info?: {
+                                            callback_type?:
+                                                | "webhook"
+                                                | "websocket";
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                    };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/message_push_overview`,
+                                `${this.domain}/open-apis/application/v6/applications/:app_id`,
                                 path
                             ),
-                            method: "POST",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -3645,30 +4417,289 @@ export default abstract class Client extends apaas {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=overview&version=v6 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=patch&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/overview document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application&version=v6 document }
                  *
-                 * 获取应用使用概览
+                 * 更新应用分组信息
                  *
-                 * 查看应用在某一天/某一周/某一个月的使用数据，可以查看租户整体对应用的使用情况，也可以分部门查看。
-                 *
-                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出前一天的数据;3. 已经支持的指标包括：应用的活跃用户数、累计用户数、新增用户数、访问页面数、打开次数;4. 数据从飞书4.10版本开始统计，使用飞书版本4.10及以下版本的用户数据不会被统计到;5. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;6. 调用频控为100次/分
+                 * 更新应用的分组信息（分组会影响应用在工作台中的分类情况，请谨慎更新）
                  */
-                overview: async (
+                patch: async (
                     payload?: {
-                        data: {
-                            date: string;
-                            cycle_type: number;
-                            department_id?: string;
-                            ability: "app" | "mp" | "h5" | "bot";
+                        data?: {
+                            common_categories?: Array<string>;
+                            secret?: string;
+                            event?: {
+                                subscription_type?: string;
+                                request_url?: string;
+                                subscribed_events?: Array<string>;
+                            };
+                            callback?: {
+                                callback_type?: string;
+                                request_url?: string;
+                                subscribed_callbacks?: Array<string>;
+                            };
+                            encryption?: {
+                                encryption_key?: string;
+                                verification_token?: string;
+                            };
+                            security?: {
+                                redirect_urls?: Array<string>;
+                                allowed_ips?: Array<string>;
+                                h5_trusted_domains?: Array<string>;
+                                web_view_trusted_domains?: Array<string>;
+                                allowed_schemas?: Array<string>;
+                                allowed_server_domains?: Array<string>;
+                            };
+                            allow_refresh_token?: boolean;
+                            callback_info?: {
+                                callback_type?: "webhook" | "websocket";
+                                request_url?: string;
+                                subscribed_callbacks?: Array<string>;
+                            };
                         };
-                        params?: {
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
+                        params: { lang: "zh_cn" | "en_us" | "ja_jp" };
                         path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                underauditlistWithIterator: async (
+                    payload?: {
+                        params: {
+                            lang: "zh_cn" | "en_us" | "ja_jp";
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/application/v6/applications/underauditlist`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        app_id: string;
+                                                        creator_id?: string;
+                                                        status?: number;
+                                                        scene_type?: number;
+                                                        payment_type?: number;
+                                                        create_source?:
+                                                            | "developer_console"
+                                                            | "base"
+                                                            | "app_engine"
+                                                            | "bot_builder"
+                                                            | "aily"
+                                                            | "unknown";
+                                                        redirect_urls?: Array<string>;
+                                                        online_version_id?: string;
+                                                        unaudit_version_id?: string;
+                                                        app_name?: string;
+                                                        avatar_url?: string;
+                                                        description?: string;
+                                                        scopes?: Array<{
+                                                            scope: string;
+                                                            description?: string;
+                                                            level?: number;
+                                                            token_types?: Array<
+                                                                | "tenant"
+                                                                | "user"
+                                                            >;
+                                                        }>;
+                                                        back_home_url?: string;
+                                                        i18n?: Array<{
+                                                            i18n_key:
+                                                                | "zh_cn"
+                                                                | "en_us"
+                                                                | "ja_jp"
+                                                                | "zh_hk"
+                                                                | "zh_tw"
+                                                                | "id_id"
+                                                                | "ms_my"
+                                                                | "de_de"
+                                                                | "es_es"
+                                                                | "fr_fr"
+                                                                | "it_it"
+                                                                | "pt_br"
+                                                                | "vi_vn"
+                                                                | "ru_ru"
+                                                                | "th_th"
+                                                                | "ko_kr";
+                                                            name?: string;
+                                                            description?: string;
+                                                            help_use?: string;
+                                                        }>;
+                                                        primary_language?:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp";
+                                                        common_categories?: Array<string>;
+                                                        owner?: {
+                                                            type: number;
+                                                            owner_id?: string;
+                                                            name?: string;
+                                                            help_desk?: string;
+                                                            email?: string;
+                                                            phone?: string;
+                                                            customer_service_account?: string;
+                                                        };
+                                                        mobile_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                        pc_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                        secret?: string;
+                                                        event?: {
+                                                            subscription_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_events?: Array<string>;
+                                                        };
+                                                        callback?: {
+                                                            callback_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
+                                                        encryption?: {
+                                                            encryption_key?: string;
+                                                            verification_token?: string;
+                                                        };
+                                                        security?: {
+                                                            redirect_urls?: Array<string>;
+                                                            allowed_ips?: Array<string>;
+                                                            h5_trusted_domains?: Array<string>;
+                                                            web_view_trusted_domains?: Array<string>;
+                                                            allowed_schemas?: Array<string>;
+                                                            allowed_server_domains?: Array<string>;
+                                                        };
+                                                        allow_refresh_token?: boolean;
+                                                        callback_info?: {
+                                                            callback_type?:
+                                                                | "webhook"
+                                                                | "websocket";
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
+                                                    }>;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=underauditlist&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=underauditlist&project=application&resource=application&version=v6 document }
+                 *
+                 * 查看待审核的应用列表
+                 *
+                 * 查看本企业下所有待审核的自建应用列表
+                 */
+                underauditlist: async (
+                    payload?: {
+                        params: {
+                            lang: "zh_cn" | "en_us" | "ja_jp";
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -3682,18 +4713,120 @@ export default abstract class Client extends apaas {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    items?: Array<{
-                                        metric_name: string;
-                                        metric_value: number;
+                                    items: Array<{
+                                        app_id: string;
+                                        creator_id?: string;
+                                        status?: number;
+                                        scene_type?: number;
+                                        payment_type?: number;
+                                        create_source?:
+                                            | "developer_console"
+                                            | "base"
+                                            | "app_engine"
+                                            | "bot_builder"
+                                            | "aily"
+                                            | "unknown";
+                                        redirect_urls?: Array<string>;
+                                        online_version_id?: string;
+                                        unaudit_version_id?: string;
+                                        app_name?: string;
+                                        avatar_url?: string;
+                                        description?: string;
+                                        scopes?: Array<{
+                                            scope: string;
+                                            description?: string;
+                                            level?: number;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
+                                        }>;
+                                        back_home_url?: string;
+                                        i18n?: Array<{
+                                            i18n_key:
+                                                | "zh_cn"
+                                                | "en_us"
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
+                                            name?: string;
+                                            description?: string;
+                                            help_use?: string;
+                                        }>;
+                                        primary_language?:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp";
+                                        common_categories?: Array<string>;
+                                        owner?: {
+                                            type: number;
+                                            owner_id?: string;
+                                            name?: string;
+                                            help_desk?: string;
+                                            email?: string;
+                                            phone?: string;
+                                            customer_service_account?: string;
+                                        };
+                                        mobile_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        pc_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        secret?: string;
+                                        event?: {
+                                            subscription_type?: string;
+                                            request_url?: string;
+                                            subscribed_events?: Array<string>;
+                                        };
+                                        callback?: {
+                                            callback_type?: string;
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                        encryption?: {
+                                            encryption_key?: string;
+                                            verification_token?: string;
+                                        };
+                                        security?: {
+                                            redirect_urls?: Array<string>;
+                                            allowed_ips?: Array<string>;
+                                            h5_trusted_domains?: Array<string>;
+                                            web_view_trusted_domains?: Array<string>;
+                                            allowed_schemas?: Array<string>;
+                                            allowed_server_domains?: Array<string>;
+                                        };
+                                        allow_refresh_token?: boolean;
+                                        callback_info?: {
+                                            callback_type?:
+                                                | "webhook"
+                                                | "websocket";
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
                                     }>;
+                                    has_more: boolean;
+                                    page_token?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/overview`,
+                                `${this.domain}/open-apis/application/v6/applications/underauditlist`,
                                 path
                             ),
-                            method: "POST",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -3707,7 +4840,7 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * 事件
+             * application.app_version
              */
             applicationAppVersion: {
                 /**
@@ -3715,7 +4848,11 @@ export default abstract class Client extends apaas {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_suggest&project=application&resource=application.app_version&version=v6 document }
                  *
-                 * 获取应用版本通讯录权限范围建议
+                 * 获取应用版本中开发者申请的通讯录权限范围
+                 *
+                 * 该接口用于根据应用的 App ID 和版本 ID 获取企业自建应用某个版本的通讯录权限范围。
+                 *
+                 * 由于通讯录权限范围需要提交发布新的应用版本，并且企业管理员审核通过后才会生效，因此该权限范围可能与实际生效的权限范围有差别，如需获取线上实际生效的通讯录权限范围，可通过[获取应用通讯录权限范围配置](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/contacts_range_configuration) 获取。
                  */
                 contactsRangeSuggest: async (
                     payload?: {
@@ -3770,9 +4907,54 @@ export default abstract class Client extends apaas {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=patch&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.app_version&version=v6 document }
+                 *
+                 * 更新应用审核状态
+                 *
+                 * 通过接口来更新应用版本的审核结果：通过后应用可以直接上架；拒绝后则开发者可以看到拒绝理由，并在修改后再次申请发布。
+                 */
+                patch: async (
+                    payload?: {
+                        data?: { status?: number };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                            operator_id: string;
+                            reject_reason?: string;
+                        };
+                        path: { app_id: string; version_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=get&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/get document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.app_version&version=v6 document }
                  *
                  * 获取应用版本信息
                  *
@@ -4239,7 +5421,7 @@ export default abstract class Client extends apaas {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=list&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application.app_version&version=v6 document }
                  *
                  * 获取应用版本列表
                  *
@@ -4452,1430 +5634,19 @@ export default abstract class Client extends apaas {
                             throw e;
                         });
                 },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=patch&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/patch document }
-                 *
-                 * 更新应用审核状态
-                 *
-                 * 通过接口来更新应用版本的审核结果：通过后应用可以直接上架；拒绝后则开发者可以看到拒绝理由，并在修改后再次申请发布。
-                 */
-                patch: async (
-                    payload?: {
-                        data?: { status?: number };
-                        params: {
-                            user_id_type: "user_id" | "union_id" | "open_id";
-                            operator_id: string;
-                            reject_reason?: string;
-                        };
-                        path: { app_id: string; version_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
             },
             /**
-             * application.collaborators
-             */
-            applicationCollaborators: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.collaborators&version=v6 document }
-                 */
-                get: async (
-                    payload?: {
-                        params?: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    collaborators?: Array<{
-                                        type:
-                                            | "administrator"
-                                            | "developer"
-                                            | "operator";
-                                        user_id: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=update&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.collaborators&version=v6 document }
-                 */
-                update: async (
-                    payload?: {
-                        data?: {
-                            adds?: Array<{
-                                type:
-                                    | "administrator"
-                                    | "developer"
-                                    | "operator";
-                                user_id: string;
-                            }>;
-                            removes?: Array<string>;
-                        };
-                        params?: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * application.contacts_range
-             */
-            applicationContactsRange: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.contacts_range&apiName=patch&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.contacts_range&version=v6 document }
-                 */
-                patch: async (
-                    payload?: {
-                        data: {
-                            contacts_range_type:
-                                | "equal_to_availability"
-                                | "some"
-                                | "all";
-                            add_visible_list?: {
-                                user_ids?: Array<string>;
-                                department_ids?: Array<string>;
-                                group_ids?: Array<string>;
-                            };
-                            del_visible_list?: {
-                                user_ids?: Array<string>;
-                                department_ids?: Array<string>;
-                                group_ids?: Array<string>;
-                            };
-                        };
-                        params?: {
-                            user_id_type?: "open_id" | "user_id" | "union_id";
-                            department_id_type?:
-                                | "open_department_id"
-                                | "department_id";
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 应用管理
-             */
-            application: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=contacts_range_configuration&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_configuration&project=application&resource=application&version=v6 document }
-                 */
-                contactsRangeConfiguration: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    contacts_range?: {
-                                        contacts_scope_type?:
-                                            | "equal_to_availability"
-                                            | "some"
-                                            | "all";
-                                        visible_list?: {
-                                            open_ids?: Array<string>;
-                                            department_ids?: Array<string>;
-                                            group_ids?: Array<string>;
-                                        };
-                                    };
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range_configuration`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=get&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/get document }
-                 *
-                 * 获取应用信息
-                 *
-                 * 根据app_id获取应用的基础信息
-                 */
-                get: async (
-                    payload?: {
-                        params: {
-                            lang: "zh_cn" | "en_us" | "ja_jp";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    app?: {
-                                        app_id: string;
-                                        creator_id?: string;
-                                        status?: number;
-                                        scene_type?: number;
-                                        payment_type?: number;
-                                        create_source?:
-                                            | "developer_console"
-                                            | "base"
-                                            | "app_engine"
-                                            | "bot_builder"
-                                            | "aily"
-                                            | "unknown";
-                                        redirect_urls?: Array<string>;
-                                        online_version_id?: string;
-                                        unaudit_version_id?: string;
-                                        app_name?: string;
-                                        avatar_url?: string;
-                                        description?: string;
-                                        scopes?: Array<{
-                                            scope: string;
-                                            description?: string;
-                                            level?: number;
-                                            token_types?: Array<
-                                                "tenant" | "user"
-                                            >;
-                                        }>;
-                                        back_home_url?: string;
-                                        i18n?: Array<{
-                                            i18n_key:
-                                                | "zh_cn"
-                                                | "en_us"
-                                                | "ja_jp"
-                                                | "zh_hk"
-                                                | "zh_tw"
-                                                | "id_id"
-                                                | "ms_my"
-                                                | "de_de"
-                                                | "es_es"
-                                                | "fr_fr"
-                                                | "it_it"
-                                                | "pt_br"
-                                                | "vi_vn"
-                                                | "ru_ru"
-                                                | "th_th"
-                                                | "ko_kr";
-                                            name?: string;
-                                            description?: string;
-                                            help_use?: string;
-                                        }>;
-                                        primary_language?:
-                                            | "zh_cn"
-                                            | "en_us"
-                                            | "ja_jp";
-                                        common_categories?: Array<string>;
-                                        owner?: {
-                                            type: number;
-                                            owner_id?: string;
-                                            name?: string;
-                                            help_desk?: string;
-                                            email?: string;
-                                            phone?: string;
-                                            customer_service_account?: string;
-                                        };
-                                        mobile_default_ability?:
-                                            | "gadget"
-                                            | "web_app"
-                                            | "bot";
-                                        pc_default_ability?:
-                                            | "gadget"
-                                            | "web_app"
-                                            | "bot";
-                                        secret?: string;
-                                        event?: {
-                                            subscription_type?: string;
-                                            request_url?: string;
-                                            subscribed_events?: Array<string>;
-                                        };
-                                        callback?: {
-                                            callback_type?: string;
-                                            request_url?: string;
-                                            subscribed_callbacks?: Array<string>;
-                                        };
-                                        encryption?: {
-                                            encryption_key?: string;
-                                            verification_token?: string;
-                                        };
-                                        security?: {
-                                            redirect_urls?: Array<string>;
-                                            allowed_ips?: Array<string>;
-                                            h5_trusted_domains?: Array<string>;
-                                            web_view_trusted_domains?: Array<string>;
-                                            allowed_schemas?: Array<string>;
-                                            allowed_server_domains?: Array<string>;
-                                        };
-                                        allow_refresh_token?: boolean;
-                                        callback_info?: {
-                                            callback_type?:
-                                                | "webhook"
-                                                | "websocket";
-                                            request_url?: string;
-                                            subscribed_callbacks?: Array<string>;
-                                        };
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: string;
-                            lang: string;
-                            status?: number;
-                            payment_type?: number;
-                            owner_type?: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/application/v6/applications`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    app_list?: Array<{
-                                                        app_id: string;
-                                                        creator_id?: string;
-                                                        status?: number;
-                                                        scene_type?: number;
-                                                        payment_type?: number;
-                                                        create_source?:
-                                                            | "developer_console"
-                                                            | "base"
-                                                            | "app_engine"
-                                                            | "bot_builder"
-                                                            | "aily"
-                                                            | "unknown";
-                                                        redirect_urls?: Array<string>;
-                                                        online_version_id?: string;
-                                                        unaudit_version_id?: string;
-                                                        app_name?: string;
-                                                        avatar_url?: string;
-                                                        description?: string;
-                                                        scopes?: Array<{
-                                                            scope: string;
-                                                            description?: string;
-                                                            level?: number;
-                                                            token_types?: Array<
-                                                                | "tenant"
-                                                                | "user"
-                                                            >;
-                                                        }>;
-                                                        back_home_url?: string;
-                                                        i18n?: Array<{
-                                                            i18n_key:
-                                                                | "zh_cn"
-                                                                | "en_us"
-                                                                | "ja_jp"
-                                                                | "zh_hk"
-                                                                | "zh_tw"
-                                                                | "id_id"
-                                                                | "ms_my"
-                                                                | "de_de"
-                                                                | "es_es"
-                                                                | "fr_fr"
-                                                                | "it_it"
-                                                                | "pt_br"
-                                                                | "vi_vn"
-                                                                | "ru_ru"
-                                                                | "th_th"
-                                                                | "ko_kr";
-                                                            name?: string;
-                                                            description?: string;
-                                                            help_use?: string;
-                                                        }>;
-                                                        primary_language?:
-                                                            | "zh_cn"
-                                                            | "en_us"
-                                                            | "ja_jp";
-                                                        common_categories?: Array<string>;
-                                                        owner?: {
-                                                            type: number;
-                                                            owner_id?: string;
-                                                            name?: string;
-                                                            help_desk?: string;
-                                                            email?: string;
-                                                            phone?: string;
-                                                            customer_service_account?: string;
-                                                        };
-                                                        mobile_default_ability?:
-                                                            | "gadget"
-                                                            | "web_app"
-                                                            | "bot";
-                                                        pc_default_ability?:
-                                                            | "gadget"
-                                                            | "web_app"
-                                                            | "bot";
-                                                        secret?: string;
-                                                        event?: {
-                                                            subscription_type?: string;
-                                                            request_url?: string;
-                                                            subscribed_events?: Array<string>;
-                                                        };
-                                                        callback?: {
-                                                            callback_type?: string;
-                                                            request_url?: string;
-                                                            subscribed_callbacks?: Array<string>;
-                                                        };
-                                                        encryption?: {
-                                                            encryption_key?: string;
-                                                            verification_token?: string;
-                                                        };
-                                                        security?: {
-                                                            redirect_urls?: Array<string>;
-                                                            allowed_ips?: Array<string>;
-                                                            h5_trusted_domains?: Array<string>;
-                                                            web_view_trusted_domains?: Array<string>;
-                                                            allowed_schemas?: Array<string>;
-                                                            allowed_server_domains?: Array<string>;
-                                                        };
-                                                        allow_refresh_token?: boolean;
-                                                        callback_info?: {
-                                                            callback_type?:
-                                                                | "webhook"
-                                                                | "websocket";
-                                                            request_url?: string;
-                                                            subscribed_callbacks?: Array<string>;
-                                                        };
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                    total_count?: number;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=list&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/list document }
-                 *
-                 * 获取企业安装的应用
-                 *
-                 * 该接口用于查询企业安装的应用列表，只能被企业自建应用调用。
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: string;
-                            lang: string;
-                            status?: number;
-                            payment_type?: number;
-                            owner_type?: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    app_list?: Array<{
-                                        app_id: string;
-                                        creator_id?: string;
-                                        status?: number;
-                                        scene_type?: number;
-                                        payment_type?: number;
-                                        create_source?:
-                                            | "developer_console"
-                                            | "base"
-                                            | "app_engine"
-                                            | "bot_builder"
-                                            | "aily"
-                                            | "unknown";
-                                        redirect_urls?: Array<string>;
-                                        online_version_id?: string;
-                                        unaudit_version_id?: string;
-                                        app_name?: string;
-                                        avatar_url?: string;
-                                        description?: string;
-                                        scopes?: Array<{
-                                            scope: string;
-                                            description?: string;
-                                            level?: number;
-                                            token_types?: Array<
-                                                "tenant" | "user"
-                                            >;
-                                        }>;
-                                        back_home_url?: string;
-                                        i18n?: Array<{
-                                            i18n_key:
-                                                | "zh_cn"
-                                                | "en_us"
-                                                | "ja_jp"
-                                                | "zh_hk"
-                                                | "zh_tw"
-                                                | "id_id"
-                                                | "ms_my"
-                                                | "de_de"
-                                                | "es_es"
-                                                | "fr_fr"
-                                                | "it_it"
-                                                | "pt_br"
-                                                | "vi_vn"
-                                                | "ru_ru"
-                                                | "th_th"
-                                                | "ko_kr";
-                                            name?: string;
-                                            description?: string;
-                                            help_use?: string;
-                                        }>;
-                                        primary_language?:
-                                            | "zh_cn"
-                                            | "en_us"
-                                            | "ja_jp";
-                                        common_categories?: Array<string>;
-                                        owner?: {
-                                            type: number;
-                                            owner_id?: string;
-                                            name?: string;
-                                            help_desk?: string;
-                                            email?: string;
-                                            phone?: string;
-                                            customer_service_account?: string;
-                                        };
-                                        mobile_default_ability?:
-                                            | "gadget"
-                                            | "web_app"
-                                            | "bot";
-                                        pc_default_ability?:
-                                            | "gadget"
-                                            | "web_app"
-                                            | "bot";
-                                        secret?: string;
-                                        event?: {
-                                            subscription_type?: string;
-                                            request_url?: string;
-                                            subscribed_events?: Array<string>;
-                                        };
-                                        callback?: {
-                                            callback_type?: string;
-                                            request_url?: string;
-                                            subscribed_callbacks?: Array<string>;
-                                        };
-                                        encryption?: {
-                                            encryption_key?: string;
-                                            verification_token?: string;
-                                        };
-                                        security?: {
-                                            redirect_urls?: Array<string>;
-                                            allowed_ips?: Array<string>;
-                                            h5_trusted_domains?: Array<string>;
-                                            web_view_trusted_domains?: Array<string>;
-                                            allowed_schemas?: Array<string>;
-                                            allowed_server_domains?: Array<string>;
-                                        };
-                                        allow_refresh_token?: boolean;
-                                        callback_info?: {
-                                            callback_type?:
-                                                | "webhook"
-                                                | "websocket";
-                                            request_url?: string;
-                                            subscribed_callbacks?: Array<string>;
-                                        };
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                    total_count?: number;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=patch&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/patch document }
-                 *
-                 * 更新应用分组信息
-                 *
-                 * 更新应用的分组信息（分组会影响应用在工作台中的分类情况，请谨慎更新）
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            common_categories?: Array<string>;
-                            secret?: string;
-                            event?: {
-                                subscription_type?: string;
-                                request_url?: string;
-                                subscribed_events?: Array<string>;
-                            };
-                            callback?: {
-                                callback_type?: string;
-                                request_url?: string;
-                                subscribed_callbacks?: Array<string>;
-                            };
-                            encryption?: {
-                                encryption_key?: string;
-                                verification_token?: string;
-                            };
-                            security?: {
-                                redirect_urls?: Array<string>;
-                                allowed_ips?: Array<string>;
-                                h5_trusted_domains?: Array<string>;
-                                web_view_trusted_domains?: Array<string>;
-                                allowed_schemas?: Array<string>;
-                                allowed_server_domains?: Array<string>;
-                            };
-                            allow_refresh_token?: boolean;
-                            callback_info?: {
-                                callback_type?: "webhook" | "websocket";
-                                request_url?: string;
-                                subscribed_callbacks?: Array<string>;
-                            };
-                        };
-                        params: { lang: "zh_cn" | "en_us" | "ja_jp" };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                underauditlistWithIterator: async (
-                    payload?: {
-                        params: {
-                            lang: "zh_cn" | "en_us" | "ja_jp";
-                            page_token?: string;
-                            page_size?: number;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/application/v6/applications/underauditlist`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items: Array<{
-                                                        app_id: string;
-                                                        creator_id?: string;
-                                                        status?: number;
-                                                        scene_type?: number;
-                                                        payment_type?: number;
-                                                        create_source?:
-                                                            | "developer_console"
-                                                            | "base"
-                                                            | "app_engine"
-                                                            | "bot_builder"
-                                                            | "aily"
-                                                            | "unknown";
-                                                        redirect_urls?: Array<string>;
-                                                        online_version_id?: string;
-                                                        unaudit_version_id?: string;
-                                                        app_name?: string;
-                                                        avatar_url?: string;
-                                                        description?: string;
-                                                        scopes?: Array<{
-                                                            scope: string;
-                                                            description?: string;
-                                                            level?: number;
-                                                            token_types?: Array<
-                                                                | "tenant"
-                                                                | "user"
-                                                            >;
-                                                        }>;
-                                                        back_home_url?: string;
-                                                        i18n?: Array<{
-                                                            i18n_key:
-                                                                | "zh_cn"
-                                                                | "en_us"
-                                                                | "ja_jp"
-                                                                | "zh_hk"
-                                                                | "zh_tw"
-                                                                | "id_id"
-                                                                | "ms_my"
-                                                                | "de_de"
-                                                                | "es_es"
-                                                                | "fr_fr"
-                                                                | "it_it"
-                                                                | "pt_br"
-                                                                | "vi_vn"
-                                                                | "ru_ru"
-                                                                | "th_th"
-                                                                | "ko_kr";
-                                                            name?: string;
-                                                            description?: string;
-                                                            help_use?: string;
-                                                        }>;
-                                                        primary_language?:
-                                                            | "zh_cn"
-                                                            | "en_us"
-                                                            | "ja_jp";
-                                                        common_categories?: Array<string>;
-                                                        owner?: {
-                                                            type: number;
-                                                            owner_id?: string;
-                                                            name?: string;
-                                                            help_desk?: string;
-                                                            email?: string;
-                                                            phone?: string;
-                                                            customer_service_account?: string;
-                                                        };
-                                                        mobile_default_ability?:
-                                                            | "gadget"
-                                                            | "web_app"
-                                                            | "bot";
-                                                        pc_default_ability?:
-                                                            | "gadget"
-                                                            | "web_app"
-                                                            | "bot";
-                                                        secret?: string;
-                                                        event?: {
-                                                            subscription_type?: string;
-                                                            request_url?: string;
-                                                            subscribed_events?: Array<string>;
-                                                        };
-                                                        callback?: {
-                                                            callback_type?: string;
-                                                            request_url?: string;
-                                                            subscribed_callbacks?: Array<string>;
-                                                        };
-                                                        encryption?: {
-                                                            encryption_key?: string;
-                                                            verification_token?: string;
-                                                        };
-                                                        security?: {
-                                                            redirect_urls?: Array<string>;
-                                                            allowed_ips?: Array<string>;
-                                                            h5_trusted_domains?: Array<string>;
-                                                            web_view_trusted_domains?: Array<string>;
-                                                            allowed_schemas?: Array<string>;
-                                                            allowed_server_domains?: Array<string>;
-                                                        };
-                                                        allow_refresh_token?: boolean;
-                                                        callback_info?: {
-                                                            callback_type?:
-                                                                | "webhook"
-                                                                | "websocket";
-                                                            request_url?: string;
-                                                            subscribed_callbacks?: Array<string>;
-                                                        };
-                                                    }>;
-                                                    has_more: boolean;
-                                                    page_token?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=underauditlist&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/underauditlist document }
-                 *
-                 * 查看待审核的应用列表
-                 *
-                 * 查看本企业下所有待审核的自建应用列表
-                 */
-                underauditlist: async (
-                    payload?: {
-                        params: {
-                            lang: "zh_cn" | "en_us" | "ja_jp";
-                            page_token?: string;
-                            page_size?: number;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items: Array<{
-                                        app_id: string;
-                                        creator_id?: string;
-                                        status?: number;
-                                        scene_type?: number;
-                                        payment_type?: number;
-                                        create_source?:
-                                            | "developer_console"
-                                            | "base"
-                                            | "app_engine"
-                                            | "bot_builder"
-                                            | "aily"
-                                            | "unknown";
-                                        redirect_urls?: Array<string>;
-                                        online_version_id?: string;
-                                        unaudit_version_id?: string;
-                                        app_name?: string;
-                                        avatar_url?: string;
-                                        description?: string;
-                                        scopes?: Array<{
-                                            scope: string;
-                                            description?: string;
-                                            level?: number;
-                                            token_types?: Array<
-                                                "tenant" | "user"
-                                            >;
-                                        }>;
-                                        back_home_url?: string;
-                                        i18n?: Array<{
-                                            i18n_key:
-                                                | "zh_cn"
-                                                | "en_us"
-                                                | "ja_jp"
-                                                | "zh_hk"
-                                                | "zh_tw"
-                                                | "id_id"
-                                                | "ms_my"
-                                                | "de_de"
-                                                | "es_es"
-                                                | "fr_fr"
-                                                | "it_it"
-                                                | "pt_br"
-                                                | "vi_vn"
-                                                | "ru_ru"
-                                                | "th_th"
-                                                | "ko_kr";
-                                            name?: string;
-                                            description?: string;
-                                            help_use?: string;
-                                        }>;
-                                        primary_language?:
-                                            | "zh_cn"
-                                            | "en_us"
-                                            | "ja_jp";
-                                        common_categories?: Array<string>;
-                                        owner?: {
-                                            type: number;
-                                            owner_id?: string;
-                                            name?: string;
-                                            help_desk?: string;
-                                            email?: string;
-                                            phone?: string;
-                                            customer_service_account?: string;
-                                        };
-                                        mobile_default_ability?:
-                                            | "gadget"
-                                            | "web_app"
-                                            | "bot";
-                                        pc_default_ability?:
-                                            | "gadget"
-                                            | "web_app"
-                                            | "bot";
-                                        secret?: string;
-                                        event?: {
-                                            subscription_type?: string;
-                                            request_url?: string;
-                                            subscribed_events?: Array<string>;
-                                        };
-                                        callback?: {
-                                            callback_type?: string;
-                                            request_url?: string;
-                                            subscribed_callbacks?: Array<string>;
-                                        };
-                                        encryption?: {
-                                            encryption_key?: string;
-                                            verification_token?: string;
-                                        };
-                                        security?: {
-                                            redirect_urls?: Array<string>;
-                                            allowed_ips?: Array<string>;
-                                            h5_trusted_domains?: Array<string>;
-                                            web_view_trusted_domains?: Array<string>;
-                                            allowed_schemas?: Array<string>;
-                                            allowed_server_domains?: Array<string>;
-                                        };
-                                        allow_refresh_token?: boolean;
-                                        callback_info?: {
-                                            callback_type?:
-                                                | "webhook"
-                                                | "websocket";
-                                            request_url?: string;
-                                            subscribed_callbacks?: Array<string>;
-                                        };
-                                    }>;
-                                    has_more: boolean;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/underauditlist`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 应用反馈
-             */
-            applicationFeedback: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/list document }
-                 *
-                 * 获取应用反馈列表
-                 *
-                 * 查询应用的反馈数据
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            from_date?: string;
-                            to_date?: string;
-                            feedback_type?: number;
-                            status?: number;
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            page_token?: string;
-                            page_size?: number;
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    feedback_list?: Array<{
-                                        feedback_id: string;
-                                        app_id: string;
-                                        feedback_time: string;
-                                        tenant_name?: string;
-                                        feedback_type: number;
-                                        status: number;
-                                        fault_type?: Array<number>;
-                                        fault_time?: string;
-                                        source?: number;
-                                        contact?: string;
-                                        update_time?: string;
-                                        description: string;
-                                        user_id?: string;
-                                        operator_id?: string;
-                                        images?: Array<string>;
-                                        feedback_path?: string;
-                                    }>;
-                                    has_more: boolean;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=patch&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/patch document }
-                 *
-                 * 更新应用反馈
-                 *
-                 * 更新应用的反馈数据
-                 */
-                patch: async (
-                    payload?: {
-                        params: {
-                            user_id_type?: "open_id" | "union_id" | "user_id";
-                            status: number;
-                            operator_id: string;
-                        };
-                        path: { app_id: string; feedback_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * application.management
-             */
-            applicationManagement: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.management&version=v6 document }
-                 */
-                update: async (
-                    payload?: {
-                        data?: { enable?: boolean };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * application.owner
-             */
-            applicationOwner: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.owner&version=v6 document }
-                 */
-                update: async (
-                    payload?: {
-                        data: { owner_id: string };
-                        params?: {
-                            user_id_type?: "open_id" | "user_id" | "union_id";
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/applications/:app_id/owner`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * 事件
+             * application.visibility
              */
             applicationVisibility: {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.visibility&apiName=check_white_black_list&version=v6 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=check_white_black_list&project=application&resource=application.visibility&version=v6 document }
+                 *
+                 * 查询用户或部门是否在应用的可用或禁用名单
+                 *
+                 * 该接口用于查询用户、部门、用户组是否在应用的可用或禁用名单中
                  */
                 checkWhiteBlackList: async (
                     payload?: {
@@ -5943,6 +5714,10 @@ export default abstract class Client extends apaas {
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.visibility&apiName=patch&version=v6 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.visibility&version=v6 document }
+                 *
+                 * 更新应用可用范围
+                 *
+                 * 调用该接口更新指定应用的可用范围，支持更新当前企业内自建应用的可用范围，或者已安装的商店应用的可用范围，包括可用人员与禁用人员。更新可用范围后对线上立即生效。
                  */
                 patch: async (
                     payload?: {
@@ -6005,15 +5780,46 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * scope
+             * application.contacts_range
              */
-            scope: {
+            applicationContactsRange: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=apply&version=v6 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.contacts_range&apiName=patch&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=application&resource=scope&version=v6 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.contacts_range&version=v6 document }
+                 *
+                 * 更新应用通讯录权限范围配置
+                 *
+                 * 该接口用于更新当前企业内自建应用或已安装的商店应用的通讯录权限范围配置。更新后线上立即生效。
                  */
-                apply: async (payload?: {}, options?: IRequestOptions) => {
+                patch: async (
+                    payload?: {
+                        data: {
+                            contacts_range_type:
+                                | "equal_to_availability"
+                                | "some"
+                                | "all";
+                            add_visible_list?: {
+                                user_ids?: Array<string>;
+                                department_ids?: Array<string>;
+                                group_ids?: Array<string>;
+                            };
+                            del_visible_list?: {
+                                user_ids?: Array<string>;
+                                department_ids?: Array<string>;
+                                group_ids?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
@@ -6023,10 +5829,69 @@ export default abstract class Client extends apaas {
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v6/scopes/apply`,
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range`,
                                 path
                             ),
-                            method: "POST",
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.collaborators
+             */
+            applicationCollaborators: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.collaborators&version=v6 document }
+                 *
+                 * 获取应用协作者列表
+                 *
+                 * 根据 app_id 获取应用（包括自建应用和商店应用）的协作者信息，包括应用的所有者、管理员、开发者、运营人员
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    collaborators?: Array<{
+                                        type:
+                                            | "administrator"
+                                            | "developer"
+                                            | "operator";
+                                        user_id: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -6039,9 +5904,167 @@ export default abstract class Client extends apaas {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=update&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.collaborators&version=v6 document }
+                 *
+                 * 更新应用协作者
+                 *
+                 * 某个应用（包括自建应用和商店应用）中添加/移除应用协作者，添加后协作者将会收到添加通知。
+                 *
+                 * 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用的所有者或管理员，否则无法操作成功。
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            adds?: Array<{
+                                type:
+                                    | "administrator"
+                                    | "developer"
+                                    | "operator";
+                                user_id: string;
+                            }>;
+                            removes?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.owner
+             */
+            applicationOwner: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.owner&version=v6 document }
+                 *
+                 * 转移应用所有者
+                 *
+                 * 将某个自建应用的所有者转移给另外一个人。
+                 *
+                 * 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用当前的所有者，否则无法操作成功。
+                 */
+                update: async (
+                    payload?: {
+                        data: { owner_id: string };
+                        params?: {
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/owner`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.management
+             */
+            applicationManagement: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.management&version=v6 document }
+                 *
+                 * 启停用应用
+                 *
+                 * 可停用或启用企业内已安装的自建应用与商店应用。
+                 */
+                update: async (
+                    payload?: {
+                        data?: { enable?: boolean };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * scope
+             */
+            scope: {
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=list&version=v6 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=scope&version=v6 document }
+                 *
+                 * 查询租户授权状态
+                 *
+                 * 调用该接口查询当前应用向租户申请授权的状态。
                  */
                 list: async (payload?: {}, options?: IRequestOptions) => {
                     const { headers, params, data, path } =
@@ -6078,125 +6101,18 @@ export default abstract class Client extends apaas {
                             throw e;
                         });
                 },
-            },
-        },
-        v7: {
-            /**
-             * app_avatar.upload
-             */
-            appAvatarUpload: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_avatar.upload&apiName=create&version=v7 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=apply&version=v6 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=application&resource=app_avatar.upload&version=v7 document }
-                 */
-                create: async (
-                    payload?: {
-                        data: { avatar: Buffer | fs.ReadStream };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { url?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/application/v7/app_avatar/upload`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-            },
-            /**
-             * application.ability
-             */
-            applicationAbility: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.ability&apiName=patch&version=v7 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=application&resource=scope&version=v6 document }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.ability&version=v7 document }
+                 * 向管理员申请授权
+                 *
+                 * 调用该接口以应用身份向租户管理员申请应用内需要审核的 API 权限。
+                 *
+                 * **注意**：同一租户下，其他员工在一个应用的同一个版本向管理员申请授权的次数不能超过 10 次。
                  */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            web_app?: {
-                                enable: boolean;
-                                pc_url?: string;
-                                pc_new_page_open_mode?: "new_tab" | "browser";
-                                mobile_url?: string;
-                            };
-                            bot?: {
-                                enable: boolean;
-                                message_card_callback_url?: string;
-                                i18ns?: Array<{
-                                    i18n_key:
-                                        | "zh_cn"
-                                        | "en_us"
-                                        | "ja_jp"
-                                        | "zh_hk"
-                                        | "zh_tw"
-                                        | "id_id"
-                                        | "ms_my"
-                                        | "de_de"
-                                        | "es_es"
-                                        | "fr_fr"
-                                        | "it_it"
-                                        | "pt_br"
-                                        | "vi_vn"
-                                        | "ru_ru"
-                                        | "th_th"
-                                        | "ko_kr";
-                                    get_started_desc: string;
-                                }>;
-                                bot_menu_enable?: boolean;
-                                bot_menus?: Array<{
-                                    menu_id?: string;
-                                    parent_menu_id?: string;
-                                    sort?: number;
-                                    default_name?: string;
-                                    i18n_name?: Record<string, string>;
-                                    redirect_link?: {
-                                        pc_url?: string;
-                                        mobile_url?: string;
-                                    };
-                                    event_key?: string;
-                                    icon_file_key?: string;
-                                    ud_icon?: {
-                                        token?: string;
-                                        color?: string;
-                                    };
-                                    menu_content_type?: number;
-                                }>;
-                                bot_menu_display_strategy?: number;
-                                allow_invited_to_group_by_other_app_switch_open?: boolean;
-                            };
-                        };
-                        path: { app_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
+                apply: async (payload?: {}, options?: IRequestOptions) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
@@ -6206,10 +6122,10 @@ export default abstract class Client extends apaas {
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v7/applications/:app_id/ability`,
+                                `${this.domain}/open-apis/application/v6/scopes/apply`,
                                 path
                             ),
-                            method: "PATCH",
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -6223,6 +6139,61 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
+             * app_badge
+             */
+            appBadge: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=set&project=application&resource=app_badge&version=v6 document }
+                 *
+                 * 更新应用红点
+                 *
+                 * 更新应用红点信息，用于工作台场景
+                 */
+                set: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            version: string;
+                            extra?: string;
+                            pc?: { web_app?: number; gadget?: number };
+                            mobile?: { web_app?: number; gadget?: number };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/app_badge/set`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+        v7: {
+            /**
              * application.base
              */
             applicationBase: {
@@ -6230,6 +6201,12 @@ export default abstract class Client extends apaas {
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.base&apiName=patch&version=v7 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.base&version=v7 document }
+                 *
+                 * 更新应用基础信息配置
+                 *
+                 * 通过该接口可更新自建应用的基础信息（名称、头像等），不传入的参数则保持不变，仅针对传入的参数则进行更新。如果应用正在审核中，则无法更新配置
+                 *
+                 * - 仅支持更新[开发者后台](https://open.feishu.cn/app)创建的自建应用，不包含通过机器人助手等其他渠道创建的自建应用;- 应用配置修改后需要[提交发布](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-publish/create)，并审核通过后才会在线上生效;;- 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用的所有者、管理员、开发者，否则无法操作成功;;- 若用 tenant_access_token 代表应用操作API，则仅可以操作应用自身
                  */
                 patch: async (
                     payload?: {
@@ -6289,6 +6266,121 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
+             * application.publish
+             */
+            applicationPublish: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.publish&apiName=create&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=application&resource=application.publish&version=v7 document }
+                 *
+                 * 提交发布自建应用
+                 *
+                 * 自建应用提交应用发布，如果当前自建应用没有待发布的版本，则会自动创建一个版本，如果有待发布的版本，则直接提交该版本。
+                 *
+                 * 仅支持发布[开发者后台](https://open.feishu.cn/app)创建的自建应用，不包含通过机器人助手等其他渠道创建的自建应用;;- 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用的所有者、管理员，否则无法操作成功;;- 若用 tenant_access_token 代表应用操作API，则仅可操作自身
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            mobile_default_ability?:
+                                | "gadget"
+                                | "web_app"
+                                | "bot";
+                            pc_default_ability?: "gadget" | "web_app" | "bot";
+                            remark: string;
+                            changelog: string;
+                            version?: string;
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    version_id?: string;
+                                    version?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/applications/:app_id/publish`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * app_avatar.upload
+             */
+            appAvatarUpload: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_avatar.upload&apiName=create&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=application&resource=app_avatar.upload&version=v7 document }
+                 *
+                 * 上传应用图标
+                 *
+                 * 上传应用图标
+                 */
+                create: async (
+                    payload?: {
+                        data: { avatar: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { url?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/app_avatar/upload`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
              * application.config
              */
             applicationConfig: {
@@ -6296,6 +6388,12 @@ export default abstract class Client extends apaas {
                  * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.config&apiName=patch&version=v7 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.config&version=v7 document }
+                 *
+                 * 更新应用开发配置
+                 *
+                 * 通过该接口可更新自建应用的应用的开发配置（通讯录、安全、可见性等），不传入的参数则保持不变，仅针对传入的参数则进行更新。如果应用正在审核中，则无法更新配置
+                 *
+                 * - 仅支持更新[开发者后台](https://open.feishu.cn/app)创建的自建应用，不包含通过机器人助手等其他渠道创建的自建应用;- 免审权限、事件订阅服务器地址、重定向URL、IP白名单、H5可信域名、协议名白名单修改后立即生效，其他应用配置修改后需要[提交发布](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-publish/create)，并审核通过后才会在线上生效。为确保所有配置均能在线上生效，建议修改后提交应用发布。;;- 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用的所有者、管理员、开发者，否则无法操作成功;;- 若用 tenant_access_token 代表应用操作API，则仅可以操作自身
                  */
                 patch: async (
                     payload?: {
@@ -6399,25 +6497,74 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * application.publish
+             * application.ability
              */
-            applicationPublish: {
+            applicationAbility: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.publish&apiName=create&version=v7 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.ability&apiName=patch&version=v7 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=application&resource=application.publish&version=v7 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.ability&version=v7 document }
+                 *
+                 * 更新应用能力
+                 *
+                 * 通过该接口可更新自建应用的应用能力（机器人、网页应用等）相关配置，不传入的参数则保持不变，仅针对传入的参数则进行更新。如果应用正在审核中，则无法更新配置
+                 *
+                 * - 仅支持更新[开发者后台](https://open.feishu.cn/app)创建的自建应用，不包含通过机器人助手等其他渠道创建的自建应用;- 应用配置修改后需要[提交发布](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-publish/create)，并审核通过后才会在线上生效;;- 若用 user_access_token 代表某个终端用户操作API，则需确保该用户为应用的所有者、管理员、开发者，否则无法操作成功;;- 若用 tenant_access_token 代表应用操作API，则仅可操作自身
                  */
-                create: async (
+                patch: async (
                     payload?: {
-                        data: {
-                            mobile_default_ability?:
-                                | "gadget"
-                                | "web_app"
-                                | "bot";
-                            pc_default_ability?: "gadget" | "web_app" | "bot";
-                            remark: string;
-                            changelog: string;
-                            version?: string;
+                        data?: {
+                            web_app?: {
+                                enable: boolean;
+                                pc_url?: string;
+                                pc_new_page_open_mode?: "new_tab" | "browser";
+                                mobile_url?: string;
+                            };
+                            bot?: {
+                                enable: boolean;
+                                message_card_callback_url?: string;
+                                i18ns?: Array<{
+                                    i18n_key:
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp"
+                                        | "zh_hk"
+                                        | "zh_tw"
+                                        | "id_id"
+                                        | "ms_my"
+                                        | "de_de"
+                                        | "es_es"
+                                        | "fr_fr"
+                                        | "it_it"
+                                        | "pt_br"
+                                        | "vi_vn"
+                                        | "ru_ru"
+                                        | "th_th"
+                                        | "ko_kr";
+                                    get_started_desc: string;
+                                }>;
+                                bot_menu_enable?: boolean;
+                                bot_menus?: Array<{
+                                    menu_id?: string;
+                                    parent_menu_id?: string;
+                                    sort?: number;
+                                    default_name?: string;
+                                    i18n_name?: Record<string, string>;
+                                    redirect_link?: {
+                                        pc_url?: string;
+                                        mobile_url?: string;
+                                    };
+                                    event_key?: string;
+                                    icon_file_key?: string;
+                                    ud_icon?: {
+                                        token?: string;
+                                        color?: string;
+                                    };
+                                    menu_content_type?: number;
+                                }>;
+                                bot_menu_display_strategy?: number;
+                                allow_invited_to_group_by_other_app_switch_open?: boolean;
+                            };
                         };
                         path: { app_id: string };
                     },
@@ -6429,20 +6576,13 @@ export default abstract class Client extends apaas {
                     return this.httpInstance
                         .request<
                             any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    version_id?: string;
-                                    version?: string;
-                                };
-                            }
+                            { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/application/v7/applications/:app_id/publish`,
+                                `${this.domain}/open-apis/application/v7/applications/:app_id/ability`,
                                 path
                             ),
-                            method: "POST",
+                            method: "PATCH",
                             data,
                             params,
                             headers,

@@ -29,28 +29,26 @@ export default abstract class Client extends performance {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 个人设置
-     */
+         
+         */
     personal_settings = {
         /**
-         * 系统状态
+         * system_status
          */
         systemStatus: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_close&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/batch_close document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=personal_settings&resource=system_status&version=v1 document }
              *
-             * 批量关闭系统状态
+             * 删除系统状态
              *
-             * 批量关闭用户系统状态可用
+             * 删除租户维度的系统状态。
+             *
+             * 注意事项：;- 操作的数据为租户维度数据，请小心操作。 ;- 删除系统状态后，并不影响正在使用该状态用户下系统状态的客户端展示。
              */
-            batchClose: async (
+            delete: async (
                 payload?: {
-                    data: { user_list: Array<string> };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
                     path?: { system_status_id?: string };
                 },
                 options?: IRequestOptions
@@ -59,91 +57,12 @@ export default abstract class Client extends performance {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                result_list: Array<{
-                                    user_id?: string;
-                                    result?:
-                                        | "success"
-                                        | "fail"
-                                        | "invisible_user_id"
-                                        | "invalid_user_id"
-                                        | "resign_user_id";
-                                }>;
-                            };
-                        }
-                    >({
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_close`,
+                            `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id`,
                             path
                         ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_open&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/batch_open document }
-             *
-             * 批量开启系统状态
-             *
-             * 批量开启用户系统状态可用
-             */
-            batchOpen: async (
-                payload?: {
-                    data: {
-                        user_list: Array<{ user_id: string; end_time: number }>;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path?: { system_status_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                result_list: Array<{
-                                    user_id: string;
-                                    end_time: number;
-                                    result?:
-                                        | "success_show"
-                                        | "success_user_close_syn"
-                                        | "success_user_in_higher_priority_system_status"
-                                        | "fail"
-                                        | "invisible_user_id"
-                                        | "invalid_user_id"
-                                        | "resign_user_id";
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_open`,
-                            path
-                        ),
-                        method: "POST",
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -158,7 +77,7 @@ export default abstract class Client extends performance {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/create document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=personal_settings&resource=system_status&version=v1 document }
              *
              * 创建系统状态
              *
@@ -315,44 +234,6 @@ export default abstract class Client extends performance {
                         throw e;
                     });
             },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/delete document }
-             *
-             * 删除系统状态
-             *
-             * 删除租户维度的系统状态。
-             *
-             * 注意事项：;- 操作的数据为租户维度数据，请小心操作。 ;- 删除系统状态后，并不影响正在使用该状态用户下系统状态的客户端展示。
-             */
-            delete: async (
-                payload?: {
-                    path?: { system_status_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
             listWithIterator: async (
                 payload?: {
                     params?: { page_size?: number; page_token?: string };
@@ -497,11 +378,11 @@ export default abstract class Client extends performance {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/list document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=personal_settings&resource=system_status&version=v1 document }
              *
              * 获取系统状态
              *
-             * 获取租户下所有系统状态
+             * 获取租户下所有系统状态。
              */
             list: async (
                 payload?: {
@@ -599,15 +480,70 @@ export default abstract class Client extends performance {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_close&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_close&project=personal_settings&resource=system_status&version=v1 document }
+             *
+             * 批量关闭系统状态
+             *
+             * 批量关闭用户系统状态可用。
+             */
+            batchClose: async (
+                payload?: {
+                    data: { user_list: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { system_status_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result_list: Array<{
+                                    user_id?: string;
+                                    result?:
+                                        | "success"
+                                        | "fail"
+                                        | "invisible_user_id"
+                                        | "invalid_user_id"
+                                        | "resign_user_id";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_close`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/patch document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=personal_settings&resource=system_status&version=v1 document }
              *
              * 修改系统状态
              *
              * 修改租户维度系统状态。
-             *
-             * 注意事项：;- 操作的数据为租户维度数据，请小心操作。 ;- 修改系统状态后，并不影响正在使用的用户。该用户的系统状态可用时间到期后，再次被开启可用的时候，用户客户端才会同步到更新后的系统状态。
              */
             patch: async (
                 payload?: {
@@ -769,27 +705,87 @@ export default abstract class Client extends performance {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_open&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_open&project=personal_settings&resource=system_status&version=v1 document }
+             *
+             * 批量开启系统状态
+             *
+             * 批量开启用户系统状态可用。
+             */
+            batchOpen: async (
+                payload?: {
+                    data: {
+                        user_list: Array<{ user_id: string; end_time: number }>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { system_status_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result_list: Array<{
+                                    user_id: string;
+                                    end_time: number;
+                                    result?:
+                                        | "success_show"
+                                        | "success_user_close_syn"
+                                        | "success_user_in_higher_priority_system_status"
+                                        | "fail"
+                                        | "invisible_user_id"
+                                        | "invalid_user_id"
+                                        | "resign_user_id";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_open`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         v1: {
             /**
-             * 系统状态
+             * system_status
              */
             systemStatus: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_close&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/batch_close document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=personal_settings&resource=system_status&version=v1 document }
                  *
-                 * 批量关闭系统状态
+                 * 删除系统状态
                  *
-                 * 批量关闭用户系统状态可用
+                 * 删除租户维度的系统状态。
+                 *
+                 * 注意事项：;- 操作的数据为租户维度数据，请小心操作。 ;- 删除系统状态后，并不影响正在使用该状态用户下系统状态的客户端展示。
                  */
-                batchClose: async (
+                delete: async (
                     payload?: {
-                        data: { user_list: Array<string> };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
                         path?: { system_status_id?: string };
                     },
                     options?: IRequestOptions
@@ -800,92 +796,13 @@ export default abstract class Client extends performance {
                     return this.httpInstance
                         .request<
                             any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    result_list: Array<{
-                                        user_id?: string;
-                                        result?:
-                                            | "success"
-                                            | "fail"
-                                            | "invisible_user_id"
-                                            | "invalid_user_id"
-                                            | "resign_user_id";
-                                    }>;
-                                };
-                            }
+                            { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_close`,
+                                `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id`,
                                 path
                             ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_open&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/batch_open document }
-                 *
-                 * 批量开启系统状态
-                 *
-                 * 批量开启用户系统状态可用
-                 */
-                batchOpen: async (
-                    payload?: {
-                        data: {
-                            user_list: Array<{
-                                user_id: string;
-                                end_time: number;
-                            }>;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path?: { system_status_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    result_list: Array<{
-                                        user_id: string;
-                                        end_time: number;
-                                        result?:
-                                            | "success_show"
-                                            | "success_user_close_syn"
-                                            | "success_user_in_higher_priority_system_status"
-                                            | "fail"
-                                            | "invisible_user_id"
-                                            | "invalid_user_id"
-                                            | "resign_user_id";
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_open`,
-                                path
-                            ),
-                            method: "POST",
+                            method: "DELETE",
                             data,
                             params,
                             headers,
@@ -900,7 +817,7 @@ export default abstract class Client extends performance {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/create document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=personal_settings&resource=system_status&version=v1 document }
                  *
                  * 创建系统状态
                  *
@@ -1046,47 +963,6 @@ export default abstract class Client extends performance {
                                 path
                             ),
                             method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/delete document }
-                 *
-                 * 删除系统状态
-                 *
-                 * 删除租户维度的系统状态。
-                 *
-                 * 注意事项：;- 操作的数据为租户维度数据，请小心操作。 ;- 删除系统状态后，并不影响正在使用该状态用户下系统状态的客户端展示。
-                 */
-                delete: async (
-                    payload?: {
-                        path?: { system_status_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id`,
-                                path
-                            ),
-                            method: "DELETE",
                             data,
                             params,
                             headers,
@@ -1244,11 +1120,11 @@ export default abstract class Client extends performance {
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/list document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=personal_settings&resource=system_status&version=v1 document }
                  *
                  * 获取系统状态
                  *
-                 * 获取租户下所有系统状态
+                 * 获取租户下所有系统状态。
                  */
                 list: async (
                     payload?: {
@@ -1346,15 +1222,70 @@ export default abstract class Client extends performance {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_close&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_close&project=personal_settings&resource=system_status&version=v1 document }
+                 *
+                 * 批量关闭系统状态
+                 *
+                 * 批量关闭用户系统状态可用。
+                 */
+                batchClose: async (
+                    payload?: {
+                        data: { user_list: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path?: { system_status_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result_list: Array<{
+                                        user_id?: string;
+                                        result?:
+                                            | "success"
+                                            | "fail"
+                                            | "invisible_user_id"
+                                            | "invalid_user_id"
+                                            | "resign_user_id";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_close`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/personal_settings-v1/system_status/patch document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=personal_settings&resource=system_status&version=v1 document }
                  *
                  * 修改系统状态
                  *
                  * 修改租户维度系统状态。
-                 *
-                 * 注意事项：;- 操作的数据为租户维度数据，请小心操作。 ;- 修改系统状态后，并不影响正在使用的用户。该用户的系统状态可用时间到期后，再次被开启可用的时候，用户客户端才会同步到更新后的系统状态。
                  */
                 patch: async (
                     payload?: {
@@ -1505,6 +1436,71 @@ export default abstract class Client extends performance {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=personal_settings&resource=system_status&apiName=batch_open&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_open&project=personal_settings&resource=system_status&version=v1 document }
+                 *
+                 * 批量开启系统状态
+                 *
+                 * 批量开启用户系统状态可用。
+                 */
+                batchOpen: async (
+                    payload?: {
+                        data: {
+                            user_list: Array<{
+                                user_id: string;
+                                end_time: number;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path?: { system_status_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result_list: Array<{
+                                        user_id: string;
+                                        end_time: number;
+                                        result?:
+                                            | "success_show"
+                                            | "success_user_close_syn"
+                                            | "success_user_in_higher_priority_system_status"
+                                            | "fail"
+                                            | "invisible_user_id"
+                                            | "invalid_user_id"
+                                            | "resign_user_id";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/personal_settings/v1/system_statuses/:system_status_id/batch_open`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
