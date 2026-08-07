@@ -86,53 +86,6 @@ export default abstract class Client extends docs_tool {
                         });
                 },
             },
-            /**
-             * global_doc
-             */
-            globalDoc: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=docs&resource=global_doc&apiName=detect&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=detect&project=docs&resource=global_doc&version=v1 document }
-                 *
-                 * 文档英语化识别
-                 */
-                detect: async (
-                    payload?: {
-                        data: {
-                            detection_type: "offline" | "evaluation";
-                            source_file_token: string;
-                            target_file_token?: string;
-                            target_file_type?: "base" | "sheet";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/docs/v1/global_doc/detect`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
         },
     };
 }

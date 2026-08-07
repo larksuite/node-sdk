@@ -34,229 +34,6 @@ export default abstract class Client extends comment_sdk {
     compensation = {
         v1: {
             /**
-             * archive
-             */
-            archive: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=archive&apiName=search&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=compensation&resource=archive&version=v1 document }
-                 */
-                search: async (
-                    payload?: {
-                        data: {
-                            user_id_list: Array<string>;
-                            start_date?: string;
-                            end_date?: string;
-                        };
-                        params: {
-                            user_id_type: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        archive_id: string;
-                                        archive_tid: string;
-                                        user_id: string;
-                                        plan?: {
-                                            plan_id: string;
-                                            plan_tid: string;
-                                            name: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                            };
-                                            people_id?: number;
-                                        };
-                                        effective_date: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/archives/search`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=archive&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=compensation&resource=archive&version=v1 document }
-                 *
-                 * 创建薪资档案
-                 *
-                 * - 该接口适用于员工入职定薪、调薪或者更正档案场景，通过创建调薪任务的方式，为员工生成对应薪资档案数据。;- 当员工在调薪生效日期存在档案数据时，则是对该档案进行更正操作。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            unique_id: string;
-                            operator_id?: string;
-                            user_id: string;
-                            effective_time: string;
-                            currency_id: string;
-                            plan_id: string;
-                            plan_tid: string;
-                            change_reason_id: string;
-                            item_value_lists: Array<{
-                                item_id: string;
-                                item_value: string;
-                                item_value_regular?: string;
-                            }>;
-                            description?: string;
-                            edit_remark?: string;
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    unique_id?: string;
-                                    archive_tid?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/archives`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=archive&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=compensation&resource=archive&version=v1 document }
-                 *
-                 * 批量查询员工薪资档案
-                 *
-                 * 批量查询员工薪资档案
-                 *
-                 * 该接口会按照应用拥有的「薪资档案资源」的权限范围返回数据，请确定在「开发者后台 - 权限管理 - 数据权限」中已申请「薪资档案资源」权限范围
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            user_id_list: Array<string>;
-                            tid_list?: Array<string>;
-                            effective_start_date?: string;
-                            effective_end_date?: string;
-                        };
-                        params: {
-                            page_size: number;
-                            page_token?: string;
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items: Array<{
-                                        user_id: string;
-                                        id: string;
-                                        tid: string;
-                                        plan_id: string;
-                                        plan_tid: string;
-                                        currency_id?: string;
-                                        change_reason_id: string;
-                                        change_description: string;
-                                        effective_date: string;
-                                        expiration_date?: string;
-                                        salary_level_id?: string;
-                                        created_time?: string;
-                                        updated_time?: string;
-                                        archive_items: Array<{
-                                            item_id: string;
-                                            item_result: string;
-                                            item_result_regular?: string;
-                                        }>;
-                                        archive_indicators: Array<{
-                                            indicator_id: string;
-                                            indicator_result: string;
-                                            indicator_result_regular?: string;
-                                        }>;
-                                    }>;
-                                    page_token?: string;
-                                    has_more: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/archives/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
              * indicator
              */
             indicator: {
@@ -1651,6 +1428,167 @@ export default abstract class Client extends comment_sdk {
                 },
             },
             /**
+             * archive
+             */
+            archive: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=archive&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=compensation&resource=archive&version=v1 document }
+                 *
+                 * 创建薪资档案
+                 *
+                 * - 该接口适用于员工入职定薪、调薪或者更正档案场景，通过创建调薪任务的方式，为员工生成对应薪资档案数据。;- 当员工在调薪生效日期存在档案数据时，则是对该档案进行更正操作。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            unique_id: string;
+                            operator_id?: string;
+                            user_id: string;
+                            effective_time: string;
+                            currency_id: string;
+                            plan_id: string;
+                            plan_tid: string;
+                            change_reason_id: string;
+                            item_value_lists: Array<{
+                                item_id: string;
+                                item_value: string;
+                                item_value_regular?: string;
+                            }>;
+                            description?: string;
+                            edit_remark?: string;
+                        };
+                        params: {
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    unique_id?: string;
+                                    archive_tid?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/archives`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=archive&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=compensation&resource=archive&version=v1 document }
+                 *
+                 * 批量查询员工薪资档案
+                 *
+                 * 批量查询员工薪资档案
+                 *
+                 * 该接口会按照应用拥有的「薪资档案资源」的权限范围返回数据，请确定在「开发者后台 - 权限管理 - 数据权限」中已申请「薪资档案资源」权限范围
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            user_id_list: Array<string>;
+                            tid_list?: Array<string>;
+                            effective_start_date?: string;
+                            effective_end_date?: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        user_id: string;
+                                        id: string;
+                                        tid: string;
+                                        plan_id: string;
+                                        plan_tid: string;
+                                        currency_id?: string;
+                                        change_reason_id: string;
+                                        change_description: string;
+                                        effective_date: string;
+                                        expiration_date?: string;
+                                        salary_level_id?: string;
+                                        created_time?: string;
+                                        updated_time?: string;
+                                        archive_items: Array<{
+                                            item_id: string;
+                                            item_result: string;
+                                            item_result_regular?: string;
+                                        }>;
+                                        archive_indicators: Array<{
+                                            indicator_id: string;
+                                            indicator_result: string;
+                                            indicator_result_regular?: string;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/archives/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * recurring_payment
              */
             recurringPayment: {
@@ -2113,375 +2051,6 @@ export default abstract class Client extends comment_sdk {
                 },
             },
             /**
-             * grade
-             */
-            grade: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=grade&apiName=withdraw_version&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=withdraw_version&project=compensation&resource=grade&version=v1 document }
-                 *
-                 * 撤销薪资标准明细版本
-                 *
-                 * 调用该接口即可对薪资标准明细的某个版本进行撤销操作，撤销薪资标准明细版本后不支持查询
-                 *
-                 * 薪资标准明细版本撤销后，页面将无法查询，请谨慎操作！
-                 */
-                withdrawVersion: async (
-                    payload?: {
-                        data: {
-                            id: string;
-                            tid: string;
-                            reason: string;
-                            operator_id?: string;
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/grade/withdraw_version`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=grade&apiName=create_version&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_version&project=compensation&resource=grade&version=v1 document }
-                 *
-                 * 创建薪资标准明细版本
-                 *
-                 * 调用该接口，可针对薪资标准下面的明细创建新版本数据
-                 */
-                createVersion: async (
-                    payload?: {
-                        data: {
-                            id: string;
-                            currency_id?: string;
-                            effective_time: string;
-                            standard_kind: "1" | "2";
-                            grade_standard_values: Array<{
-                                standard_value?: string;
-                                reference_object?: {
-                                    id?: string;
-                                    api_name?: "cpst_item" | "cpst_indicator";
-                                };
-                                upper_limit?: string;
-                                lower_limit?: string;
-                            }>;
-                            dimensions: Array<{
-                                api_name?:
-                                    | "company"
-                                    | "department"
-                                    | "job_family"
-                                    | "job_level"
-                                    | "job_grade"
-                                    | "job"
-                                    | "work_location"
-                                    | "workforce_type"
-                                    | "recruitment_type"
-                                    | "cpst_plan"
-                                    | "salary_level"
-                                    | "cpst_change_reason"
-                                    | "indicator"
-                                    | "score_grade"
-                                    | "custom_org_01"
-                                    | "custom_org_02"
-                                    | "custom_org_03"
-                                    | "custom_org_04"
-                                    | "custom_org_05"
-                                    | "custom_org_06"
-                                    | "custom_org_07"
-                                    | "custom_org_08"
-                                    | "custom_org_09"
-                                    | "custom_org_10";
-                                contain_sub?: boolean;
-                                values?: Array<string>;
-                            }>;
-                            description?: { zh_cn?: string; en_us?: string };
-                            operator_id?: string;
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { id?: string; tid?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/grade/create_version`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=grade&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=compensation&resource=grade&version=v1 document }
-                 *
-                 * 获取薪资标准明细列表
-                 *
-                 * - 调用此接口来获取薪资标准明细信息; - 请求时，可选传递薪资标准表ID、关键词，等筛选条件，用于获取薪资标准表; - 此接口将返回所有的薪资标准表信息，包括适用人员范围、引用对象、划分维度和冲突信息等
-                 */
-                query: async (
-                    payload?: {
-                        data: {
-                            standard_id: string;
-                            effective_time?: string;
-                            serial_number?: string;
-                            standard_kind?: number;
-                            dimensions?: Array<{
-                                api_name?:
-                                    | "company"
-                                    | "department"
-                                    | "job_family"
-                                    | "job_level"
-                                    | "job_grade"
-                                    | "job"
-                                    | "work_location"
-                                    | "workforce_type"
-                                    | "recruitment_type"
-                                    | "cpst_plan"
-                                    | "salary_level"
-                                    | "cpst_change_reason"
-                                    | "indicator"
-                                    | "score_grade"
-                                    | "custom_org_01"
-                                    | "custom_org_02"
-                                    | "custom_org_03"
-                                    | "custom_org_04"
-                                    | "custom_org_05"
-                                    | "custom_org_06"
-                                    | "custom_org_07"
-                                    | "custom_org_08"
-                                    | "custom_org_09"
-                                    | "custom_org_10";
-                                contain_sub?: boolean;
-                                values?: Array<string>;
-                            }>;
-                            page_no?: number;
-                            page_size?: number;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    grades?: Array<{
-                                        id?: string;
-                                        tid?: string;
-                                        serial_number?: string;
-                                        grade_standard_values?: Array<{
-                                            standard_value?: string;
-                                            reference_object?: {
-                                                id?: string;
-                                                api_name?:
-                                                    | "cpst_item"
-                                                    | "cpst_indicator";
-                                            };
-                                            upper_limit?: string;
-                                            lower_limit?: string;
-                                        }>;
-                                        dimensions?: Array<{
-                                            api_name?:
-                                                | "company"
-                                                | "department"
-                                                | "job_family"
-                                                | "job_level"
-                                                | "job_grade"
-                                                | "job"
-                                                | "work_location"
-                                                | "workforce_type"
-                                                | "recruitment_type"
-                                                | "cpst_plan"
-                                                | "salary_level"
-                                                | "cpst_change_reason"
-                                                | "indicator"
-                                                | "score_grade"
-                                                | "custom_org_01"
-                                                | "custom_org_02"
-                                                | "custom_org_03"
-                                                | "custom_org_04"
-                                                | "custom_org_05"
-                                                | "custom_org_06"
-                                                | "custom_org_07"
-                                                | "custom_org_08"
-                                                | "custom_org_09"
-                                                | "custom_org_10";
-                                            contain_sub?: boolean;
-                                            values?: Array<string>;
-                                        }>;
-                                        currency?: {
-                                            code?: string;
-                                            currency_id?: string;
-                                        };
-                                        description?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                        };
-                                        effective_time?: string;
-                                        standard_grade_version?: string;
-                                        created_at?: string;
-                                        updated_at?: string;
-                                        standard_id?: string;
-                                        standard_kind?: number;
-                                    }>;
-                                    page_no?: number;
-                                    page_size?: number;
-                                    total?: number;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/grade/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * salary_level_type
-             */
-            salaryLevelType: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=salary_level_type&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=compensation&resource=salary_level_type&version=v1 document }
-                 *
-                 * 获取薪级薪等树状筛选数据
-                 *
-                 * 调用该接口可获取所有薪级薪等的树状筛选类型数据
-                 */
-                query: async (
-                    payload?: {
-                        data?: { status?: boolean };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    salary_level_types?: Array<{
-                                        id?: string;
-                                        name?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                        };
-                                        status?: boolean;
-                                        salary_levels?: Array<{
-                                            id?: string;
-                                            name?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                            };
-                                            status?: boolean;
-                                            salary_grades?: Array<{
-                                                id?: string;
-                                                name?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                };
-                                                status?: boolean;
-                                            }>;
-                                        }>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/salary_level_type/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
              * social_archive
              */
             socialArchive: {
@@ -2720,390 +2289,6 @@ export default abstract class Client extends comment_sdk {
                             throw e;
                         });
                 },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=social_archive_adjust_record&apiName=query_by_operate_status&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_by_operate_status&project=compensation&resource=social_archive_adjust_record&version=v1 document }
-                 *
-                 * 根据操作状态查询社保增减员记录
-                 *
-                 * 根据用户传入的人员信息和操作状态，返回对应的增减员社保记录
-                 */
-                queryByOperateStatus: async (
-                    payload?: {
-                        data: {
-                            user_id: string;
-                            record_type: "increase" | "attrition";
-                            operate_status?:
-                                | "initialization"
-                                | "confirmed"
-                                | "revoke";
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    records?: Array<{
-                                        user_id?: string;
-                                        record_type?: "increase" | "attrition";
-                                        details?: Array<{
-                                            description: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                            };
-                                            insurance_type:
-                                                | "social_insurance"
-                                                | "provident_fund";
-                                            insurance_status:
-                                                | "contribution"
-                                                | "not_contribution"
-                                                | "stopped_contribution";
-                                            id?: string;
-                                            tid?: string;
-                                            plan_id?: string;
-                                            plan_tid?: string;
-                                            location_id?: string;
-                                            company_id?: string;
-                                            account_type?:
-                                                | "associated_company"
-                                                | "supplier";
-                                            insurance_account?: string;
-                                            base_salary?: string;
-                                            insurance_details?: Array<{
-                                                insurance_id: string;
-                                                company_deduction: string;
-                                                company_setting: {
-                                                    lower_limit: string;
-                                                    upper_limit: string;
-                                                    payment_ratio: string;
-                                                    payment_rounding_rule:
-                                                        | "rounding"
-                                                        | "round_up"
-                                                        | "round_down";
-                                                    payment_decimals: number;
-                                                    fixed_payment: string;
-                                                };
-                                                personal_deduction: string;
-                                                personal_setting: {
-                                                    lower_limit: string;
-                                                    upper_limit: string;
-                                                    payment_ratio: string;
-                                                    payment_rounding_rule:
-                                                        | "rounding"
-                                                        | "round_up"
-                                                        | "round_down";
-                                                    payment_decimals: number;
-                                                    fixed_payment: string;
-                                                };
-                                                payment_frequency:
-                                                    | "annually"
-                                                    | "monthly"
-                                                    | "quarterly";
-                                                payment_months: Array<number>;
-                                            }>;
-                                            effective_date?: string;
-                                        }>;
-                                        record_id?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/social_archive_adjust_record/query_by_operate_status`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=social_archive_adjust_record&apiName=query_by_record_id&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_by_record_id&project=compensation&resource=social_archive_adjust_record&version=v1 document }
-                 *
-                 * 根据增减员记录ID查询社保增减员记录
-                 *
-                 * 根据用户传入的增减员记录ID和参保类型，获取社保增减员记录信息
-                 */
-                queryByRecordId: async (
-                    payload?: {
-                        data: {
-                            record_id: string;
-                            insurance_types: Array<
-                                "social_insurance" | "provident_fund"
-                            >;
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    records?: Array<{
-                                        user_id?: string;
-                                        record_type?: "increase" | "attrition";
-                                        details?: Array<{
-                                            description: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                            };
-                                            insurance_type:
-                                                | "social_insurance"
-                                                | "provident_fund";
-                                            insurance_status:
-                                                | "contribution"
-                                                | "not_contribution"
-                                                | "stopped_contribution";
-                                            id?: string;
-                                            tid?: string;
-                                            plan_id?: string;
-                                            plan_tid?: string;
-                                            location_id?: string;
-                                            company_id?: string;
-                                            account_type?:
-                                                | "associated_company"
-                                                | "supplier";
-                                            insurance_account?: string;
-                                            base_salary?: string;
-                                            insurance_details?: Array<{
-                                                insurance_id: string;
-                                                company_deduction: string;
-                                                company_setting: {
-                                                    lower_limit: string;
-                                                    upper_limit: string;
-                                                    payment_ratio: string;
-                                                    payment_rounding_rule:
-                                                        | "rounding"
-                                                        | "round_up"
-                                                        | "round_down";
-                                                    payment_decimals: number;
-                                                    fixed_payment: string;
-                                                };
-                                                personal_deduction: string;
-                                                personal_setting: {
-                                                    lower_limit: string;
-                                                    upper_limit: string;
-                                                    payment_ratio: string;
-                                                    payment_rounding_rule:
-                                                        | "rounding"
-                                                        | "round_up"
-                                                        | "round_down";
-                                                    payment_decimals: number;
-                                                    fixed_payment: string;
-                                                };
-                                                payment_frequency:
-                                                    | "annually"
-                                                    | "monthly"
-                                                    | "quarterly";
-                                                payment_months: Array<number>;
-                                            }>;
-                                            effective_date?: string;
-                                        }>;
-                                        record_id?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/social_archive_adjust_record/query_by_record_id`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * standard
-             */
-            standard: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=standard&apiName=query&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=compensation&resource=standard&version=v1 document }
-                 *
-                 * 获取薪资标准列表数据
-                 *
-                 * - 调用此接口来获取薪资标准表信息; - 请求时，可选传递薪资标准表ID、关联对象等筛选条件，用于获取薪资标准表; - 此接口将返回所有的薪资标准表信息，包括适用人员范围、引用对象和划分维度等信息
-                 */
-                query: async (
-                    payload?: {
-                        data?: {
-                            page_no?: number;
-                            page_size?: number;
-                            standard_ids?: Array<string>;
-                            reference_item_ids?: Array<string>;
-                            reference_indicator_ids?: Array<string>;
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    page_no?: number;
-                                    page_size?: number;
-                                    total?: number;
-                                    has_more?: boolean;
-                                    standards?: Array<{
-                                        id?: string;
-                                        name?: {
-                                            zh_cn?: string;
-                                            en_us?: string;
-                                        };
-                                        updated_by?: string;
-                                        updated_at?: string;
-                                        created_by?: string;
-                                        created_at?: string;
-                                        automatic_backfill_standard_value?: boolean;
-                                        scope?: {
-                                            all?: boolean;
-                                            define_expression?: string;
-                                            expressions?: Array<{
-                                                api_name?:
-                                                    | "company"
-                                                    | "department"
-                                                    | "job_family"
-                                                    | "job_level"
-                                                    | "job_grade"
-                                                    | "job"
-                                                    | "work_location"
-                                                    | "workforce_type"
-                                                    | "recruitment_type"
-                                                    | "cpst_plan"
-                                                    | "salary_level"
-                                                    | "cpst_change_reason"
-                                                    | "custom_org_01"
-                                                    | "custom_org_02"
-                                                    | "custom_org_03"
-                                                    | "custom_org_04"
-                                                    | "custom_org_05"
-                                                    | "custom_org_06"
-                                                    | "custom_org_07"
-                                                    | "custom_org_08"
-                                                    | "custom_org_09"
-                                                    | "custom_org_10";
-                                                operator_type?: number;
-                                                contain_sub?: boolean;
-                                                values?: Array<string>;
-                                                scope_name?: {
-                                                    zh_cn?: string;
-                                                    en_us?: string;
-                                                };
-                                            }>;
-                                        };
-                                        dimensions?: Array<{
-                                            api_name?:
-                                                | "company"
-                                                | "department"
-                                                | "job_family"
-                                                | "job_level"
-                                                | "job_grade"
-                                                | "job"
-                                                | "work_location"
-                                                | "workforce_type"
-                                                | "recruitment_type"
-                                                | "cpst_plan"
-                                                | "salary_level"
-                                                | "cpst_change_reason"
-                                                | "indicator"
-                                                | "score_grade"
-                                                | "custom_org_01"
-                                                | "custom_org_02"
-                                                | "custom_org_03"
-                                                | "custom_org_04"
-                                                | "custom_org_05";
-                                            label?: {
-                                                zh_cn?: string;
-                                                en_us?: string;
-                                            };
-                                        }>;
-                                        reference_objects?: Array<{
-                                            id?: string;
-                                            api_name?:
-                                                | "cpst_item"
-                                                | "cpst_indicator";
-                                        }>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/standard/query`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
             },
             /**
              * lump_sum_payment
@@ -3141,16 +2326,95 @@ export default abstract class Client extends comment_sdk {
                                         unique_id?: string;
                                         code?: number;
                                         message?: string;
-                                        detail_results?: Array<{
-                                            detail_id?: string;
-                                            issuance_index?: number;
-                                        }>;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_remove`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 *
+                 * 批量更正一次性支付记录
+                 *
+                 * 通过传入的一次性支付记录数据，校验并更正一次性支付记录，并返回更正失败原因
+                 *
+                 * 本接口支持部分成功，失败部分详细报错信息参考 `data.operate_results.code`。;- 当 `data.operate_results.code` 存在非 0 时，响应体 code 仍可能返回 0;- 仅当出现非预期异常时，响应体 code 才会为非 0
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data?: {
+                            records?: Array<{
+                                id?: string;
+                                total_amount: string;
+                                binding_period?: number;
+                                currency_id: string;
+                                issuance_frequency: number;
+                                remark?: string;
+                                reference_period_start_date?: string;
+                                reference_period_end_date?: string;
+                                details: Array<{
+                                    id?: string;
+                                    issuance_amount?: string;
+                                    issuance_status?:
+                                        | "to_be_issued"
+                                        | "not_issued";
+                                    issuance_way?:
+                                        | "with_salary"
+                                        | "with_cash"
+                                        | "with_year_end_bonus";
+                                    issuance_time?: string;
+                                    belong_time?: string;
+                                    issuance_country_region_id?: string;
+                                    issuance_pay_group_id?: string;
+                                    detail_reference_period_start_date?: string;
+                                    detail_reference_period_end_date?: string;
+                                    is_not_issued_due_to_offboardings?: number;
+                                }>;
+                                binding_period_decimal?: string;
+                                operation_source?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    operate_results?: Array<{
+                                        id?: string;
+                                        unique_id?: string;
+                                        code?: number;
+                                        message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_update`,
                                 path
                             ),
                             method: "POST",
@@ -3307,7 +2571,7 @@ export default abstract class Client extends comment_sdk {
                                                             issuance_pay_group_id?: string;
                                                             detail_reference_period_start_date?: string;
                                                             detail_reference_period_end_date?: string;
-                                                            is_not_issued_due_to_offboarding?: number;
+                                                            is_not_issued_due_to_offboardings?: number;
                                                         }>;
                                                         binding_period_decimal?: string;
                                                     }>;
@@ -3433,7 +2697,7 @@ export default abstract class Client extends comment_sdk {
                                             issuance_pay_group_id?: string;
                                             detail_reference_period_start_date?: string;
                                             detail_reference_period_end_date?: string;
-                                            is_not_issued_due_to_offboarding?: number;
+                                            is_not_issued_due_to_offboardings?: number;
                                         }>;
                                         binding_period_decimal?: string;
                                     }>;
@@ -3442,6 +2706,94 @@ export default abstract class Client extends comment_sdk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/compensation/v1/lump_sum_payment/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 *
+                 * 批量创建一次性支付记录
+                 *
+                 * 通过传入的一次性支付记录数据，校验并创建一次性支付记录，并返回创建失败原因或创建成功数据的ID
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            records?: Array<{
+                                unique_id: string;
+                                user_id: string;
+                                total_amount: string;
+                                binding_period: number;
+                                currency_id: string;
+                                issuance_frequency: number;
+                                item_id: string;
+                                reference_period_start_date?: string;
+                                reference_period_end_date?: string;
+                                details: Array<{
+                                    issuance_amount: string;
+                                    issuance_status:
+                                        | "to_be_issued"
+                                        | "not_issued";
+                                    issuance_way:
+                                        | "with_salary"
+                                        | "with_cash"
+                                        | "with_year_end_bonus";
+                                    issuance_time: string;
+                                    belong_time: string;
+                                    issuance_country_region_id?: string;
+                                    issuance_pay_group_id?: string;
+                                    detail_reference_period_start_date?: string;
+                                    detail_reference_period_end_date?: string;
+                                    is_not_issued_due_to_offboardings?: number;
+                                }>;
+                                remark?: string;
+                                binding_period_decimal?: string;
+                            }>;
+                        };
+                        params: {
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    operate_results?: Array<{
+                                        id?: string;
+                                        unique_id?: string;
+                                        code?: number;
+                                        message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_create`,
                                 path
                             ),
                             method: "POST",
@@ -3585,7 +2937,7 @@ export default abstract class Client extends comment_sdk {
                                                         issuance_pay_group_id?: string;
                                                         detail_reference_period_start_date?: string;
                                                         detail_reference_period_end_date?: string;
-                                                        is_not_issued_due_to_offboarding?: number;
+                                                        is_not_issued_due_to_offboardings?: number;
                                                     }>;
                                                 };
                                             }
@@ -3696,193 +3048,13 @@ export default abstract class Client extends comment_sdk {
                                         issuance_pay_group_id?: string;
                                         detail_reference_period_start_date?: string;
                                         detail_reference_period_end_date?: string;
-                                        is_not_issued_due_to_offboarding?: number;
+                                        is_not_issued_due_to_offboardings?: number;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/compensation/v1/lump_sum_payment/query_detail`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=compensation&resource=lump_sum_payment&version=v1 document }
-                 *
-                 * 批量创建一次性支付记录
-                 *
-                 * 通过传入的一次性支付记录数据，校验并创建一次性支付记录，并返回创建失败原因或创建成功数据的ID
-                 */
-                batchCreate: async (
-                    payload?: {
-                        data?: {
-                            records?: Array<{
-                                unique_id: string;
-                                user_id: string;
-                                total_amount: string;
-                                binding_period: number;
-                                currency_id: string;
-                                issuance_frequency: number;
-                                item_id: string;
-                                reference_period_start_date?: string;
-                                reference_period_end_date?: string;
-                                details: Array<{
-                                    issuance_amount: string;
-                                    issuance_status:
-                                        | "to_be_issued"
-                                        | "not_issued";
-                                    issuance_way:
-                                        | "with_salary"
-                                        | "with_cash"
-                                        | "with_year_end_bonus";
-                                    issuance_time: string;
-                                    belong_time: string;
-                                    issuance_country_region_id?: string;
-                                    issuance_pay_group_id?: string;
-                                    detail_reference_period_start_date?: string;
-                                    detail_reference_period_end_date?: string;
-                                    is_not_issued_due_to_offboarding?: number;
-                                    issuance_index?: number;
-                                }>;
-                                remark?: string;
-                                binding_period_decimal?: string;
-                            }>;
-                        };
-                        params: {
-                            user_id_type:
-                                | "user_id"
-                                | "union_id"
-                                | "open_id"
-                                | "people_corehr_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    operate_results?: Array<{
-                                        id?: string;
-                                        unique_id?: string;
-                                        code?: number;
-                                        message?: string;
-                                        detail_results?: Array<{
-                                            detail_id?: string;
-                                            issuance_index?: number;
-                                        }>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_create`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_update&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=compensation&resource=lump_sum_payment&version=v1 document }
-                 *
-                 * 批量更正一次性支付记录
-                 *
-                 * 通过传入的一次性支付记录数据，校验并更正一次性支付记录，并返回更正失败原因
-                 *
-                 * 本接口支持部分成功，失败部分详细报错信息参考 `data.operate_results.code`。;- 当 `data.operate_results.code` 存在非 0 时，响应体 code 仍可能返回 0;- 仅当出现非预期异常时，响应体 code 才会为非 0
-                 */
-                batchUpdate: async (
-                    payload?: {
-                        data?: {
-                            records?: Array<{
-                                id?: string;
-                                total_amount: string;
-                                binding_period?: number;
-                                currency_id: string;
-                                issuance_frequency: number;
-                                remark?: string;
-                                reference_period_start_date?: string;
-                                reference_period_end_date?: string;
-                                details: Array<{
-                                    id?: string;
-                                    issuance_amount?: string;
-                                    issuance_status?:
-                                        | "to_be_issued"
-                                        | "not_issued";
-                                    issuance_way?:
-                                        | "with_salary"
-                                        | "with_cash"
-                                        | "with_year_end_bonus";
-                                    issuance_time?: string;
-                                    belong_time?: string;
-                                    issuance_country_region_id?: string;
-                                    issuance_pay_group_id?: string;
-                                    detail_reference_period_start_date?: string;
-                                    detail_reference_period_end_date?: string;
-                                    is_not_issued_due_to_offboarding?: number;
-                                }>;
-                                binding_period_decimal?: string;
-                                operation_source?: string;
-                            }>;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    operate_results?: Array<{
-                                        id?: string;
-                                        unique_id?: string;
-                                        code?: number;
-                                        message?: string;
-                                        detail_results?: Array<{
-                                            detail_id?: string;
-                                            issuance_index?: number;
-                                        }>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_update`,
                                 path
                             ),
                             method: "POST",

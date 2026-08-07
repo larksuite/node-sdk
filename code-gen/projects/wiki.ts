@@ -192,17 +192,141 @@ export default abstract class Client extends verification {
                         throw e;
                     });
             },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=delete&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space.node&version=v2 document }
-             *
-             * 删除知识库节点
-             */
-            delete: async (
+            listWithIterator: async (
                 payload?: {
-                    data: { obj_type: string; include_children?: boolean };
-                    path: { space_id: string; node_token: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        parent_node_token?: string;
+                    };
+                    path?: { space_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    space_id?: string;
+                                                    node_token?: string;
+                                                    obj_token?: string;
+                                                    obj_type:
+                                                        | "doc"
+                                                        | "sheet"
+                                                        | "mindnote"
+                                                        | "bitable"
+                                                        | "file"
+                                                        | "docx"
+                                                        | "slides";
+                                                    parent_node_token?: string;
+                                                    node_type:
+                                                        | "origin"
+                                                        | "shortcut";
+                                                    origin_node_token?: string;
+                                                    origin_space_id?: string;
+                                                    has_child?: boolean;
+                                                    title?: string;
+                                                    obj_create_time?: string;
+                                                    obj_edit_time?: string;
+                                                    node_create_time?: string;
+                                                    creator?: string;
+                                                    owner?: string;
+                                                    node_creator?: string;
+                                                    url?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=list&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.node&version=v2 document }
+             *
+             * 获取知识空间子节点列表
+             *
+             * 此接口用于分页获取Wiki节点的子节点列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。
+             *
+             * 知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 父节点阅读权限
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        parent_node_token?: string;
+                    };
+                    path?: { space_id?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -215,14 +339,43 @@ export default abstract class Client extends verification {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { task_id?: string };
+                            data?: {
+                                items?: Array<{
+                                    space_id?: string;
+                                    node_token?: string;
+                                    obj_token?: string;
+                                    obj_type:
+                                        | "doc"
+                                        | "sheet"
+                                        | "mindnote"
+                                        | "bitable"
+                                        | "file"
+                                        | "docx"
+                                        | "slides";
+                                    parent_node_token?: string;
+                                    node_type: "origin" | "shortcut";
+                                    origin_node_token?: string;
+                                    origin_space_id?: string;
+                                    has_child?: boolean;
+                                    title?: string;
+                                    obj_create_time?: string;
+                                    obj_edit_time?: string;
+                                    node_create_time?: string;
+                                    creator?: string;
+                                    owner?: string;
+                                    node_creator?: string;
+                                    url?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token`,
+                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
                             path
                         ),
-                        method: "DELETE",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -469,25 +622,28 @@ export default abstract class Client extends verification {
                         throw e;
                     });
             },
+        },
+        spaceMember: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=get&version=v2 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=delete&version=v2 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=wiki&resource=space.node&version=v2 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space.member&version=v2 document }
+             *
+             * 删除知识空间成员
+             *
+             * 此接口用于删除知识空间成员或管理员。
+             *
+             * 使用tenant access token操作时，无法使用部门ID(opendepartmentid)删除知识空间成员。;;知识空间具有[类型](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)和[可见性](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)的概念。不同的类型或可见性可以对本操作做出限制：;- 可见性限制：公开知识空间（visibility为public）对租户所有用户可见，因此不支持再删除成员，但可以删除管理员。;- 类型限制：个人知识空间 （type为person）为个人管理的知识空间，不支持删除管理员。但可以删除成员。;;;知识空间权限要求，当前用户或应用：;- 为知识空间管理员
              */
-            get: async (
+            delete: async (
                 payload?: {
-                    params?: {
-                        obj_type?:
-                            | "doc"
-                            | "docx"
-                            | "sheet"
-                            | "mindnote"
-                            | "bitable"
-                            | "file"
-                            | "slides"
-                            | "wiki";
+                    data: {
+                        member_type: string;
+                        member_role: string;
+                        type?: "user" | "chat" | "department";
+                        member_perm?: string;
                     };
-                    path?: { space_id?: string; node_token?: string };
+                    path: { space_id: string; member_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -501,478 +657,18 @@ export default abstract class Client extends verification {
                             code?: number;
                             msg?: string;
                             data?: {
-                                node?: {
-                                    space_id?: string;
-                                    node_token?: string;
-                                    obj_token?: string;
-                                    obj_type:
-                                        | "doc"
-                                        | "sheet"
-                                        | "mindnote"
-                                        | "bitable"
-                                        | "file"
-                                        | "docx"
-                                        | "slides";
-                                    parent_node_token?: string;
-                                    node_type: "origin" | "shortcut";
-                                    origin_node_token?: string;
-                                    origin_space_id?: string;
-                                    has_child?: boolean;
-                                    title?: string;
-                                    obj_create_time?: string;
-                                    obj_edit_time?: string;
-                                    node_create_time?: string;
-                                    creator?: string;
-                                    owner?: string;
-                                    node_creator?: string;
-                                    url?: string;
+                                member: {
+                                    member_type: string;
+                                    member_id: string;
+                                    member_role: string;
+                                    type?: "user" | "chat" | "department";
+                                    member_perm?: string;
                                 };
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        parent_node_token?: string;
-                    };
-                    path?: { space_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    space_id?: string;
-                                                    node_token?: string;
-                                                    obj_token?: string;
-                                                    obj_type:
-                                                        | "doc"
-                                                        | "sheet"
-                                                        | "mindnote"
-                                                        | "bitable"
-                                                        | "file"
-                                                        | "docx"
-                                                        | "slides";
-                                                    parent_node_token?: string;
-                                                    node_type:
-                                                        | "origin"
-                                                        | "shortcut";
-                                                    origin_node_token?: string;
-                                                    origin_space_id?: string;
-                                                    has_child?: boolean;
-                                                    title?: string;
-                                                    obj_create_time?: string;
-                                                    obj_edit_time?: string;
-                                                    node_create_time?: string;
-                                                    creator?: string;
-                                                    owner?: string;
-                                                    node_creator?: string;
-                                                    url?: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=list&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.node&version=v2 document }
-             *
-             * 获取知识空间子节点列表
-             *
-             * 此接口用于分页获取Wiki节点的子节点列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。
-             *
-             * 知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 父节点阅读权限
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        parent_node_token?: string;
-                    };
-                    path?: { space_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    space_id?: string;
-                                    node_token?: string;
-                                    obj_token?: string;
-                                    obj_type:
-                                        | "doc"
-                                        | "sheet"
-                                        | "mindnote"
-                                        | "bitable"
-                                        | "file"
-                                        | "docx"
-                                        | "slides";
-                                    parent_node_token?: string;
-                                    node_type: "origin" | "shortcut";
-                                    origin_node_token?: string;
-                                    origin_space_id?: string;
-                                    has_child?: boolean;
-                                    title?: string;
-                                    obj_create_time?: string;
-                                    obj_edit_time?: string;
-                                    node_create_time?: string;
-                                    creator?: string;
-                                    owner?: string;
-                                    node_creator?: string;
-                                    url?: string;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * node
-         */
-        node: {
-            searchWithIterator: async (
-                payload?: {
-                    data: {
-                        query: string;
-                        space_id?: string;
-                        node_id?: string;
-                    };
-                    params?: { page_token?: string; page_size?: number };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/nodes/search`,
-                                path
-                            ),
-                            method: "POST",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items: Array<{
-                                                    node_id: string;
-                                                    space_id: string;
-                                                    obj_type: number;
-                                                    title: string;
-                                                    url?: string;
-                                                    icon?: string;
-                                                    obj_token: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=node&apiName=search&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=wiki&resource=node&version=v2 document }
-             */
-            search: async (
-                payload?: {
-                    data: {
-                        query: string;
-                        space_id?: string;
-                        node_id?: string;
-                    };
-                    params?: { page_token?: string; page_size?: number };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items: Array<{
-                                    node_id: string;
-                                    space_id: string;
-                                    obj_type: number;
-                                    title: string;
-                                    url?: string;
-                                    icon?: string;
-                                    obj_token: string;
-                                }>;
-                                page_token?: string;
-                                has_more: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/nodes/search`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=node&apiName=move_wiki_to_docs&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=move_wiki_to_docs&project=wiki&resource=node&version=v2 document }
-             *
-             * 移动wiki节点到space
-             */
-            moveWikiToDocs: async (
-                payload?: {
-                    data?: { folder_token?: string };
-                    path: { node_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { task_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/nodes/:node_token/move_wiki_to_docs`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * space
-         */
-        space: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space&apiName=delete&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space&version=v2 document }
-             *
-             * 删除知识空间
-             */
-            delete: async (
-                payload?: {
-                    path?: { space_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { task_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id`,
+                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members/:member_id`,
                             path
                         ),
                         method: "DELETE",
@@ -987,6 +683,120 @@ export default abstract class Client extends verification {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=create&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=wiki&resource=space.member&version=v2 document }
+             *
+             * 添加知识空间成员
+             *
+             * 添加知识空间成员或管理员。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        member_type: string;
+                        member_id: string;
+                        member_role: string;
+                        member_perm?: string;
+                    };
+                    params?: { need_notification?: boolean };
+                    path?: { space_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                member?: {
+                                    member_type: string;
+                                    member_id: string;
+                                    member_role: string;
+                                    type?: "user" | "chat" | "department";
+                                    member_perm?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=list&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.member&version=v2 document }
+             *
+             * 获取知识空间成员列表
+             *
+             * 获取知识空间的成员与管理员列表。
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path: { space_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                members?: Array<{
+                                    member_type: string;
+                                    member_id: string;
+                                    member_role: string;
+                                    type?: "user" | "chat" | "department";
+                                    member_perm?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        space: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space&apiName=get_node&version=v2 click to debug }
              *
@@ -1362,179 +1172,6 @@ export default abstract class Client extends verification {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/wiki/v2/spaces`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        spaceMember: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=delete&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space.member&version=v2 document }
-             *
-             * 删除知识空间成员
-             *
-             * 此接口用于删除知识空间成员或管理员。
-             *
-             * 使用tenant access token操作时，无法使用部门ID(opendepartmentid)删除知识空间成员。;;知识空间具有[类型](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)和[可见性](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)的概念。不同的类型或可见性可以对本操作做出限制：;- 可见性限制：公开知识空间（visibility为public）对租户所有用户可见，因此不支持再删除成员，但可以删除管理员。;- 类型限制：个人知识空间 （type为person）为个人管理的知识空间，不支持删除管理员。但可以删除成员。;;;知识空间权限要求，当前用户或应用：;- 为知识空间管理员
-             */
-            delete: async (
-                payload?: {
-                    data: {
-                        member_type: string;
-                        member_role: string;
-                        type?: "user" | "chat" | "department";
-                        member_perm?: string;
-                    };
-                    path: { space_id: string; member_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                member: {
-                                    member_type: string;
-                                    member_id: string;
-                                    member_role: string;
-                                    type?: "user" | "chat" | "department";
-                                    member_perm?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members/:member_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=create&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=wiki&resource=space.member&version=v2 document }
-             *
-             * 添加知识空间成员
-             *
-             * 添加知识空间成员或管理员。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        member_type: string;
-                        member_id: string;
-                        member_role: string;
-                        member_perm?: string;
-                    };
-                    params?: { need_notification?: boolean };
-                    path?: { space_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                member?: {
-                                    member_type: string;
-                                    member_id: string;
-                                    member_role: string;
-                                    type?: "user" | "chat" | "department";
-                                    member_perm?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=list&version=v2 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.member&version=v2 document }
-             *
-             * 获取知识空间成员列表
-             *
-             * 获取知识空间的成员与管理员列表。
-             */
-            list: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                    path: { space_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                members?: Array<{
-                                    member_type: string;
-                                    member_id: string;
-                                    member_role: string;
-                                    type?: "user" | "chat" | "department";
-                                    member_perm?: string;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
                             path
                         ),
                         method: "GET",
@@ -1989,17 +1626,143 @@ export default abstract class Client extends verification {
                             throw e;
                         });
                 },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space.node&version=v2 document }
-                 *
-                 * 删除知识库节点
-                 */
-                delete: async (
+                listWithIterator: async (
                     payload?: {
-                        data: { obj_type: string; include_children?: boolean };
-                        path: { space_id: string; node_token: string };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            parent_node_token?: string;
+                        };
+                        path?: { space_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        space_id?: string;
+                                                        node_token?: string;
+                                                        obj_token?: string;
+                                                        obj_type:
+                                                            | "doc"
+                                                            | "sheet"
+                                                            | "mindnote"
+                                                            | "bitable"
+                                                            | "file"
+                                                            | "docx"
+                                                            | "slides";
+                                                        parent_node_token?: string;
+                                                        node_type:
+                                                            | "origin"
+                                                            | "shortcut";
+                                                        origin_node_token?: string;
+                                                        origin_space_id?: string;
+                                                        has_child?: boolean;
+                                                        title?: string;
+                                                        obj_create_time?: string;
+                                                        obj_edit_time?: string;
+                                                        node_create_time?: string;
+                                                        creator?: string;
+                                                        owner?: string;
+                                                        node_creator?: string;
+                                                        url?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.node&version=v2 document }
+                 *
+                 * 获取知识空间子节点列表
+                 *
+                 * 此接口用于分页获取Wiki节点的子节点列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。
+                 *
+                 * 知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 父节点阅读权限
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            parent_node_token?: string;
+                        };
+                        path?: { space_id?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -2012,14 +1775,43 @@ export default abstract class Client extends verification {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { task_id?: string };
+                                data?: {
+                                    items?: Array<{
+                                        space_id?: string;
+                                        node_token?: string;
+                                        obj_token?: string;
+                                        obj_type:
+                                            | "doc"
+                                            | "sheet"
+                                            | "mindnote"
+                                            | "bitable"
+                                            | "file"
+                                            | "docx"
+                                            | "slides";
+                                        parent_node_token?: string;
+                                        node_type: "origin" | "shortcut";
+                                        origin_node_token?: string;
+                                        origin_space_id?: string;
+                                        has_child?: boolean;
+                                        title?: string;
+                                        obj_create_time?: string;
+                                        obj_edit_time?: string;
+                                        node_create_time?: string;
+                                        creator?: string;
+                                        owner?: string;
+                                        node_creator?: string;
+                                        url?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token`,
+                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
                                 path
                             ),
-                            method: "DELETE",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -2266,25 +2058,31 @@ export default abstract class Client extends verification {
                             throw e;
                         });
                 },
+            },
+            /**
+             * space.member
+             */
+            spaceMember: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=get&version=v2 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=delete&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=wiki&resource=space.node&version=v2 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space.member&version=v2 document }
+                 *
+                 * 删除知识空间成员
+                 *
+                 * 此接口用于删除知识空间成员或管理员。
+                 *
+                 * 使用tenant access token操作时，无法使用部门ID(opendepartmentid)删除知识空间成员。;;知识空间具有[类型](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)和[可见性](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)的概念。不同的类型或可见性可以对本操作做出限制：;- 可见性限制：公开知识空间（visibility为public）对租户所有用户可见，因此不支持再删除成员，但可以删除管理员。;- 类型限制：个人知识空间 （type为person）为个人管理的知识空间，不支持删除管理员。但可以删除成员。;;;知识空间权限要求，当前用户或应用：;- 为知识空间管理员
                  */
-                get: async (
+                delete: async (
                     payload?: {
-                        params?: {
-                            obj_type?:
-                                | "doc"
-                                | "docx"
-                                | "sheet"
-                                | "mindnote"
-                                | "bitable"
-                                | "file"
-                                | "slides"
-                                | "wiki";
+                        data: {
+                            member_type: string;
+                            member_role: string;
+                            type?: "user" | "chat" | "department";
+                            member_perm?: string;
                         };
-                        path?: { space_id?: string; node_token?: string };
+                        path: { space_id: string; member_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -2298,40 +2096,21 @@ export default abstract class Client extends verification {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    node?: {
-                                        space_id?: string;
-                                        node_token?: string;
-                                        obj_token?: string;
-                                        obj_type:
-                                            | "doc"
-                                            | "sheet"
-                                            | "mindnote"
-                                            | "bitable"
-                                            | "file"
-                                            | "docx"
-                                            | "slides";
-                                        parent_node_token?: string;
-                                        node_type: "origin" | "shortcut";
-                                        origin_node_token?: string;
-                                        origin_space_id?: string;
-                                        has_child?: boolean;
-                                        title?: string;
-                                        obj_create_time?: string;
-                                        obj_edit_time?: string;
-                                        node_create_time?: string;
-                                        creator?: string;
-                                        owner?: string;
-                                        node_creator?: string;
-                                        url?: string;
+                                    member: {
+                                        member_type: string;
+                                        member_id: string;
+                                        member_role: string;
+                                        type?: "user" | "chat" | "department";
+                                        member_perm?: string;
                                     };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token`,
+                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members/:member_id`,
                                 path
                             ),
-                            method: "GET",
+                            method: "DELETE",
                             data,
                             params,
                             headers,
@@ -2343,142 +2122,24 @@ export default abstract class Client extends verification {
                             throw e;
                         });
                 },
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            parent_node_token?: string;
-                        };
-                        path?: { space_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        space_id?: string;
-                                                        node_token?: string;
-                                                        obj_token?: string;
-                                                        obj_type:
-                                                            | "doc"
-                                                            | "sheet"
-                                                            | "mindnote"
-                                                            | "bitable"
-                                                            | "file"
-                                                            | "docx"
-                                                            | "slides";
-                                                        parent_node_token?: string;
-                                                        node_type:
-                                                            | "origin"
-                                                            | "shortcut";
-                                                        origin_node_token?: string;
-                                                        origin_space_id?: string;
-                                                        has_child?: boolean;
-                                                        title?: string;
-                                                        obj_create_time?: string;
-                                                        obj_edit_time?: string;
-                                                        node_create_time?: string;
-                                                        creator?: string;
-                                                        owner?: string;
-                                                        node_creator?: string;
-                                                        url?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=list&version=v2 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=create&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.node&version=v2 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=wiki&resource=space.member&version=v2 document }
                  *
-                 * 获取知识空间子节点列表
+                 * 添加知识空间成员
                  *
-                 * 此接口用于分页获取Wiki节点的子节点列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。
-                 *
-                 * 知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 父节点阅读权限
+                 * 添加知识空间成员或管理员。
                  */
-                list: async (
+                create: async (
                     payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            parent_node_token?: string;
+                        data: {
+                            member_type: string;
+                            member_id: string;
+                            member_role: string;
+                            member_perm?: string;
                         };
+                        params?: { need_notification?: boolean };
                         path?: { space_id?: string };
                     },
                     options?: IRequestOptions
@@ -2493,31 +2154,64 @@ export default abstract class Client extends verification {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    items?: Array<{
-                                        space_id?: string;
-                                        node_token?: string;
-                                        obj_token?: string;
-                                        obj_type:
-                                            | "doc"
-                                            | "sheet"
-                                            | "mindnote"
-                                            | "bitable"
-                                            | "file"
-                                            | "docx"
-                                            | "slides";
-                                        parent_node_token?: string;
-                                        node_type: "origin" | "shortcut";
-                                        origin_node_token?: string;
-                                        origin_space_id?: string;
-                                        has_child?: boolean;
-                                        title?: string;
-                                        obj_create_time?: string;
-                                        obj_edit_time?: string;
-                                        node_create_time?: string;
-                                        creator?: string;
-                                        owner?: string;
-                                        node_creator?: string;
-                                        url?: string;
+                                    member?: {
+                                        member_type: string;
+                                        member_id: string;
+                                        member_role: string;
+                                        type?: "user" | "chat" | "department";
+                                        member_perm?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.member&version=v2 document }
+                 *
+                 * 获取知识空间成员列表
+                 *
+                 * 获取知识空间的成员与管理员列表。
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path: { space_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    members?: Array<{
+                                        member_type: string;
+                                        member_id: string;
+                                        member_role: string;
+                                        type?: "user" | "chat" | "department";
+                                        member_perm?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -2525,212 +2219,10 @@ export default abstract class Client extends verification {
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
+                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
                                 path
                             ),
                             method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * node
-             */
-            node: {
-                searchWithIterator: async (
-                    payload?: {
-                        data: {
-                            query: string;
-                            space_id?: string;
-                            node_id?: string;
-                        };
-                        params?: { page_token?: string; page_size?: number };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/wiki/v2/nodes/search`,
-                                    path
-                                ),
-                                method: "POST",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items: Array<{
-                                                        node_id: string;
-                                                        space_id: string;
-                                                        obj_type: number;
-                                                        title: string;
-                                                        url?: string;
-                                                        icon?: string;
-                                                        obj_token: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=node&apiName=search&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=wiki&resource=node&version=v2 document }
-                 */
-                search: async (
-                    payload?: {
-                        data: {
-                            query: string;
-                            space_id?: string;
-                            node_id?: string;
-                        };
-                        params?: { page_token?: string; page_size?: number };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items: Array<{
-                                        node_id: string;
-                                        space_id: string;
-                                        obj_type: number;
-                                        title: string;
-                                        url?: string;
-                                        icon?: string;
-                                        obj_token: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/nodes/search`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=node&apiName=move_wiki_to_docs&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=move_wiki_to_docs&project=wiki&resource=node&version=v2 document }
-                 *
-                 * 移动wiki节点到space
-                 */
-                moveWikiToDocs: async (
-                    payload?: {
-                        data?: { folder_token?: string };
-                        path: { node_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { task_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/nodes/:node_token/move_wiki_to_docs`,
-                                path
-                            ),
-                            method: "POST",
                             data,
                             params,
                             headers,
@@ -2747,47 +2239,6 @@ export default abstract class Client extends verification {
              * space
              */
             space: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space&version=v2 document }
-                 *
-                 * 删除知识空间
-                 */
-                delete: async (
-                    payload?: {
-                        path?: { space_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { task_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space&apiName=get_node&version=v2 click to debug }
                  *
@@ -3165,182 +2616,6 @@ export default abstract class Client extends verification {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/wiki/v2/spaces`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * space.member
-             */
-            spaceMember: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=wiki&resource=space.member&version=v2 document }
-                 *
-                 * 删除知识空间成员
-                 *
-                 * 此接口用于删除知识空间成员或管理员。
-                 *
-                 * 使用tenant access token操作时，无法使用部门ID(opendepartmentid)删除知识空间成员。;;知识空间具有[类型](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)和[可见性](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)的概念。不同的类型或可见性可以对本操作做出限制：;- 可见性限制：公开知识空间（visibility为public）对租户所有用户可见，因此不支持再删除成员，但可以删除管理员。;- 类型限制：个人知识空间 （type为person）为个人管理的知识空间，不支持删除管理员。但可以删除成员。;;;知识空间权限要求，当前用户或应用：;- 为知识空间管理员
-                 */
-                delete: async (
-                    payload?: {
-                        data: {
-                            member_type: string;
-                            member_role: string;
-                            type?: "user" | "chat" | "department";
-                            member_perm?: string;
-                        };
-                        path: { space_id: string; member_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    member: {
-                                        member_type: string;
-                                        member_id: string;
-                                        member_role: string;
-                                        type?: "user" | "chat" | "department";
-                                        member_perm?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members/:member_id`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=wiki&resource=space.member&version=v2 document }
-                 *
-                 * 添加知识空间成员
-                 *
-                 * 添加知识空间成员或管理员。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            member_type: string;
-                            member_id: string;
-                            member_role: string;
-                            member_perm?: string;
-                        };
-                        params?: { need_notification?: boolean };
-                        path?: { space_id?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    member?: {
-                                        member_type: string;
-                                        member_id: string;
-                                        member_role: string;
-                                        type?: "user" | "chat" | "department";
-                                        member_perm?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.member&version=v2 document }
-                 *
-                 * 获取知识空间成员列表
-                 *
-                 * 获取知识空间的成员与管理员列表。
-                 */
-                list: async (
-                    payload?: {
-                        params?: { page_size?: number; page_token?: string };
-                        path: { space_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    members?: Array<{
-                                        member_type: string;
-                                        member_id: string;
-                                        member_role: string;
-                                        type?: "user" | "chat" | "department";
-                                        member_perm?: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
                                 path
                             ),
                             method: "GET",

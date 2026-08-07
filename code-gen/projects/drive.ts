@@ -287,56 +287,6 @@ export default abstract class Client extends docx {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=gen_doc_diff_url&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=gen_doc_diff_url&project=drive&resource=file&version=v1 document }
-             */
-            genDocDiffUrl: async (
-                payload?: {
-                    data: {
-                        file_type: "docx";
-                        change_info: {
-                            start_time: number;
-                            changes: Array<{
-                                block_token?: string;
-                                block_token_type?: string;
-                                rev_ranges?: Array<number>;
-                            }>;
-                        };
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { diff_url: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/gen_doc_diff_url`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_part&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=drive&resource=file&version=v1 document }
@@ -756,51 +706,6 @@ export default abstract class Client extends docx {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=file&version=v1 document }
-             */
-            patch: async (
-                payload?: {
-                    data?: { new_title?: string };
-                    params: {
-                        type:
-                            | "doc"
-                            | "docx"
-                            | "sheet"
-                            | "bitable"
-                            | "file"
-                            | "folder"
-                            | "wiki"
-                            | "slides"
-                            | "mindnote";
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=download&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=drive&resource=file&version=v1 document }
@@ -924,149 +829,6 @@ export default abstract class Client extends docx {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=version_del&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=version_del&project=drive&resource=file&version=v1 document }
-             *
-             * 删除文件的指定历史版本。当前版本不可删除；删除后该版本不可恢复。
-             */
-            versionDel: async (
-                payload?: {
-                    data: { version: string };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/version_del`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=revert&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=revert&project=drive&resource=file&version=v1 document }
-             *
-             * 将文件回滚到指定的历史版本。回滚后，指定版本成为当前版本，原 Data 的二进制会被作为新版本落库。
-             */
-            revert: async (
-                payload?: {
-                    data: { version: string };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { version?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/revert`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=history&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=history&project=drive&resource=file&version=v1 document }
-             *
-             * 获取文件的历史版本列表。返回指定文件的版本历史记录，支持按最后编辑时间翻页、仅返回打过 tag 的版本、升降序控制。底层 thrift 响应体为单一 JSON string（Data 字段），结构详见响应字段说明。
-             */
-            history: async (
-                payload?: {
-                    params?: {
-                        page_size?: number;
-                        last_edit_time?: string;
-                        is_asc?: boolean;
-                        only_tag?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    version?: string;
-                                    edit_user_id?: string;
-                                    edit_time?: string;
-                                    type?: number;
-                                    tag?: number;
-                                    source_tag?: number;
-                                    source_name?: string;
-                                    name?: string;
-                                    size?: string;
-                                    user_source?: number;
-                                    is_deleted?: boolean;
-                                    delete_type?: number;
-                                    is_third_enc?: boolean;
-                                    risk_status?: number;
-                                }>;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/history`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_finish&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=drive&resource=file&version=v1 document }
@@ -1173,54 +935,6 @@ export default abstract class Client extends docx {
                 return res?.data || null;
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=report_file_event&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=report_file_event&project=drive&resource=file&version=v1 document }
-             *
-             * 上报 Lark CLI 文件事件埋点
-             */
-            reportFileEvent: async (
-                payload?: {
-                    data: {
-                        file_scene: string;
-                        scene: string;
-                        tags: Record<string, string>;
-                        operation: string;
-                        latency?: string;
-                        score?: string;
-                        user_id?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        { code?: number; msg?: string; data?: { msg?: string } }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/lark_cli_file_event/report`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=delete&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=drive&resource=file&version=v1 document }
@@ -1262,282 +976,6 @@ export default abstract class Client extends docx {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            searchWithIterator: async (
-                payload?: {
-                    data: {
-                        search_key: string;
-                        owner_ids?: Array<string>;
-                        chat_ids?: Array<string>;
-                        docs_types?: Array<string>;
-                        count?: number;
-                        offset?: number;
-                    };
-                    params?: {
-                        page_token?: string;
-                        page_size?: number;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/search`,
-                                path
-                            ),
-                            method: "POST",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                docs_entities: Array<{
-                                                    docs_token: string;
-                                                    docs_type:
-                                                        | "doc"
-                                                        | "sheet"
-                                                        | "slide"
-                                                        | "bitable"
-                                                        | "mindnote"
-                                                        | "file";
-                                                    title: string;
-                                                    owner_id: string;
-                                                }>;
-                                                total?: number;
-                                                has_more?: boolean;
-                                                page_token?: string;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=search&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=drive&resource=file&version=v1 document }
-             */
-            search: async (
-                payload?: {
-                    data: {
-                        search_key: string;
-                        owner_ids?: Array<string>;
-                        chat_ids?: Array<string>;
-                        docs_types?: Array<string>;
-                        count?: number;
-                        offset?: number;
-                    };
-                    params?: {
-                        page_token?: string;
-                        page_size?: number;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                docs_entities: Array<{
-                                    docs_token: string;
-                                    docs_type:
-                                        | "doc"
-                                        | "sheet"
-                                        | "slide"
-                                        | "bitable"
-                                        | "mindnote"
-                                        | "file";
-                                    title: string;
-                                    owner_id: string;
-                                }>;
-                                total?: number;
-                                has_more?: boolean;
-                                page_token?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/search`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * file.favorite
-         */
-        fileFavorite: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.favorite&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.favorite&version=v1 document }
-             *
-             * 收藏云文档
-             *
-             * 收藏一篇云文档
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        type:
-                            | "file"
-                            | "doc"
-                            | "sheet"
-                            | "bitable"
-                            | "docx"
-                            | "mindnote"
-                            | "wiki"
-                            | "folder"
-                            | "slides";
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/favorite`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.favorite&apiName=delete&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=drive&resource=file.favorite&version=v1 document }
-             *
-             * 取消收藏云文档
-             *
-             * 取消收藏一篇云文档
-             */
-            delete: async (
-                payload?: {
-                    params: {
-                        type:
-                            | "file"
-                            | "doc"
-                            | "sheet"
-                            | "bitable"
-                            | "docx"
-                            | "mindnote"
-                            | "wiki"
-                            | "folder"
-                            | "slides";
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/favorite`,
                             path
                         ),
                         method: "DELETE",
@@ -2349,403 +1787,6 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * permission.public
-         */
-        permissionPublic: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=unlock&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unlock&project=drive&resource=permission.public&version=v1 document }
-             */
-            unlock: async (
-                payload?: {
-                    params: {
-                        type:
-                            | "doc"
-                            | "sheet"
-                            | "file"
-                            | "wiki"
-                            | "bitable"
-                            | "docx"
-                            | "mindnote"
-                            | "slides";
-                    };
-                    path: { token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/permissions/:token/public/unlock`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=permission.public&version=v1 document }
-             *
-             * 更新云文档权限设置
-             *
-             * 更新指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者、谁可以复制内容等设置。;
-             *
-             * 本接口为历史版本接口。推荐使用新版接口[更新云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/patch)。
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        external_access?: boolean;
-                        security_entity?:
-                            | "anyone_can_view"
-                            | "anyone_can_edit"
-                            | "only_full_access";
-                        comment_entity?: "anyone_can_view" | "anyone_can_edit";
-                        share_entity?:
-                            | "anyone"
-                            | "same_tenant"
-                            | "only_full_access";
-                        link_share_entity?:
-                            | "tenant_readable"
-                            | "tenant_editable"
-                            | "anyone_readable"
-                            | "anyone_editable"
-                            | "closed";
-                        invite_external?: boolean;
-                    };
-                    params: {
-                        type:
-                            | "doc"
-                            | "sheet"
-                            | "file"
-                            | "wiki"
-                            | "bitable"
-                            | "docx"
-                            | "mindnote"
-                            | "minutes"
-                            | "slides";
-                    };
-                    path: { token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                permission_public?: {
-                                    external_access?: boolean;
-                                    security_entity?:
-                                        | "anyone_can_view"
-                                        | "anyone_can_edit"
-                                        | "only_full_access";
-                                    comment_entity?:
-                                        | "anyone_can_view"
-                                        | "anyone_can_edit";
-                                    share_entity?:
-                                        | "anyone"
-                                        | "same_tenant"
-                                        | "only_full_access";
-                                    link_share_entity?:
-                                        | "tenant_readable"
-                                        | "tenant_editable"
-                                        | "anyone_readable"
-                                        | "anyone_editable"
-                                        | "closed";
-                                    invite_external?: boolean;
-                                    lock_switch?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=permission.public&version=v1 document }
-             *
-             * 获取云文档权限设置
-             *
-             * 获取指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者等设置。
-             *
-             * 本接口为历史版本接口。推荐使用新版接口[获取云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/get)。
-             */
-            get: async (
-                payload?: {
-                    params: {
-                        type:
-                            | "doc"
-                            | "sheet"
-                            | "file"
-                            | "wiki"
-                            | "bitable"
-                            | "docx"
-                            | "mindnote"
-                            | "minutes"
-                            | "slides";
-                    };
-                    path: { token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                permission_public?: {
-                                    external_access?: boolean;
-                                    security_entity?:
-                                        | "anyone_can_view"
-                                        | "anyone_can_edit"
-                                        | "only_full_access";
-                                    comment_entity?:
-                                        | "anyone_can_view"
-                                        | "anyone_can_edit";
-                                    share_entity?:
-                                        | "anyone"
-                                        | "same_tenant"
-                                        | "only_full_access";
-                                    link_share_entity?:
-                                        | "tenant_readable"
-                                        | "tenant_editable"
-                                        | "anyone_readable"
-                                        | "anyone_editable"
-                                        | "closed";
-                                    invite_external?: boolean;
-                                    lock_switch?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * favorite
-         */
-        favorite: {
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        page_size: number;
-                        page_token?: string;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/favorites`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items: Array<{
-                                                    token: string;
-                                                    name: string;
-                                                    type: string;
-                                                    parent_token?: string;
-                                                    url?: string;
-                                                    shortcut_info?: {
-                                                        target_type: string;
-                                                        target_token: string;
-                                                    };
-                                                    created_time?: string;
-                                                    modified_time?: string;
-                                                    owner_id?: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=favorite&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=drive&resource=favorite&version=v1 document }
-             *
-             * 获取用户的云文档收藏列表
-             *
-             * 获取用户的收藏列表，包括文件、各种在线文档、文件夹。该接口支持分页。
-             */
-            list: async (
-                payload?: {
-                    params: {
-                        page_size: number;
-                        page_token?: string;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items: Array<{
-                                    token: string;
-                                    name: string;
-                                    type: string;
-                                    parent_token?: string;
-                                    url?: string;
-                                    shortcut_info?: {
-                                        target_type: string;
-                                        target_token: string;
-                                    };
-                                    created_time?: string;
-                                    modified_time?: string;
-                                    owner_id?: string;
-                                }>;
-                                page_token?: string;
-                                has_more: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/favorites`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
          * file.view_record
          */
         fileViewRecord: {
@@ -3153,389 +2194,45 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * media
+         * file.comment
          */
-        media: {
+        fileComment: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=batch_get_tmp_download_url&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_tmp_download_url&project=drive&resource=media&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment&version=v1 document }
              *
-             * 获取素材临时下载链接
+             * 添加全文评论
              *
-             * 该接口用于获取云文档中素材的临时下载链接。链接的有效期为 24 小时，过期失效。
+             * 在文档中添加一条全局评论，不支持局部评论。
              */
-            batchGetTmpDownloadUrl: async (
+            create: async (
                 payload?: {
-                    params: { file_tokens: Array<string>; extra?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                tmp_download_urls?: Array<{
-                                    file_token: string;
-                                    tmp_download_url: string;
+                    data?: {
+                        reply_list?: {
+                            replies: Array<{
+                                content: {
+                                    elements: Array<{
+                                        type:
+                                            | "text_run"
+                                            | "docs_link"
+                                            | "person";
+                                        text_run?: { text: string };
+                                        docs_link?: { url: string };
+                                        person?: { user_id: string };
+                                    }>;
+                                };
+                                reactions?: Array<{
+                                    reaction_key: string;
+                                    count: number;
+                                    ahead_users?: Array<string>;
                                 }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/batch_get_tmp_download_url`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=download&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=drive&resource=media&version=v1 document }
-             *
-             * 下载素材
-             *
-             * 下载各类云文档中的素材，例如电子表格中的图片。该接口支持通过在请求头添加`Range` 参数分片下载素材。
-             */
-            download: async (
-                payload?: {
-                    params?: { extra?: string };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/:file_token/download`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_part&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=drive&resource=media&version=v1 document }
-             *
-             * 分片上传素材-上传分片
-             *
-             * 根据 [预上传](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_prepare)接口返回的上传事务 ID 和分片策略上传对应的素材分片。上传完成后，你可调用 [分片上传素材（完成上传）](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_finish)触发完成上传。
-             *
-             * ## 使用限制;;该接口调用频率上限为 5 QPS。
-             */
-            uploadPart: async (
-                payload?: {
-                    data: {
-                        upload_id: string;
-                        seq: number;
-                        size: number;
-                        checksum?: string;
-                        file: Buffer | fs.ReadStream;
+                            }>;
+                        };
                     };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/upload_part`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=drive&resource=media&version=v1 document }
-             *
-             * 分片上传素材-完成上传
-             *
-             * 调用[上传分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)接口将分片全部上传完毕后，你需调用本接口触发完成上传。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
-             *
-             * ## 使用限制;;该接口调用频率上限为 5 QPS。
-             */
-            uploadFinish: async (
-                payload?: {
-                    data: { upload_id: string; block_num: number };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { file_token?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/upload_finish`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_all&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_all&project=drive&resource=media&version=v1 document }
-             *
-             * 上传素材
-             *
-             * 将文件、图片、视频等素材上传到指定云文档中。素材将显示在对应云文档中，在云空间中不会显示。
-             */
-            uploadAll: async (
-                payload?: {
-                    data: {
-                        file_name: string;
-                        parent_type:
-                            | "doc_image"
-                            | "docx_image"
-                            | "sheet_image"
-                            | "doc_file"
-                            | "docx_file"
-                            | "sheet_file"
-                            | "vc_virtual_background"
-                            | "bitable_image"
-                            | "bitable_file"
-                            | "moments"
-                            | "ccm_import_open"
-                            | "calendar"
-                            | "base_global"
-                            | "lark_ai_media_analysis"
-                            | "whiteboard"
-                            | "mindnote_image"
-                            | "comment_image"
-                            | "slide_img"
-                            | "slide_file"
-                            | "email"
-                            | "bitable_tmp_point"
-                            | "office_sheet_file"
-                            | "office_slide_file";
-                        parent_node: string;
-                        size: number;
-                        checksum?: string;
-                        extra?: string;
-                        file: Buffer | fs.ReadStream;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { file_token?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/upload_all`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-                return res?.data || null;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_prepare&project=drive&resource=media&version=v1 document }
-             *
-             * 分片上传素材-预上传
-             *
-             * 发送初始化请求，以获取上传事务 ID 和分片策略，为[上传素材分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)做准备。平台固定以 4MB 的大小对素材进行分片。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
-             */
-            uploadPrepare: async (
-                payload?: {
-                    data: {
-                        file_name: string;
-                        parent_type:
-                            | "doc_image"
-                            | "docx_image"
-                            | "sheet_image"
-                            | "doc_file"
-                            | "docx_file"
-                            | "sheet_file"
-                            | "vc_virtual_background"
-                            | "bitable_image"
-                            | "bitable_file"
-                            | "moments"
-                            | "ccm_import_open"
-                            | "calendar"
-                            | "base_global"
-                            | "lark_ai_media_analysis"
-                            | "whiteboard"
-                            | "mindnote_image"
-                            | "comment_image"
-                            | "slide_img"
-                            | "slide_file"
-                            | "email"
-                            | "bitable_tmp_point"
-                            | "office_sheet_file"
-                            | "office_slide_file";
-                        size: number;
-                        parent_node?: string;
-                        extra?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                upload_id?: string;
-                                block_size?: number;
-                                block_num?: number;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/upload_prepare`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=preview_download&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview_download&project=drive&resource=media&version=v1 document }
-             */
-            previewDownload: async (
-                payload?: {
                     params: {
-                        extra?: string;
-                        preview_type: string;
-                        version?: string;
-                        bus_type?: string;
-                        platform?: string;
-                        width?: number;
-                        height?: number;
+                        file_type: "doc" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string };
                 },
@@ -3544,74 +2241,6 @@ export default abstract class Client extends docx {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await this.httpInstance
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/:file_token/preview_download`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=preview_result&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview_result&project=drive&resource=media&version=v1 document }
-             *
-             * 获取云文档文件的预览封面图和预览状态信息
-             */
-            previewResult: async (
-                payload?: {
-                    data?: { version?: string; ext?: string };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
                 return this.httpInstance
                     .request<
                         any,
@@ -3619,322 +2248,47 @@ export default abstract class Client extends docx {
                             code?: number;
                             msg?: string;
                             data?: {
-                                preview_results?: Array<{
-                                    preview_type?: number;
-                                    preview_status?: number;
-                                }>;
-                                cover_token?: string;
-                                version?: string;
-                                data_version?: string;
-                                mount_point?: number;
-                                file_size?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/medias/:file_token/preview_result`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * import_task
-         */
-        importTask: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=import_task&version=v1 document }
-             *
-             * 查询导入结果
-             *
-             * 根据[创建导入任务](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/create)返回的导入任务 ID（ticket）轮询导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
-             */
-            get: async (
-                payload?: {
-                    path: { ticket: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                result?: {
-                                    ticket?: string;
-                                    type: string;
-                                    job_status?: number;
-                                    job_error_msg?: string;
-                                    token?: string;
-                                    url?: string;
-                                    extra?: Array<string>;
+                                comment_id?: string;
+                                user_id?: string;
+                                create_time?: number;
+                                update_time?: number;
+                                is_solved?: boolean;
+                                solved_time?: number;
+                                solver_user_id?: string;
+                                has_more?: boolean;
+                                page_token?: string;
+                                is_whole?: boolean;
+                                quote?: string;
+                                reply_list?: {
+                                    replies: Array<{
+                                        content: {
+                                            elements: Array<{
+                                                type:
+                                                    | "text_run"
+                                                    | "docs_link"
+                                                    | "person";
+                                                text_run?: { text: string };
+                                                docs_link?: { url: string };
+                                                person?: { user_id: string };
+                                            }>;
+                                        };
+                                        reply_id?: string;
+                                        user_id?: string;
+                                        create_time?: number;
+                                        update_time?: number;
+                                        extra?: { image_list?: Array<string> };
+                                        reactions?: Array<{
+                                            reaction_key: string;
+                                            count: number;
+                                            ahead_users?: Array<string>;
+                                        }>;
+                                    }>;
                                 };
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/import_tasks/:ticket`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=import_task&version=v1 document }
-             *
-             * 创建导入任务
-             *
-             * 该接口用于创建导入文件的任务，并返回导入任务 ID。导入文件指将本地文件如 Word、TXT、Markdown、Excel 等格式的文件导入为某种格式的飞书在线云文档。该接口为异步接口，需要继续调用[查询导入任务结果](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/get)接口获取导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
-             *
-             * ## 前提条件;创建导入任务前，你需先调用[上传素材](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all)或[上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all)接口获取源文件的 token。
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        file_extension: string;
-                        file_token: string;
-                        type: string;
-                        file_name?: string;
-                        point: { mount_type: number; mount_key: string };
-                        token?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { ticket?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/import_tasks`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * user
-         */
-        user: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription_status&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription_status&project=drive&resource=user&version=v1 document }
-             *
-             * 查询用户云文档事件订阅状态
-             *
-             * 该接口用于查询用户云文档事件的订阅状态。仅当is_subscribe（订阅状态）为 true，应用才可收到 “用户云文档事件”下的各类通知事件。
-             */
-            subscriptionStatus: async (
-                payload?: {
-                    params: { event_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        { code?: number; msg?: string; data?: { data: string } }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/user/subscription_status`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=remove_subscription&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscription&project=drive&resource=user&version=v1 document }
-             *
-             * 取消用户云文档事件订阅
-             *
-             * 该接口用于取消订阅用户云文档的通知事件。取消订阅后，用户将不再收到云文档评论、回复添加事件。
-             */
-            removeSubscription: async (
-                payload?: {
-                    params: { event_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/user/remove_subscription`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=drive&resource=user&version=v1 document }
-             *
-             * 订阅用户云文档事件
-             *
-             * 订阅用户云文档的各类通知事件，调用后目前可获取接收者视角的云文档评论、回复添加事件。
-             *
-             * ## 注意事项;仅用户身份订阅“用户云文档事件”时，需要调用该接口，应用身份无需调用。
-             */
-            subscription: async (
-                payload?: {
-                    data: { event_type: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/user/subscription`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * file.comment
-         */
-        fileComment: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create_v2&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_v2&project=drive&resource=file.comment&version=v1 document }
-             *
-             * 开放平台：添加评论(V2)
-             */
-            createV2: async (
-                payload?: {
-                    data: {
-                        file_type: string;
-                        anchor?: {
-                            block_id: string;
-                            parent_file_token?: string;
-                            parent_file_type?: string;
-                            sheet_row?: number;
-                            sheet_col?: number;
-                            slide_block_type?: string;
-                            base_record_id?: string;
-                            base_view_id?: string;
-                            file_page_num?: string;
-                            file_extra?: string;
-                            content_anchor_id?: string;
-                        };
-                        reply_elements: Array<{
-                            type: string;
-                            text?: string;
-                            mention_user?: string;
-                            link?: string;
-                        }>;
-                        extra?: string;
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                comment_id: string;
-                                created_at: string;
-                                idempotency_key?: string;
-                                reply_id?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/files/:file_token/new_comments`,
+                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
                             path
                         ),
                         method: "POST",
@@ -4343,112 +2697,6 @@ export default abstract class Client extends docx {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment&version=v1 document }
-             *
-             * 添加全文评论
-             *
-             * 在文档中添加一条全局评论，不支持局部评论。
-             */
-            create: async (
-                payload?: {
-                    data?: {
-                        reply_list?: {
-                            replies: Array<{
-                                content: {
-                                    elements: Array<{
-                                        type:
-                                            | "text_run"
-                                            | "docs_link"
-                                            | "person";
-                                        text_run?: { text: string };
-                                        docs_link?: { url: string };
-                                        person?: { user_id: string };
-                                    }>;
-                                };
-                                reactions?: Array<{
-                                    reaction_key: string;
-                                    count: number;
-                                    ahead_users?: Array<string>;
-                                }>;
-                            }>;
-                        };
-                    };
-                    params: {
-                        file_type: "doc" | "docx";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                comment_id?: string;
-                                user_id?: string;
-                                create_time?: number;
-                                update_time?: number;
-                                is_solved?: boolean;
-                                solved_time?: number;
-                                solver_user_id?: string;
-                                has_more?: boolean;
-                                page_token?: string;
-                                is_whole?: boolean;
-                                quote?: string;
-                                reply_list?: {
-                                    replies: Array<{
-                                        content: {
-                                            elements: Array<{
-                                                type:
-                                                    | "text_run"
-                                                    | "docs_link"
-                                                    | "person";
-                                                text_run?: { text: string };
-                                                docs_link?: { url: string };
-                                                person?: { user_id: string };
-                                            }>;
-                                        };
-                                        reply_id?: string;
-                                        user_id?: string;
-                                        create_time?: number;
-                                        update_time?: number;
-                                        extra?: { image_list?: Array<string> };
-                                        reactions?: Array<{
-                                            reaction_key: string;
-                                            count: number;
-                                            ahead_users?: Array<string>;
-                                        }>;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=batch_query&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=drive&resource=file.comment&version=v1 document }
@@ -4552,6 +2800,604 @@ export default abstract class Client extends docx {
             },
         },
         /**
+         * media
+         */
+        media: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=batch_get_tmp_download_url&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_tmp_download_url&project=drive&resource=media&version=v1 document }
+             *
+             * 获取素材临时下载链接
+             *
+             * 该接口用于获取云文档中素材的临时下载链接。链接的有效期为 24 小时，过期失效。
+             */
+            batchGetTmpDownloadUrl: async (
+                payload?: {
+                    params: { file_tokens: Array<string>; extra?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tmp_download_urls?: Array<{
+                                    file_token: string;
+                                    tmp_download_url: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/medias/batch_get_tmp_download_url`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=download&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=drive&resource=media&version=v1 document }
+             *
+             * 下载素材
+             *
+             * 下载各类云文档中的素材，例如电子表格中的图片。该接口支持通过在请求头添加`Range` 参数分片下载素材。
+             */
+            download: async (
+                payload?: {
+                    params?: { extra?: string };
+                    path: { file_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/medias/:file_token/download`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_part&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=drive&resource=media&version=v1 document }
+             *
+             * 分片上传素材-上传分片
+             *
+             * 根据 [预上传](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_prepare)接口返回的上传事务 ID 和分片策略上传对应的素材分片。上传完成后，你可调用 [分片上传素材（完成上传）](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_finish)触发完成上传。
+             *
+             * ## 使用限制;;该接口调用频率上限为 5 QPS。
+             */
+            uploadPart: async (
+                payload?: {
+                    data: {
+                        upload_id: string;
+                        seq: number;
+                        size: number;
+                        checksum?: string;
+                        file: Buffer | fs.ReadStream;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/medias/upload_part`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=drive&resource=media&version=v1 document }
+             *
+             * 分片上传素材-完成上传
+             *
+             * 调用[上传分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)接口将分片全部上传完毕后，你需调用本接口触发完成上传。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
+             *
+             * ## 使用限制;;该接口调用频率上限为 5 QPS。
+             */
+            uploadFinish: async (
+                payload?: {
+                    data: { upload_id: string; block_num: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_token?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/medias/upload_finish`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_all&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_all&project=drive&resource=media&version=v1 document }
+             *
+             * 上传素材
+             *
+             * 将文件、图片、视频等素材上传到指定云文档中。素材将显示在对应云文档中，在云空间中不会显示。
+             */
+            uploadAll: async (
+                payload?: {
+                    data: {
+                        file_name: string;
+                        parent_type:
+                            | "doc_image"
+                            | "docx_image"
+                            | "sheet_image"
+                            | "doc_file"
+                            | "docx_file"
+                            | "sheet_file"
+                            | "vc_virtual_background"
+                            | "bitable_image"
+                            | "bitable_file"
+                            | "moments"
+                            | "ccm_import_open"
+                            | "calendar"
+                            | "base_global"
+                            | "lark_ai_media_analysis"
+                            | "whiteboard"
+                            | "mindnote_image"
+                            | "comment_image"
+                            | "slide_img"
+                            | "slide_file"
+                            | "email"
+                            | "bitable_tmp_point"
+                            | "office_sheet_file"
+                            | "office_slide_file";
+                        parent_node: string;
+                        size: number;
+                        checksum?: string;
+                        extra?: string;
+                        file: Buffer | fs.ReadStream;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_token?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/medias/upload_all`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_prepare&project=drive&resource=media&version=v1 document }
+             *
+             * 分片上传素材-预上传
+             *
+             * 发送初始化请求，以获取上传事务 ID 和分片策略，为[上传素材分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)做准备。平台固定以 4MB 的大小对素材进行分片。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
+             */
+            uploadPrepare: async (
+                payload?: {
+                    data: {
+                        file_name: string;
+                        parent_type:
+                            | "doc_image"
+                            | "docx_image"
+                            | "sheet_image"
+                            | "doc_file"
+                            | "docx_file"
+                            | "sheet_file"
+                            | "vc_virtual_background"
+                            | "bitable_image"
+                            | "bitable_file"
+                            | "moments"
+                            | "ccm_import_open"
+                            | "calendar"
+                            | "base_global"
+                            | "lark_ai_media_analysis"
+                            | "whiteboard"
+                            | "mindnote_image"
+                            | "comment_image"
+                            | "slide_img"
+                            | "slide_file"
+                            | "email"
+                            | "bitable_tmp_point"
+                            | "office_sheet_file"
+                            | "office_slide_file";
+                        size: number;
+                        parent_node?: string;
+                        extra?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                upload_id?: string;
+                                block_size?: number;
+                                block_num?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/medias/upload_prepare`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * import_task
+         */
+        importTask: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=import_task&version=v1 document }
+             *
+             * 查询导入结果
+             *
+             * 根据[创建导入任务](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/create)返回的导入任务 ID（ticket）轮询导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
+             */
+            get: async (
+                payload?: {
+                    path: { ticket: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    ticket?: string;
+                                    type: string;
+                                    job_status?: number;
+                                    job_error_msg?: string;
+                                    token?: string;
+                                    url?: string;
+                                    extra?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/import_tasks/:ticket`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=import_task&version=v1 document }
+             *
+             * 创建导入任务
+             *
+             * 该接口用于创建导入文件的任务，并返回导入任务 ID。导入文件指将本地文件如 Word、TXT、Markdown、Excel 等格式的文件导入为某种格式的飞书在线云文档。该接口为异步接口，需要继续调用[查询导入任务结果](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/get)接口获取导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
+             *
+             * ## 前提条件;创建导入任务前，你需先调用[上传素材](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all)或[上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all)接口获取源文件的 token。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        file_extension: string;
+                        file_token: string;
+                        type: string;
+                        file_name?: string;
+                        point: { mount_type: number; mount_key: string };
+                        token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { ticket?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/import_tasks`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user
+         */
+        user: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription_status&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription_status&project=drive&resource=user&version=v1 document }
+             *
+             * 查询用户云文档事件订阅状态
+             *
+             * 该接口用于查询用户云文档事件的订阅状态。仅当is_subscribe（订阅状态）为 true，应用才可收到 “用户云文档事件”下的各类通知事件。
+             */
+            subscriptionStatus: async (
+                payload?: {
+                    params: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/user/subscription_status`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=remove_subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscription&project=drive&resource=user&version=v1 document }
+             *
+             * 取消用户云文档事件订阅
+             *
+             * 该接口用于取消订阅用户云文档的通知事件。取消订阅后，用户将不再收到云文档评论、回复添加事件。
+             */
+            removeSubscription: async (
+                payload?: {
+                    params: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/user/remove_subscription`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=drive&resource=user&version=v1 document }
+             *
+             * 订阅用户云文档事件
+             *
+             * 订阅用户云文档的各类通知事件，调用后目前可获取接收者视角的云文档评论、回复添加事件。
+             *
+             * ## 注意事项;仅用户身份订阅“用户云文档事件”时，需要调用该接口，应用身份无需调用。
+             */
+            subscription: async (
+                payload?: {
+                    data: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/user/subscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * file.comment.reply
          */
         fileCommentReply: {
@@ -4597,6 +3443,157 @@ export default abstract class Client extends docx {
                             path
                         ),
                         method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment.reply&version=v1 document }
+             *
+             * 添加回复
+             *
+             * 使用该接口可对云文档中的某条评论进行回复，回复内容支持普通文本、云文档链接等。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        content: {
+                            elements: Array<{
+                                type: "text_run" | "docs_link" | "person";
+                                text_run?: { text: string };
+                                docs_link?: { url: string };
+                                person?: { user_id: string };
+                            }>;
+                        };
+                        extra?: string;
+                    };
+                    params: {
+                        file_type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "docx"
+                            | "slides"
+                            | "bitable"
+                            | "apps";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { file_token: string; comment_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                content?: {
+                                    elements: Array<{
+                                        type:
+                                            | "text_run"
+                                            | "docs_link"
+                                            | "person";
+                                        text_run?: { text: string };
+                                        docs_link?: { url: string };
+                                        person?: { user_id: string };
+                                    }>;
+                                };
+                                reply_id?: string;
+                                user_id?: string;
+                                create_time?: number;
+                                update_time?: number;
+                                extra?: { image_list?: Array<string> };
+                                reactions?: Array<{
+                                    reaction_key: string;
+                                    count: number;
+                                    ahead_users?: Array<string>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=drive&resource=file.comment.reply&version=v1 document }
+             *
+             * 更新回复的内容
+             *
+             * 更新云文档中的某条回复的内容。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        content: {
+                            elements: Array<{
+                                type: "text_run" | "docs_link" | "person";
+                                text_run?: { text: string };
+                                docs_link?: { url: string };
+                                person?: { user_id: string };
+                            }>;
+                        };
+                    };
+                    params: {
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable"
+                            | "apps";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: {
+                        file_token: string;
+                        comment_id: string;
+                        reply_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -4819,40 +3816,56 @@ export default abstract class Client extends docx {
                         throw e;
                     });
             },
+        },
+        /**
+         * permission.public
+         */
+        permissionPublic: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=patch&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment.reply&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=permission.public&version=v1 document }
              *
-             * 添加回复
+             * 更新云文档权限设置
              *
-             * 使用该接口可对云文档中的某条评论进行回复，回复内容支持普通文本、云文档链接等。
+             * 更新指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者、谁可以复制内容等设置。;
+             *
+             * 本接口为历史版本接口。推荐使用新版接口[更新云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/patch)。
              */
-            create: async (
+            patch: async (
                 payload?: {
-                    data: {
-                        content: {
-                            elements: Array<{
-                                type: "text_run" | "docs_link" | "person";
-                                text_run?: { text: string };
-                                docs_link?: { url: string };
-                                person?: { user_id: string };
-                            }>;
-                        };
-                        extra?: string;
+                    data?: {
+                        external_access?: boolean;
+                        security_entity?:
+                            | "anyone_can_view"
+                            | "anyone_can_edit"
+                            | "only_full_access";
+                        comment_entity?: "anyone_can_view" | "anyone_can_edit";
+                        share_entity?:
+                            | "anyone"
+                            | "same_tenant"
+                            | "only_full_access";
+                        link_share_entity?:
+                            | "tenant_readable"
+                            | "tenant_editable"
+                            | "anyone_readable"
+                            | "anyone_editable"
+                            | "closed";
+                        invite_external?: boolean;
                     };
                     params: {
-                        file_type:
+                        type:
                             | "doc"
                             | "sheet"
                             | "file"
-                            | "docx"
-                            | "slides"
+                            | "wiki"
                             | "bitable"
-                            | "apps";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
+                            | "docx"
+                            | "mindnote"
+                            | "minutes"
+                            | "slides";
                     };
-                    path: { file_token: string; comment_id: string };
+                    path: { token: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -4866,35 +3879,36 @@ export default abstract class Client extends docx {
                             code?: number;
                             msg?: string;
                             data?: {
-                                content?: {
-                                    elements: Array<{
-                                        type:
-                                            | "text_run"
-                                            | "docs_link"
-                                            | "person";
-                                        text_run?: { text: string };
-                                        docs_link?: { url: string };
-                                        person?: { user_id: string };
-                                    }>;
+                                permission_public?: {
+                                    external_access?: boolean;
+                                    security_entity?:
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit"
+                                        | "only_full_access";
+                                    comment_entity?:
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit";
+                                    share_entity?:
+                                        | "anyone"
+                                        | "same_tenant"
+                                        | "only_full_access";
+                                    link_share_entity?:
+                                        | "tenant_readable"
+                                        | "tenant_editable"
+                                        | "anyone_readable"
+                                        | "anyone_editable"
+                                        | "closed";
+                                    invite_external?: boolean;
+                                    lock_switch?: boolean;
                                 };
-                                reply_id?: string;
-                                user_id?: string;
-                                create_time?: number;
-                                update_time?: number;
-                                extra?: { image_list?: Array<string> };
-                                reactions?: Array<{
-                                    reaction_key: string;
-                                    count: number;
-                                    ahead_users?: Array<string>;
-                                }>;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies`,
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
                             path
                         ),
-                        method: "POST",
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -4907,42 +3921,31 @@ export default abstract class Client extends docx {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=update&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=drive&resource=file.comment.reply&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=permission.public&version=v1 document }
              *
-             * 更新回复的内容
+             * 获取云文档权限设置
              *
-             * 更新云文档中的某条回复的内容。
+             * 获取指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者等设置。
+             *
+             * 本接口为历史版本接口。推荐使用新版接口[获取云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/get)。
              */
-            update: async (
+            get: async (
                 payload?: {
-                    data: {
-                        content: {
-                            elements: Array<{
-                                type: "text_run" | "docs_link" | "person";
-                                text_run?: { text: string };
-                                docs_link?: { url: string };
-                                person?: { user_id: string };
-                            }>;
-                        };
-                    };
                     params: {
-                        file_type:
+                        type:
                             | "doc"
-                            | "docx"
                             | "sheet"
                             | "file"
-                            | "slides"
+                            | "wiki"
                             | "bitable"
-                            | "apps";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
+                            | "docx"
+                            | "mindnote"
+                            | "minutes"
+                            | "slides";
                     };
-                    path: {
-                        file_token: string;
-                        comment_id: string;
-                        reply_id: string;
-                    };
+                    path: { token: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -4952,13 +3955,40 @@ export default abstract class Client extends docx {
                 return this.httpInstance
                     .request<
                         any,
-                        { code?: number; msg?: string; data?: { data: string } }
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                permission_public?: {
+                                    external_access?: boolean;
+                                    security_entity?:
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit"
+                                        | "only_full_access";
+                                    comment_entity?:
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit";
+                                    share_entity?:
+                                        | "anyone"
+                                        | "same_tenant"
+                                        | "only_full_access";
+                                    link_share_entity?:
+                                        | "tenant_readable"
+                                        | "tenant_editable"
+                                        | "anyone_readable"
+                                        | "anyone_editable"
+                                        | "closed";
+                                    invite_external?: boolean;
+                                    lock_switch?: boolean;
+                                };
+                            };
+                        }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
                             path
                         ),
-                        method: "PUT",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -5322,13 +4352,16 @@ export default abstract class Client extends docx {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=apply&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=auth&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=drive&resource=permission.member&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auth&project=drive&resource=permission.member&version=v1 document }
+             *
+             * 判断用户权限
+             *
+             * 判断当前请求的应用或用户是否具有指定云文档的指定权限，权限包括阅读、编辑、分享、评论、导出等权限。
              */
-            apply: async (
+            auth: async (
                 payload?: {
-                    data?: { perm?: "view" | "edit"; remark?: string };
                     params: {
                         type:
                             | "doc"
@@ -5338,8 +4371,18 @@ export default abstract class Client extends docx {
                             | "bitable"
                             | "docx"
                             | "mindnote"
+                            | "minutes"
                             | "slides"
                             | "apps";
+                        action:
+                            | "view"
+                            | "edit"
+                            | "share"
+                            | "comment"
+                            | "export"
+                            | "copy"
+                            | "print"
+                            | "manage_public";
                     };
                     path: { token: string };
                 },
@@ -5349,12 +4392,19 @@ export default abstract class Client extends docx {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { auth_result: boolean };
+                        }
+                    >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/permissions/:token/members/apply`,
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/members/auth`,
                             path
                         ),
-                        method: "POST",
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -5375,7 +4425,7 @@ export default abstract class Client extends docx {
              *
              * 为指定云文档添加协作者，协作者可以是用户、群组、部门、用户组等。
              *
-             * ## 前提条件;;- 调用该接口需要调用身份有该云文档添加协作者的权限。添加协作者的权限可通过云文档设置中的 **谁可以查看、添加、移除协作者** 等选项进行控制。;- 调用该接口时，需要调用身份与被授权对象 **互相可见**，例如：; - **添加用户协作者**：需要调用身份与被授权对象为联系人或同组织内可搜索，且互相未屏蔽。; - **添加群协作者**：需要调用身份在群内。要使用 `tenant_access_token` 身份添加群协作者，则需要将该应用作为机器人添加至群组中，使应用对群可见。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。; - **添加部门协作者**：需要调用身份对部门可见。由于应用对企业内的组织架构都不可见，所以暂不支持通过 `tenant_access_token` 添加部门协作者。;;## 注意事项;;不支持将应用直接添加到文件夹作为协作者（添加成功后实际仍然没有权限）。如果希望给应用授予文件夹的权限，请将应用作为群机器人添加到群组内，然后授予该群组可管理权限。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。
+             * ## 前提条件;;- 调用该接口需要调用身份有该云文档添加协作者的权限。添加协作者的权限可通过云文档设置中的 **谁可以查看、添加、移除协作者** 等选项进行控制。;- 调用该接口时，需要调用身份与被授权对象 **互相可见**，例如：;    - **添加用户协作者**：需要调用身份与被授权对象为联系人或同组织内可搜索，且互相未屏蔽。;    - **添加群协作者**：需要调用身份在群内。要使用 `tenant_access_token` 身份添加群协作者，则需要将该应用作为机器人添加至群组中，使应用对群可见。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。;    - **添加部门协作者**：需要调用身份对部门可见。由于应用对企业内的组织架构都不可见，所以暂不支持通过 `tenant_access_token`  添加部门协作者。;;## 注意事项;;不支持将应用直接添加到文件夹作为协作者（添加成功后实际仍然没有权限）。如果希望给应用授予文件夹的权限，请将应用作为群机器人添加到群组内，然后授予该群组可管理权限。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。
              */
             create: async (
                 payload?: {
@@ -5547,71 +4597,6 @@ export default abstract class Client extends docx {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/permissions/:token/members`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=auth&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auth&project=drive&resource=permission.member&version=v1 document }
-             *
-             * 判断用户权限
-             *
-             * 判断当前请求的应用或用户是否具有指定云文档的指定权限，权限包括阅读、编辑、分享、评论、导出等权限。
-             */
-            auth: async (
-                payload?: {
-                    params: {
-                        type:
-                            | "doc"
-                            | "sheet"
-                            | "file"
-                            | "wiki"
-                            | "bitable"
-                            | "docx"
-                            | "mindnote"
-                            | "minutes"
-                            | "slides"
-                            | "apps";
-                        action:
-                            | "view"
-                            | "edit"
-                            | "share"
-                            | "comment"
-                            | "export"
-                            | "copy"
-                            | "print"
-                            | "manage_public";
-                    };
-                    path: { token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { auth_result: boolean };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/permissions/:token/members/auth`,
                             path
                         ),
                         method: "GET",
@@ -5868,56 +4853,6 @@ export default abstract class Client extends docx {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/create_shortcut`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=gen_doc_diff_url&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=gen_doc_diff_url&project=drive&resource=file&version=v1 document }
-                 */
-                genDocDiffUrl: async (
-                    payload?: {
-                        data: {
-                            file_type: "docx";
-                            change_info: {
-                                start_time: number;
-                                changes: Array<{
-                                    block_token?: string;
-                                    block_token_type?: string;
-                                    rev_ranges?: Array<number>;
-                                }>;
-                            };
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { diff_url: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/gen_doc_diff_url`,
                                 path
                             ),
                             method: "POST",
@@ -6364,54 +5299,6 @@ export default abstract class Client extends docx {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=file&version=v1 document }
-                 */
-                patch: async (
-                    payload?: {
-                        data?: { new_title?: string };
-                        params: {
-                            type:
-                                | "doc"
-                                | "docx"
-                                | "sheet"
-                                | "bitable"
-                                | "file"
-                                | "folder"
-                                | "wiki"
-                                | "slides"
-                                | "mindnote";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=download&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=drive&resource=file&version=v1 document }
@@ -6535,152 +5422,6 @@ export default abstract class Client extends docx {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=version_del&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=version_del&project=drive&resource=file&version=v1 document }
-                 *
-                 * 删除文件的指定历史版本。当前版本不可删除；删除后该版本不可恢复。
-                 */
-                versionDel: async (
-                    payload?: {
-                        data: { version: string };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/version_del`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=revert&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=revert&project=drive&resource=file&version=v1 document }
-                 *
-                 * 将文件回滚到指定的历史版本。回滚后，指定版本成为当前版本，原 Data 的二进制会被作为新版本落库。
-                 */
-                revert: async (
-                    payload?: {
-                        data: { version: string };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { version?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/revert`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=history&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=history&project=drive&resource=file&version=v1 document }
-                 *
-                 * 获取文件的历史版本列表。返回指定文件的版本历史记录，支持按最后编辑时间翻页、仅返回打过 tag 的版本、升降序控制。底层 thrift 响应体为单一 JSON string（Data 字段），结构详见响应字段说明。
-                 */
-                history: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            last_edit_time?: string;
-                            is_asc?: boolean;
-                            only_tag?: boolean;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        version?: string;
-                                        edit_user_id?: string;
-                                        edit_time?: string;
-                                        type?: number;
-                                        tag?: number;
-                                        source_tag?: number;
-                                        source_name?: string;
-                                        name?: string;
-                                        size?: string;
-                                        user_source?: number;
-                                        is_deleted?: boolean;
-                                        delete_type?: number;
-                                        is_third_enc?: boolean;
-                                        risk_status?: number;
-                                    }>;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/history`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_finish&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=drive&resource=file&version=v1 document }
@@ -6787,58 +5528,6 @@ export default abstract class Client extends docx {
                     return res?.data || null;
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=report_file_event&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=report_file_event&project=drive&resource=file&version=v1 document }
-                 *
-                 * 上报 Lark CLI 文件事件埋点
-                 */
-                reportFileEvent: async (
-                    payload?: {
-                        data: {
-                            file_scene: string;
-                            scene: string;
-                            tags: Record<string, string>;
-                            operation: string;
-                            latency?: string;
-                            score?: string;
-                            user_id?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { msg?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/lark_cli_file_event/report`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=delete&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=drive&resource=file&version=v1 document }
@@ -6880,290 +5569,6 @@ export default abstract class Client extends docx {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                searchWithIterator: async (
-                    payload?: {
-                        data: {
-                            search_key: string;
-                            owner_ids?: Array<string>;
-                            chat_ids?: Array<string>;
-                            docs_types?: Array<string>;
-                            count?: number;
-                            offset?: number;
-                        };
-                        params?: {
-                            page_token?: string;
-                            page_size?: number;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/v1/files/search`,
-                                    path
-                                ),
-                                method: "POST",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    docs_entities: Array<{
-                                                        docs_token: string;
-                                                        docs_type:
-                                                            | "doc"
-                                                            | "sheet"
-                                                            | "slide"
-                                                            | "bitable"
-                                                            | "mindnote"
-                                                            | "file";
-                                                        title: string;
-                                                        owner_id: string;
-                                                    }>;
-                                                    total?: number;
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=search&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=drive&resource=file&version=v1 document }
-                 */
-                search: async (
-                    payload?: {
-                        data: {
-                            search_key: string;
-                            owner_ids?: Array<string>;
-                            chat_ids?: Array<string>;
-                            docs_types?: Array<string>;
-                            count?: number;
-                            offset?: number;
-                        };
-                        params?: {
-                            page_token?: string;
-                            page_size?: number;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    docs_entities: Array<{
-                                        docs_token: string;
-                                        docs_type:
-                                            | "doc"
-                                            | "sheet"
-                                            | "slide"
-                                            | "bitable"
-                                            | "mindnote"
-                                            | "file";
-                                        title: string;
-                                        owner_id: string;
-                                    }>;
-                                    total?: number;
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/search`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * file.favorite
-             */
-            fileFavorite: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.favorite&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.favorite&version=v1 document }
-                 *
-                 * 收藏云文档
-                 *
-                 * 收藏一篇云文档
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            type:
-                                | "file"
-                                | "doc"
-                                | "sheet"
-                                | "bitable"
-                                | "docx"
-                                | "mindnote"
-                                | "wiki"
-                                | "folder"
-                                | "slides";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/favorite`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.favorite&apiName=delete&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=drive&resource=file.favorite&version=v1 document }
-                 *
-                 * 取消收藏云文档
-                 *
-                 * 取消收藏一篇云文档
-                 */
-                delete: async (
-                    payload?: {
-                        params: {
-                            type:
-                                | "file"
-                                | "doc"
-                                | "sheet"
-                                | "bitable"
-                                | "docx"
-                                | "mindnote"
-                                | "wiki"
-                                | "folder"
-                                | "slides";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/favorite`,
                                 path
                             ),
                             method: "DELETE",
@@ -7996,410 +6401,6 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * permission.public
-             */
-            permissionPublic: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=unlock&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unlock&project=drive&resource=permission.public&version=v1 document }
-                 */
-                unlock: async (
-                    payload?: {
-                        params: {
-                            type:
-                                | "doc"
-                                | "sheet"
-                                | "file"
-                                | "wiki"
-                                | "bitable"
-                                | "docx"
-                                | "mindnote"
-                                | "slides";
-                        };
-                        path: { token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/permissions/:token/public/unlock`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=permission.public&version=v1 document }
-                 *
-                 * 更新云文档权限设置
-                 *
-                 * 更新指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者、谁可以复制内容等设置。;
-                 *
-                 * 本接口为历史版本接口。推荐使用新版接口[更新云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/patch)。
-                 */
-                patch: async (
-                    payload?: {
-                        data?: {
-                            external_access?: boolean;
-                            security_entity?:
-                                | "anyone_can_view"
-                                | "anyone_can_edit"
-                                | "only_full_access";
-                            comment_entity?:
-                                | "anyone_can_view"
-                                | "anyone_can_edit";
-                            share_entity?:
-                                | "anyone"
-                                | "same_tenant"
-                                | "only_full_access";
-                            link_share_entity?:
-                                | "tenant_readable"
-                                | "tenant_editable"
-                                | "anyone_readable"
-                                | "anyone_editable"
-                                | "closed";
-                            invite_external?: boolean;
-                        };
-                        params: {
-                            type:
-                                | "doc"
-                                | "sheet"
-                                | "file"
-                                | "wiki"
-                                | "bitable"
-                                | "docx"
-                                | "mindnote"
-                                | "minutes"
-                                | "slides";
-                        };
-                        path: { token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    permission_public?: {
-                                        external_access?: boolean;
-                                        security_entity?:
-                                            | "anyone_can_view"
-                                            | "anyone_can_edit"
-                                            | "only_full_access";
-                                        comment_entity?:
-                                            | "anyone_can_view"
-                                            | "anyone_can_edit";
-                                        share_entity?:
-                                            | "anyone"
-                                            | "same_tenant"
-                                            | "only_full_access";
-                                        link_share_entity?:
-                                            | "tenant_readable"
-                                            | "tenant_editable"
-                                            | "anyone_readable"
-                                            | "anyone_editable"
-                                            | "closed";
-                                        invite_external?: boolean;
-                                        lock_switch?: boolean;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=permission.public&version=v1 document }
-                 *
-                 * 获取云文档权限设置
-                 *
-                 * 获取指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者等设置。
-                 *
-                 * 本接口为历史版本接口。推荐使用新版接口[获取云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/get)。
-                 */
-                get: async (
-                    payload?: {
-                        params: {
-                            type:
-                                | "doc"
-                                | "sheet"
-                                | "file"
-                                | "wiki"
-                                | "bitable"
-                                | "docx"
-                                | "mindnote"
-                                | "minutes"
-                                | "slides";
-                        };
-                        path: { token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    permission_public?: {
-                                        external_access?: boolean;
-                                        security_entity?:
-                                            | "anyone_can_view"
-                                            | "anyone_can_edit"
-                                            | "only_full_access";
-                                        comment_entity?:
-                                            | "anyone_can_view"
-                                            | "anyone_can_edit";
-                                        share_entity?:
-                                            | "anyone"
-                                            | "same_tenant"
-                                            | "only_full_access";
-                                        link_share_entity?:
-                                            | "tenant_readable"
-                                            | "tenant_editable"
-                                            | "anyone_readable"
-                                            | "anyone_editable"
-                                            | "closed";
-                                        invite_external?: boolean;
-                                        lock_switch?: boolean;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * favorite
-             */
-            favorite: {
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            page_size: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/v1/favorites`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items: Array<{
-                                                        token: string;
-                                                        name: string;
-                                                        type: string;
-                                                        parent_token?: string;
-                                                        url?: string;
-                                                        shortcut_info?: {
-                                                            target_type: string;
-                                                            target_token: string;
-                                                        };
-                                                        created_time?: string;
-                                                        modified_time?: string;
-                                                        owner_id?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=favorite&apiName=list&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=drive&resource=favorite&version=v1 document }
-                 *
-                 * 获取用户的云文档收藏列表
-                 *
-                 * 获取用户的收藏列表，包括文件、各种在线文档、文件夹。该接口支持分页。
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            page_size: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items: Array<{
-                                        token: string;
-                                        name: string;
-                                        type: string;
-                                        parent_token?: string;
-                                        url?: string;
-                                        shortcut_info?: {
-                                            target_type: string;
-                                            target_token: string;
-                                        };
-                                        created_time?: string;
-                                        modified_time?: string;
-                                        owner_id?: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/favorites`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
              * file.view_record
              */
             fileViewRecord: {
@@ -8812,392 +6813,45 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * media
+             * file.comment
              */
-            media: {
+            fileComment: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=batch_get_tmp_download_url&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_tmp_download_url&project=drive&resource=media&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment&version=v1 document }
                  *
-                 * 获取素材临时下载链接
+                 * 添加全文评论
                  *
-                 * 该接口用于获取云文档中素材的临时下载链接。链接的有效期为 24 小时，过期失效。
+                 * 在文档中添加一条全局评论，不支持局部评论。
                  */
-                batchGetTmpDownloadUrl: async (
+                create: async (
                     payload?: {
-                        params: { file_tokens: Array<string>; extra?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tmp_download_urls?: Array<{
-                                        file_token: string;
-                                        tmp_download_url: string;
+                        data?: {
+                            reply_list?: {
+                                replies: Array<{
+                                    content: {
+                                        elements: Array<{
+                                            type:
+                                                | "text_run"
+                                                | "docs_link"
+                                                | "person";
+                                            text_run?: { text: string };
+                                            docs_link?: { url: string };
+                                            person?: { user_id: string };
+                                        }>;
+                                    };
+                                    reactions?: Array<{
+                                        reaction_key: string;
+                                        count: number;
+                                        ahead_users?: Array<string>;
                                     }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/batch_get_tmp_download_url`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=download&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=drive&resource=media&version=v1 document }
-                 *
-                 * 下载素材
-                 *
-                 * 下载各类云文档中的素材，例如电子表格中的图片。该接口支持通过在请求头添加`Range` 参数分片下载素材。
-                 */
-                download: async (
-                    payload?: {
-                        params?: { extra?: string };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/:file_token/download`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_part&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=drive&resource=media&version=v1 document }
-                 *
-                 * 分片上传素材-上传分片
-                 *
-                 * 根据 [预上传](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_prepare)接口返回的上传事务 ID 和分片策略上传对应的素材分片。上传完成后，你可调用 [分片上传素材（完成上传）](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_finish)触发完成上传。
-                 *
-                 * ## 使用限制;;该接口调用频率上限为 5 QPS。
-                 */
-                uploadPart: async (
-                    payload?: {
-                        data: {
-                            upload_id: string;
-                            seq: number;
-                            size: number;
-                            checksum?: string;
-                            file: Buffer | fs.ReadStream;
+                                }>;
+                            };
                         };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/upload_part`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=drive&resource=media&version=v1 document }
-                 *
-                 * 分片上传素材-完成上传
-                 *
-                 * 调用[上传分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)接口将分片全部上传完毕后，你需调用本接口触发完成上传。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
-                 *
-                 * ## 使用限制;;该接口调用频率上限为 5 QPS。
-                 */
-                uploadFinish: async (
-                    payload?: {
-                        data: { upload_id: string; block_num: number };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { file_token?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/upload_finish`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_all&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_all&project=drive&resource=media&version=v1 document }
-                 *
-                 * 上传素材
-                 *
-                 * 将文件、图片、视频等素材上传到指定云文档中。素材将显示在对应云文档中，在云空间中不会显示。
-                 */
-                uploadAll: async (
-                    payload?: {
-                        data: {
-                            file_name: string;
-                            parent_type:
-                                | "doc_image"
-                                | "docx_image"
-                                | "sheet_image"
-                                | "doc_file"
-                                | "docx_file"
-                                | "sheet_file"
-                                | "vc_virtual_background"
-                                | "bitable_image"
-                                | "bitable_file"
-                                | "moments"
-                                | "ccm_import_open"
-                                | "calendar"
-                                | "base_global"
-                                | "lark_ai_media_analysis"
-                                | "whiteboard"
-                                | "mindnote_image"
-                                | "comment_image"
-                                | "slide_img"
-                                | "slide_file"
-                                | "email"
-                                | "bitable_tmp_point"
-                                | "office_sheet_file"
-                                | "office_slide_file";
-                            parent_node: string;
-                            size: number;
-                            checksum?: string;
-                            extra?: string;
-                            file: Buffer | fs.ReadStream;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const res = await this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { file_token?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/upload_all`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                    return res?.data || null;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_prepare&project=drive&resource=media&version=v1 document }
-                 *
-                 * 分片上传素材-预上传
-                 *
-                 * 发送初始化请求，以获取上传事务 ID 和分片策略，为[上传素材分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)做准备。平台固定以 4MB 的大小对素材进行分片。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
-                 */
-                uploadPrepare: async (
-                    payload?: {
-                        data: {
-                            file_name: string;
-                            parent_type:
-                                | "doc_image"
-                                | "docx_image"
-                                | "sheet_image"
-                                | "doc_file"
-                                | "docx_file"
-                                | "sheet_file"
-                                | "vc_virtual_background"
-                                | "bitable_image"
-                                | "bitable_file"
-                                | "moments"
-                                | "ccm_import_open"
-                                | "calendar"
-                                | "base_global"
-                                | "lark_ai_media_analysis"
-                                | "whiteboard"
-                                | "mindnote_image"
-                                | "comment_image"
-                                | "slide_img"
-                                | "slide_file"
-                                | "email"
-                                | "bitable_tmp_point"
-                                | "office_sheet_file"
-                                | "office_slide_file";
-                            size: number;
-                            parent_node?: string;
-                            extra?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    upload_id?: string;
-                                    block_size?: number;
-                                    block_num?: number;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/upload_prepare`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=preview_download&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview_download&project=drive&resource=media&version=v1 document }
-                 */
-                previewDownload: async (
-                    payload?: {
                         params: {
-                            extra?: string;
-                            preview_type: string;
-                            version?: string;
-                            bus_type?: string;
-                            platform?: string;
-                            width?: number;
-                            height?: number;
+                            file_type: "doc" | "docx";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { file_token: string };
                     },
@@ -9206,74 +6860,6 @@ export default abstract class Client extends docx {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/:file_token/preview_download`,
-                                path
-                            ),
-                            method: "GET",
-                            headers,
-                            data,
-                            params,
-                            responseType: "stream",
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=preview_result&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview_result&project=drive&resource=media&version=v1 document }
-                 *
-                 * 获取云文档文件的预览封面图和预览状态信息
-                 */
-                previewResult: async (
-                    payload?: {
-                        data?: { version?: string; ext?: string };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
                     return this.httpInstance
                         .request<
                             any,
@@ -9281,332 +6867,51 @@ export default abstract class Client extends docx {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    preview_results?: Array<{
-                                        preview_type?: number;
-                                        preview_status?: number;
-                                    }>;
-                                    cover_token?: string;
-                                    version?: string;
-                                    data_version?: string;
-                                    mount_point?: number;
-                                    file_size?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/medias/:file_token/preview_result`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * import_task
-             */
-            importTask: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=import_task&version=v1 document }
-                 *
-                 * 查询导入结果
-                 *
-                 * 根据[创建导入任务](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/create)返回的导入任务 ID（ticket）轮询导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
-                 */
-                get: async (
-                    payload?: {
-                        path: { ticket: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    result?: {
-                                        ticket?: string;
-                                        type: string;
-                                        job_status?: number;
-                                        job_error_msg?: string;
-                                        token?: string;
-                                        url?: string;
-                                        extra?: Array<string>;
+                                    comment_id?: string;
+                                    user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    is_solved?: boolean;
+                                    solved_time?: number;
+                                    solver_user_id?: string;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    is_whole?: boolean;
+                                    quote?: string;
+                                    reply_list?: {
+                                        replies: Array<{
+                                            content: {
+                                                elements: Array<{
+                                                    type:
+                                                        | "text_run"
+                                                        | "docs_link"
+                                                        | "person";
+                                                    text_run?: { text: string };
+                                                    docs_link?: { url: string };
+                                                    person?: {
+                                                        user_id: string;
+                                                    };
+                                                }>;
+                                            };
+                                            reply_id?: string;
+                                            user_id?: string;
+                                            create_time?: number;
+                                            update_time?: number;
+                                            extra?: {
+                                                image_list?: Array<string>;
+                                            };
+                                            reactions?: Array<{
+                                                reaction_key: string;
+                                                count: number;
+                                                ahead_users?: Array<string>;
+                                            }>;
+                                        }>;
                                     };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/import_tasks/:ticket`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=import_task&version=v1 document }
-                 *
-                 * 创建导入任务
-                 *
-                 * 该接口用于创建导入文件的任务，并返回导入任务 ID。导入文件指将本地文件如 Word、TXT、Markdown、Excel 等格式的文件导入为某种格式的飞书在线云文档。该接口为异步接口，需要继续调用[查询导入任务结果](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/get)接口获取导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
-                 *
-                 * ## 前提条件;创建导入任务前，你需先调用[上传素材](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all)或[上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all)接口获取源文件的 token。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            file_extension: string;
-                            file_token: string;
-                            type: string;
-                            file_name?: string;
-                            point: { mount_type: number; mount_key: string };
-                            token?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { ticket?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/import_tasks`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * user
-             */
-            user: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription_status&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription_status&project=drive&resource=user&version=v1 document }
-                 *
-                 * 查询用户云文档事件订阅状态
-                 *
-                 * 该接口用于查询用户云文档事件的订阅状态。仅当is_subscribe（订阅状态）为 true，应用才可收到 “用户云文档事件”下的各类通知事件。
-                 */
-                subscriptionStatus: async (
-                    payload?: {
-                        params: { event_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { data: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/user/subscription_status`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=remove_subscription&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscription&project=drive&resource=user&version=v1 document }
-                 *
-                 * 取消用户云文档事件订阅
-                 *
-                 * 该接口用于取消订阅用户云文档的通知事件。取消订阅后，用户将不再收到云文档评论、回复添加事件。
-                 */
-                removeSubscription: async (
-                    payload?: {
-                        params: { event_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/user/remove_subscription`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=drive&resource=user&version=v1 document }
-                 *
-                 * 订阅用户云文档事件
-                 *
-                 * 订阅用户云文档的各类通知事件，调用后目前可获取接收者视角的云文档评论、回复添加事件。
-                 *
-                 * ## 注意事项;仅用户身份订阅“用户云文档事件”时，需要调用该接口，应用身份无需调用。
-                 */
-                subscription: async (
-                    payload?: {
-                        data: { event_type: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/user/subscription`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * file.comment
-             */
-            fileComment: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create_v2&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_v2&project=drive&resource=file.comment&version=v1 document }
-                 *
-                 * 开放平台：添加评论(V2)
-                 */
-                createV2: async (
-                    payload?: {
-                        data: {
-                            file_type: string;
-                            anchor?: {
-                                block_id: string;
-                                parent_file_token?: string;
-                                parent_file_type?: string;
-                                sheet_row?: number;
-                                sheet_col?: number;
-                                slide_block_type?: string;
-                                base_record_id?: string;
-                                base_view_id?: string;
-                                file_page_num?: string;
-                                file_extra?: string;
-                                content_anchor_id?: string;
-                            };
-                            reply_elements: Array<{
-                                type: string;
-                                text?: string;
-                                mention_user?: string;
-                                link?: string;
-                            }>;
-                            extra?: string;
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    comment_id: string;
-                                    created_at: string;
-                                    idempotency_key?: string;
-                                    reply_id?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/files/:file_token/new_comments`,
+                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
                                 path
                             ),
                             method: "POST",
@@ -10029,116 +7334,6 @@ export default abstract class Client extends docx {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment&version=v1 document }
-                 *
-                 * 添加全文评论
-                 *
-                 * 在文档中添加一条全局评论，不支持局部评论。
-                 */
-                create: async (
-                    payload?: {
-                        data?: {
-                            reply_list?: {
-                                replies: Array<{
-                                    content: {
-                                        elements: Array<{
-                                            type:
-                                                | "text_run"
-                                                | "docs_link"
-                                                | "person";
-                                            text_run?: { text: string };
-                                            docs_link?: { url: string };
-                                            person?: { user_id: string };
-                                        }>;
-                                    };
-                                    reactions?: Array<{
-                                        reaction_key: string;
-                                        count: number;
-                                        ahead_users?: Array<string>;
-                                    }>;
-                                }>;
-                            };
-                        };
-                        params: {
-                            file_type: "doc" | "docx";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    comment_id?: string;
-                                    user_id?: string;
-                                    create_time?: number;
-                                    update_time?: number;
-                                    is_solved?: boolean;
-                                    solved_time?: number;
-                                    solver_user_id?: string;
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    is_whole?: boolean;
-                                    quote?: string;
-                                    reply_list?: {
-                                        replies: Array<{
-                                            content: {
-                                                elements: Array<{
-                                                    type:
-                                                        | "text_run"
-                                                        | "docs_link"
-                                                        | "person";
-                                                    text_run?: { text: string };
-                                                    docs_link?: { url: string };
-                                                    person?: {
-                                                        user_id: string;
-                                                    };
-                                                }>;
-                                            };
-                                            reply_id?: string;
-                                            user_id?: string;
-                                            create_time?: number;
-                                            update_time?: number;
-                                            extra?: {
-                                                image_list?: Array<string>;
-                                            };
-                                            reactions?: Array<{
-                                                reaction_key: string;
-                                                count: number;
-                                                ahead_users?: Array<string>;
-                                            }>;
-                                        }>;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=batch_query&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=drive&resource=file.comment&version=v1 document }
@@ -10246,6 +7441,617 @@ export default abstract class Client extends docx {
                 },
             },
             /**
+             * media
+             */
+            media: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=batch_get_tmp_download_url&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_tmp_download_url&project=drive&resource=media&version=v1 document }
+                 *
+                 * 获取素材临时下载链接
+                 *
+                 * 该接口用于获取云文档中素材的临时下载链接。链接的有效期为 24 小时，过期失效。
+                 */
+                batchGetTmpDownloadUrl: async (
+                    payload?: {
+                        params: { file_tokens: Array<string>; extra?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tmp_download_urls?: Array<{
+                                        file_token: string;
+                                        tmp_download_url: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/medias/batch_get_tmp_download_url`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=download&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=drive&resource=media&version=v1 document }
+                 *
+                 * 下载素材
+                 *
+                 * 下载各类云文档中的素材，例如电子表格中的图片。该接口支持通过在请求头添加`Range` 参数分片下载素材。
+                 */
+                download: async (
+                    payload?: {
+                        params?: { extra?: string };
+                        path: { file_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/medias/:file_token/download`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_part&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=drive&resource=media&version=v1 document }
+                 *
+                 * 分片上传素材-上传分片
+                 *
+                 * 根据 [预上传](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_prepare)接口返回的上传事务 ID 和分片策略上传对应的素材分片。上传完成后，你可调用 [分片上传素材（完成上传）](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_finish)触发完成上传。
+                 *
+                 * ## 使用限制;;该接口调用频率上限为 5 QPS。
+                 */
+                uploadPart: async (
+                    payload?: {
+                        data: {
+                            upload_id: string;
+                            seq: number;
+                            size: number;
+                            checksum?: string;
+                            file: Buffer | fs.ReadStream;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/medias/upload_part`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=drive&resource=media&version=v1 document }
+                 *
+                 * 分片上传素材-完成上传
+                 *
+                 * 调用[上传分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)接口将分片全部上传完毕后，你需调用本接口触发完成上传。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
+                 *
+                 * ## 使用限制;;该接口调用频率上限为 5 QPS。
+                 */
+                uploadFinish: async (
+                    payload?: {
+                        data: { upload_id: string; block_num: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_token?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/medias/upload_finish`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_all&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_all&project=drive&resource=media&version=v1 document }
+                 *
+                 * 上传素材
+                 *
+                 * 将文件、图片、视频等素材上传到指定云文档中。素材将显示在对应云文档中，在云空间中不会显示。
+                 */
+                uploadAll: async (
+                    payload?: {
+                        data: {
+                            file_name: string;
+                            parent_type:
+                                | "doc_image"
+                                | "docx_image"
+                                | "sheet_image"
+                                | "doc_file"
+                                | "docx_file"
+                                | "sheet_file"
+                                | "vc_virtual_background"
+                                | "bitable_image"
+                                | "bitable_file"
+                                | "moments"
+                                | "ccm_import_open"
+                                | "calendar"
+                                | "base_global"
+                                | "lark_ai_media_analysis"
+                                | "whiteboard"
+                                | "mindnote_image"
+                                | "comment_image"
+                                | "slide_img"
+                                | "slide_file"
+                                | "email"
+                                | "bitable_tmp_point"
+                                | "office_sheet_file"
+                                | "office_slide_file";
+                            parent_node: string;
+                            size: number;
+                            checksum?: string;
+                            extra?: string;
+                            file: Buffer | fs.ReadStream;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_token?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/medias/upload_all`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_prepare&project=drive&resource=media&version=v1 document }
+                 *
+                 * 分片上传素材-预上传
+                 *
+                 * 发送初始化请求，以获取上传事务 ID 和分片策略，为[上传素材分片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part)做准备。平台固定以 4MB 的大小对素材进行分片。了解完整的分片上传素材流程，参考[素材概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/introduction)。
+                 */
+                uploadPrepare: async (
+                    payload?: {
+                        data: {
+                            file_name: string;
+                            parent_type:
+                                | "doc_image"
+                                | "docx_image"
+                                | "sheet_image"
+                                | "doc_file"
+                                | "docx_file"
+                                | "sheet_file"
+                                | "vc_virtual_background"
+                                | "bitable_image"
+                                | "bitable_file"
+                                | "moments"
+                                | "ccm_import_open"
+                                | "calendar"
+                                | "base_global"
+                                | "lark_ai_media_analysis"
+                                | "whiteboard"
+                                | "mindnote_image"
+                                | "comment_image"
+                                | "slide_img"
+                                | "slide_file"
+                                | "email"
+                                | "bitable_tmp_point"
+                                | "office_sheet_file"
+                                | "office_slide_file";
+                            size: number;
+                            parent_node?: string;
+                            extra?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    upload_id?: string;
+                                    block_size?: number;
+                                    block_num?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/medias/upload_prepare`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * import_task
+             */
+            importTask: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=import_task&version=v1 document }
+                 *
+                 * 查询导入结果
+                 *
+                 * 根据[创建导入任务](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/create)返回的导入任务 ID（ticket）轮询导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
+                 */
+                get: async (
+                    payload?: {
+                        path: { ticket: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        ticket?: string;
+                                        type: string;
+                                        job_status?: number;
+                                        job_error_msg?: string;
+                                        token?: string;
+                                        url?: string;
+                                        extra?: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/import_tasks/:ticket`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_task&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=import_task&version=v1 document }
+                 *
+                 * 创建导入任务
+                 *
+                 * 该接口用于创建导入文件的任务，并返回导入任务 ID。导入文件指将本地文件如 Word、TXT、Markdown、Excel 等格式的文件导入为某种格式的飞书在线云文档。该接口为异步接口，需要继续调用[查询导入任务结果](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/get)接口获取导入结果。了解完整的导入文件步骤，参考[导入文件概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)。
+                 *
+                 * ## 前提条件;创建导入任务前，你需先调用[上传素材](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all)或[上传文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/upload_all)接口获取源文件的 token。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            file_extension: string;
+                            file_token: string;
+                            type: string;
+                            file_name?: string;
+                            point: { mount_type: number; mount_key: string };
+                            token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { ticket?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/import_tasks`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user
+             */
+            user: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription_status&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription_status&project=drive&resource=user&version=v1 document }
+                 *
+                 * 查询用户云文档事件订阅状态
+                 *
+                 * 该接口用于查询用户云文档事件的订阅状态。仅当is_subscribe（订阅状态）为 true，应用才可收到 “用户云文档事件”下的各类通知事件。
+                 */
+                subscriptionStatus: async (
+                    payload?: {
+                        params: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/user/subscription_status`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=remove_subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscription&project=drive&resource=user&version=v1 document }
+                 *
+                 * 取消用户云文档事件订阅
+                 *
+                 * 该接口用于取消订阅用户云文档的通知事件。取消订阅后，用户将不再收到云文档评论、回复添加事件。
+                 */
+                removeSubscription: async (
+                    payload?: {
+                        params: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/user/remove_subscription`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=drive&resource=user&version=v1 document }
+                 *
+                 * 订阅用户云文档事件
+                 *
+                 * 订阅用户云文档的各类通知事件，调用后目前可获取接收者视角的云文档评论、回复添加事件。
+                 *
+                 * ## 注意事项;仅用户身份订阅“用户云文档事件”时，需要调用该接口，应用身份无需调用。
+                 */
+                subscription: async (
+                    payload?: {
+                        data: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/user/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * file.comment.reply
              */
             fileCommentReply: {
@@ -10295,6 +8101,161 @@ export default abstract class Client extends docx {
                                 path
                             ),
                             method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment.reply&version=v1 document }
+                 *
+                 * 添加回复
+                 *
+                 * 使用该接口可对云文档中的某条评论进行回复，回复内容支持普通文本、云文档链接等。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            content: {
+                                elements: Array<{
+                                    type: "text_run" | "docs_link" | "person";
+                                    text_run?: { text: string };
+                                    docs_link?: { url: string };
+                                    person?: { user_id: string };
+                                }>;
+                            };
+                            extra?: string;
+                        };
+                        params: {
+                            file_type:
+                                | "doc"
+                                | "sheet"
+                                | "file"
+                                | "docx"
+                                | "slides"
+                                | "bitable"
+                                | "apps";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { file_token: string; comment_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    content?: {
+                                        elements: Array<{
+                                            type:
+                                                | "text_run"
+                                                | "docs_link"
+                                                | "person";
+                                            text_run?: { text: string };
+                                            docs_link?: { url: string };
+                                            person?: { user_id: string };
+                                        }>;
+                                    };
+                                    reply_id?: string;
+                                    user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    extra?: { image_list?: Array<string> };
+                                    reactions?: Array<{
+                                        reaction_key: string;
+                                        count: number;
+                                        ahead_users?: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=drive&resource=file.comment.reply&version=v1 document }
+                 *
+                 * 更新回复的内容
+                 *
+                 * 更新云文档中的某条回复的内容。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            content: {
+                                elements: Array<{
+                                    type: "text_run" | "docs_link" | "person";
+                                    text_run?: { text: string };
+                                    docs_link?: { url: string };
+                                    person?: { user_id: string };
+                                }>;
+                            };
+                        };
+                        params: {
+                            file_type:
+                                | "doc"
+                                | "docx"
+                                | "sheet"
+                                | "file"
+                                | "slides"
+                                | "bitable"
+                                | "apps";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: {
+                            file_token: string;
+                            comment_id: string;
+                            reply_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,
@@ -10519,40 +8480,58 @@ export default abstract class Client extends docx {
                             throw e;
                         });
                 },
+            },
+            /**
+             * permission.public
+             */
+            permissionPublic: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=patch&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment.reply&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=permission.public&version=v1 document }
                  *
-                 * 添加回复
+                 * 更新云文档权限设置
                  *
-                 * 使用该接口可对云文档中的某条评论进行回复，回复内容支持普通文本、云文档链接等。
+                 * 更新指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者、谁可以复制内容等设置。;
+                 *
+                 * 本接口为历史版本接口。推荐使用新版接口[更新云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/patch)。
                  */
-                create: async (
+                patch: async (
                     payload?: {
-                        data: {
-                            content: {
-                                elements: Array<{
-                                    type: "text_run" | "docs_link" | "person";
-                                    text_run?: { text: string };
-                                    docs_link?: { url: string };
-                                    person?: { user_id: string };
-                                }>;
-                            };
-                            extra?: string;
+                        data?: {
+                            external_access?: boolean;
+                            security_entity?:
+                                | "anyone_can_view"
+                                | "anyone_can_edit"
+                                | "only_full_access";
+                            comment_entity?:
+                                | "anyone_can_view"
+                                | "anyone_can_edit";
+                            share_entity?:
+                                | "anyone"
+                                | "same_tenant"
+                                | "only_full_access";
+                            link_share_entity?:
+                                | "tenant_readable"
+                                | "tenant_editable"
+                                | "anyone_readable"
+                                | "anyone_editable"
+                                | "closed";
+                            invite_external?: boolean;
                         };
                         params: {
-                            file_type:
+                            type:
                                 | "doc"
                                 | "sheet"
                                 | "file"
-                                | "docx"
-                                | "slides"
+                                | "wiki"
                                 | "bitable"
-                                | "apps";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
+                                | "docx"
+                                | "mindnote"
+                                | "minutes"
+                                | "slides";
                         };
-                        path: { file_token: string; comment_id: string };
+                        path: { token: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -10566,35 +8545,36 @@ export default abstract class Client extends docx {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    content?: {
-                                        elements: Array<{
-                                            type:
-                                                | "text_run"
-                                                | "docs_link"
-                                                | "person";
-                                            text_run?: { text: string };
-                                            docs_link?: { url: string };
-                                            person?: { user_id: string };
-                                        }>;
+                                    permission_public?: {
+                                        external_access?: boolean;
+                                        security_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit"
+                                            | "only_full_access";
+                                        comment_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit";
+                                        share_entity?:
+                                            | "anyone"
+                                            | "same_tenant"
+                                            | "only_full_access";
+                                        link_share_entity?:
+                                            | "tenant_readable"
+                                            | "tenant_editable"
+                                            | "anyone_readable"
+                                            | "anyone_editable"
+                                            | "closed";
+                                        invite_external?: boolean;
+                                        lock_switch?: boolean;
                                     };
-                                    reply_id?: string;
-                                    user_id?: string;
-                                    create_time?: number;
-                                    update_time?: number;
-                                    extra?: { image_list?: Array<string> };
-                                    reactions?: Array<{
-                                        reaction_key: string;
-                                        count: number;
-                                        ahead_users?: Array<string>;
-                                    }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies`,
+                                `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
                                 path
                             ),
-                            method: "POST",
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -10607,42 +8587,31 @@ export default abstract class Client extends docx {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=update&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=get&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=drive&resource=file.comment.reply&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=permission.public&version=v1 document }
                  *
-                 * 更新回复的内容
+                 * 获取云文档权限设置
                  *
-                 * 更新云文档中的某条回复的内容。
+                 * 获取指定云文档的权限设置，包括是否允许内容被分享到组织外、谁可以查看、添加、移除协作者等设置。
+                 *
+                 * 本接口为历史版本接口。推荐使用新版接口[获取云文档权限设置](https://open.feishu.cn/document/ukTMukTMukTM/uIzNzUjLyczM14iM3MTN/drive-v2/permission-public/get)。
                  */
-                update: async (
+                get: async (
                     payload?: {
-                        data: {
-                            content: {
-                                elements: Array<{
-                                    type: "text_run" | "docs_link" | "person";
-                                    text_run?: { text: string };
-                                    docs_link?: { url: string };
-                                    person?: { user_id: string };
-                                }>;
-                            };
-                        };
                         params: {
-                            file_type:
+                            type:
                                 | "doc"
-                                | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides"
+                                | "wiki"
                                 | "bitable"
-                                | "apps";
-                            user_id_type?: "user_id" | "union_id" | "open_id";
+                                | "docx"
+                                | "mindnote"
+                                | "minutes"
+                                | "slides";
                         };
-                        path: {
-                            file_token: string;
-                            comment_id: string;
-                            reply_id: string;
-                        };
+                        path: { token: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -10655,14 +8624,37 @@ export default abstract class Client extends docx {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { data: string };
+                                data?: {
+                                    permission_public?: {
+                                        external_access?: boolean;
+                                        security_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit"
+                                            | "only_full_access";
+                                        comment_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit";
+                                        share_entity?:
+                                            | "anyone"
+                                            | "same_tenant"
+                                            | "only_full_access";
+                                        link_share_entity?:
+                                            | "tenant_readable"
+                                            | "tenant_editable"
+                                            | "anyone_readable"
+                                            | "anyone_editable"
+                                            | "closed";
+                                        invite_external?: boolean;
+                                        lock_switch?: boolean;
+                                    };
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
+                                `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
                                 path
                             ),
-                            method: "PUT",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -11036,13 +9028,16 @@ export default abstract class Client extends docx {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=apply&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=auth&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=drive&resource=permission.member&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auth&project=drive&resource=permission.member&version=v1 document }
+                 *
+                 * 判断用户权限
+                 *
+                 * 判断当前请求的应用或用户是否具有指定云文档的指定权限，权限包括阅读、编辑、分享、评论、导出等权限。
                  */
-                apply: async (
+                auth: async (
                     payload?: {
-                        data?: { perm?: "view" | "edit"; remark?: string };
                         params: {
                             type:
                                 | "doc"
@@ -11052,8 +9047,18 @@ export default abstract class Client extends docx {
                                 | "bitable"
                                 | "docx"
                                 | "mindnote"
+                                | "minutes"
                                 | "slides"
                                 | "apps";
+                            action:
+                                | "view"
+                                | "edit"
+                                | "share"
+                                | "comment"
+                                | "export"
+                                | "copy"
+                                | "print"
+                                | "manage_public";
                         };
                         path: { token: string };
                     },
@@ -11065,13 +9070,17 @@ export default abstract class Client extends docx {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { auth_result: boolean };
+                            }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/permissions/:token/members/apply`,
+                                `${this.domain}/open-apis/drive/v1/permissions/:token/members/auth`,
                                 path
                             ),
-                            method: "POST",
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -11092,7 +9101,7 @@ export default abstract class Client extends docx {
                  *
                  * 为指定云文档添加协作者，协作者可以是用户、群组、部门、用户组等。
                  *
-                 * ## 前提条件;;- 调用该接口需要调用身份有该云文档添加协作者的权限。添加协作者的权限可通过云文档设置中的 **谁可以查看、添加、移除协作者** 等选项进行控制。;- 调用该接口时，需要调用身份与被授权对象 **互相可见**，例如：; - **添加用户协作者**：需要调用身份与被授权对象为联系人或同组织内可搜索，且互相未屏蔽。; - **添加群协作者**：需要调用身份在群内。要使用 `tenant_access_token` 身份添加群协作者，则需要将该应用作为机器人添加至群组中，使应用对群可见。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。; - **添加部门协作者**：需要调用身份对部门可见。由于应用对企业内的组织架构都不可见，所以暂不支持通过 `tenant_access_token` 添加部门协作者。;;## 注意事项;;不支持将应用直接添加到文件夹作为协作者（添加成功后实际仍然没有权限）。如果希望给应用授予文件夹的权限，请将应用作为群机器人添加到群组内，然后授予该群组可管理权限。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。
+                 * ## 前提条件;;- 调用该接口需要调用身份有该云文档添加协作者的权限。添加协作者的权限可通过云文档设置中的 **谁可以查看、添加、移除协作者** 等选项进行控制。;- 调用该接口时，需要调用身份与被授权对象 **互相可见**，例如：;    - **添加用户协作者**：需要调用身份与被授权对象为联系人或同组织内可搜索，且互相未屏蔽。;    - **添加群协作者**：需要调用身份在群内。要使用 `tenant_access_token` 身份添加群协作者，则需要将该应用作为机器人添加至群组中，使应用对群可见。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。;    - **添加部门协作者**：需要调用身份对部门可见。由于应用对企业内的组织架构都不可见，所以暂不支持通过 `tenant_access_token`  添加部门协作者。;;## 注意事项;;不支持将应用直接添加到文件夹作为协作者（添加成功后实际仍然没有权限）。如果希望给应用授予文件夹的权限，请将应用作为群机器人添加到群组内，然后授予该群组可管理权限。详细步骤参考[如何为应用开通云文档相关资源的权限](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-add-permissions-to-app)。
                  */
                 create: async (
                     payload?: {
@@ -11278,237 +9287,9 @@ export default abstract class Client extends docx {
                             throw e;
                         });
                 },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=auth&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auth&project=drive&resource=permission.member&version=v1 document }
-                 *
-                 * 判断用户权限
-                 *
-                 * 判断当前请求的应用或用户是否具有指定云文档的指定权限，权限包括阅读、编辑、分享、评论、导出等权限。
-                 */
-                auth: async (
-                    payload?: {
-                        params: {
-                            type:
-                                | "doc"
-                                | "sheet"
-                                | "file"
-                                | "wiki"
-                                | "bitable"
-                                | "docx"
-                                | "mindnote"
-                                | "minutes"
-                                | "slides"
-                                | "apps";
-                            action:
-                                | "view"
-                                | "edit"
-                                | "share"
-                                | "comment"
-                                | "export"
-                                | "copy"
-                                | "print"
-                                | "manage_public";
-                        };
-                        path: { token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { auth_result: boolean };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v1/permissions/:token/members/auth`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
             },
         },
         v2: {
-            /**
-             * my_like
-             */
-            myLike: {
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            file_type?: "all" | "doc" | "docx" | "file";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/v2/my_likes`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        last_liked_time?: string;
-                                                        file_token?: string;
-                                                        file_type?:
-                                                            | "doc"
-                                                            | "docx"
-                                                            | "file";
-                                                        file_name?: string;
-                                                        file_url?: string;
-                                                        file_is_deleted?: boolean;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=my_like&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=drive&resource=my_like&version=v2 document }
-                 *
-                 * 获取个人点赞的云文档列表
-                 *
-                 * 获取个人点赞的云文档列表并按点赞时间由近到远分页返回。
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            file_type?: "all" | "doc" | "docx" | "file";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        last_liked_time?: string;
-                                        file_token?: string;
-                                        file_type?: "doc" | "docx" | "file";
-                                        file_name?: string;
-                                        file_url?: string;
-                                        file_is_deleted?: boolean;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/my_likes`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
             /**
              * file.like
              */
@@ -11658,1334 +9439,6 @@ export default abstract class Client extends docx {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v2/files/:file_token/likes`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * my_secure_label
-             */
-            mySecureLabel: {
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            lang?: "zh" | "en" | "ja";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/v2/my_secure_labels`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        id: string;
-                                                        name: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=my_secure_label&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=drive&resource=my_secure_label&version=v2 document }
-                 *
-                 * 查询当前用户可用的密级标签
-                 *
-                 * 查询当前用户可用的密级标签
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            lang?: "zh" | "en" | "ja";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{ id: string; name: string }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/my_secure_labels`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * file.secure_label
-             */
-            fileSecureLabel: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.secure_label&apiName=update&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=drive&resource=file.secure_label&version=v2 document }
-                 *
-                 * 修改云文档的密级标签
-                 *
-                 * 修改云文档的密级标签
-                 */
-                update: async (
-                    payload?: {
-                        data: { id: string };
-                        params: {
-                            type:
-                                | "doc"
-                                | "docx"
-                                | "file"
-                                | "sheet"
-                                | "wiki"
-                                | "bitable"
-                                | "mindnote"
-                                | "slides";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/files/:file_token/secure_label`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.secure_label&apiName=patch&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=file.secure_label&version=v2 document }
-                 *
-                 * 修改文档的密级标签
-                 */
-                patch: async (
-                    payload?: {
-                        data: { id: string };
-                        params: {
-                            type:
-                                | "doc"
-                                | "docx"
-                                | "file"
-                                | "sheet"
-                                | "wiki"
-                                | "bitable"
-                                | "mindnote"
-                                | "slides";
-                        };
-                        path: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/files/:file_token/secure_label`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * export_job
-             */
-            exportJob: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=export_job&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=export_job&version=v2 document }
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            file_extension:
-                                | "larkdoc"
-                                | "larksheet"
-                                | "larkmm"
-                                | "lark_whiteboard"
-                                | "base";
-                            token: string;
-                            type: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { ticket?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/export_jobs`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=export_job&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=export_job&version=v2 document }
-                 */
-                get: async (
-                    payload?: {
-                        params: { token: string };
-                        path: { ticket: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    result?: {
-                                        file_extension:
-                                            | "larkdoc"
-                                            | "larksheet"
-                                            | "larkmm"
-                                            | "lark_whiteboard"
-                                            | "base";
-                                        type: string;
-                                        file_name?: string;
-                                        file_token?: string;
-                                        job_error_msg?: string;
-                                        job_status?: number;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/export_jobs/:ticket`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * import_job
-             */
-            importJob: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_job&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=import_job&version=v2 document }
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            file_extension:
-                                | "larkdoc"
-                                | "larksheet"
-                                | "larkmm"
-                                | "lark_whiteboard"
-                                | "base";
-                            file_token: string;
-                            type: string;
-                            file_name?: string;
-                            point: { mount_type: number; mount_key: string };
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { ticket?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/import_jobs`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=import_job&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=import_job&version=v2 document }
-                 */
-                get: async (
-                    payload?: {
-                        path: { ticket: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    result?: {
-                                        file_extension:
-                                            | "larkdoc"
-                                            | "larksheet"
-                                            | "larkmm"
-                                            | "lark_whiteboard"
-                                            | "base";
-                                        type: string;
-                                        job_status?: number;
-                                        job_error_msg?: string;
-                                        token?: string;
-                                        url?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/import_jobs/:ticket`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * storage_task
-             */
-            storageTask: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=storage_task&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=storage_task&version=v2 document }
-                 *
-                 * 创建存储清理任务
-                 *
-                 * 创建存储清理任务，可以清理用户下的消息文件
-                 *
-                 * 创建任务后，任务会删除条件范围内的消息文件，请注意删除条件
-                 */
-                create: async (
-                    payload?: {
-                        data?: {
-                            storage_task?: {
-                                policy_id?: number;
-                                task_name: string;
-                                config: {
-                                    includes?: Array<{
-                                        range?: number;
-                                        operator?:
-                                            | "resign"
-                                            | "unResign"
-                                            | "all"
-                                            | "eq"
-                                            | "lt"
-                                            | "gt"
-                                            | "lte"
-                                            | "gte"
-                                            | "between";
-                                        params?: Array<string>;
-                                    }>;
-                                    excludes?: Array<{
-                                        range?: number;
-                                        operator?:
-                                            | "resign"
-                                            | "unResign"
-                                            | "all"
-                                            | "eq"
-                                            | "lt"
-                                            | "gt"
-                                            | "lte"
-                                            | "gte"
-                                            | "between";
-                                        params?: Array<string>;
-                                    }>;
-                                };
-                                trash_remain_days: number;
-                            };
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { task_id?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/storage_task`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * quota_detail
-             */
-            quotaDetail: {
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            department_ids: Array<string>;
-                            page_size?: number;
-                            page_token?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/v2/quota_details`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        user_info?: {
-                                                            user_name?: string;
-                                                            avatar_url?: string;
-                                                            status?: number;
-                                                            employee_id?: string;
-                                                        };
-                                                        department_info?: Array<{
-                                                            department_name?: string;
-                                                            department_full_path?: string;
-                                                            custom_id?: string;
-                                                        }>;
-                                                        biz_lists?: Array<{
-                                                            name?: string;
-                                                            used?: string;
-                                                            quota?: string;
-                                                            unlimited?: boolean;
-                                                        }>;
-                                                    }>;
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=quota_detail&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=drive&resource=quota_detail&version=v2 document }
-                 *
-                 * 获取容量明细
-                 *
-                 * 获取对应部门下面的用户容量明细，包括云文档、IM、Mail、视频会议的容量
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            department_ids: Array<string>;
-                            page_size?: number;
-                            page_token?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        user_info?: {
-                                            user_name?: string;
-                                            avatar_url?: string;
-                                            status?: number;
-                                            employee_id?: string;
-                                        };
-                                        department_info?: Array<{
-                                            department_name?: string;
-                                            department_full_path?: string;
-                                            custom_id?: string;
-                                        }>;
-                                        biz_lists?: Array<{
-                                            name?: string;
-                                            used?: string;
-                                            quota?: string;
-                                            unlimited?: boolean;
-                                        }>;
-                                    }>;
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/quota_details`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=quota_detail&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=quota_detail&version=v2 document }
-                 *
-                 * 获取当前用户的容量信息，包含各业务使用量、租户配额是否超限、用户配额、所在部门配额
-                 */
-                get: async (
-                    payload?: {
-                        path: { quota_detail_id: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    biz_infos?: Array<{
-                                        name?: string;
-                                        used?: string;
-                                        quota?: string;
-                                        unlimited?: boolean;
-                                    }>;
-                                    is_tenant_quota_exceeded?: boolean;
-                                    user_quota?: {
-                                        id?: string;
-                                        limit?: string;
-                                        usage?: string;
-                                        type?: number;
-                                    };
-                                    department_quota?: {
-                                        id?: string;
-                                        limit?: string;
-                                        usage?: string;
-                                        type?: number;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/v2/quota_details/:quota_detail_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * list_edited_file
-             */
-            listEditedFile: {
-                getEditedFileWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: string;
-                            page_token?: string;
-                            type?: string;
-                            start_at?: string;
-                            end_at?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/files/edited`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    files?: Array<{
-                                                        token: string;
-                                                        title: string;
-                                                        type:
-                                                            | "doc"
-                                                            | "sheet"
-                                                            | "mindnote"
-                                                            | "bitable"
-                                                            | "file"
-                                                            | "docx"
-                                                            | "slides";
-                                                        url: string;
-                                                        last_edited_at: string;
-                                                        owner_user_id: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=list_edited_file&apiName=get_edited_file&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_edited_file&project=drive&resource=list_edited_file&version=v2 document }
-                 *
-                 * 以用户身份查询编辑的文件
-                 */
-                getEditedFile: async (
-                    payload?: {
-                        params?: {
-                            page_size?: string;
-                            page_token?: string;
-                            type?: string;
-                            start_at?: string;
-                            end_at?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    files?: Array<{
-                                        token: string;
-                                        title: string;
-                                        type:
-                                            | "doc"
-                                            | "sheet"
-                                            | "mindnote"
-                                            | "bitable"
-                                            | "file"
-                                            | "docx"
-                                            | "slides";
-                                        url: string;
-                                        last_edited_at: string;
-                                        owner_user_id: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/files/edited`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * list_owned_file
-             */
-            listOwnedFile: {
-                getOwnedFileWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: string;
-                            page_token?: string;
-                            type?: string;
-                            start_at?: string;
-                            end_at?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/files/owned`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    files?: Array<{
-                                                        token: string;
-                                                        title: string;
-                                                        type:
-                                                            | "doc"
-                                                            | "sheet"
-                                                            | "mindnote"
-                                                            | "bitable"
-                                                            | "file"
-                                                            | "docx"
-                                                            | "slides";
-                                                        url: string;
-                                                        created_at: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=list_owned_file&apiName=get_owned_file&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_owned_file&project=drive&resource=list_owned_file&version=v2 document }
-                 *
-                 * 以用户身份查询拥有的文件
-                 */
-                getOwnedFile: async (
-                    payload?: {
-                        params?: {
-                            page_size?: string;
-                            page_token?: string;
-                            type?: string;
-                            start_at?: string;
-                            end_at?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    files?: Array<{
-                                        token: string;
-                                        title: string;
-                                        type:
-                                            | "doc"
-                                            | "sheet"
-                                            | "mindnote"
-                                            | "bitable"
-                                            | "file"
-                                            | "docx"
-                                            | "slides";
-                                        url: string;
-                                        created_at: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/files/owned`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * list_accessed_file
-             */
-            listAccessedFile: {
-                getAccessedFileWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: string;
-                            page_token?: string;
-                            type?: string;
-                            start_at?: string;
-                            end_at?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/drive/files/accessed`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    has_more?: boolean;
-                                                    page_token?: string;
-                                                    files?: Array<{
-                                                        token: string;
-                                                        title: string;
-                                                        type:
-                                                            | "doc"
-                                                            | "sheet"
-                                                            | "mindnote"
-                                                            | "bitable"
-                                                            | "file"
-                                                            | "docx"
-                                                            | "slides";
-                                                        url: string;
-                                                        last_accessed_at: string;
-                                                        owner_user_id: string;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=list_accessed_file&apiName=get_accessed_file&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_accessed_file&project=drive&resource=list_accessed_file&version=v2 document }
-                 *
-                 * 以用户身份查询访问的文件
-                 */
-                getAccessedFile: async (
-                    payload?: {
-                        params?: {
-                            page_size?: string;
-                            page_token?: string;
-                            type?: string;
-                            start_at?: string;
-                            end_at?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    has_more?: boolean;
-                                    page_token?: string;
-                                    files?: Array<{
-                                        token: string;
-                                        title: string;
-                                        type:
-                                            | "doc"
-                                            | "sheet"
-                                            | "mindnote"
-                                            | "bitable"
-                                            | "file"
-                                            | "docx"
-                                            | "slides";
-                                        url: string;
-                                        last_accessed_at: string;
-                                        owner_user_id: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/drive/files/accessed`,
                                 path
                             ),
                             method: "GET",

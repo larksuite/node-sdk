@@ -111,138 +111,6 @@ export default abstract class Client extends mindnote {
                         headers: res.headers,
                     };
                 },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.transcript&apiName=word&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=word&project=minutes&resource=minute.transcript&version=v1 document }
-                 *
-                 * 妙记文字记录关键词批量替换
-                 */
-                word: async (
-                    payload?: {
-                        data?: {
-                            replace_words?: Array<{
-                                source_word?: string;
-                                target_word?: string;
-                            }>;
-                        };
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/transcript/word`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.transcript&apiName=speakerlist&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=speakerlist&project=minutes&resource=minute.transcript&version=v1 document }
-                 *
-                 * 获取文字记录说话人信息
-                 */
-                speakerlist: async (
-                    payload?: {
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    speakers?: Array<{
-                                        speaker_id?: string;
-                                        name?: string;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/transcript/speakerlist`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.transcript&apiName=speaker&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=speaker&project=minutes&resource=minute.transcript&version=v1 document }
-                 */
-                speaker: async (
-                    payload?: {
-                        data: {
-                            from_user_id?: string;
-                            to_user_id: string;
-                            from_speaker_id?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/transcript/speaker`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
             },
             /**
              * minute.statistics
@@ -356,81 +224,6 @@ export default abstract class Client extends mindnote {
              * minute
              */
             minute: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=upload&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=minutes&resource=minute&version=v1 document }
-                 */
-                upload: async (
-                    payload?: {
-                        data: { file_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: { minute_url?: string };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/upload`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=patch&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=minutes&resource=minute&version=v1 document }
-                 */
-                patch: async (
-                    payload?: {
-                        data?: { topic?: string };
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token`,
-                                path
-                            ),
-                            method: "PATCH",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=subscription&version=v1 click to debug }
                  *
@@ -552,150 +345,6 @@ export default abstract class Client extends mindnote {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/minutes/v1/minutes/:minute_token`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=summary&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=summary&project=minutes&resource=minute&version=v1 document }
-                 *
-                 * 替换妙记内 AI 总结
-                 */
-                summary: async (
-                    payload?: {
-                        data?: { summary?: string };
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/summary`,
-                                path
-                            ),
-                            method: "PUT",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=todo&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=todo&project=minutes&resource=minute&version=v1 document }
-                 *
-                 * 支持妙记待办的增删改
-                 */
-                todo: async (
-                    payload?: {
-                        data?: {
-                            todo_items?: Array<{
-                                content?: string;
-                                assignees?: Array<string>;
-                                is_done?: boolean;
-                                todo_id?: string;
-                                operation?: string;
-                            }>;
-                        };
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/todo`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=artifacts&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=artifacts&project=minutes&resource=minute&version=v1 document }
-                 *
-                 * 获取妙记AI产物
-                 *
-                 * 通过妙记唯一标识minute_token获取AI产物
-                 */
-                artifacts: async (
-                    payload?: {
-                        path: { minute_token: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    summary?: string;
-                                    minute_chapters?: Array<{
-                                        title?: string;
-                                        start_ms?: string;
-                                        stop_ms?: string;
-                                        summary_content?: string;
-                                    }>;
-                                    minute_todos?: Array<{
-                                        content?: string;
-                                        assignees?: Array<string>;
-                                        is_done?: boolean;
-                                        todo_id?: string;
-                                        operation?: string;
-                                    }>;
-                                    keywords?: Array<string>;
-                                    transcript?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/artifacts`,
                                 path
                             ),
                             method: "GET",
@@ -895,19 +544,17 @@ export default abstract class Client extends mindnote {
                             throw e;
                         });
                 },
-            },
-            /**
-             * minute.permission
-             */
-            minutePermission: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute.permission&apiName=apply&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=artifacts&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply&project=minutes&resource=minute.permission&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=artifacts&project=minutes&resource=minute&version=v1 document }
+                 *
+                 * 获取妙记AI产物
+                 *
+                 * 通过妙记唯一标识minute_token获取AI产物
                  */
-                apply: async (
+                artifacts: async (
                     payload?: {
-                        data: { perm: string };
                         path: { minute_token: string };
                     },
                     options?: IRequestOptions
@@ -918,13 +565,34 @@ export default abstract class Client extends mindnote {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    summary?: string;
+                                    minute_chapters?: Array<{
+                                        title?: string;
+                                        start_ms?: string;
+                                        stop_ms?: string;
+                                        summary_content?: string;
+                                    }>;
+                                    minute_todos?: Array<{
+                                        content?: string;
+                                        assignees?: Array<string>;
+                                        is_done?: boolean;
+                                        todo_id?: string;
+                                        operation?: string;
+                                    }>;
+                                    keywords?: Array<string>;
+                                    transcript?: string;
+                                };
+                            }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/permissions/apply`,
+                                `${this.domain}/open-apis/minutes/v1/minutes/:minute_token/artifacts`,
                                 path
                             ),
-                            method: "POST",
+                            method: "GET",
                             data,
                             params,
                             headers,
