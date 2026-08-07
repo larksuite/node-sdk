@@ -1838,6 +1838,132 @@ export default abstract class Client extends llpp {
             },
         },
         /**
+         * user.alias
+         */
+        userAlias: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user.alias&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user.alias&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    path?: { user_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    primary_email?: string;
+                                    email_alias?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/users/:user_id/aliases`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user.alias&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user.alias&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path?: { user_id?: string; alias_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/users/:user_id/aliases/:alias_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user.alias&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user.alias&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: { email_alias?: string };
+                    path?: { user_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_alias?: {
+                                    primary_email?: string;
+                                    email_alias?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/users/:user_id/aliases`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * mailgroup.alias
          */
         mailgroupAlias: {
@@ -3338,6 +3464,55 @@ export default abstract class Client extends llpp {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=public_mailbox&apiName=restore&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=restore&project=mail&resource=public_mailbox&version=v1 document }
+             *
+             * 恢复已删除的公共邮箱地址
+             *
+             * restore deleted public mailbox
+             */
+            restore: async (
+                payload?: {
+                    path: { public_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                public_mailbox_id?: string;
+                                email?: string;
+                                name?: string;
+                                mail_address_status?: number;
+                                restored?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/restore`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * user
@@ -3378,6 +3553,47 @@ export default abstract class Client extends llpp {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/users/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * large_file
+         */
+        largeFile: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=large_file&apiName=expire&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=expire&project=mail&resource=large_file&version=v1 document }
+             *
+             * 超大附件过期
+             *
+             * 使超大附件过期失效
+             */
+            expire: async (
+                payload?: {
+                    path: { token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/large_file/:token/expire`,
                             path
                         ),
                         method: "POST",
@@ -3501,6 +3717,67 @@ export default abstract class Client extends llpp {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/send`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=reply_message&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply_message&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 回复邮件
+             *
+             * 回复某一封邮件
+             *
+             * 回复邮件时使用 base64url 编码。与普通 base64 的区别是将「+/」替换为「-_」。;对于 Golang 使用 base64.URLEncoding。;;该接口基于单个用户加锁，只能串行调用
+             */
+            replyMessage: async (
+                payload?: {
+                    data?: {
+                        reply_all?: boolean;
+                        subject?: string;
+                        body_html?: string;
+                        attachments?: Array<{
+                            body: string;
+                            filename: string;
+                            is_inline?: boolean;
+                            cid?: string;
+                        }>;
+                        quote_message?: boolean;
+                        to?: Array<{ mail_address: string; name?: string }>;
+                        cc?: Array<{ mail_address: string; name?: string }>;
+                        bcc?: Array<{ mail_address: string; name?: string }>;
+                        head_from?: { name?: string };
+                    };
+                    path: { user_mailbox_id: string; message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { message_id?: string; thread_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/reply`,
                             path
                         ),
                         method: "POST",
@@ -4230,6 +4507,1486 @@ export default abstract class Client extends llpp {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * event_log
+         */
+        eventLog: {
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        event_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/event_logs`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    mail_from?: string;
+                                                    rcpt_to?: string;
+                                                    smtp_message_id?: string;
+                                                    event_type?: number;
+                                                    timestamp?: number;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=event_log&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=event_log&version=v1 document }
+             *
+             * 列出行为日志
+             *
+             * 列出租户下用户的行为日志。;## 测试;不对好登记防守打法送的i就是低价;就四等奖覅扫地机方式
+             *
+             * 当前接口已下线，文档也不再维护更新，请勿继续使用该接口。;;- 我是 *自定义* 权限;- **说明**;
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        event_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    mail_from?: string;
+                                    rcpt_to?: string;
+                                    smtp_message_id?: string;
+                                    event_type?: number;
+                                    timestamp?: number;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/event_logs`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * domain_incremental_switch
+         */
+        domainIncrementalSwitch: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain_incremental_switch&apiName=address_service_type&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=address_service_type&project=mail&resource=domain_incremental_switch&version=v1 document }
+             *
+             * 查询地址服务类型
+             *
+             * 查询对应地址处于Gmail服务还是LMS服务
+             */
+            addressServiceType: async (
+                payload?: {
+                    data?: { addresses?: Array<string>; domain_name?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { service_type?: Record<string, string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/domain_incremental_switch/address_service_type`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain_incremental_switch&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=domain_incremental_switch&version=v1 document }
+             *
+             * 批量新增域名切换黑名单
+             *
+             * 维护域名切换的黑名单
+             */
+            batchCreate: async (
+                payload?: {
+                    data?: {
+                        domain_name?: string;
+                        items?: Array<{
+                            entity_type:
+                                | "DEPARTMENT"
+                                | "PUBLIC_MAILBOX"
+                                | "USER"
+                                | "GROUP";
+                            user_id?: string;
+                            email?: string;
+                            lark_department_id?: string;
+                            group_id?: string;
+                        }>;
+                    };
+                    params?: { group_id_type?: "group_id" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                failed_items?: Array<{
+                                    entity_type:
+                                        | "DEPARTMENT"
+                                        | "PUBLIC_MAILBOX"
+                                        | "USER"
+                                        | "GROUP";
+                                    user_id?: string;
+                                    email?: string;
+                                    lark_department_id?: string;
+                                    group_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/domain_incremental_switch/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain_incremental_switch&apiName=batch_remove&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove&project=mail&resource=domain_incremental_switch&version=v1 document }
+             *
+             * 批量移除域名切换黑名单
+             *
+             * 维护域名切换的黑名单
+             */
+            batchRemove: async (
+                payload?: {
+                    data?: {
+                        domain_name?: string;
+                        items?: Array<{
+                            entity_type:
+                                | "DEPARTMENT"
+                                | "PUBLIC_MAILBOX"
+                                | "USER"
+                                | "GROUP";
+                            user_id?: string;
+                            email?: string;
+                            lark_department_id?: string;
+                            group_id?: string;
+                        }>;
+                    };
+                    params?: { group_id_type?: "group_id" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                failed_items?: Array<{
+                                    entity_type:
+                                        | "DEPARTMENT"
+                                        | "PUBLIC_MAILBOX"
+                                        | "USER"
+                                        | "GROUP";
+                                    user_id?: string;
+                                    email?: string;
+                                    lark_department_id?: string;
+                                    group_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/domain_incremental_switch/batch_remove`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * mail_log
+         */
+        mailLog: {
+            mailFlowRuleWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        tag_name?: string;
+                        start_time?: string;
+                        end_time?: string;
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_logs/mail_flow_rule`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    timestamp: string;
+                                                    id: string;
+                                                    initiator?: {
+                                                        type: number;
+                                                        email_address?: string;
+                                                        entity_id?: string;
+                                                        user_id?: string;
+                                                    };
+                                                    operator?: {
+                                                        type: number;
+                                                        email_address?: string;
+                                                        entity_id?: string;
+                                                        user_id?: string;
+                                                    };
+                                                    mail_info?: {
+                                                        message_id?: string;
+                                                        owner?: {
+                                                            type: number;
+                                                            email_address?: string;
+                                                            entity_id?: string;
+                                                            user_id?: string;
+                                                        };
+                                                        event_types?: Array<
+                                                            | "internal_out"
+                                                            | "external_out"
+                                                        >;
+                                                        smtp_message_id?: string;
+                                                        date?: string;
+                                                        subject?: string;
+                                                        header_from?: {
+                                                            mail_address: string;
+                                                            name?: string;
+                                                        };
+                                                        to_recipients?: Array<{
+                                                            mail_address: string;
+                                                            name?: string;
+                                                        }>;
+                                                        cc_recipients?: Array<{
+                                                            mail_address: string;
+                                                            name?: string;
+                                                        }>;
+                                                        bcc_recipients?: Array<{
+                                                            mail_address: string;
+                                                            name?: string;
+                                                        }>;
+                                                        attachment_num?: string;
+                                                        image_num?: string;
+                                                        attachments?: Array<{
+                                                            id?: string;
+                                                            filename_hash?: string;
+                                                            size?: string;
+                                                        }>;
+                                                        images?: Array<{
+                                                            id?: string;
+                                                            filename_hash?: string;
+                                                            size?: string;
+                                                        }>;
+                                                    };
+                                                    rule_infos?: Array<{
+                                                        id: string;
+                                                        name?: string;
+                                                        action_category?: number;
+                                                    }>;
+                                                    tags?: Array<string>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_log&apiName=mail_flow_rule&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mail_flow_rule&project=mail&resource=mail_log&version=v1 document }
+             *
+             * 邮件流规则日志
+             *
+             * 查询发信时命中邮件流规则产生的日志
+             *
+             * 每次最多可查询 100 条数据;
+             */
+            mailFlowRule: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        tag_name?: string;
+                        start_time?: string;
+                        end_time?: string;
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    timestamp: string;
+                                    id: string;
+                                    initiator?: {
+                                        type: number;
+                                        email_address?: string;
+                                        entity_id?: string;
+                                        user_id?: string;
+                                    };
+                                    operator?: {
+                                        type: number;
+                                        email_address?: string;
+                                        entity_id?: string;
+                                        user_id?: string;
+                                    };
+                                    mail_info?: {
+                                        message_id?: string;
+                                        owner?: {
+                                            type: number;
+                                            email_address?: string;
+                                            entity_id?: string;
+                                            user_id?: string;
+                                        };
+                                        event_types?: Array<
+                                            "internal_out" | "external_out"
+                                        >;
+                                        smtp_message_id?: string;
+                                        date?: string;
+                                        subject?: string;
+                                        header_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        to_recipients?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc_recipients?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc_recipients?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        attachment_num?: string;
+                                        image_num?: string;
+                                        attachments?: Array<{
+                                            id?: string;
+                                            filename_hash?: string;
+                                            size?: string;
+                                        }>;
+                                        images?: Array<{
+                                            id?: string;
+                                            filename_hash?: string;
+                                            size?: string;
+                                        }>;
+                                    };
+                                    rule_infos?: Array<{
+                                        id: string;
+                                        name?: string;
+                                        action_category?: number;
+                                    }>;
+                                    tags?: Array<string>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mail_logs/mail_flow_rule`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * mailgroup_as_sender_permission_member
+         */
+        mailgroupAsSenderPermissionMember: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup_as_sender_permission_member&apiName=batch_remove&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove&project=mail&resource=mailgroup_as_sender_permission_member&version=v1 document }
+             *
+             * 批量移除「谁可通过邮件组发信」权限成员
+             *
+             * 批量移除「谁可通过邮件组发信」权限成员
+             */
+            batchRemove: async (
+                payload?: {
+                    data?: { items?: Array<{ user_id?: string }> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { mailgroup_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                failed_items?: Array<{ user_id?: string }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members/batch_remove`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup_as_sender_permission_member&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=mailgroup_as_sender_permission_member&version=v1 document }
+             *
+             * 批量新增「谁可通过邮件组发信」权限成员
+             *
+             * 批量新增「谁可通过邮件组发信」权限成员
+             */
+            batchCreate: async (
+                payload?: {
+                    data?: { items?: Array<{ user_id?: string }> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { mailgroup_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                failed_items?: Array<{ user_id?: string }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listAsSenderPermissionMemberWithIterator: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { mailgroup_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: string;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    user_id?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup_as_sender_permission_member&apiName=list_as_sender_permission_member&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_as_sender_permission_member&project=mail&resource=mailgroup_as_sender_permission_member&version=v1 document }
+             *
+             * 获取邮件组「谁可通过邮件组发信」权限成员
+             *
+             * 分页拉取邮件组「谁可通过邮件组发信」权限成员
+             */
+            listAsSenderPermissionMember: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { mailgroup_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: string;
+                                page_token?: string;
+                                items?: Array<{ user_id?: string }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * tmp_message
+         */
+        tmpMessage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=tmp_message&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=tmp_message&version=v1 document }
+             *
+             * 硬删除邮件
+             *
+             * 物理删除指定邮件
+             */
+            delete: async (
+                payload?: {
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { delete_message_count?: number };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/tmp_messages/:message_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * mail_data_manage
+         */
+        mailDataManage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_data_manage&apiName=query_task_status&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_task_status&project=mail&resource=mail_data_manage&version=v1 document }
+             *
+             * 查询任务状态
+             *
+             * 查询任务状态
+             */
+            queryTaskStatus: async (
+                payload?: {
+                    data: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                task?: {
+                                    task_id?: string;
+                                    task_status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mail_data_manage/query_task_status`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        start_timestamp?: string;
+                        end_timestamp?: string;
+                        smtp_message_id?: string;
+                        sender?: string;
+                        recipient?: string;
+                        subject?: string;
+                        next_created_time_ms?: string;
+                        owner_ids?: Array<string>;
+                        owner_addresses?: Array<string>;
+                        status?: number;
+                    };
+                    params: { page_size: number; page_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_data_manage/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    created_timestamp?: string;
+                                                    owner?: string;
+                                                    owner_id?: string;
+                                                    subject?: string;
+                                                    mail_from?: string;
+                                                    mail_to?: string;
+                                                    message_id?: string;
+                                                    status?: number;
+                                                    thread_id?: string;
+                                                    message_biz_id?: string;
+                                                    item_id?: string;
+                                                }>;
+                                                next_created_time_ms?: string;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_data_manage&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=mail&resource=mail_data_manage&version=v1 document }
+             *
+             * 搜索邮件;
+             *
+             * 搜索需要撤回的邮件;
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        start_timestamp?: string;
+                        end_timestamp?: string;
+                        smtp_message_id?: string;
+                        sender?: string;
+                        recipient?: string;
+                        subject?: string;
+                        next_created_time_ms?: string;
+                        owner_ids?: Array<string>;
+                        owner_addresses?: Array<string>;
+                        status?: number;
+                    };
+                    params: { page_size: number; page_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    created_timestamp?: string;
+                                    owner?: string;
+                                    owner_id?: string;
+                                    subject?: string;
+                                    mail_from?: string;
+                                    mail_to?: string;
+                                    message_id?: string;
+                                    status?: number;
+                                    thread_id?: string;
+                                    message_biz_id?: string;
+                                    item_id?: string;
+                                }>;
+                                next_created_time_ms?: string;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mail_data_manage/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_data_manage&apiName=recall&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recall&project=mail&resource=mail_data_manage&version=v1 document }
+             *
+             * 撤回邮件;
+             *
+             * 撤回所选择的邮件;
+             */
+            recall: async (
+                payload?: {
+                    data?: {
+                        selectors?: Array<{
+                            owner_id?: string;
+                            thread_id?: string;
+                            message_biz_id?: string;
+                            smtp_message_id?: string;
+                        }>;
+                        operator?: string;
+                        start_timestamp?: string;
+                        end_timestamp?: string;
+                        smtp_message_id?: string;
+                        sender?: string;
+                        recipient?: string;
+                        subject?: string;
+                        status?: number;
+                        owner_addresses?: Array<string>;
+                        is_select_all?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { task_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mail_data_manage/recall`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * mail_recipient_log
+         */
+        mailRecipientLog: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_recipient_log&apiName=recipient_log&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recipient_log&project=mail&resource=mail_recipient_log&version=v1 document }
+             *
+             * 查询邮件收发记录;
+             *
+             * 查询某封邮件的流转日志;
+             */
+            recipientLog: async (
+                payload?: {
+                    data?: {
+                        message_id?: string;
+                        recipient?: string;
+                        locale?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                data?: {
+                                    subject?: string;
+                                    direction?: number;
+                                    sender?: string;
+                                    recipient?: string;
+                                    created_timestamp?: string;
+                                    message_id?: string;
+                                    message_size?: string;
+                                    attachment_number?: number;
+                                    last_status?: string;
+                                    last_status_type?: number;
+                                    is_recipient_group?: boolean;
+                                    group_total_member?: number;
+                                    recipient_mail_log?: {
+                                        recipient?: string;
+                                        mail_log_texts?: Array<{
+                                            created_timestamp?: string;
+                                            text?: string;
+                                            status_type?: number;
+                                            text_values?: Array<{
+                                                param_name?: string;
+                                                param_type?: number;
+                                                param_extra?: Record<
+                                                    string,
+                                                    string
+                                                >;
+                                            }>;
+                                        }>;
+                                    };
+                                    sender_mail_location_text?: string;
+                                    sender_mail_location_text_values?: Array<{
+                                        param_name?: string;
+                                        param_type?: number;
+                                        param_extra?: Record<string, string>;
+                                    }>;
+                                    recipient_mail_location_text?: string;
+                                    recipient_mail_location_text_values?: Array<{
+                                        param_name?: string;
+                                        param_type?: number;
+                                        param_extra?: Record<string, string>;
+                                    }>;
+                                    sender_ip?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mail_recipient_log/recipient_log`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        start_timestamp?: string;
+                        end_timestamp?: string;
+                        message_id?: string;
+                        sender?: string;
+                        recipient?: string;
+                        subject?: string;
+                        delivery_status_types?: Array<number>;
+                    };
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_recipient_log/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    created_timestamp?: string;
+                                                    message_id?: string;
+                                                    sender?: string;
+                                                    recipient?: string;
+                                                    subject?: string;
+                                                    status?: string;
+                                                    status_type?: number;
+                                                    sender_ip?: string;
+                                                    real_sender?: string;
+                                                }>;
+                                                total?: number;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_recipient_log&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=mail&resource=mail_recipient_log&version=v1 document }
+             *
+             * 搜索收发记录
+             *
+             * search recipient log
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        start_timestamp?: string;
+                        end_timestamp?: string;
+                        message_id?: string;
+                        sender?: string;
+                        recipient?: string;
+                        subject?: string;
+                        delivery_status_types?: Array<number>;
+                    };
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    created_timestamp?: string;
+                                    message_id?: string;
+                                    sender?: string;
+                                    recipient?: string;
+                                    subject?: string;
+                                    status?: string;
+                                    status_type?: number;
+                                    sender_ip?: string;
+                                    real_sender?: string;
+                                }>;
+                                total?: number;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mail_recipient_log/search`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6397,6 +8154,544 @@ export default abstract class Client extends llpp {
             },
         },
         /**
+         * blocked_sender
+         */
+        blockedSender: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=blocked_sender&version=v1 document }
+             *
+             * 删除白名单发件人
+             */
+            delete: async (
+                payload?: {
+                    path: { blocked_sender_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/blocked_senders/:blocked_sender_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        keyword?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/blocked_senders`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                items?: Array<{
+                                                    address: string;
+                                                    blocked_sender_id?: string;
+                                                    description?: string;
+                                                    created_time?: string;
+                                                    last_updated_time?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=blocked_sender&version=v1 document }
+             *
+             * 查询白名单发件人列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        keyword?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                page_token?: string;
+                                has_more?: boolean;
+                                items?: Array<{
+                                    address: string;
+                                    blocked_sender_id?: string;
+                                    description?: string;
+                                    created_time?: string;
+                                    last_updated_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/blocked_senders`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=blocked_sender&version=v1 document }
+             *
+             * 更新白名单发件人
+             */
+            update: async (
+                payload?: {
+                    data?: { address?: string; description?: string };
+                    path: { blocked_sender_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/blocked_senders/:blocked_sender_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=blocked_sender&version=v1 document }
+             *
+             * 批量创建黑名单发件人
+             */
+            batchCreate: async (
+                payload?: {
+                    data?: { addresses?: Array<string>; description?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { failed_items?: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/blocked_senders/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * allowed_sender
+         */
+        allowedSender: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=allowed_sender&version=v1 document }
+             *
+             * 批量创建白名单发件人
+             */
+            batchCreate: async (
+                payload?: {
+                    data?: {
+                        addresses?: Array<string>;
+                        description?: string;
+                        need_authorized?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { failed_items?: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/allowed_senders/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=allowed_sender&version=v1 document }
+             *
+             * 删除白名单发件人
+             */
+            delete: async (
+                payload?: {
+                    path: { allowed_sender_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/allowed_senders/:allowed_sender_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        keyword?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/allowed_senders`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                items?: Array<{
+                                                    address: string;
+                                                    allowed_sender_id?: string;
+                                                    description?: string;
+                                                    created_time?: string;
+                                                    last_updated_time?: string;
+                                                    need_authorized?: boolean;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=allowed_sender&version=v1 document }
+             *
+             * 查询白名单发件人列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        keyword?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                page_token?: string;
+                                has_more?: boolean;
+                                items?: Array<{
+                                    address: string;
+                                    allowed_sender_id?: string;
+                                    description?: string;
+                                    created_time?: string;
+                                    last_updated_time?: string;
+                                    need_authorized?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/allowed_senders`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=allowed_sender&version=v1 document }
+             *
+             * 更新白名单发件人
+             */
+            update: async (
+                payload?: {
+                    data?: {
+                        address?: string;
+                        description?: string;
+                        need_authorized?: boolean;
+                    };
+                    path: { allowed_sender_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/allowed_senders/:allowed_sender_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * user_mailbox.sent_message
          */
         userMailboxSentMessage: {
@@ -6506,6 +8801,107 @@ export default abstract class Client extends llpp {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/recall`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.mail_card
+         */
+        userMailboxMailCard: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_card&apiName=create_share_session&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_share_session&project=mail&resource=user_mailbox.mail_card&version=v1 document }
+             *
+             * 创建邮件分享凭证，获取 card_id。获取后需要调用发送接口将邮件卡片发送到 IM 会话。
+             */
+            createShareSession: async (
+                payload?: {
+                    data?: {
+                        message_id?: string;
+                        thread_id?: string;
+                        include_spam_and_trash?: boolean;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { card_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/share_token`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_card&apiName=send&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send&project=mail&resource=user_mailbox.mail_card&version=v1 document }
+             *
+             * 将邮件卡片发送到 IM会话。需要先调用创建分享凭证接口获取 card_id。
+             */
+            send: async (
+                payload?: {
+                    data: { receive_id: string };
+                    params?: {
+                        receive_id_type?:
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id";
+                    };
+                    path: { user_mailbox_id: string; card_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { message_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/share_tokens/:card_id/send`,
                             path
                         ),
                         method: "POST",
@@ -7281,6 +9677,64 @@ export default abstract class Client extends llpp {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/attachments/download_url`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * domain
+         */
+        domain: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=domain&version=v1 document }
+             *
+             * 查询域名列表
+             *
+             * 查询域名列表-支持单个域名与全量域名查询
+             */
+            list: async (
+                payload?: {
+                    params?: { domain_name?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    domain_name?: string;
+                                    is_ownership_verified?: boolean;
+                                    domain_type?: number;
+                                    using_in_migration?: boolean;
+                                    primary_domain_name?: string;
+                                    spf_status?: number;
+                                    mx_status?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/domains`,
                             path
                         ),
                         method: "GET",
@@ -9141,6 +11595,135 @@ export default abstract class Client extends llpp {
                 },
             },
             /**
+             * user.alias
+             */
+            userAlias: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user.alias&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user.alias&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        path?: { user_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        primary_email?: string;
+                                        email_alias?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/users/:user_id/aliases`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user.alias&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user.alias&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { user_id?: string; alias_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/users/:user_id/aliases/:alias_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user.alias&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user.alias&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: { email_alias?: string };
+                        path?: { user_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_alias?: {
+                                        primary_email?: string;
+                                        email_alias?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/users/:user_id/aliases`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * mailgroup.alias
              */
             mailgroupAlias: {
@@ -10680,6 +13263,55 @@ export default abstract class Client extends llpp {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=public_mailbox&apiName=restore&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=restore&project=mail&resource=public_mailbox&version=v1 document }
+                 *
+                 * 恢复已删除的公共邮箱地址
+                 *
+                 * restore deleted public mailbox
+                 */
+                restore: async (
+                    payload?: {
+                        path: { public_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    public_mailbox_id?: string;
+                                    email?: string;
+                                    name?: string;
+                                    mail_address_status?: number;
+                                    restored?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/restore`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * user
@@ -10720,6 +13352,50 @@ export default abstract class Client extends llpp {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/users/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * large_file
+             */
+            largeFile: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=large_file&apiName=expire&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=expire&project=mail&resource=large_file&version=v1 document }
+                 *
+                 * 超大附件过期
+                 *
+                 * 使超大附件过期失效
+                 */
+                expire: async (
+                    payload?: {
+                        path: { token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/large_file/:token/expire`,
                                 path
                             ),
                             method: "POST",
@@ -10849,6 +13525,73 @@ export default abstract class Client extends llpp {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/send`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=reply_message&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply_message&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 回复邮件
+                 *
+                 * 回复某一封邮件
+                 *
+                 * 回复邮件时使用 base64url 编码。与普通 base64 的区别是将「+/」替换为「-_」。;对于 Golang 使用 base64.URLEncoding。;;该接口基于单个用户加锁，只能串行调用
+                 */
+                replyMessage: async (
+                    payload?: {
+                        data?: {
+                            reply_all?: boolean;
+                            subject?: string;
+                            body_html?: string;
+                            attachments?: Array<{
+                                body: string;
+                                filename: string;
+                                is_inline?: boolean;
+                                cid?: string;
+                            }>;
+                            quote_message?: boolean;
+                            to?: Array<{ mail_address: string; name?: string }>;
+                            cc?: Array<{ mail_address: string; name?: string }>;
+                            bcc?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            head_from?: { name?: string };
+                        };
+                        path: { user_mailbox_id: string; message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    thread_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/reply`,
                                 path
                             ),
                             method: "POST",
@@ -11596,6 +14339,1507 @@ export default abstract class Client extends llpp {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * event_log
+             */
+            eventLog: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            event_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/event_logs`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        mail_from?: string;
+                                                        rcpt_to?: string;
+                                                        smtp_message_id?: string;
+                                                        event_type?: number;
+                                                        timestamp?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=event_log&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=event_log&version=v1 document }
+                 *
+                 * 列出行为日志
+                 *
+                 * 列出租户下用户的行为日志。;## 测试;不对好登记防守打法送的i就是低价;就四等奖覅扫地机方式
+                 *
+                 * 当前接口已下线，文档也不再维护更新，请勿继续使用该接口。;;- 我是 *自定义* 权限;- **说明**;
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            event_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        mail_from?: string;
+                                        rcpt_to?: string;
+                                        smtp_message_id?: string;
+                                        event_type?: number;
+                                        timestamp?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/event_logs`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * domain_incremental_switch
+             */
+            domainIncrementalSwitch: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain_incremental_switch&apiName=address_service_type&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=address_service_type&project=mail&resource=domain_incremental_switch&version=v1 document }
+                 *
+                 * 查询地址服务类型
+                 *
+                 * 查询对应地址处于Gmail服务还是LMS服务
+                 */
+                addressServiceType: async (
+                    payload?: {
+                        data?: {
+                            addresses?: Array<string>;
+                            domain_name?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    service_type?: Record<string, string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/domain_incremental_switch/address_service_type`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain_incremental_switch&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=domain_incremental_switch&version=v1 document }
+                 *
+                 * 批量新增域名切换黑名单
+                 *
+                 * 维护域名切换的黑名单
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            domain_name?: string;
+                            items?: Array<{
+                                entity_type:
+                                    | "DEPARTMENT"
+                                    | "PUBLIC_MAILBOX"
+                                    | "USER"
+                                    | "GROUP";
+                                user_id?: string;
+                                email?: string;
+                                lark_department_id?: string;
+                                group_id?: string;
+                            }>;
+                        };
+                        params?: { group_id_type?: "group_id" };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{
+                                        entity_type:
+                                            | "DEPARTMENT"
+                                            | "PUBLIC_MAILBOX"
+                                            | "USER"
+                                            | "GROUP";
+                                        user_id?: string;
+                                        email?: string;
+                                        lark_department_id?: string;
+                                        group_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/domain_incremental_switch/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain_incremental_switch&apiName=batch_remove&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove&project=mail&resource=domain_incremental_switch&version=v1 document }
+                 *
+                 * 批量移除域名切换黑名单
+                 *
+                 * 维护域名切换的黑名单
+                 */
+                batchRemove: async (
+                    payload?: {
+                        data?: {
+                            domain_name?: string;
+                            items?: Array<{
+                                entity_type:
+                                    | "DEPARTMENT"
+                                    | "PUBLIC_MAILBOX"
+                                    | "USER"
+                                    | "GROUP";
+                                user_id?: string;
+                                email?: string;
+                                lark_department_id?: string;
+                                group_id?: string;
+                            }>;
+                        };
+                        params?: { group_id_type?: "group_id" };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{
+                                        entity_type:
+                                            | "DEPARTMENT"
+                                            | "PUBLIC_MAILBOX"
+                                            | "USER"
+                                            | "GROUP";
+                                        user_id?: string;
+                                        email?: string;
+                                        lark_department_id?: string;
+                                        group_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/domain_incremental_switch/batch_remove`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * mail_log
+             */
+            mailLog: {
+                mailFlowRuleWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            tag_name?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/mail_logs/mail_flow_rule`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        timestamp: string;
+                                                        id: string;
+                                                        initiator?: {
+                                                            type: number;
+                                                            email_address?: string;
+                                                            entity_id?: string;
+                                                            user_id?: string;
+                                                        };
+                                                        operator?: {
+                                                            type: number;
+                                                            email_address?: string;
+                                                            entity_id?: string;
+                                                            user_id?: string;
+                                                        };
+                                                        mail_info?: {
+                                                            message_id?: string;
+                                                            owner?: {
+                                                                type: number;
+                                                                email_address?: string;
+                                                                entity_id?: string;
+                                                                user_id?: string;
+                                                            };
+                                                            event_types?: Array<
+                                                                | "internal_out"
+                                                                | "external_out"
+                                                            >;
+                                                            smtp_message_id?: string;
+                                                            date?: string;
+                                                            subject?: string;
+                                                            header_from?: {
+                                                                mail_address: string;
+                                                                name?: string;
+                                                            };
+                                                            to_recipients?: Array<{
+                                                                mail_address: string;
+                                                                name?: string;
+                                                            }>;
+                                                            cc_recipients?: Array<{
+                                                                mail_address: string;
+                                                                name?: string;
+                                                            }>;
+                                                            bcc_recipients?: Array<{
+                                                                mail_address: string;
+                                                                name?: string;
+                                                            }>;
+                                                            attachment_num?: string;
+                                                            image_num?: string;
+                                                            attachments?: Array<{
+                                                                id?: string;
+                                                                filename_hash?: string;
+                                                                size?: string;
+                                                            }>;
+                                                            images?: Array<{
+                                                                id?: string;
+                                                                filename_hash?: string;
+                                                                size?: string;
+                                                            }>;
+                                                        };
+                                                        rule_infos?: Array<{
+                                                            id: string;
+                                                            name?: string;
+                                                            action_category?: number;
+                                                        }>;
+                                                        tags?: Array<string>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_log&apiName=mail_flow_rule&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mail_flow_rule&project=mail&resource=mail_log&version=v1 document }
+                 *
+                 * 邮件流规则日志
+                 *
+                 * 查询发信时命中邮件流规则产生的日志
+                 *
+                 * 每次最多可查询 100 条数据;
+                 */
+                mailFlowRule: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            tag_name?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        timestamp: string;
+                                        id: string;
+                                        initiator?: {
+                                            type: number;
+                                            email_address?: string;
+                                            entity_id?: string;
+                                            user_id?: string;
+                                        };
+                                        operator?: {
+                                            type: number;
+                                            email_address?: string;
+                                            entity_id?: string;
+                                            user_id?: string;
+                                        };
+                                        mail_info?: {
+                                            message_id?: string;
+                                            owner?: {
+                                                type: number;
+                                                email_address?: string;
+                                                entity_id?: string;
+                                                user_id?: string;
+                                            };
+                                            event_types?: Array<
+                                                "internal_out" | "external_out"
+                                            >;
+                                            smtp_message_id?: string;
+                                            date?: string;
+                                            subject?: string;
+                                            header_from?: {
+                                                mail_address: string;
+                                                name?: string;
+                                            };
+                                            to_recipients?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            cc_recipients?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            bcc_recipients?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            attachment_num?: string;
+                                            image_num?: string;
+                                            attachments?: Array<{
+                                                id?: string;
+                                                filename_hash?: string;
+                                                size?: string;
+                                            }>;
+                                            images?: Array<{
+                                                id?: string;
+                                                filename_hash?: string;
+                                                size?: string;
+                                            }>;
+                                        };
+                                        rule_infos?: Array<{
+                                            id: string;
+                                            name?: string;
+                                            action_category?: number;
+                                        }>;
+                                        tags?: Array<string>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_logs/mail_flow_rule`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * mailgroup_as_sender_permission_member
+             */
+            mailgroupAsSenderPermissionMember: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup_as_sender_permission_member&apiName=batch_remove&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove&project=mail&resource=mailgroup_as_sender_permission_member&version=v1 document }
+                 *
+                 * 批量移除「谁可通过邮件组发信」权限成员
+                 *
+                 * 批量移除「谁可通过邮件组发信」权限成员
+                 */
+                batchRemove: async (
+                    payload?: {
+                        data?: { items?: Array<{ user_id?: string }> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { mailgroup_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{ user_id?: string }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members/batch_remove`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup_as_sender_permission_member&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=mailgroup_as_sender_permission_member&version=v1 document }
+                 *
+                 * 批量新增「谁可通过邮件组发信」权限成员
+                 *
+                 * 批量新增「谁可通过邮件组发信」权限成员
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: { items?: Array<{ user_id?: string }> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { mailgroup_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{ user_id?: string }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listAsSenderPermissionMemberWithIterator: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { mailgroup_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: string;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        user_id?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup_as_sender_permission_member&apiName=list_as_sender_permission_member&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_as_sender_permission_member&project=mail&resource=mailgroup_as_sender_permission_member&version=v1 document }
+                 *
+                 * 获取邮件组「谁可通过邮件组发信」权限成员
+                 *
+                 * 分页拉取邮件组「谁可通过邮件组发信」权限成员
+                 */
+                listAsSenderPermissionMember: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { mailgroup_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: string;
+                                    page_token?: string;
+                                    items?: Array<{ user_id?: string }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/as_sender_permission_members`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * tmp_message
+             */
+            tmpMessage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=tmp_message&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=tmp_message&version=v1 document }
+                 *
+                 * 硬删除邮件
+                 *
+                 * 物理删除指定邮件
+                 */
+                delete: async (
+                    payload?: {
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { delete_message_count?: number };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/tmp_messages/:message_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * mail_data_manage
+             */
+            mailDataManage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_data_manage&apiName=query_task_status&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_task_status&project=mail&resource=mail_data_manage&version=v1 document }
+                 *
+                 * 查询任务状态
+                 *
+                 * 查询任务状态
+                 */
+                queryTaskStatus: async (
+                    payload?: {
+                        data: { task_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    task?: {
+                                        task_id?: string;
+                                        task_status?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_data_manage/query_task_status`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            start_timestamp?: string;
+                            end_timestamp?: string;
+                            smtp_message_id?: string;
+                            sender?: string;
+                            recipient?: string;
+                            subject?: string;
+                            next_created_time_ms?: string;
+                            owner_ids?: Array<string>;
+                            owner_addresses?: Array<string>;
+                            status?: number;
+                        };
+                        params: { page_size: number; page_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/mail_data_manage/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        created_timestamp?: string;
+                                                        owner?: string;
+                                                        owner_id?: string;
+                                                        subject?: string;
+                                                        mail_from?: string;
+                                                        mail_to?: string;
+                                                        message_id?: string;
+                                                        status?: number;
+                                                        thread_id?: string;
+                                                        message_biz_id?: string;
+                                                        item_id?: string;
+                                                    }>;
+                                                    next_created_time_ms?: string;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_data_manage&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=mail&resource=mail_data_manage&version=v1 document }
+                 *
+                 * 搜索邮件;
+                 *
+                 * 搜索需要撤回的邮件;
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            start_timestamp?: string;
+                            end_timestamp?: string;
+                            smtp_message_id?: string;
+                            sender?: string;
+                            recipient?: string;
+                            subject?: string;
+                            next_created_time_ms?: string;
+                            owner_ids?: Array<string>;
+                            owner_addresses?: Array<string>;
+                            status?: number;
+                        };
+                        params: { page_size: number; page_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        created_timestamp?: string;
+                                        owner?: string;
+                                        owner_id?: string;
+                                        subject?: string;
+                                        mail_from?: string;
+                                        mail_to?: string;
+                                        message_id?: string;
+                                        status?: number;
+                                        thread_id?: string;
+                                        message_biz_id?: string;
+                                        item_id?: string;
+                                    }>;
+                                    next_created_time_ms?: string;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_data_manage/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_data_manage&apiName=recall&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recall&project=mail&resource=mail_data_manage&version=v1 document }
+                 *
+                 * 撤回邮件;
+                 *
+                 * 撤回所选择的邮件;
+                 */
+                recall: async (
+                    payload?: {
+                        data?: {
+                            selectors?: Array<{
+                                owner_id?: string;
+                                thread_id?: string;
+                                message_biz_id?: string;
+                                smtp_message_id?: string;
+                            }>;
+                            operator?: string;
+                            start_timestamp?: string;
+                            end_timestamp?: string;
+                            smtp_message_id?: string;
+                            sender?: string;
+                            recipient?: string;
+                            subject?: string;
+                            status?: number;
+                            owner_addresses?: Array<string>;
+                            is_select_all?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { task_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_data_manage/recall`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * mail_recipient_log
+             */
+            mailRecipientLog: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_recipient_log&apiName=recipient_log&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recipient_log&project=mail&resource=mail_recipient_log&version=v1 document }
+                 *
+                 * 查询邮件收发记录;
+                 *
+                 * 查询某封邮件的流转日志;
+                 */
+                recipientLog: async (
+                    payload?: {
+                        data?: {
+                            message_id?: string;
+                            recipient?: string;
+                            locale?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data?: {
+                                        subject?: string;
+                                        direction?: number;
+                                        sender?: string;
+                                        recipient?: string;
+                                        created_timestamp?: string;
+                                        message_id?: string;
+                                        message_size?: string;
+                                        attachment_number?: number;
+                                        last_status?: string;
+                                        last_status_type?: number;
+                                        is_recipient_group?: boolean;
+                                        group_total_member?: number;
+                                        recipient_mail_log?: {
+                                            recipient?: string;
+                                            mail_log_texts?: Array<{
+                                                created_timestamp?: string;
+                                                text?: string;
+                                                status_type?: number;
+                                                text_values?: Array<{
+                                                    param_name?: string;
+                                                    param_type?: number;
+                                                    param_extra?: Record<
+                                                        string,
+                                                        string
+                                                    >;
+                                                }>;
+                                            }>;
+                                        };
+                                        sender_mail_location_text?: string;
+                                        sender_mail_location_text_values?: Array<{
+                                            param_name?: string;
+                                            param_type?: number;
+                                            param_extra?: Record<
+                                                string,
+                                                string
+                                            >;
+                                        }>;
+                                        recipient_mail_location_text?: string;
+                                        recipient_mail_location_text_values?: Array<{
+                                            param_name?: string;
+                                            param_type?: number;
+                                            param_extra?: Record<
+                                                string,
+                                                string
+                                            >;
+                                        }>;
+                                        sender_ip?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_recipient_log/recipient_log`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            start_timestamp?: string;
+                            end_timestamp?: string;
+                            message_id?: string;
+                            sender?: string;
+                            recipient?: string;
+                            subject?: string;
+                            delivery_status_types?: Array<number>;
+                        };
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/mail_recipient_log/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        created_timestamp?: string;
+                                                        message_id?: string;
+                                                        sender?: string;
+                                                        recipient?: string;
+                                                        subject?: string;
+                                                        status?: string;
+                                                        status_type?: number;
+                                                        sender_ip?: string;
+                                                        real_sender?: string;
+                                                    }>;
+                                                    total?: number;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mail_recipient_log&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=mail&resource=mail_recipient_log&version=v1 document }
+                 *
+                 * 搜索收发记录
+                 *
+                 * search recipient log
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            start_timestamp?: string;
+                            end_timestamp?: string;
+                            message_id?: string;
+                            sender?: string;
+                            recipient?: string;
+                            subject?: string;
+                            delivery_status_types?: Array<number>;
+                        };
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        created_timestamp?: string;
+                                        message_id?: string;
+                                        sender?: string;
+                                        recipient?: string;
+                                        subject?: string;
+                                        status?: string;
+                                        status_type?: number;
+                                        sender_ip?: string;
+                                        real_sender?: string;
+                                    }>;
+                                    total?: number;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/mail_recipient_log/search`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -13838,6 +18082,563 @@ export default abstract class Client extends llpp {
                 },
             },
             /**
+             * blocked_sender
+             */
+            blockedSender: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=blocked_sender&version=v1 document }
+                 *
+                 * 删除白名单发件人
+                 */
+                delete: async (
+                    payload?: {
+                        path: { blocked_sender_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/blocked_senders/:blocked_sender_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            keyword?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/blocked_senders`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    items?: Array<{
+                                                        address: string;
+                                                        blocked_sender_id?: string;
+                                                        description?: string;
+                                                        created_time?: string;
+                                                        last_updated_time?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=blocked_sender&version=v1 document }
+                 *
+                 * 查询白名单发件人列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            keyword?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    items?: Array<{
+                                        address: string;
+                                        blocked_sender_id?: string;
+                                        description?: string;
+                                        created_time?: string;
+                                        last_updated_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/blocked_senders`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=blocked_sender&version=v1 document }
+                 *
+                 * 更新白名单发件人
+                 */
+                update: async (
+                    payload?: {
+                        data?: { address?: string; description?: string };
+                        path: { blocked_sender_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/blocked_senders/:blocked_sender_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=blocked_sender&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=blocked_sender&version=v1 document }
+                 *
+                 * 批量创建黑名单发件人
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            addresses?: Array<string>;
+                            description?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { failed_items?: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/blocked_senders/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * allowed_sender
+             */
+            allowedSender: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=mail&resource=allowed_sender&version=v1 document }
+                 *
+                 * 批量创建白名单发件人
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            addresses?: Array<string>;
+                            description?: string;
+                            need_authorized?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { failed_items?: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/allowed_senders/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=allowed_sender&version=v1 document }
+                 *
+                 * 删除白名单发件人
+                 */
+                delete: async (
+                    payload?: {
+                        path: { allowed_sender_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/allowed_senders/:allowed_sender_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            keyword?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/allowed_senders`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    items?: Array<{
+                                                        address: string;
+                                                        allowed_sender_id?: string;
+                                                        description?: string;
+                                                        created_time?: string;
+                                                        last_updated_time?: string;
+                                                        need_authorized?: boolean;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=allowed_sender&version=v1 document }
+                 *
+                 * 查询白名单发件人列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            keyword?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    items?: Array<{
+                                        address: string;
+                                        allowed_sender_id?: string;
+                                        description?: string;
+                                        created_time?: string;
+                                        last_updated_time?: string;
+                                        need_authorized?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/allowed_senders`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=allowed_sender&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=allowed_sender&version=v1 document }
+                 *
+                 * 更新白名单发件人
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            address?: string;
+                            description?: string;
+                            need_authorized?: boolean;
+                        };
+                        path: { allowed_sender_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/allowed_senders/:allowed_sender_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * user_mailbox.sent_message
              */
             userMailboxSentMessage: {
@@ -13950,6 +18751,107 @@ export default abstract class Client extends llpp {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/recall`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.mail_card
+             */
+            userMailboxMailCard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_card&apiName=create_share_session&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_share_session&project=mail&resource=user_mailbox.mail_card&version=v1 document }
+                 *
+                 * 创建邮件分享凭证，获取 card_id。获取后需要调用发送接口将邮件卡片发送到 IM 会话。
+                 */
+                createShareSession: async (
+                    payload?: {
+                        data?: {
+                            message_id?: string;
+                            thread_id?: string;
+                            include_spam_and_trash?: boolean;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { card_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/share_token`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_card&apiName=send&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send&project=mail&resource=user_mailbox.mail_card&version=v1 document }
+                 *
+                 * 将邮件卡片发送到 IM会话。需要先调用创建分享凭证接口获取 card_id。
+                 */
+                send: async (
+                    payload?: {
+                        data: { receive_id: string };
+                        params?: {
+                            receive_id_type?:
+                                | "open_id"
+                                | "user_id"
+                                | "union_id"
+                                | "email"
+                                | "chat_id";
+                        };
+                        path: { user_mailbox_id: string; card_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { message_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/share_tokens/:card_id/send`,
                                 path
                             ),
                             method: "POST",
@@ -14734,6 +19636,64 @@ export default abstract class Client extends llpp {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/attachments/download_url`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * domain
+             */
+            domain: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=domain&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=domain&version=v1 document }
+                 *
+                 * 查询域名列表
+                 *
+                 * 查询域名列表-支持单个域名与全量域名查询
+                 */
+                list: async (
+                    payload?: {
+                        params?: { domain_name?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        domain_name?: string;
+                                        is_ownership_verified?: boolean;
+                                        domain_type?: number;
+                                        using_in_migration?: boolean;
+                                        primary_domain_name?: string;
+                                        spf_status?: number;
+                                        mx_status?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/domains`,
                                 path
                             ),
                             method: "GET",

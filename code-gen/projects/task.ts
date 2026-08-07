@@ -3687,6 +3687,1324 @@ export default abstract class Client extends subscriptions {
         },
         v2: {
             /**
+             * tasklist
+             */
+            tasklist: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=task_statistics&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=task_statistics&project=task&resource=tasklist&version=v2 document }
+                 */
+                taskStatistics: async (
+                    payload?: {
+                        path?: { tasklist_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    task_statistics?: {
+                                        total_tasks_count?: number;
+                                        total_completed_tasks_count?: number;
+                                        total_uncompleted_tasks_count?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/task_statistics`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=tasks&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=tasks&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 获取清单任务列表
+                 *
+                 * 获取一个清单的任务列表，返回任务的摘要信息。;;本接口支持分页。清单中的任务以“自定义拖拽”的顺序返回。;;本接口支持简单的按照任务的完成状态或者任务的创建时间范围过滤。;;分页参数说明：是否还有分页数据的判断依据是has_more=true，并非items个数，由于历史原因可能出现当前分页items为空的情况。
+                 *
+                 * 需要清单读取权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 */
+                tasks: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            completed?: boolean;
+                            created_from?: string;
+                            created_to?: string;
+                            user_id_type?: string;
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        summary?: string;
+                                        completed_at?: string;
+                                        start?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        due?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        subtask_count?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                activityRecordsWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_count?: number;
+                            page_token?: string;
+                            locale?: "zh_cn" | "en_us" | "ja_jp";
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            timezone?: string;
+                            time_range?: "today";
+                            page_size?: number;
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_records`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        key?: number;
+                                                        content?: string;
+                                                        created_at?: string;
+                                                        op_user?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        key_name?: string;
+                                                        target_task_guid?: string;
+                                                        target_task_name?: string;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=activity_records&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=activity_records&project=task&resource=tasklist&version=v2 document }
+                 */
+                activityRecords: async (
+                    payload?: {
+                        params?: {
+                            page_count?: number;
+                            page_token?: string;
+                            locale?: "zh_cn" | "en_us" | "ja_jp";
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                            timezone?: string;
+                            time_range?: "today";
+                            page_size?: number;
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        key?: number;
+                                        content?: string;
+                                        created_at?: string;
+                                        op_user?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        key_name?: string;
+                                        target_task_guid?: string;
+                                        target_task_name?: string;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_records`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=add_subscribers&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_subscribers&project=task&resource=tasklist&version=v2 document }
+                 */
+                addSubscribers: async (
+                    payload?: {
+                        data: {
+                            subscribers: Array<{
+                                id?: string;
+                                type?: string;
+                                role?: string;
+                                name?: string;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/add_subscribers`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 删除清单
+                 *
+                 * 删除一个清单。;;删除清单后，不可对该清单做任何操作，也无法再访问到清单。清单被删除后不可恢复。
+                 *
+                 * 删除清单需要清单管理权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { tasklist_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=remove_subscribers&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscribers&project=task&resource=tasklist&version=v2 document }
+                 */
+                removeSubscribers: async (
+                    payload?: {
+                        data?: {
+                            subscribers?: Array<{
+                                id?: string;
+                                type?: string;
+                                role?: string;
+                                name?: string;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path?: { tasklist_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/remove_subscribers`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 获取清单详情
+                 *
+                 * 获取一个清单的详细信息，包括清单名，所有者，清单成员等。
+                 *
+                 * 需要清单的读取权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 */
+                get: async (
+                    payload?: {
+                        params?: { user_id_type?: string };
+                        path?: { tasklist_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasklist?: {
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/tasklists`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        guid?: string;
+                                                        name?: string;
+                                                        creator?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        owner?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        members?: Array<{
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        }>;
+                                                        url?: string;
+                                                        created_at?: string;
+                                                        updated_at?: string;
+                                                        archive_msec?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 获取清单列表
+                 *
+                 * 获取调用身份所有可读取的清单列表。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=detail&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=detail&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 查询企业清单详情;
+                 *
+                 * 获取（企业下所有用户的）清单详细信息，包括清单名，所有者，清单成员等。;
+                 */
+                detail: async (
+                    payload?: {
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasklist?: {
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/detail`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=add_members&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_members&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 添加清单成员
+                 *
+                 * 向一个清单添加1个或多个协作成员。成员信息通过设置`members`字段实现。关于member的格式，详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 如何表示任务和清单的成员？”章节。;;一个清单协作成员可以是一个用户，应用或者群组。每个成员可以设置“可编辑”或者“可阅读”的角色。群组作为协作成员表示该群里所有群成员都自动拥有群组协作成员的角色。;;如果要添加的成员已经是清单成员，且角色和请求中设置是一样的，则会被自动忽略，接口返回成功。;;如果要添加的成员已经是清单成员，且角色和请求中设置是不一样的（比如原来的角色是可阅读，请求中设为可编辑），则相当于更新其角色。;;如果要添加的成员已经是清单的所有者，则会被自动忽略。接口返回成功。其所有者的角色不会改变。;;本接口不能用来设置清单所有者，如要设置，可以使用[更新清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/patch)接口。
+                 *
+                 * 需要清单编辑权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 */
+                addMembers: async (
+                    payload?: {
+                        data: {
+                            members: Array<{
+                                id?: string;
+                                type?: string;
+                                role?: string;
+                                name?: string;
+                            }>;
+                        };
+                        params?: { user_id_type?: string };
+                        path?: { tasklist_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasklist?: {
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/add_members`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=remove_members&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_members&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 移除清单成员
+                 *
+                 * 移除清单的一个或多个协作成员。通过设置`members`字段表示要移除的成员信息。关于member的格式，详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 如何表示任务和清单的成员？”章节。;;清单中同一个成员只能有一个角色，通过的member的id和type可以唯一确定一个成员，因此请求参数中对于要删除的成员，不需要填写"role"字段。;;如果要移除的成员不在清单中，则被自动忽略，接口返回成功。;;该接口不能用于移除清单所有者。如果要移除的成员是清单所有者，则会被自动忽略。如要设置清单所有者，需要调用[更新清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/patch)接口。
+                 *
+                 * 需要清单编辑权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 */
+                removeMembers: async (
+                    payload?: {
+                        data: {
+                            members: Array<{
+                                id?: string;
+                                type?: string;
+                                role?: string;
+                                name?: string;
+                            }>;
+                        };
+                        params?: { user_id_type?: string };
+                        path?: { tasklist_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasklist?: {
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/remove_members`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 创建清单
+                 *
+                 * 创建一个清单。清单可以用于组织和管理属于同一个项目的多个任务。;;创建时，必须填写清单的名字。同时，可以设置通过`members`字段设置清单的协作成员。关于member的格式，详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 如何表示任务和清单的成员？”章节。;;创建清单后，创建人自动成为清单的所有者。如果请求同时将创建人设置为可编辑/可阅读角色，则最终该用户成为清单所有者，并自动从清单成员列表中消失。因为同一个用户在同一个清单只能拥有一个角色。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            members?: Array<{
+                                id?: string;
+                                type?: string;
+                                role?: string;
+                                name?: string;
+                            }>;
+                            archive_tasklist?: boolean;
+                        };
+                        params?: { user_id_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasklist?: {
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 更新清单
+                 *
+                 * 更新清单，可以更新清单的名字和所有者。;;更新清单时，将`update_fields`字段中填写所有要修改的清单字段名，同时在`tasklist`字段中填写要修改的字段的新值即可。更新调用规范详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 关于资源的更新”章节。;;支持更新的字段包括:;;* `name` - 清单名字;* `owner` - 清单所有者;;更新清单所有者（owner）时，如果该成员已经是清单的“可编辑”或者“可阅读”角色，则该成员将直接升级为所有者角色，自动从清单的成员列表中消失。这是因为同一个用户在同一个清单中只能有一个角色。同时，支持使用`origin_owner_to_role`字段将原有所有者变为可编辑/可阅读角色或者直接退出清单。;;该接口不能用于更新清单的成员和增删清单中的任务。;* 如要增删清单中的成员，可以使用[添加清单成员](https://open.feishu.cn/document:/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/add_members)和[移除清单成员](https://open.feishu.cn/document:/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/remove_members)接口。;* 如要增删清单中的任务，可以使用[任务加入清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/add_tasklist)和[任务移出清单]( https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/remove_tasklist)接口。
+                 *
+                 * 更新清单名字需要清单的编辑权限。;;更新清单所有人必须由清单的管理权限。;;详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            tasklist: {
+                                name?: string;
+                                owner?: {
+                                    id?: string;
+                                    type?: string;
+                                    role?: string;
+                                    name?: string;
+                                };
+                                archive_tasklist?: boolean;
+                            };
+                            update_fields: Array<string>;
+                            origin_owner_to_role?: "editor" | "viewer" | "none";
+                        };
+                        params?: { user_id_type?: string };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasklist?: {
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=assign_container_to_section&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=assign_container_to_section&project=task&resource=tasklist&version=v2 document }
+                 */
+                assignContainerToSection: async (
+                    payload?: {
+                        data?: {
+                            insert_before?: string;
+                            insert_after?: string;
+                            section_guid?: string;
+                            user_id_type?: string;
+                            target_user_id?: string;
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/assign_container_to_section`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                create_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                user_id?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/tasklists/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        id: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            app_link?: string;
+                                                            avatar?: string;
+                                                            description?: string;
+                                                        };
+                                                    }>;
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                    notice?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 搜索清单
+                 *
+                 * 通过清单关键词搜索清单的信息，包括清单名称、清单ID、清单链接、清单描述
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                create_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                user_id?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        id: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            app_link?: string;
+                                            avatar?: string;
+                                            description?: string;
+                                        };
+                                    }>;
+                                    total?: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    notice?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * task
              */
             task: {
@@ -3726,6 +5044,51 @@ export default abstract class Client extends subscriptions {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v2/tasks/:task_guid/tasklists`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=statistics&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=statistics&project=task&resource=task&version=v2 document }
+                 */
+                statistics: async (
+                    payload?: {
+                        params?: { type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    statistics?: {
+                                        total_tasks_count?: number;
+                                        total_completed_tasks_count?: number;
+                                        total_uncompleted_tasks_count?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasks/statistics`,
                                 path
                             ),
                             method: "GET",
@@ -3874,6 +5237,47 @@ export default abstract class Client extends subscriptions {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v2/tasks/:task_guid/remove_dependencies`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=user_complete_task_status&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_complete_task_status&project=task&resource=task&version=v2 document }
+                 */
+                userCompleteTaskStatus: async (
+                    payload?: {
+                        data?: {
+                            be_completed_user_id?: string;
+                            complete?: boolean;
+                            user_id_type?: string;
+                            target_user_id?: string;
+                        };
+                        path: { task_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasks/:task_guid/user_complete_task_status`,
                                 path
                             ),
                             method: "POST",
@@ -5413,6 +6817,248 @@ export default abstract class Client extends subscriptions {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=detail&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=detail&project=task&resource=task&version=v2 document }
+                 *
+                 * 查询企业任务详情;
+                 *
+                 * 该接口用于获取（企业下所有用户的）任务详情，包括任务标题、描述、时间、成员等信息。;
+                 */
+                detail: async (
+                    payload?: {
+                        path: { task_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    task?: {
+                                        guid?: string;
+                                        summary?: string;
+                                        description?: string;
+                                        due?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        completed_at?: string;
+                                        attachments?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        origin?: {
+                                            platform_i18n_name?: {
+                                                en_us?: string;
+                                                zh_cn?: string;
+                                                zh_hk?: string;
+                                                zh_tw?: string;
+                                                ja_jp?: string;
+                                                fr_fr?: string;
+                                                it_it?: string;
+                                                de_de?: string;
+                                                ru_ru?: string;
+                                                th_th?: string;
+                                                es_es?: string;
+                                                ko_kr?: string;
+                                            };
+                                            href?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
+                                        };
+                                        extra?: string;
+                                        tasklists?: Array<{
+                                            tasklist_guid?: string;
+                                            section_guid?: string;
+                                        }>;
+                                        repeat_rule?: string;
+                                        parent_task_guid?: string;
+                                        mode?: number;
+                                        source?: number;
+                                        custom_complete?: {
+                                            pc?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            ios?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            android?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                        };
+                                        task_id?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        status?: string;
+                                        url?: string;
+                                        start?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        subtask_count?: number;
+                                        is_milestone?: boolean;
+                                        custom_fields?: Array<{
+                                            guid?: string;
+                                            type?: string;
+                                            number_value?: string;
+                                            datetime_value?: string;
+                                            member_value?: Array<{
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            }>;
+                                            single_select_value?: string;
+                                            multi_select_value?: Array<string>;
+                                            name?: string;
+                                            text_value?: string;
+                                        }>;
+                                        dependencies?: Array<{
+                                            type: "prev" | "next";
+                                            task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasks/:task_guid/detail`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=remove_reminders&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_reminders&project=task&resource=task&version=v2 document }
@@ -6850,6 +8496,541 @@ export default abstract class Client extends subscriptions {
                             throw e;
                         });
                 },
+                listAllTasksByTenantWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            update_msec?: string;
+                            target_user_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/tasks/list_all_tasks_by_tenant`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        guid?: string;
+                                                        summary?: string;
+                                                        description?: string;
+                                                        due?: {
+                                                            timestamp?: string;
+                                                            is_all_day?: boolean;
+                                                        };
+                                                        reminders?: Array<{
+                                                            id?: string;
+                                                            relative_fire_minute: number;
+                                                        }>;
+                                                        creator?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        members?: Array<{
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        }>;
+                                                        completed_at?: string;
+                                                        attachments?: Array<{
+                                                            guid?: string;
+                                                            file_token?: string;
+                                                            name?: string;
+                                                            size?: number;
+                                                            resource?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                            };
+                                                            uploader?: {
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            };
+                                                            is_cover?: boolean;
+                                                            uploaded_at?: string;
+                                                            url?: string;
+                                                        }>;
+                                                        origin?: {
+                                                            platform_i18n_name?: {
+                                                                en_us?: string;
+                                                                zh_cn?: string;
+                                                                zh_hk?: string;
+                                                                zh_tw?: string;
+                                                                ja_jp?: string;
+                                                                fr_fr?: string;
+                                                                it_it?: string;
+                                                                de_de?: string;
+                                                                ru_ru?: string;
+                                                                th_th?: string;
+                                                                es_es?: string;
+                                                                ko_kr?: string;
+                                                            };
+                                                            href?: {
+                                                                url?: string;
+                                                                title?: string;
+                                                            };
+                                                            refer_resources?: Array<{
+                                                                resource_id?: string;
+                                                                type?: string;
+                                                                source_message?: {
+                                                                    message_id?: string;
+                                                                    content?: string;
+                                                                };
+                                                                unavailable_reason?: string;
+                                                            }>;
+                                                        };
+                                                        extra?: string;
+                                                        tasklists?: Array<{
+                                                            tasklist_guid?: string;
+                                                            section_guid?: string;
+                                                        }>;
+                                                        repeat_rule?: string;
+                                                        parent_task_guid?: string;
+                                                        mode?: number;
+                                                        source?: number;
+                                                        custom_complete?: {
+                                                            pc?: {
+                                                                href?: string;
+                                                                tip?: {
+                                                                    en_us?: string;
+                                                                    zh_cn?: string;
+                                                                    zh_hk?: string;
+                                                                    zh_tw?: string;
+                                                                    ja_jp?: string;
+                                                                    fr_fr?: string;
+                                                                    it_it?: string;
+                                                                    de_de?: string;
+                                                                    ru_ru?: string;
+                                                                    th_th?: string;
+                                                                    es_es?: string;
+                                                                    ko_kr?: string;
+                                                                };
+                                                            };
+                                                            ios?: {
+                                                                href?: string;
+                                                                tip?: {
+                                                                    en_us?: string;
+                                                                    zh_cn?: string;
+                                                                    zh_hk?: string;
+                                                                    zh_tw?: string;
+                                                                    ja_jp?: string;
+                                                                    fr_fr?: string;
+                                                                    it_it?: string;
+                                                                    de_de?: string;
+                                                                    ru_ru?: string;
+                                                                    th_th?: string;
+                                                                    es_es?: string;
+                                                                    ko_kr?: string;
+                                                                };
+                                                            };
+                                                            android?: {
+                                                                href?: string;
+                                                                tip?: {
+                                                                    en_us?: string;
+                                                                    zh_cn?: string;
+                                                                    zh_hk?: string;
+                                                                    zh_tw?: string;
+                                                                    ja_jp?: string;
+                                                                    fr_fr?: string;
+                                                                    it_it?: string;
+                                                                    de_de?: string;
+                                                                    ru_ru?: string;
+                                                                    th_th?: string;
+                                                                    es_es?: string;
+                                                                    ko_kr?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        task_id?: string;
+                                                        created_at?: string;
+                                                        updated_at?: string;
+                                                        status?: string;
+                                                        url?: string;
+                                                        start?: {
+                                                            timestamp?: string;
+                                                            is_all_day?: boolean;
+                                                        };
+                                                        subtask_count?: number;
+                                                        is_milestone?: boolean;
+                                                        custom_fields?: Array<{
+                                                            guid?: string;
+                                                            type?: string;
+                                                            number_value?: string;
+                                                            datetime_value?: string;
+                                                            member_value?: Array<{
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            }>;
+                                                            single_select_value?: string;
+                                                            multi_select_value?: Array<string>;
+                                                            name?: string;
+                                                            text_value?: string;
+                                                        }>;
+                                                        dependencies?: Array<{
+                                                            type:
+                                                                | "prev"
+                                                                | "next";
+                                                            task_guid: string;
+                                                        }>;
+                                                        assignee_related?: Array<{
+                                                            id?: string;
+                                                            completed_at?: string;
+                                                        }>;
+                                                        positive_reminders?: Array<{
+                                                            id?: string;
+                                                            relative_fire_minute: number;
+                                                        }>;
+                                                        agent_task_status?: number;
+                                                        agent_task_progress?: string;
+                                                        text_deliveries?: Array<string>;
+                                                        attachment_deliveries?: Array<{
+                                                            guid?: string;
+                                                            file_token?: string;
+                                                            name?: string;
+                                                            size?: number;
+                                                            resource?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                            };
+                                                            uploader?: {
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            };
+                                                            is_cover?: boolean;
+                                                            uploaded_at?: string;
+                                                            url?: string;
+                                                        }>;
+                                                        next_task_guid?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=list_all_tasks_by_tenant&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_all_tasks_by_tenant&project=task&resource=task&version=v2 document }
+                 */
+                listAllTasksByTenant: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            update_msec?: string;
+                            target_user_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        summary?: string;
+                                        description?: string;
+                                        due?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        completed_at?: string;
+                                        attachments?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        origin?: {
+                                            platform_i18n_name?: {
+                                                en_us?: string;
+                                                zh_cn?: string;
+                                                zh_hk?: string;
+                                                zh_tw?: string;
+                                                ja_jp?: string;
+                                                fr_fr?: string;
+                                                it_it?: string;
+                                                de_de?: string;
+                                                ru_ru?: string;
+                                                th_th?: string;
+                                                es_es?: string;
+                                                ko_kr?: string;
+                                            };
+                                            href?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
+                                        };
+                                        extra?: string;
+                                        tasklists?: Array<{
+                                            tasklist_guid?: string;
+                                            section_guid?: string;
+                                        }>;
+                                        repeat_rule?: string;
+                                        parent_task_guid?: string;
+                                        mode?: number;
+                                        source?: number;
+                                        custom_complete?: {
+                                            pc?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            ios?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            android?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                        };
+                                        task_id?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        status?: string;
+                                        url?: string;
+                                        start?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        subtask_count?: number;
+                                        is_milestone?: boolean;
+                                        custom_fields?: Array<{
+                                            guid?: string;
+                                            type?: string;
+                                            number_value?: string;
+                                            datetime_value?: string;
+                                            member_value?: Array<{
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            }>;
+                                            single_select_value?: string;
+                                            multi_select_value?: Array<string>;
+                                            name?: string;
+                                            text_value?: string;
+                                        }>;
+                                        dependencies?: Array<{
+                                            type: "prev" | "next";
+                                            task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasks/list_all_tasks_by_tenant`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=add_tasklist&version=v2 click to debug }
                  *
@@ -7773,6 +9954,42 @@ export default abstract class Client extends subscriptions {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=add_tasks&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_tasks&project=task&resource=section&version=v2 document }
+                 */
+                addTasks: async (
+                    payload?: {
+                        data: { task_guids: Array<string> };
+                        path?: { section_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/sections/:section_guid/add_tasks`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=delete&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=task&resource=section&version=v2 document }
@@ -8043,6 +10260,368 @@ export default abstract class Client extends subscriptions {
                             throw e;
                         });
                 },
+                listTasklistSectionsWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            target_user_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/sections/list_tasklist_sections`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    items?: Array<{
+                                                        guid?: string;
+                                                        name?: string;
+                                                        resource_type?: string;
+                                                        is_default?: boolean;
+                                                        creator?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        tasklist?: {
+                                                            guid?: string;
+                                                            name?: string;
+                                                        };
+                                                        created_at?: string;
+                                                        updated_at?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=list_tasklist_sections&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_tasklist_sections&project=task&resource=section&version=v2 document }
+                 */
+                listTasklistSections: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            target_user_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    items?: Array<{
+                                        guid?: string;
+                                        name?: string;
+                                        resource_type?: string;
+                                        is_default?: boolean;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        tasklist?: {
+                                            guid?: string;
+                                            name?: string;
+                                        };
+                                        created_at?: string;
+                                        updated_at?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/sections/list_tasklist_sections`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                tasklistWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            target_user_id?: string;
+                        };
+                        path: { section_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/sections/:section_guid/tasklist`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    items?: Array<{
+                                                        guid?: string;
+                                                        name?: string;
+                                                        creator?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        owner?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        members?: Array<{
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        }>;
+                                                        url?: string;
+                                                        created_at?: string;
+                                                        updated_at?: string;
+                                                        archive_msec?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=tasklist&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=tasklist&project=task&resource=section&version=v2 document }
+                 */
+                tasklist: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            target_user_id?: string;
+                        };
+                        path: { section_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    items?: Array<{
+                                        guid?: string;
+                                        name?: string;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        owner?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        url?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        archive_msec?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/sections/:section_guid/tasklist`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=create&version=v2 click to debug }
                  *
@@ -8112,663 +10691,34 @@ export default abstract class Client extends subscriptions {
                             throw e;
                         });
                 },
-            },
-            /**
-             * tasklist
-             */
-            tasklist: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=tasks&version=v2 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=update_task_list_section&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=tasks&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 获取清单任务列表
-                 *
-                 * 获取一个清单的任务列表，返回任务的摘要信息。;;本接口支持分页。清单中的任务以“自定义拖拽”的顺序返回。;;本接口支持简单的按照任务的完成状态或者任务的创建时间范围过滤。;;分页参数说明：是否还有分页数据的判断依据是has_more=true，并非items个数，由于历史原因可能出现当前分页items为空的情况。
-                 *
-                 * 需要清单读取权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_task_list_section&project=task&resource=section&version=v2 document }
                  */
-                tasks: async (
+                updateTaskListSection: async (
                     payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            completed?: boolean;
-                            created_from?: string;
-                            created_to?: string;
+                        data?: {
+                            update_fields?: Array<string>;
                             user_id_type?: string;
-                        };
-                        path: { tasklist_guid: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        guid?: string;
-                                        summary?: string;
-                                        completed_at?: string;
-                                        start?: {
-                                            timestamp?: string;
-                                            is_all_day?: boolean;
-                                        };
-                                        due?: {
-                                            timestamp?: string;
-                                            is_all_day?: boolean;
-                                        };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        subtask_count?: number;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/tasks`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=delete&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 删除清单
-                 *
-                 * 删除一个清单。;;删除清单后，不可对该清单做任何操作，也无法再访问到清单。清单被删除后不可恢复。
-                 *
-                 * 删除清单需要清单管理权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
-                 */
-                delete: async (
-                    payload?: {
-                        path?: { tasklist_guid?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            { code?: number; msg?: string; data?: {} }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid`,
-                                path
-                            ),
-                            method: "DELETE",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=get&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 获取清单详情
-                 *
-                 * 获取一个清单的详细信息，包括清单名，所有者，清单成员等。
-                 *
-                 * 需要清单的读取权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
-                 */
-                get: async (
-                    payload?: {
-                        params?: { user_id_type?: string };
-                        path?: { tasklist_guid?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tasklist?: {
-                                        guid?: string;
-                                        name?: string;
-                                        creator?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        owner?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        url?: string;
-                                        created_at?: string;
-                                        updated_at?: string;
-                                        archive_msec?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/task/v2/tasklists`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items?: Array<{
-                                                        guid?: string;
-                                                        name?: string;
-                                                        creator?: {
-                                                            id?: string;
-                                                            type?: string;
-                                                            role?: string;
-                                                            name?: string;
-                                                        };
-                                                        owner?: {
-                                                            id?: string;
-                                                            type?: string;
-                                                            role?: string;
-                                                            name?: string;
-                                                        };
-                                                        members?: Array<{
-                                                            id?: string;
-                                                            type?: string;
-                                                            role?: string;
-                                                            name?: string;
-                                                        }>;
-                                                        url?: string;
-                                                        created_at?: string;
-                                                        updated_at?: string;
-                                                        archive_msec?: string;
-                                                    }>;
-                                                    page_token?: string;
-                                                    has_more?: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=list&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 获取清单列表
-                 *
-                 * 获取调用身份所有可读取的清单列表。
-                 */
-                list: async (
-                    payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    items?: Array<{
-                                        guid?: string;
-                                        name?: string;
-                                        creator?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        owner?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        url?: string;
-                                        created_at?: string;
-                                        updated_at?: string;
-                                        archive_msec?: string;
-                                    }>;
-                                    page_token?: string;
-                                    has_more?: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=add_members&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_members&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 添加清单成员
-                 *
-                 * 向一个清单添加1个或多个协作成员。成员信息通过设置`members`字段实现。关于member的格式，详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 如何表示任务和清单的成员？”章节。;;一个清单协作成员可以是一个用户，应用或者群组。每个成员可以设置“可编辑”或者“可阅读”的角色。群组作为协作成员表示该群里所有群成员都自动拥有群组协作成员的角色。;;如果要添加的成员已经是清单成员，且角色和请求中设置是一样的，则会被自动忽略，接口返回成功。;;如果要添加的成员已经是清单成员，且角色和请求中设置是不一样的（比如原来的角色是可阅读，请求中设为可编辑），则相当于更新其角色。;;如果要添加的成员已经是清单的所有者，则会被自动忽略。接口返回成功。其所有者的角色不会改变。;;本接口不能用来设置清单所有者，如要设置，可以使用[更新清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/patch)接口。
-                 *
-                 * 需要清单编辑权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
-                 */
-                addMembers: async (
-                    payload?: {
-                        data: {
-                            members: Array<{
-                                id?: string;
-                                type?: string;
-                                role?: string;
+                            section?: {
+                                guid?: string;
                                 name?: string;
-                            }>;
-                        };
-                        params?: { user_id_type?: string };
-                        path?: { tasklist_guid?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tasklist?: {
-                                        guid?: string;
-                                        name?: string;
-                                        creator?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        owner?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        url?: string;
-                                        created_at?: string;
-                                        updated_at?: string;
-                                        archive_msec?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/add_members`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=remove_members&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_members&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 移除清单成员
-                 *
-                 * 移除清单的一个或多个协作成员。通过设置`members`字段表示要移除的成员信息。关于member的格式，详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 如何表示任务和清单的成员？”章节。;;清单中同一个成员只能有一个角色，通过的member的id和type可以唯一确定一个成员，因此请求参数中对于要删除的成员，不需要填写"role"字段。;;如果要移除的成员不在清单中，则被自动忽略，接口返回成功。;;该接口不能用于移除清单所有者。如果要移除的成员是清单所有者，则会被自动忽略。如要设置清单所有者，需要调用[更新清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/patch)接口。
-                 *
-                 * 需要清单编辑权限。详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
-                 */
-                removeMembers: async (
-                    payload?: {
-                        data: {
-                            members: Array<{
-                                id?: string;
-                                type?: string;
-                                role?: string;
-                                name?: string;
-                            }>;
-                        };
-                        params?: { user_id_type?: string };
-                        path?: { tasklist_guid?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tasklist?: {
-                                        guid?: string;
-                                        name?: string;
-                                        creator?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        owner?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        url?: string;
-                                        created_at?: string;
-                                        updated_at?: string;
-                                        archive_msec?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/remove_members`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=create&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 创建清单
-                 *
-                 * 创建一个清单。清单可以用于组织和管理属于同一个项目的多个任务。;;创建时，必须填写清单的名字。同时，可以设置通过`members`字段设置清单的协作成员。关于member的格式，详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 如何表示任务和清单的成员？”章节。;;创建清单后，创建人自动成为清单的所有者。如果请求同时将创建人设置为可编辑/可阅读角色，则最终该用户成为清单所有者，并自动从清单成员列表中消失。因为同一个用户在同一个清单只能拥有一个角色。
-                 */
-                create: async (
-                    payload?: {
-                        data: {
-                            name: string;
-                            members?: Array<{
-                                id?: string;
-                                type?: string;
-                                role?: string;
-                                name?: string;
-                            }>;
-                            archive_tasklist?: boolean;
-                        };
-                        params?: { user_id_type?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tasklist?: {
-                                        guid?: string;
-                                        name?: string;
-                                        creator?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        owner?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        url?: string;
-                                        created_at?: string;
-                                        updated_at?: string;
-                                        archive_msec?: string;
-                                    };
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=patch&version=v2 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=task&resource=tasklist&version=v2 document }
-                 *
-                 * 更新清单
-                 *
-                 * 更新清单，可以更新清单的名字和所有者。;;更新清单时，将`update_fields`字段中填写所有要修改的清单字段名，同时在`tasklist`字段中填写要修改的字段的新值即可。更新调用规范详见[功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/overview)中的“ 关于资源的更新”章节。;;支持更新的字段包括:;;* `name` - 清单名字;* `owner` - 清单所有者;;更新清单所有者（owner）时，如果该成员已经是清单的“可编辑”或者“可阅读”角色，则该成员将直接升级为所有者角色，自动从清单的成员列表中消失。这是因为同一个用户在同一个清单中只能有一个角色。同时，支持使用`origin_owner_to_role`字段将原有所有者变为可编辑/可阅读角色或者直接退出清单。;;该接口不能用于更新清单的成员和增删清单中的任务。;* 如要增删清单中的成员，可以使用[添加清单成员](https://open.feishu.cn/document:/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/add_members)和[移除清单成员](https://open.feishu.cn/document:/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/remove_members)接口。;* 如要增删清单中的任务，可以使用[任务加入清单](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/add_tasklist)和[任务移出清单]( https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/remove_tasklist)接口。
-                 *
-                 * 更新清单名字需要清单的编辑权限。;;更新清单所有人必须由清单的管理权限。;;详情见[清单功能概述](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/tasklist/overview)中的“清单是如何鉴权的？“章节。
-                 */
-                patch: async (
-                    payload?: {
-                        data: {
-                            tasklist: {
-                                name?: string;
-                                owner?: {
+                                resource_type?: string;
+                                is_default?: boolean;
+                                creator?: {
                                     id?: string;
                                     type?: string;
                                     role?: string;
                                     name?: string;
                                 };
-                                archive_tasklist?: boolean;
+                                tasklist?: { guid?: string; name?: string };
+                                created_at?: string;
+                                updated_at?: string;
                             };
-                            update_fields: Array<string>;
-                            origin_owner_to_role?: "editor" | "viewer" | "none";
+                            target_user_id?: string;
                         };
-                        params?: { user_id_type?: string };
-                        path: { tasklist_guid: string };
+                        path: { section_guid: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -8782,37 +10732,29 @@ export default abstract class Client extends subscriptions {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    tasklist?: {
+                                    section?: {
                                         guid?: string;
                                         name?: string;
+                                        resource_type?: string;
+                                        is_default?: boolean;
                                         creator?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
                                             name?: string;
                                         };
-                                        owner?: {
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
+                                        tasklist?: {
+                                            guid?: string;
                                             name?: string;
                                         };
-                                        members?: Array<{
-                                            id?: string;
-                                            type?: string;
-                                            role?: string;
-                                            name?: string;
-                                        }>;
-                                        url?: string;
                                         created_at?: string;
                                         updated_at?: string;
-                                        archive_msec?: string;
                                     };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid`,
+                                `${this.domain}/open-apis/task/v2/sections/:section_guid/update_task_list_section`,
                                 path
                             ),
                             method: "PATCH",
@@ -8827,141 +10769,21 @@ export default abstract class Client extends subscriptions {
                             throw e;
                         });
                 },
-                searchWithIterator: async (
-                    payload?: {
-                        data?: {
-                            query?: string;
-                            filter?: {
-                                create_time?: {
-                                    start_time?: string;
-                                    end_time?: string;
-                                };
-                                user_id?: Array<string>;
-                            };
-                        };
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/task/v2/tasklists/search`,
-                                    path
-                                ),
-                                method: "POST",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items: Array<{
-                                                        id: string;
-                                                        display_info?: string;
-                                                        meta_data?: {
-                                                            app_link?: string;
-                                                            avatar?: string;
-                                                            description?: string;
-                                                        };
-                                                    }>;
-                                                    total?: number;
-                                                    has_more: boolean;
-                                                    page_token?: string;
-                                                    notice?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=search&version=v2 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=section&apiName=create_tasklist_section&version=v2 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=task&resource=tasklist&version=v2 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_tasklist_section&project=task&resource=section&version=v2 document }
                  *
-                 * 搜索清单
-                 *
-                 * 通过清单关键词搜索清单的信息，包括清单名称、清单ID、清单链接、清单描述
+                 * 创建清单的分组
                  */
-                search: async (
+                createTasklistSection: async (
                     payload?: {
                         data?: {
-                            query?: string;
-                            filter?: {
-                                create_time?: {
-                                    start_time?: string;
-                                    end_time?: string;
-                                };
-                                user_id?: Array<string>;
-                            };
-                        };
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            name?: string;
+                            insert_before?: string;
+                            insert_after?: string;
+                            user_id_type?: string;
+                            target_user_id?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -8976,24 +10798,29 @@ export default abstract class Client extends subscriptions {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    items: Array<{
-                                        id: string;
-                                        display_info?: string;
-                                        meta_data?: {
-                                            app_link?: string;
-                                            avatar?: string;
-                                            description?: string;
+                                    section?: {
+                                        guid?: string;
+                                        name?: string;
+                                        resource_type?: string;
+                                        is_default?: boolean;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
                                         };
-                                    }>;
-                                    total?: number;
-                                    has_more: boolean;
-                                    page_token?: string;
-                                    notice?: string;
+                                        tasklist?: {
+                                            guid?: string;
+                                            name?: string;
+                                        };
+                                        created_at?: string;
+                                        updated_at?: string;
+                                    };
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/task/v2/tasklists/search`,
+                                `${this.domain}/open-apis/task/v2/sections/create_tasklist_section`,
                                 path
                             ),
                             method: "POST",
@@ -9115,7 +10942,7 @@ export default abstract class Client extends subscriptions {
                  *
                  * 创建自定义字段
                  *
-                 * 创建一个自定义字段，并将其加入一个资源上（目前资源只支持清单）。创建自定义字段必须提供字段名称，类型和相应类型的设置。;;目前任务自定义字段支持数字(number)，成员(member)，日期(datetime)，单选(single_select),多选(multi_select), 文本(text)几种类型。分别使用"number_setting", "member_setting", "datetime_setting", "single_select_setting", "multi_select_setting","text_setting"来设置。;;例如创建一个数字类型的自定义字段，并添加到guid为"ec5ed63d-a4a9-44de-a935-7ba243471c0a"的清单，可以这样发请求。;;```;POST /task/v2/custom_fields;{;    "name": "价格",;    "type": "number",;    "resource_type": "tasklist",;    "resource_id": "ec5ed63d-a4a9-44de-a935-7ba243471c0a",;    "number_setting": {;         "format": "cny",;         "decimal_count": 2,;         "separator": "thousand";    };};```;表示创建一个叫做“价格”的自定义字段，保留两位小数。在界面上显示时采用人民币的格式，并显示千分位分隔符。;;类似的，创建一个单选字段，可以这样调用接口：;```;POST /task/v2/custom_fields;{;  "name": "优先级",;  "type": "single_select",;  "resource_type": "tasklist",;  "resource_id":  "ec5ed63d-a4a9-44de-a935-7ba243471c0a",;  "single_select_setting": {;    "options": [;       {;          "name": "高",;          "color_index": 1;       },;       {;          "name": "中",;          "color_index": 11;       },;       {;          "name": "低",;          "color_index": 16;       };   ];  };};```;表示创建一个叫“优先级”的单选，包含“高”，“中”，“低”三个选项，每个选项设置一个颜色值。
+                 * 创建一个自定义字段，并将其加入一个资源上（目前资源只支持清单）。创建自定义字段必须提供字段名称，类型和相应类型的设置。;;目前任务自定义字段支持数字(number)，成员(member)，日期(datetime)，单选(single_select),多选(multi_select), 文本(text)几种类型。分别使用"number_setting", "member_setting", "datetime_setting", "single_select_setting", "multi_select_setting","text_setting"来设置。;;例如创建一个数字类型的自定义字段，并添加到guid为"ec5ed63d-a4a9-44de-a935-7ba243471c0a"的清单，可以这样发请求。;;```;POST /task/v2/custom_fields;{; "name": "价格",; "type": "number",; "resource_type": "tasklist",; "resource_id": "ec5ed63d-a4a9-44de-a935-7ba243471c0a",; "number_setting": {; "format": "cny",; "decimal_count": 2,; "separator": "thousand"; };};```;表示创建一个叫做“价格”的自定义字段，保留两位小数。在界面上显示时采用人民币的格式，并显示千分位分隔符。;;类似的，创建一个单选字段，可以这样调用接口：;```;POST /task/v2/custom_fields;{; "name": "优先级",; "type": "single_select",; "resource_type": "tasklist",; "resource_id": "ec5ed63d-a4a9-44de-a935-7ba243471c0a",; "single_select_setting": {; "options": [; {; "name": "高",; "color_index": 1; },; {; "name": "中",; "color_index": 11; },; {; "name": "低",; "color_index": 16; }; ]; };};```;表示创建一个叫“优先级”的单选，包含“高”，“中”，“低”三个选项，每个选项设置一个颜色值。
                  *
                  * 在一个资源上创建自定义字段需要该资源的可编辑权限。
                  */
@@ -9292,7 +11119,7 @@ export default abstract class Client extends subscriptions {
                  *
                  * 更新自定义字段
                  *
-                 * 更新一个自定义字段的名称和设定。更新时，将`update_fields`字段中填写所有要修改的任务字段名，同时在`custom_field`字段中填写要修改的字段的新值即可。自定义字段不允许修改类型，只能根据类型修改其设置。;;`update_fields`支持更新的字段包括：;;* `name`：自定义字段名称;* `number_setting` ：数字类型设置（当且仅当要更新的自定义字段类型是数字时);* `member_setting` ：人员类型设置（当且仅当要更新的自定义字段类型是人员时);* `datetime_setting` ：日期类型设置 (当且仅当要更新的自定义字段类型是日期时);* `single_select_setting`：单选类型设置 (当且仅当要更新的自定义字段类型是单选时);* `multi_select_setting`：多选类型设置 (当且仅当要更新的自定义字段类型是多选时);* `text_setting`: 文本类型设置（目前文本类型没有可设置项）;;当更改某个设置时，如果不填写一个字段，表示不覆盖原有的设定。比如，对于一个数字，原有的setting是:;```json;"number_setting": {;     "format": "normal",;     "decimal_count": 2,;     "separator": "none",;     "custom_symbol": "L",;     "custom_symbol_position": "right";};```;;使用如下参数调用接口：;```;PATCH /task/v2/custom_fields/:custom_field_guid;{;  "custom_field": {;    "number_setting": {;      "decimal_count": 4;    };  },;  "update_fields": ["number_setting"];};```;;表示仅仅将小数位数从2改为4，其余的设置`format`, `separator`, `custom_field`等都不变。;;对于单选/多选类型的自定义字段，其设定是一个选项列表。更新时，使用方式接近使用App的界面。使用者不必传入字段的所有选项，而是只需要提供最终希望界面可见（is_hidden=false) 的选项。原有字段中的选项如果没有出现在输入中，则被置为`is_hidden=true`并放到所有可见选项之后。;;对于某一个更新的选项，如果提供了option_guid，将视作更新该选项（此时option_guid必须存在于当前字段，否则会返回错误）；如果不提供，将视作新建一个选项（新的选项的option_guid会在response中被返回)。;;例如，一个单选字段原来有3个选项A，B，C，D。其中C是隐藏的。用户可以这样更新选项：;;```;PATCH /task/v2/custom_fields/:custom_field_guid;{;   "custom_field": {;      "single_select_setting": {;         "options": [;            {;               "name": "E",;               "color_index": 25;            },;            {;               "guid": "<option_guid of A>";               "name": "A2";            },;            {;               "guid": "<option_guid of C>",;            },;         ];      };   },;   "update_fields": ["single_select_setting"];};```;;调用后最终得到了新的选项列表E, A, C, B, D。其中：;;* 选项E被新建出来，其`color_index`被设为了25。;* 选项A被更新，其名称被改为了"A2"。但其color_index因为没有设置而保持不变；;* 选项整体顺序遵循用户的输入顺序，即E，A，C。同时E，A，C作为直接的输入，其is_hidden均被设为了false，其中，C原本是is_hidden=true，也会被设置为is_hidden=false。;* 选项B和D因为用户没有输入，其`is_hidden`被置为了true，并且被放到了所有用户输入的选项之后。;;如果只是单纯的希望修改用户可见的选项的顺序，比如从原本的选项A,B,C修改为C,B,A，可以这样调用接口：;```;PATCH /task/v2/custom_fields/:custom_field_guid;{;   "custom_field": {;      "single_select_setting": {;         "optoins": [;            {;               "guid": "<option_guid_of_C>";            },;            {;               "guid": "<option_guid of B>";            },;            {;               "guid": "<option_guid of A>",;            },;         ];      };   },;  "update_fields": ["single_select_setting"];};```;;如果希望直接将字段里的所有选项都标记为不可见，可以这样调用接口：;```;PATCH /task/v2/custom_fields/:custom_field_guid;{;  "custom_field": {;      "single_select_setting": {;         "optoins": [];      };   },;  "update_fields": ["single_select_setting"];};```;;更新单选/多选字段的选项必须满足“可见选项名字不能重复”的约束。否则会返回错误。开发者需要自行保证输入的选项名不可以重复。;;如希望只更新单个选项，或者希望单独设置某个选项的is_hidden，本接口无法支持，但可以使用[更新自定义字段选项](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/custom_field-option/patch)接口实现。
+                 * 更新一个自定义字段的名称和设定。更新时，将`update_fields`字段中填写所有要修改的任务字段名，同时在`custom_field`字段中填写要修改的字段的新值即可。自定义字段不允许修改类型，只能根据类型修改其设置。;;`update_fields`支持更新的字段包括：;;* `name`：自定义字段名称;* `number_setting` ：数字类型设置（当且仅当要更新的自定义字段类型是数字时);* `member_setting` ：人员类型设置（当且仅当要更新的自定义字段类型是人员时);* `datetime_setting` ：日期类型设置 (当且仅当要更新的自定义字段类型是日期时);* `single_select_setting`：单选类型设置 (当且仅当要更新的自定义字段类型是单选时);* `multi_select_setting`：多选类型设置 (当且仅当要更新的自定义字段类型是多选时);* `text_setting`: 文本类型设置（目前文本类型没有可设置项）;;当更改某个设置时，如果不填写一个字段，表示不覆盖原有的设定。比如，对于一个数字，原有的setting是:;```json;"number_setting": {; "format": "normal",; "decimal_count": 2,; "separator": "none",; "custom_symbol": "L",; "custom_symbol_position": "right";};```;;使用如下参数调用接口：;```;PATCH /task/v2/custom_fields/:custom_field_guid;{; "custom_field": {; "number_setting": {; "decimal_count": 4; }; },; "update_fields": ["number_setting"];};```;;表示仅仅将小数位数从2改为4，其余的设置`format`, `separator`, `custom_field`等都不变。;;对于单选/多选类型的自定义字段，其设定是一个选项列表。更新时，使用方式接近使用App的界面。使用者不必传入字段的所有选项，而是只需要提供最终希望界面可见（is_hidden=false) 的选项。原有字段中的选项如果没有出现在输入中，则被置为`is_hidden=true`并放到所有可见选项之后。;;对于某一个更新的选项，如果提供了option_guid，将视作更新该选项（此时option_guid必须存在于当前字段，否则会返回错误）；如果不提供，将视作新建一个选项（新的选项的option_guid会在response中被返回)。;;例如，一个单选字段原来有3个选项A，B，C，D。其中C是隐藏的。用户可以这样更新选项：;;```;PATCH /task/v2/custom_fields/:custom_field_guid;{; "custom_field": {; "single_select_setting": {; "options": [; {; "name": "E",; "color_index": 25; },; {; "guid": "<option_guid of A>"; "name": "A2"; },; {; "guid": "<option_guid of C>",; },; ]; }; },; "update_fields": ["single_select_setting"];};```;;调用后最终得到了新的选项列表E, A, C, B, D。其中：;;* 选项E被新建出来，其`color_index`被设为了25。;* 选项A被更新，其名称被改为了"A2"。但其color_index因为没有设置而保持不变；;* 选项整体顺序遵循用户的输入顺序，即E，A，C。同时E，A，C作为直接的输入，其is_hidden均被设为了false，其中，C原本是is_hidden=true，也会被设置为is_hidden=false。;* 选项B和D因为用户没有输入，其`is_hidden`被置为了true，并且被放到了所有用户输入的选项之后。;;如果只是单纯的希望修改用户可见的选项的顺序，比如从原本的选项A,B,C修改为C,B,A，可以这样调用接口：;```;PATCH /task/v2/custom_fields/:custom_field_guid;{; "custom_field": {; "single_select_setting": {; "optoins": [; {; "guid": "<option_guid_of_C>"; },; {; "guid": "<option_guid of B>"; },; {; "guid": "<option_guid of A>",; },; ]; }; },; "update_fields": ["single_select_setting"];};```;;如果希望直接将字段里的所有选项都标记为不可见，可以这样调用接口：;```;PATCH /task/v2/custom_fields/:custom_field_guid;{; "custom_field": {; "single_select_setting": {; "optoins": []; }; },; "update_fields": ["single_select_setting"];};```;;更新单选/多选字段的选项必须满足“可见选项名字不能重复”的约束。否则会返回错误。开发者需要自行保证输入的选项名不可以重复。;;如希望只更新单个选项，或者希望单独设置某个选项的is_hidden，本接口无法支持，但可以使用[更新自定义字段选项](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/custom_field-option/patch)接口实现。
                  *
                  * 更新自定义字段需要拥有自定义字段的编辑权限。
                  */
@@ -10412,7 +12239,7 @@ export default abstract class Client extends subscriptions {
                  *
                  * 更新自定义字段选项
                  *
-                 * 根据一个自定义字段的GUID和其选项的GUID，更新该选项的数据。要更新的字段必须是单选或者多选类型，且要更新的字段必须归属于该字段。;;更新时，将`update_fields`字段中填写所有要修改的任务字段名，同时在`option`字段中填写要修改的字段的新值即可。`update_fields`支持的字段包括：;;* `name`:  选项名称;* `color_index`: 选项的颜色索引值;* `is_hidden`: 是否从界面上隐藏;* `insert_before`: 将当前option放到同字段某个option之前的那个option_guid。;* `insert_after`: 将当前option放到同字段某个option之后的那个option_guid。
+                 * 根据一个自定义字段的GUID和其选项的GUID，更新该选项的数据。要更新的字段必须是单选或者多选类型，且要更新的字段必须归属于该字段。;;更新时，将`update_fields`字段中填写所有要修改的任务字段名，同时在`option`字段中填写要修改的字段的新值即可。`update_fields`支持的字段包括：;;* `name`: 选项名称;* `color_index`: 选项的颜色索引值;* `is_hidden`: 是否从界面上隐藏;* `insert_before`: 将当前option放到同字段某个option之前的那个option_guid。;* `insert_after`: 将当前option放到同字段某个option之后的那个option_guid。
                  *
                  * 更新选项需要自定义字段的编辑权限
                  */
@@ -10541,7 +12368,7 @@ export default abstract class Client extends subscriptions {
                  *
                  * 订阅任务更新事件
                  *
-                 * - 订阅范围;  - 使用应用身份，订阅当前应用所负责的任务的变更事件;  - 使用用户身份，订阅当前用户所创建、负责、关注的任务的变更事件;
+                 * - 订阅范围; - 使用应用身份，订阅当前应用所负责的任务的变更事件; - 使用用户身份，订阅当前用户所创建、负责、关注的任务的变更事件;
                  */
                 taskSubscription: async (
                     payload?: {
@@ -10568,6 +12395,250 @@ export default abstract class Client extends subscriptions {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task_v2&apiName=task_in_docx&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=task_in_docx&project=task&resource=task_v2&version=v2 document }
+                 *
+                 * 查询云文档中的任务
+                 */
+                taskInDocx: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "union_id" | "user_id" | "open_id";
+                            task_guid?: string;
+                            docx_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    task?: {
+                                        guid?: string;
+                                        summary?: string;
+                                        description?: string;
+                                        due?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        completed_at?: string;
+                                        attachments?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        origin?: {
+                                            platform_i18n_name?: {
+                                                en_us?: string;
+                                                zh_cn?: string;
+                                                zh_hk?: string;
+                                                zh_tw?: string;
+                                                ja_jp?: string;
+                                                fr_fr?: string;
+                                                it_it?: string;
+                                                de_de?: string;
+                                                ru_ru?: string;
+                                                th_th?: string;
+                                                es_es?: string;
+                                                ko_kr?: string;
+                                            };
+                                            href?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
+                                        };
+                                        extra?: string;
+                                        tasklists?: Array<{
+                                            tasklist_guid?: string;
+                                            section_guid?: string;
+                                        }>;
+                                        repeat_rule?: string;
+                                        parent_task_guid?: string;
+                                        mode?: number;
+                                        source?: number;
+                                        custom_complete?: {
+                                            pc?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            ios?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            android?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                        };
+                                        task_id?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        status?: string;
+                                        url?: string;
+                                        start?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        subtask_count?: number;
+                                        is_milestone?: boolean;
+                                        custom_fields?: Array<{
+                                            guid?: string;
+                                            type?: string;
+                                            number_value?: string;
+                                            datetime_value?: string;
+                                            member_value?: Array<{
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            }>;
+                                            single_select_value?: string;
+                                            multi_select_value?: Array<string>;
+                                            name?: string;
+                                            text_value?: string;
+                                        }>;
+                                        dependencies?: Array<{
+                                            type: "prev" | "next";
+                                            task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/task_v2/task_in_docx`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -11109,6 +13180,221 @@ export default abstract class Client extends subscriptions {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * agent
+             */
+            agent: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=agent&apiName=list_registered_agent&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_registered_agent&project=task&resource=agent&version=v2 document }
+                 *
+                 * ## 功能介绍 获取已注册的第三方任务代理应用列表，包含应用标识、名称等核心信息，用于管理企业内接入的任务协作工具，支持批量查询已完成注册的代理应用数据。 ### 注意事项 - 返回的应用列表仅包含当前企业已完成注册流程的代理应用，未通过审核或注册中的应用不会展示。
+                 */
+                listRegisteredAgent: async (
+                    payload?: {},
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        app_id?: string;
+                                        app_name?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/agent/list_registered_agent`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=agent&apiName=register_agent&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=register_agent&project=task&resource=agent&version=v2 document }
+                 *
+                 * 注册/注销 AI 智能体
+                 */
+                registerAgent: async (
+                    payload?: {},
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    agent?: {
+                                        app_id?: string;
+                                        app_name?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/agent/register_agent`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=agent&apiName=unregister_agent&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unregister_agent&project=task&resource=agent&version=v2 document }
+                 *
+                 * ## 功能介绍;解除指定任务代理的绑定关系，停止其代处理任务的权限，常用于员工离职、岗位调整或代理权限到期等场景。;;### 注意事项;- 解绑操作不可逆，需确认代理已完成当前待处理任务或已完成任务交接。;- 解绑后代理将无法再接收新的待处理任务，已接收的任务需手动转派或由原责任人处理。
+                 */
+                unregisterAgent: async (
+                    payload?: {},
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/agent/unregister_agent`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=agent&apiName=update_agent_profile&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_agent_profile&project=task&resource=agent&version=v2 document }
+                 *
+                 * ## 功能介绍 更新任务代理的主页内容数据。
+                 */
+                updateAgentProfile: async (
+                    payload?: {
+                        data?: { profile_content?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/agent/update_agent_profile`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * agent_task_step_info
+             */
+            agentTaskStepInfo: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=agent_task_step_info&apiName=append_task_steps&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=append_task_steps&project=task&resource=agent_task_step_info&version=v2 document }
+                 *
+                 * ## 功能介绍 写入任务记录。
+                 */
+                appendTaskSteps: async (
+                    payload?: {
+                        data?: {
+                            task_guid?: string;
+                            task_steps?: Array<{
+                                quote?: string;
+                                content: string;
+                                timestamp?: number;
+                            }>;
+                            idempotent_key?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/agent_task_step_info/append_task_steps`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

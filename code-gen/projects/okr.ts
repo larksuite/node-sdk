@@ -33,6 +33,516 @@ export default abstract class Client extends myai {
          */
     okr = {
         /**
+         * metric_source
+         */
+        metricSource: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=metric_source&version=v1 document }
+             *
+             * 获取指标库
+             *
+             * 获取租户下全部 OKR 指标库（仅限 OKR 企业版使用）。
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                total: number;
+                                has_more: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    metric_source_id: string;
+                                    metric_source_name: string;
+                                    metric_name: string;
+                                    metric_unit: {
+                                        zh_cn: string;
+                                        en_us: string;
+                                        ja_jp: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/metric_sources`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * metric_source.table.item
+         */
+        metricSourceTableItem: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=metric_source.table.item&version=v1 document }
+             *
+             * 更新指标项
+             *
+             * - 该接口用于更新某项指标，接口仅限 OKR 企业版使用。;; 更新成功后 OKR 系统会给以下人员发送消息通知：;; - 首次更新目标值的人员 ;; - 已经将指标添加为 KR、且本次目标值/起始值/支撑的上级有变更的人员，不包含仅更新了进度值的人员
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        metric_initial_value?: number;
+                        metric_target_value?: number;
+                        metric_current_value?: number;
+                        supported_user_id?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: {
+                        metric_source_id: string;
+                        metric_table_id: string;
+                        metric_item_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                metric_item_id: string;
+                                user_id: string;
+                                period_id: string;
+                                metric_unit: {
+                                    zh_cn: string;
+                                    en_us: string;
+                                    ja_jp: string;
+                                };
+                                metric_initial_value: number;
+                                metric_target_value?: number;
+                                metric_current_value: number;
+                                supported_user_id?: string;
+                                kr_id?: string;
+                                updated_at: string;
+                                updated_by?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/:metric_item_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=metric_source.table.item&version=v1 document }
+             *
+             * 获取指标项详情
+             *
+             * 获取某项指标的具体内容（仅限 OKR 企业版使用）。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: {
+                        metric_source_id: string;
+                        metric_table_id: string;
+                        metric_item_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                metric_item_id: string;
+                                user_id: string;
+                                period_id: string;
+                                metric_unit: {
+                                    zh_cn: string;
+                                    en_us: string;
+                                    ja_jp: string;
+                                };
+                                metric_initial_value: number;
+                                metric_target_value?: number;
+                                metric_current_value: number;
+                                supported_user_id?: string;
+                                kr_id?: string;
+                                updated_at: string;
+                                updated_by?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/:metric_item_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=okr&resource=metric_source.table.item&version=v1 document }
+             *
+             * 批量更新指标项
+             *
+             * - 该接口用于批量更新多项指标，单次调用最多更新 100 条记录。接口仅限 OKR 企业版使用。;; 更新成功后 OKR 系统会给以下人员发送消息通知：;; - 首次更新目标值的人员 ;; - 已经将指标添加为 KR、且本次目标值/起始值/支撑的上级有变更的人员，不包含仅更新了进度值的人员
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        items: Array<{
+                            metric_item_id: string;
+                            metric_initial_value?: number;
+                            metric_target_value?: number;
+                            metric_current_value?: number;
+                            supported_user_id?: string;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { metric_source_id: string; metric_table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    metric_item_id: string;
+                                    user_id: string;
+                                    period_id: string;
+                                    metric_unit: {
+                                        zh_cn: string;
+                                        en_us: string;
+                                        ja_jp: string;
+                                    };
+                                    metric_initial_value: number;
+                                    metric_target_value?: number;
+                                    metric_current_value: number;
+                                    supported_user_id?: string;
+                                    kr_id?: string;
+                                    updated_at: string;
+                                    updated_by?: string;
+                                }>;
+                                failed_items?: Array<{
+                                    metric_item_id: string;
+                                    reason: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/batch_update`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=metric_source.table.item&version=v1 document }
+             *
+             * 获取指标项
+             *
+             * 获取指定指标表下的所有指标项（仅限 OKR 企业版使用）。
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: string;
+                    };
+                    path: { metric_source_id: string; metric_table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                total: number;
+                                has_more: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    metric_item_id: string;
+                                    user_id: string;
+                                    period_id: string;
+                                    metric_unit: {
+                                        zh_cn: string;
+                                        en_us: string;
+                                        ja_jp: string;
+                                    };
+                                    metric_initial_value: number;
+                                    metric_target_value?: number;
+                                    metric_current_value: number;
+                                    supported_user_id?: string;
+                                    kr_id?: string;
+                                    updated_at: string;
+                                    updated_by?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * metric_source.table
+         */
+        metricSourceTable: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=metric_source.table&version=v1 document }
+             *
+             * 获取指标表
+             *
+             * 获取指定指标库下有哪些指标表（仅限 OKR 企业版使用）。
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: string };
+                    path: { metric_source_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                total: number;
+                                has_more: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    metric_table_id: string;
+                                    metric_table_name: string;
+                                    period_id: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * task
+         */
+        task: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=task&apiName=permissions&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=permissions&project=okr&resource=task&version=v1 document }
+             *
+             * 在任务管理多维表格中增加协作者权限
+             *
+             * 给指定的用户、群组、应用增加任务管理多维表格的协作者权限。
+             */
+            permissions: async (
+                payload?: {
+                    data: {
+                        member_id: string;
+                        member_type: string;
+                        permission_type: string;
+                    };
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/tasks/:task_id/permissions`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=task&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=task&version=v1 document }
+             *
+             * 获取用户的任务管理多维表格的 id
+             *
+             * 获取指定用户在指定周期里的任务多维表格的 id。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        period_ids: Array<string>;
+                        user_id: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    task_id?: string;
+                                    app_token?: string;
+                                    user_id?: string;
+                                    okr_id?: string;
+                                    period_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/tasks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * review
          */
         review: {
@@ -939,6 +1449,121 @@ export default abstract class Client extends myai {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr&apiName=import&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=okr&resource=okr&version=v1 document }
+             */
+            import: async (
+                payload?: {
+                    data: {
+                        period_id: string;
+                        objective_list?: Array<{
+                            content: string;
+                            mention_list?: Array<string>;
+                            kr_list?: Array<{
+                                content: string;
+                                mention_list?: Array<string>;
+                                score?: number;
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
+                                };
+                                progress_list?: Array<{
+                                    content?: string;
+                                    timestamp?: string;
+                                    mention_list?: Array<string>;
+                                }>;
+                                weight?: number;
+                            }>;
+                            progress_rate?: {
+                                percent?: number;
+                                status?: number;
+                            };
+                            progress_list?: Array<{
+                                content?: string;
+                                timestamp?: string;
+                                mention_list?: Array<string>;
+                            }>;
+                            weight?: number;
+                        }>;
+                    };
+                    params?: {
+                        user_id?: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { id?: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/okrs/import`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * okr.objective.alignment
+         */
+        okrObjectiveAlignment: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.alignment&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.objective.alignment&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: { to_id: string; to_type: number };
+                    path: { okr_id: string; objective_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { id?: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/okrs/:okr_id/objectives/:objective_id/alignments`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * user.okr
@@ -1132,6 +1757,525 @@ export default abstract class Client extends myai {
             },
         },
         v1: {
+            /**
+             * metric_source
+             */
+            metricSource: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=metric_source&version=v1 document }
+                 *
+                 * 获取指标库
+                 *
+                 * 获取租户下全部 OKR 指标库（仅限 OKR 企业版使用）。
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        metric_source_id: string;
+                                        metric_source_name: string;
+                                        metric_name: string;
+                                        metric_unit: {
+                                            zh_cn: string;
+                                            en_us: string;
+                                            ja_jp: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/metric_sources`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * metric_source.table.item
+             */
+            metricSourceTableItem: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=okr&resource=metric_source.table.item&version=v1 document }
+                 *
+                 * 更新指标项
+                 *
+                 * - 该接口用于更新某项指标，接口仅限 OKR 企业版使用。;; 更新成功后 OKR 系统会给以下人员发送消息通知：;; - 首次更新目标值的人员 ;; - 已经将指标添加为 KR、且本次目标值/起始值/支撑的上级有变更的人员，不包含仅更新了进度值的人员
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            metric_initial_value?: number;
+                            metric_target_value?: number;
+                            metric_current_value?: number;
+                            supported_user_id?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: {
+                            metric_source_id: string;
+                            metric_table_id: string;
+                            metric_item_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    metric_item_id: string;
+                                    user_id: string;
+                                    period_id: string;
+                                    metric_unit: {
+                                        zh_cn: string;
+                                        en_us: string;
+                                        ja_jp: string;
+                                    };
+                                    metric_initial_value: number;
+                                    metric_target_value?: number;
+                                    metric_current_value: number;
+                                    supported_user_id?: string;
+                                    kr_id?: string;
+                                    updated_at: string;
+                                    updated_by?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/:metric_item_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=okr&resource=metric_source.table.item&version=v1 document }
+                 *
+                 * 获取指标项详情
+                 *
+                 * 获取某项指标的具体内容（仅限 OKR 企业版使用）。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: {
+                            metric_source_id: string;
+                            metric_table_id: string;
+                            metric_item_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    metric_item_id: string;
+                                    user_id: string;
+                                    period_id: string;
+                                    metric_unit: {
+                                        zh_cn: string;
+                                        en_us: string;
+                                        ja_jp: string;
+                                    };
+                                    metric_initial_value: number;
+                                    metric_target_value?: number;
+                                    metric_current_value: number;
+                                    supported_user_id?: string;
+                                    kr_id?: string;
+                                    updated_at: string;
+                                    updated_by?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/:metric_item_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=okr&resource=metric_source.table.item&version=v1 document }
+                 *
+                 * 批量更新指标项
+                 *
+                 * - 该接口用于批量更新多项指标，单次调用最多更新 100 条记录。接口仅限 OKR 企业版使用。;; 更新成功后 OKR 系统会给以下人员发送消息通知：;; - 首次更新目标值的人员 ;; - 已经将指标添加为 KR、且本次目标值/起始值/支撑的上级有变更的人员，不包含仅更新了进度值的人员
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            items: Array<{
+                                metric_item_id: string;
+                                metric_initial_value?: number;
+                                metric_target_value?: number;
+                                metric_current_value?: number;
+                                supported_user_id?: string;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: {
+                            metric_source_id: string;
+                            metric_table_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        metric_item_id: string;
+                                        user_id: string;
+                                        period_id: string;
+                                        metric_unit: {
+                                            zh_cn: string;
+                                            en_us: string;
+                                            ja_jp: string;
+                                        };
+                                        metric_initial_value: number;
+                                        metric_target_value?: number;
+                                        metric_current_value: number;
+                                        supported_user_id?: string;
+                                        kr_id?: string;
+                                        updated_at: string;
+                                        updated_by?: string;
+                                    }>;
+                                    failed_items?: Array<{
+                                        metric_item_id: string;
+                                        reason: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/batch_update`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=metric_source.table.item&version=v1 document }
+                 *
+                 * 获取指标项
+                 *
+                 * 获取指定指标表下的所有指标项（仅限 OKR 企业版使用）。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: string;
+                        };
+                        path: {
+                            metric_source_id: string;
+                            metric_table_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        metric_item_id: string;
+                                        user_id: string;
+                                        period_id: string;
+                                        metric_unit: {
+                                            zh_cn: string;
+                                            en_us: string;
+                                            ja_jp: string;
+                                        };
+                                        metric_initial_value: number;
+                                        metric_target_value?: number;
+                                        metric_current_value: number;
+                                        supported_user_id?: string;
+                                        kr_id?: string;
+                                        updated_at: string;
+                                        updated_by?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * metric_source.table
+             */
+            metricSourceTable: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=metric_source.table&version=v1 document }
+                 *
+                 * 获取指标表
+                 *
+                 * 获取指定指标库下有哪些指标表（仅限 OKR 企业版使用）。
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: string };
+                        path: { metric_source_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        metric_table_id: string;
+                                        metric_table_name: string;
+                                        period_id: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * task
+             */
+            task: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=task&apiName=permissions&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=permissions&project=okr&resource=task&version=v1 document }
+                 *
+                 * 在任务管理多维表格中增加协作者权限
+                 *
+                 * 给指定的用户、群组、应用增加任务管理多维表格的协作者权限。
+                 */
+                permissions: async (
+                    payload?: {
+                        data: {
+                            member_id: string;
+                            member_type: string;
+                            permission_type: string;
+                        };
+                        path: { task_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/tasks/:task_id/permissions`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=task&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=okr&resource=task&version=v1 document }
+                 *
+                 * 获取用户的任务管理多维表格的 id
+                 *
+                 * 获取指定用户在指定周期里的任务多维表格的 id。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            period_ids: Array<string>;
+                            user_id: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        task_id?: string;
+                                        app_token?: string;
+                                        user_id?: string;
+                                        okr_id?: string;
+                                        period_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * review
              */
@@ -2049,6 +3193,129 @@ export default abstract class Client extends myai {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr&apiName=import&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=okr&resource=okr&version=v1 document }
+                 */
+                import: async (
+                    payload?: {
+                        data: {
+                            period_id: string;
+                            objective_list?: Array<{
+                                content: string;
+                                mention_list?: Array<string>;
+                                kr_list?: Array<{
+                                    content: string;
+                                    mention_list?: Array<string>;
+                                    score?: number;
+                                    progress_rate?: {
+                                        percent?: number;
+                                        status?: number;
+                                    };
+                                    progress_list?: Array<{
+                                        content?: string;
+                                        timestamp?: string;
+                                        mention_list?: Array<string>;
+                                    }>;
+                                    weight?: number;
+                                }>;
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
+                                };
+                                progress_list?: Array<{
+                                    content?: string;
+                                    timestamp?: string;
+                                    mention_list?: Array<string>;
+                                }>;
+                                weight?: number;
+                            }>;
+                        };
+                        params?: {
+                            user_id?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/okrs/import`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * okr.objective.alignment
+             */
+            okrObjectiveAlignment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=okr.objective.alignment&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=okr&resource=okr.objective.alignment&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: { to_id: string; to_type: number };
+                        path: { okr_id: string; objective_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/okrs/:okr_id/objectives/:objective_id/alignments`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

@@ -31,5 +31,64 @@ export default abstract class Client extends myai_assistant {
     /**
          
          */
-    myai_base_ai = {};
+    myai_base_ai = {
+        v1: {
+            /**
+             * base
+             */
+            base: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=myai_base_ai&resource=base&apiName=ai_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_create&project=myai_base_ai&resource=base&version=v1 document }
+                 */
+                aiCreate: async (
+                    payload?: {
+                        data?: {
+                            user_input?: string;
+                            tool_raw_instruction?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    hint?: string;
+                                    result?: {
+                                        bitable?: {
+                                            token?: string;
+                                            title?: string;
+                                            url?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/myai_base_ai/v1/base/ai_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+    };
 }

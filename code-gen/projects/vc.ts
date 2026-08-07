@@ -33,6 +33,156 @@ export default abstract class Client extends vault {
          */
     vc = {
         /**
+         * material
+         */
+        material: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=material&apiName=upload_meta&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_meta&project=vc&resource=material&version=v1 document }
+             */
+            uploadMeta: async (
+                payload?: {
+                    data: {
+                        materials: Array<{
+                            name?: string;
+                            file_token: string;
+                            file_size: number;
+                            device_type: number;
+                            material_type: number;
+                            material_source: number;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                results?: Array<{
+                                    file_token?: string;
+                                    result?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/materials/upload_meta`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=material&apiName=remove&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove&project=vc&resource=material&version=v1 document }
+             */
+            remove: async (
+                payload?: {
+                    data: { file_tokens: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                results?: Array<{
+                                    file_token?: string;
+                                    result?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/materials/remove`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=material&apiName=pull_meta&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=pull_meta&project=vc&resource=material&version=v1 document }
+             */
+            pullMeta: async (
+                payload?: {
+                    params?: { device_type?: number; material_type?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                materials: Array<{
+                                    name?: string;
+                                    file_token: string;
+                                    file_size: number;
+                                    device_type: number;
+                                    material_type: number;
+                                    review_result?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/materials/pull_meta`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * meeting.recording
          */
         meetingRecording: {
@@ -217,6 +367,46 @@ export default abstract class Client extends vault {
          * room_config
          */
         roomConfig: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_config&apiName=del&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del&project=vc&resource=room_config&version=v1 document }
+             */
+            del: async (
+                payload?: {
+                    data: {
+                        scope: number;
+                        country_id?: string;
+                        district_id?: string;
+                        building_id?: string;
+                        floor_name?: string;
+                        room_id?: string;
+                        config: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_configs/del`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_config&apiName=set_checkboard_access_code&version=v1 click to debug }
              *
@@ -925,6 +1115,909 @@ export default abstract class Client extends vault {
             },
         },
         /**
+         * my_ai_vc_meeting
+         */
+        myAiVcMeeting: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=get_common_reply&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_common_reply&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 会议内容问答
+             */
+            getCommonReply: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: { meeting_content_reply?: string };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/get_common_reply`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=do_operation&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=do_operation&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 会议操作
+             */
+            doOperation: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: { meeting_operation_reply?: string };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/do_operation`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=get_todo_task&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_todo_task&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 获取会议待办
+             */
+            getTodoTask: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    meeting_todo_task_or_fail_reason?: string;
+                                    meeting_todo_task?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/get_todo_task`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=seed_ai_pull_data&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=seed_ai_pull_data&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * seed ai获取会议信息
+             */
+            seedAiPullData: async (
+                payload?: {
+                    params?: {
+                        meeting_id?: string;
+                        lan?: string;
+                        data_type?: "1" | "2" | "3" | "4" | "5" | "6";
+                        extra?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { result?: string; fail_msg?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/seed_ai_pull_data`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=doc_based_suggest_question&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=doc_based_suggest_question&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             */
+            docBasedSuggestQuestion: async (
+                payload?: {
+                    data?: {
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                presents?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/doc_based_suggest_question`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=callback&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=callback&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             */
+            callback: async (
+                payload?: {
+                    data?: { message_id?: string; callback_info?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/callback`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=section_summary&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=section_summary&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 获取会议分段纪要
+             */
+            sectionSummary: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        participant_input?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    meeting_recap_or_fail_reason?: string;
+                                    meeting_recap?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/section_summary`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=get_recap&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_recap&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 获取会议纪要
+             */
+            getRecap: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        participant_input?: string;
+                        current_im_message_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    meeting_recap_or_fail_reason?: string;
+                                    meeting_recap?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/get_recap`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=fetch_step_summary_stream&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_step_summary_stream&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 流式获取两段式会议总结
+             */
+            fetchStepSummaryStream: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        participant_input?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    meeting_recap_or_fail_reason?: string;
+                                    meeting_recap?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/fetch_step_summary_stream`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=fetch_section_summary_stream&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_section_summary_stream&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 流式获取分段会议总结
+             */
+            fetchSectionSummaryStream: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        participant_input?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    meeting_recap_or_fail_reason?: string;
+                                    meeting_recap?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/fetch_section_summary_stream`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=fetch_recap_stream&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_recap_stream&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+             *
+             * 流式获取会议纪要
+             */
+            fetchRecapStream: async (
+                payload?: {
+                    data?: {
+                        meeting_id?: string;
+                        question?: string;
+                        lang?: string;
+                        scenario_context_schema_version?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            object?: {
+                                type?:
+                                    | "DOC"
+                                    | "USER"
+                                    | "EMAIL"
+                                    | "MESSAGE"
+                                    | "MESSAGE_COLLECTION"
+                                    | "TASK"
+                                    | "SCHEDULE"
+                                    | "MEETING";
+                                biz_id?: string;
+                            };
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "Meego";
+                            extra?: {
+                                vc_meeting_id?: string;
+                                vc_locale?: string;
+                                vc_applink_host?: string;
+                                vc_app_version?: string;
+                                vc_feature_config?: string;
+                                quick_execute_param_rich_tag?: string;
+                            };
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        participant_input?: string;
+                        current_im_message_id?: string;
+                        debug_info_message_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    meeting_recap_or_fail_reason?: string;
+                                    meeting_recap?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/fetch_recap_stream`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * meeting
          */
         meeting: {
@@ -1124,6 +2217,61 @@ export default abstract class Client extends vault {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=change_name&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=change_name&project=vc&resource=meeting&version=v1 document }
+             */
+            changeName: async (
+                payload?: {
+                    data: {
+                        change_name_users: Array<{
+                            id?: string;
+                            user_type?: number;
+                            in_meeting_name?: string;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { meeting_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                results?: Array<{
+                                    id?: string;
+                                    user_type?: number;
+                                    result?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/change_name`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1390,6 +2538,169 @@ export default abstract class Client extends vault {
                         throw e;
                     });
             },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        room_id?: string;
+                        start_time: string;
+                        end_time: string;
+                        status: number;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                meetings?: Array<{
+                                                    id?: string;
+                                                    topic?: string;
+                                                    meeting_no?: string;
+                                                    password?: string;
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                    meeting_connect?: boolean;
+                                                    status?: number;
+                                                    participant_count_accumulated?: string;
+                                                    note_id?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=vc&resource=meeting&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        room_id?: string;
+                        start_time: string;
+                        end_time: string;
+                        status: number;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                meetings?: Array<{
+                                    id?: string;
+                                    topic?: string;
+                                    meeting_no?: string;
+                                    password?: string;
+                                    start_time?: string;
+                                    end_time?: string;
+                                    meeting_connect?: boolean;
+                                    status?: number;
+                                    participant_count_accumulated?: string;
+                                    note_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meetings`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=subscription&version=v1 click to debug }
              *
@@ -1639,6 +2950,1225 @@ export default abstract class Client extends vault {
             },
         },
         /**
+         * my_ai_room
+         */
+        myAiRoom: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=join_offline_meeting&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join_offline_meeting&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 创建线下会议
+             */
+            joinOfflineMeeting: async (
+                payload?: {
+                    data: {
+                        room_id?: string;
+                        schedule_event_id?: string;
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/join_offline_meeting`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=reserve_instant_event&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reserve_instant_event&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 预定即时日程
+             */
+            reserveInstantEvent: async (
+                payload?: {
+                    data: {
+                        room_id?: string;
+                        request_type: number;
+                        end_time?: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/reserve_instant_event`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=help_scene_type&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=help_scene_type&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 获取帮助指令
+             */
+            helpSceneType: async (
+                payload?: {
+                    data: {
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                        help_request_type: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/help_scene_type`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=join_meeting&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join_meeting&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 加入及创建会议
+             */
+            joinMeeting: async (
+                payload?: {
+                    data: {
+                        room_id?: string;
+                        schedule_event_id?: string;
+                        request_type: number;
+                        join_meeting_type?: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/join_meeting`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=check_in_schedule&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=check_in_schedule&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 签到日程
+             */
+            checkInSchedule: async (
+                payload?: {
+                    data?: {
+                        room_id?: string;
+                        schedule_id?: string;
+                        request_type?: number;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            extra?: { calendar_info?: string };
+                        };
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/check_in_schedule`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=exit&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=exit&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 退出
+             */
+            exit: async (
+                payload?: {
+                    data: {
+                        room_id?: string;
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/exit`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=auto_release_event&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auto_release_event&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 引导释放
+             */
+            autoReleaseEvent: async (
+                payload?: {
+                    data: {
+                        schedule_event_id?: string;
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/auto_release_event`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=auto_welcome&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auto_welcome&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 自动欢迎
+             */
+            autoWelcome: async (
+                payload?: {
+                    data: {
+                        schedule_event_id?: string;
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/auto_welcome`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=room_calling&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=room_calling&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 呼叫
+             */
+            roomCalling: async (
+                payload?: {
+                    data: {
+                        targets?: string;
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/room_calling`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=join_meeting_number&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join_meeting_number&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 会议号入会
+             */
+            joinMeetingNumber: async (
+                payload?: {
+                    data: {
+                        meeting_number?: string;
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/join_meeting_number`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=leave_meeting&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=leave_meeting&project=vc&resource=my_ai_room&version=v1 document }
+             *
+             * 离开会议
+             */
+            leaveMeeting: async (
+                payload?: {
+                    data: {
+                        request_type: number;
+                        common_param?: {
+                            language?: string;
+                            utc_offset?: string;
+                            room_id?: string;
+                            client_version?: string;
+                            openapi_history?: {
+                                response_type?: number;
+                                schedule_event_id?: string;
+                                other_msg?: string;
+                                oapi_msg?: string;
+                            };
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: {
+                                    room_reply?: string;
+                                    openapi_response?: {
+                                        response_type?: number;
+                                        schedule_event_id?: string;
+                                        other_msg?: string;
+                                        oapi_msg?: string;
+                                    };
+                                };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_room/leave_meeting`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * my_ai_mm
+         */
+        myAiMm: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=media_parse&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=media_parse&project=vc&resource=my_ai_mm&version=v1 document }
+             */
+            mediaParse: async (
+                payload?: {
+                    data?: {
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "MediaView";
+                            session_id?: string;
+                            upload_objects?: Array<{
+                                biz_id?: string;
+                                type?: string;
+                            }>;
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        scenario_context_schema_version?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                present?: {
+                                    type?: string;
+                                    card_template_id?: string;
+                                    body?: string;
+                                    card_variables?: { content?: string };
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_mm/media_parse`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=extension_boarding&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=extension_boarding&project=vc&resource=my_ai_mm&version=v1 document }
+             */
+            extensionBoarding: async (
+                payload?: {
+                    data?: {
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "MediaView";
+                            session_id?: string;
+                            upload_objects?: Array<{
+                                biz_id?: string;
+                                type?: string;
+                            }>;
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        scenario_context_schema_version?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                present?: {
+                                    type?: string;
+                                    card_template_id?: string;
+                                    body?: string;
+                                    card_variables?: { content?: string };
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_mm/extension_boarding`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=query_suggest_context&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_suggest_context&project=vc&resource=my_ai_mm&version=v1 document }
+             */
+            querySuggestContext: async (
+                payload?: {
+                    params?: { object_token?: string; object_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { title?: string; content?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_mm/query_suggest_context`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=media_bind&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=media_bind&project=vc&resource=my_ai_mm&version=v1 document }
+             */
+            mediaBind: async (
+                payload?: {
+                    data?: {
+                        message_id?: string;
+                        status?: { from_status?: string; to_status?: string };
+                        callback_info?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                present?: {
+                                    type?: string;
+                                    card_template_id?: string;
+                                    body?: string;
+                                    card_variables?: { content?: string };
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_mm/media_bind`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=vc&resource=my_ai_mm&version=v1 document }
+             */
+            query: async (
+                payload?: {
+                    data?: {
+                        tool_raw_instruction?: string;
+                        scenario_context?: {
+                            plugins?: Array<{ key?: string }>;
+                            work_mode?: number;
+                            scenario?:
+                                | "IM"
+                                | "Doc"
+                                | "Sheet"
+                                | "Base"
+                                | "VC"
+                                | "Calendar"
+                                | "Email"
+                                | "MediaView";
+                            session_id?: string;
+                            upload_objects?: Array<{
+                                biz_id?: string;
+                                type?: string;
+                            }>;
+                            system_info?: {
+                                lang?: string;
+                                brand?: string;
+                                locale?: string;
+                                session_id?: string;
+                                app_version?: string;
+                            };
+                        };
+                        scenario_context_schema_version?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                present?: {
+                                    type?: string;
+                                    card_template_id?: string;
+                                    body?: string;
+                                    card_variables?: { content?: string };
+                                    callback_info?: string;
+                                };
+                                hint?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_mm/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * my_ai_sip
+         */
+        myAiSip: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_sip&apiName=create_event_card&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_event_card&project=vc&resource=my_ai_sip&version=v1 document }
+             *
+             * 生成卡片
+             */
+            createEventCard: async (
+                payload?: {
+                    data?: { theme?: string; number?: number; size?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                hint?: string;
+                                result?: string;
+                                present?: {
+                                    type: string;
+                                    body: string;
+                                    operation_type?: string;
+                                    interactable?: boolean;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                    card_template_id?: string;
+                                    card_variables?: {
+                                        text?: string;
+                                        image_key?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_sip/create_event_card`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * alert
          */
         alert: {
@@ -1814,6 +4344,291 @@ export default abstract class Client extends vault {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * my_ai_vc
+         */
+        myAiVc: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=card_callback&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=card_callback&project=vc&resource=my_ai_vc&version=v1 document }
+             */
+            cardCallback: async (
+                payload?: {
+                    data?: {
+                        open_message_id?: string;
+                        open_chat_id?: string;
+                        operator_tenant_key?: string;
+                        token?: string;
+                        action?: {
+                            value: { body: string; handle: string };
+                            tag: string;
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc/card_callback`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=start_analysis&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=start_analysis&project=vc&resource=my_ai_vc&version=v1 document }
+             *
+             * 开始会议分析
+             */
+            startAnalysis: async (
+                payload?: {
+                    data: { tool_raw_instruction: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                result?: { reply: string };
+                                present?: {
+                                    type?: string;
+                                    body?: string;
+                                    interactable?: boolean;
+                                    operation_type?: string;
+                                    operation_url?: string;
+                                    callback_url?: string;
+                                    callback_info?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc/start_analysis`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=fetch_meeting_list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_meeting_list&project=vc&resource=my_ai_vc&version=v1 document }
+             *
+             * 用于获取已经保存的会议列表
+             */
+            fetchMeetingList: async (
+                payload?: {},
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { meeting_list_url?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc/fetch_meeting_list`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=set_meeting_list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=set_meeting_list&project=vc&resource=my_ai_vc&version=v1 document }
+             *
+             * 设置需要分析的会议列表
+             */
+            setMeetingList: async (
+                payload?: {
+                    data: { meeting_list_url: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc/set_meeting_list`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=meeting_analyze&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=meeting_analyze&project=vc&resource=my_ai_vc&version=v1 document }
+             */
+            meetingAnalyze: async (
+                payload?: {
+                    data?: {
+                        objective_check?: {
+                            objective_check_types?: Array<number>;
+                            objective_check_params?: Array<{
+                                params?: Array<number>;
+                            }>;
+                        };
+                        subjective_check?: {
+                            key_points?: Array<{
+                                name?: string;
+                                description?: string;
+                            }>;
+                            user_input_prompts?: Array<string>;
+                        };
+                        meeting_ids?: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { task_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc/meeting_analyze`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=fetch_meeting_analyze&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_meeting_analyze&project=vc&resource=my_ai_vc&version=v1 document }
+             */
+            fetchMeetingAnalyze: async (
+                payload?: {
+                    data?: { task_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                meeting_analyze_status?: number;
+                                analyze_outputs?: Array<{
+                                    meeting_id?: string;
+                                    check_status_code?: number;
+                                    objective_check_output?: {
+                                        failed_lists?: Array<number>;
+                                        status_code?: number;
+                                    };
+                                    subjective_check_output?: {
+                                        keypoints?: Array<string>;
+                                        key_point_match_details?: Array<{
+                                            key_point_match_details?: Array<{
+                                                start_timestamp?: string;
+                                                matched_text?: string;
+                                            }>;
+                                        }>;
+                                        user_prompt_outputs?: Array<string>;
+                                        status_code?: number;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/my_ai_vc/fetch_meeting_analyze`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3679,6 +6494,53 @@ export default abstract class Client extends vault {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=scope_config&apiName=access_code&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=access_code&project=vc&resource=scope_config&version=v1 document }
+             *
+             * 创建部署码
+             *
+             * 该接口可以用来创建会议室或者签到板的部署码。
+             */
+            accessCode: async (
+                payload?: {
+                    data: {
+                        scope_type: number;
+                        scope_id: string;
+                        valid_day: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { access_code: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/scope_config/access_code`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * reserve_config.form
@@ -4989,6 +7851,182 @@ export default abstract class Client extends vault {
             },
         },
         /**
+         * meeting.pull_subtitle
+         */
+        meetingPullSubtitle: {
+            getWithIterator: async (
+                payload?: {
+                    params: {
+                        uid: string;
+                        page_token?: string;
+                        page_size?: string;
+                        did: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { meeting_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/pull_subtitle`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                meeting_subtitles?: Array<{
+                                                    seg_id?: number;
+                                                    subtitle?: {
+                                                        content?: string;
+                                                        language?: string;
+                                                        speaker_user_id?: number;
+                                                        speaker_device_id?: number;
+                                                        ssd_speaker?: {
+                                                            user_id?: string;
+                                                            speaker_id?: number;
+                                                            speaker_id_type?: number;
+                                                        };
+                                                    };
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting.pull_subtitle&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=meeting.pull_subtitle&version=v1 document }
+             *
+             * 获取会议或录音字幕
+             *
+             * 支持视频会议、妙记录音场景。可通过会议编号、订阅用户、订阅设备作为查询条件，获取目标字幕内容。
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        uid: string;
+                        page_token?: string;
+                        page_size?: string;
+                        did: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { meeting_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                meeting_subtitles?: Array<{
+                                    seg_id?: number;
+                                    subtitle?: {
+                                        content?: string;
+                                        language?: string;
+                                        speaker_user_id?: number;
+                                        speaker_device_id?: number;
+                                        ssd_speaker?: {
+                                            user_id?: string;
+                                            speaker_id?: number;
+                                            speaker_id_type?: number;
+                                        };
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/pull_subtitle`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * note
          */
         note: {
@@ -5053,6 +8091,201 @@ export default abstract class Client extends vault {
                             path
                         ),
                         method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            unifiedNoteTranscriptWithIterator: async (
+                payload?: {
+                    params?: {
+                        format?: string;
+                        cursor_id?: string;
+                        page_size?: number;
+                        locale?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { note_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/notes/:note_id/unified_note_transcript`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                transcript?: {
+                                                    format?: number;
+                                                    plain_text?: string;
+                                                    markdown?: string;
+                                                    structured_transcript_content?: {
+                                                        paragraphs?: Array<{
+                                                            speaker?: {
+                                                                speaker_id?: string;
+                                                                speaker_type?: number;
+                                                                speaker_name?: string;
+                                                                extra?: {
+                                                                    room_name?: string;
+                                                                    other_device_user_id?: string;
+                                                                    other_device_user_name?: string;
+                                                                };
+                                                            };
+                                                            speak_ms?: number;
+                                                            sentences?: Array<{
+                                                                sentence_id?: string;
+                                                                content: string;
+                                                                start_ms?: number;
+                                                                stop_ms?: number;
+                                                            }>;
+                                                        }>;
+                                                    };
+                                                };
+                                                next_cursor_id?: string;
+                                                page_size?: number;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=unified_note_transcript&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unified_note_transcript&project=vc&resource=note&version=v1 document }
+             *
+             * 获取三合一纪要文档的原始转写记录（支持分页）
+             */
+            unifiedNoteTranscript: async (
+                payload?: {
+                    params?: {
+                        format?: string;
+                        cursor_id?: string;
+                        page_size?: number;
+                        locale?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { note_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                transcript?: {
+                                    format?: number;
+                                    plain_text?: string;
+                                    markdown?: string;
+                                    structured_transcript_content?: {
+                                        paragraphs?: Array<{
+                                            speaker?: {
+                                                speaker_id?: string;
+                                                speaker_type?: number;
+                                                speaker_name?: string;
+                                                extra?: {
+                                                    room_name?: string;
+                                                    other_device_user_id?: string;
+                                                    other_device_user_name?: string;
+                                                };
+                                            };
+                                            speak_ms?: number;
+                                            sentences?: Array<{
+                                                sentence_id?: string;
+                                                content: string;
+                                                start_ms?: number;
+                                                stop_ms?: number;
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                                next_cursor_id?: string;
+                                page_size?: number;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/notes/:note_id/unified_note_transcript`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -5133,9 +8366,222 @@ export default abstract class Client extends vault {
             },
         },
         /**
+         * recording
+         */
+        recording: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=recording&apiName=unsubscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=vc&resource=recording&version=v1 document }
+             *
+             * 取消订阅录音事件
+             */
+            unsubscription: async (
+                payload?: {
+                    data: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/recordings/unsubscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=recording&apiName=subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=vc&resource=recording&version=v1 document }
+             *
+             * 订阅录音事件
+             */
+            subscription: async (
+                payload?: {
+                    data: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/recordings/subscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * bot
          */
         bot: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=realtime_endpoint&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=realtime_endpoint&project=vc&resource=bot&version=v1 document }
+             *
+             * 获取会议机器人实时 WebSocket 连接地址
+             */
+            realtimeEndpoint: async (
+                payload?: {
+                    params: { meeting_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                websocket_url?: string;
+                                expires_time?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/realtime/endpoint`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=leave&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=leave&project=vc&resource=bot&version=v1 document }
+             *
+             * 离开会议
+             *
+             * 通过会议 ID 将智能体离开指定的视频会议。调用成功后会返回离会用户信息。
+             */
+            leave: async (
+                payload?: {
+                    data: { meeting_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                leave_user?: {
+                                    id?: string;
+                                    user_type?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/bots/leave`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=message&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=message&project=vc&resource=bot&version=v1 document }
+             *
+             * 发送会中消息
+             *
+             * 向指定的视频会议发送会中消息。智能体需已加入目标会议。
+             */
+            message: async (
+                payload?: {
+                    data: {
+                        meeting_id: string;
+                        msg_type: string;
+                        content: string;
+                        uuid?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { uuid?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/bots/message`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=user_active_meeting&version=v1 click to debug }
              *
@@ -5179,6 +8625,64 @@ export default abstract class Client extends vault {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=join&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join&project=vc&resource=bot&version=v1 document }
+             *
+             * 加入会议
+             *
+             * 通过会议号将智能体加入指定的视频会议。调用成功后会返回会议 ID，该 ID 可用于后续的智能体离会、发送会中消息等操作。
+             *
+             * 目前智能体入离会能力灰度中
+             */
+            join: async (
+                payload?: {
+                    data: {
+                        join_type: number;
+                        join_identify: { meeting_no?: string };
+                        password?: string;
+                        call_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                meeting?: {
+                                    id?: string;
+                                    meeting_no?: string;
+                                    start_time?: string;
+                                    topic?: string;
+                                };
+                                join_user?: { id?: string; user_type?: number };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/bots/join`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5349,6 +8853,35 @@ export default abstract class Client extends vault {
                                                             share_id?: string;
                                                             time?: string;
                                                         }>;
+                                                        document_context_changed_items?: Array<{
+                                                            operator?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            share_id?: string;
+                                                            share_doc?: {
+                                                                url?: string;
+                                                                title?: string;
+                                                            };
+                                                            time?: string;
+                                                            comment_focus?: {
+                                                                comment_id?: string;
+                                                                focused?: boolean;
+                                                            };
+                                                            section_location?: {
+                                                                title?: string;
+                                                                level?: number;
+                                                                parent_titles?: Array<string>;
+                                                            };
+                                                            element_preview?: {
+                                                                action?: string;
+                                                                element_type?: string;
+                                                                element_token?: string;
+                                                                block_id?: string;
+                                                            };
+                                                        }>;
                                                     };
                                                 }>;
                                             };
@@ -5490,6 +9023,35 @@ export default abstract class Client extends vault {
                                             share_id?: string;
                                             time?: string;
                                         }>;
+                                        document_context_changed_items?: Array<{
+                                            operator?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            share_id?: string;
+                                            share_doc?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            time?: string;
+                                            comment_focus?: {
+                                                comment_id?: string;
+                                                focused?: boolean;
+                                            };
+                                            section_location?: {
+                                                title?: string;
+                                                level?: number;
+                                                parent_titles?: Array<string>;
+                                            };
+                                            element_preview?: {
+                                                action?: string;
+                                                element_type?: string;
+                                                element_token?: string;
+                                                block_id?: string;
+                                            };
+                                        }>;
                                     };
                                 }>;
                             };
@@ -5513,6 +9075,159 @@ export default abstract class Client extends vault {
             },
         },
         v1: {
+            /**
+             * material
+             */
+            material: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=material&apiName=upload_meta&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_meta&project=vc&resource=material&version=v1 document }
+                 */
+                uploadMeta: async (
+                    payload?: {
+                        data: {
+                            materials: Array<{
+                                name?: string;
+                                file_token: string;
+                                file_size: number;
+                                device_type: number;
+                                material_type: number;
+                                material_source: number;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    results?: Array<{
+                                        file_token?: string;
+                                        result?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/materials/upload_meta`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=material&apiName=remove&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove&project=vc&resource=material&version=v1 document }
+                 */
+                remove: async (
+                    payload?: {
+                        data: { file_tokens: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    results?: Array<{
+                                        file_token?: string;
+                                        result?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/materials/remove`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=material&apiName=pull_meta&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=pull_meta&project=vc&resource=material&version=v1 document }
+                 */
+                pullMeta: async (
+                    payload?: {
+                        params?: {
+                            device_type?: number;
+                            material_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    materials: Array<{
+                                        name?: string;
+                                        file_token: string;
+                                        file_size: number;
+                                        device_type: number;
+                                        material_type: number;
+                                        review_result?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/materials/pull_meta`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * meeting.recording
              */
@@ -5707,6 +9422,49 @@ export default abstract class Client extends vault {
              * room_config
              */
             roomConfig: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_config&apiName=del&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del&project=vc&resource=room_config&version=v1 document }
+                 */
+                del: async (
+                    payload?: {
+                        data: {
+                            scope: number;
+                            country_id?: string;
+                            district_id?: string;
+                            building_id?: string;
+                            floor_name?: string;
+                            room_id?: string;
+                            config: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/room_configs/del`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_config&apiName=set_checkboard_access_code&version=v1 click to debug }
                  *
@@ -6421,6 +10179,914 @@ export default abstract class Client extends vault {
                 },
             },
             /**
+             * my_ai_vc_meeting
+             */
+            myAiVcMeeting: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=get_common_reply&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_common_reply&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 会议内容问答
+                 */
+                getCommonReply: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: { meeting_content_reply?: string };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/get_common_reply`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=do_operation&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=do_operation&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 会议操作
+                 */
+                doOperation: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_operation_reply?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/do_operation`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=get_todo_task&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_todo_task&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 获取会议待办
+                 */
+                getTodoTask: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_todo_task_or_fail_reason?: string;
+                                        meeting_todo_task?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/get_todo_task`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=seed_ai_pull_data&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=seed_ai_pull_data&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * seed ai获取会议信息
+                 */
+                seedAiPullData: async (
+                    payload?: {
+                        params?: {
+                            meeting_id?: string;
+                            lan?: string;
+                            data_type?: "1" | "2" | "3" | "4" | "5" | "6";
+                            extra?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { result?: string; fail_msg?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/seed_ai_pull_data`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=doc_based_suggest_question&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=doc_based_suggest_question&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 */
+                docBasedSuggestQuestion: async (
+                    payload?: {
+                        data?: {
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    presents?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/doc_based_suggest_question`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=callback&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=callback&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 */
+                callback: async (
+                    payload?: {
+                        data?: { message_id?: string; callback_info?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/callback`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=section_summary&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=section_summary&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 获取会议分段纪要
+                 */
+                sectionSummary: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            participant_input?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_recap_or_fail_reason?: string;
+                                        meeting_recap?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/section_summary`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=get_recap&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_recap&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 获取会议纪要
+                 */
+                getRecap: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            participant_input?: string;
+                            current_im_message_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_recap_or_fail_reason?: string;
+                                        meeting_recap?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/get_recap`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=fetch_step_summary_stream&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_step_summary_stream&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 流式获取两段式会议总结
+                 */
+                fetchStepSummaryStream: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            participant_input?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_recap_or_fail_reason?: string;
+                                        meeting_recap?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/fetch_step_summary_stream`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=fetch_section_summary_stream&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_section_summary_stream&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 流式获取分段会议总结
+                 */
+                fetchSectionSummaryStream: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            participant_input?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_recap_or_fail_reason?: string;
+                                        meeting_recap?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/fetch_section_summary_stream`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc_meeting&apiName=fetch_recap_stream&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_recap_stream&project=vc&resource=my_ai_vc_meeting&version=v1 document }
+                 *
+                 * 流式获取会议纪要
+                 */
+                fetchRecapStream: async (
+                    payload?: {
+                        data?: {
+                            meeting_id?: string;
+                            question?: string;
+                            lang?: string;
+                            scenario_context_schema_version?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                object?: {
+                                    type?:
+                                        | "DOC"
+                                        | "USER"
+                                        | "EMAIL"
+                                        | "MESSAGE"
+                                        | "MESSAGE_COLLECTION"
+                                        | "TASK"
+                                        | "SCHEDULE"
+                                        | "MEETING";
+                                    biz_id?: string;
+                                };
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "Meego";
+                                extra?: {
+                                    vc_meeting_id?: string;
+                                    vc_locale?: string;
+                                    vc_applink_host?: string;
+                                    vc_app_version?: string;
+                                    vc_feature_config?: string;
+                                    quick_execute_param_rich_tag?: string;
+                                };
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            participant_input?: string;
+                            current_im_message_id?: string;
+                            debug_info_message_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        meeting_recap_or_fail_reason?: string;
+                                        meeting_recap?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc_meeting/fetch_recap_stream`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * meeting
              */
             meeting: {
@@ -6629,6 +11295,61 @@ export default abstract class Client extends vault {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=change_name&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=change_name&project=vc&resource=meeting&version=v1 document }
+                 */
+                changeName: async (
+                    payload?: {
+                        data: {
+                            change_name_users: Array<{
+                                id?: string;
+                                user_type?: number;
+                                in_meeting_name?: string;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { meeting_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    results?: Array<{
+                                        id?: string;
+                                        user_type?: number;
+                                        result?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/change_name`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -6883,6 +11604,171 @@ export default abstract class Client extends vault {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/meetings/:meeting_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            room_id?: string;
+                            start_time: string;
+                            end_time: string;
+                            status: number;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/vc/v1/meetings`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    meetings?: Array<{
+                                                        id?: string;
+                                                        topic?: string;
+                                                        meeting_no?: string;
+                                                        password?: string;
+                                                        start_time?: string;
+                                                        end_time?: string;
+                                                        meeting_connect?: boolean;
+                                                        status?: number;
+                                                        participant_count_accumulated?: string;
+                                                        note_id?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=vc&resource=meeting&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            room_id?: string;
+                            start_time: string;
+                            end_time: string;
+                            status: number;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    meetings?: Array<{
+                                        id?: string;
+                                        topic?: string;
+                                        meeting_no?: string;
+                                        password?: string;
+                                        start_time?: string;
+                                        end_time?: string;
+                                        meeting_connect?: boolean;
+                                        status?: number;
+                                        participant_count_accumulated?: string;
+                                        note_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings`,
                                 path
                             ),
                             method: "GET",
@@ -7154,6 +12040,1235 @@ export default abstract class Client extends vault {
                 },
             },
             /**
+             * my_ai_room
+             */
+            myAiRoom: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=join_offline_meeting&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join_offline_meeting&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 创建线下会议
+                 */
+                joinOfflineMeeting: async (
+                    payload?: {
+                        data: {
+                            room_id?: string;
+                            schedule_event_id?: string;
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/join_offline_meeting`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=reserve_instant_event&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reserve_instant_event&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 预定即时日程
+                 */
+                reserveInstantEvent: async (
+                    payload?: {
+                        data: {
+                            room_id?: string;
+                            request_type: number;
+                            end_time?: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/reserve_instant_event`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=help_scene_type&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=help_scene_type&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 获取帮助指令
+                 */
+                helpSceneType: async (
+                    payload?: {
+                        data: {
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                            help_request_type: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/help_scene_type`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=join_meeting&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join_meeting&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 加入及创建会议
+                 */
+                joinMeeting: async (
+                    payload?: {
+                        data: {
+                            room_id?: string;
+                            schedule_event_id?: string;
+                            request_type: number;
+                            join_meeting_type?: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/join_meeting`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=check_in_schedule&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=check_in_schedule&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 签到日程
+                 */
+                checkInSchedule: async (
+                    payload?: {
+                        data?: {
+                            room_id?: string;
+                            schedule_id?: string;
+                            request_type?: number;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                extra?: { calendar_info?: string };
+                            };
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/check_in_schedule`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=exit&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=exit&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 退出
+                 */
+                exit: async (
+                    payload?: {
+                        data: {
+                            room_id?: string;
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/exit`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=auto_release_event&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auto_release_event&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 引导释放
+                 */
+                autoReleaseEvent: async (
+                    payload?: {
+                        data: {
+                            schedule_event_id?: string;
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/auto_release_event`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=auto_welcome&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=auto_welcome&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 自动欢迎
+                 */
+                autoWelcome: async (
+                    payload?: {
+                        data: {
+                            schedule_event_id?: string;
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/auto_welcome`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=room_calling&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=room_calling&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 呼叫
+                 */
+                roomCalling: async (
+                    payload?: {
+                        data: {
+                            targets?: string;
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/room_calling`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=join_meeting_number&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join_meeting_number&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 会议号入会
+                 */
+                joinMeetingNumber: async (
+                    payload?: {
+                        data: {
+                            meeting_number?: string;
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/join_meeting_number`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_room&apiName=leave_meeting&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=leave_meeting&project=vc&resource=my_ai_room&version=v1 document }
+                 *
+                 * 离开会议
+                 */
+                leaveMeeting: async (
+                    payload?: {
+                        data: {
+                            request_type: number;
+                            common_param?: {
+                                language?: string;
+                                utc_offset?: string;
+                                room_id?: string;
+                                client_version?: string;
+                                openapi_history?: {
+                                    response_type?: number;
+                                    schedule_event_id?: string;
+                                    other_msg?: string;
+                                    oapi_msg?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: {
+                                        room_reply?: string;
+                                        openapi_response?: {
+                                            response_type?: number;
+                                            schedule_event_id?: string;
+                                            other_msg?: string;
+                                            oapi_msg?: string;
+                                        };
+                                    };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_room/leave_meeting`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * my_ai_mm
+             */
+            myAiMm: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=media_parse&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=media_parse&project=vc&resource=my_ai_mm&version=v1 document }
+                 */
+                mediaParse: async (
+                    payload?: {
+                        data?: {
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "MediaView";
+                                session_id?: string;
+                                upload_objects?: Array<{
+                                    biz_id?: string;
+                                    type?: string;
+                                }>;
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            scenario_context_schema_version?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    present?: {
+                                        type?: string;
+                                        card_template_id?: string;
+                                        body?: string;
+                                        card_variables?: { content?: string };
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_mm/media_parse`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=extension_boarding&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=extension_boarding&project=vc&resource=my_ai_mm&version=v1 document }
+                 */
+                extensionBoarding: async (
+                    payload?: {
+                        data?: {
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "MediaView";
+                                session_id?: string;
+                                upload_objects?: Array<{
+                                    biz_id?: string;
+                                    type?: string;
+                                }>;
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            scenario_context_schema_version?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    present?: {
+                                        type?: string;
+                                        card_template_id?: string;
+                                        body?: string;
+                                        card_variables?: { content?: string };
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_mm/extension_boarding`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=query_suggest_context&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_suggest_context&project=vc&resource=my_ai_mm&version=v1 document }
+                 */
+                querySuggestContext: async (
+                    payload?: {
+                        params?: {
+                            object_token?: string;
+                            object_type?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { title?: string; content?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_mm/query_suggest_context`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=media_bind&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=media_bind&project=vc&resource=my_ai_mm&version=v1 document }
+                 */
+                mediaBind: async (
+                    payload?: {
+                        data?: {
+                            message_id?: string;
+                            status?: {
+                                from_status?: string;
+                                to_status?: string;
+                            };
+                            callback_info?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    present?: {
+                                        type?: string;
+                                        card_template_id?: string;
+                                        body?: string;
+                                        card_variables?: { content?: string };
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_mm/media_bind`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_mm&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=vc&resource=my_ai_mm&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        data?: {
+                            tool_raw_instruction?: string;
+                            scenario_context?: {
+                                plugins?: Array<{ key?: string }>;
+                                work_mode?: number;
+                                scenario?:
+                                    | "IM"
+                                    | "Doc"
+                                    | "Sheet"
+                                    | "Base"
+                                    | "VC"
+                                    | "Calendar"
+                                    | "Email"
+                                    | "MediaView";
+                                session_id?: string;
+                                upload_objects?: Array<{
+                                    biz_id?: string;
+                                    type?: string;
+                                }>;
+                                system_info?: {
+                                    lang?: string;
+                                    brand?: string;
+                                    locale?: string;
+                                    session_id?: string;
+                                    app_version?: string;
+                                };
+                            };
+                            scenario_context_schema_version?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    present?: {
+                                        type?: string;
+                                        card_template_id?: string;
+                                        body?: string;
+                                        card_variables?: { content?: string };
+                                        callback_info?: string;
+                                    };
+                                    hint?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_mm/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * my_ai_sip
+             */
+            myAiSip: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_sip&apiName=create_event_card&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_event_card&project=vc&resource=my_ai_sip&version=v1 document }
+                 *
+                 * 生成卡片
+                 */
+                createEventCard: async (
+                    payload?: {
+                        data?: {
+                            theme?: string;
+                            number?: number;
+                            size?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    hint?: string;
+                                    result?: string;
+                                    present?: {
+                                        type: string;
+                                        body: string;
+                                        operation_type?: string;
+                                        interactable?: boolean;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                        card_template_id?: string;
+                                        card_variables?: {
+                                            text?: string;
+                                            image_key?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_sip/create_event_card`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * alert
              */
             alert: {
@@ -7331,6 +13446,297 @@ export default abstract class Client extends vault {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * my_ai_vc
+             */
+            myAiVc: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=card_callback&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=card_callback&project=vc&resource=my_ai_vc&version=v1 document }
+                 */
+                cardCallback: async (
+                    payload?: {
+                        data?: {
+                            open_message_id?: string;
+                            open_chat_id?: string;
+                            operator_tenant_key?: string;
+                            token?: string;
+                            action?: {
+                                value: { body: string; handle: string };
+                                tag: string;
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc/card_callback`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=start_analysis&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=start_analysis&project=vc&resource=my_ai_vc&version=v1 document }
+                 *
+                 * 开始会议分析
+                 */
+                startAnalysis: async (
+                    payload?: {
+                        data: { tool_raw_instruction: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    result?: { reply: string };
+                                    present?: {
+                                        type?: string;
+                                        body?: string;
+                                        interactable?: boolean;
+                                        operation_type?: string;
+                                        operation_url?: string;
+                                        callback_url?: string;
+                                        callback_info?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc/start_analysis`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=fetch_meeting_list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_meeting_list&project=vc&resource=my_ai_vc&version=v1 document }
+                 *
+                 * 用于获取已经保存的会议列表
+                 */
+                fetchMeetingList: async (
+                    payload?: {},
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { meeting_list_url?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc/fetch_meeting_list`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=set_meeting_list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=set_meeting_list&project=vc&resource=my_ai_vc&version=v1 document }
+                 *
+                 * 设置需要分析的会议列表
+                 */
+                setMeetingList: async (
+                    payload?: {
+                        data: { meeting_list_url: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc/set_meeting_list`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=meeting_analyze&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=meeting_analyze&project=vc&resource=my_ai_vc&version=v1 document }
+                 */
+                meetingAnalyze: async (
+                    payload?: {
+                        data?: {
+                            objective_check?: {
+                                objective_check_types?: Array<number>;
+                                objective_check_params?: Array<{
+                                    params?: Array<number>;
+                                }>;
+                            };
+                            subjective_check?: {
+                                key_points?: Array<{
+                                    name?: string;
+                                    description?: string;
+                                }>;
+                                user_input_prompts?: Array<string>;
+                            };
+                            meeting_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { task_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc/meeting_analyze`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=my_ai_vc&apiName=fetch_meeting_analyze&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch_meeting_analyze&project=vc&resource=my_ai_vc&version=v1 document }
+                 */
+                fetchMeetingAnalyze: async (
+                    payload?: {
+                        data?: { task_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    meeting_analyze_status?: number;
+                                    analyze_outputs?: Array<{
+                                        meeting_id?: string;
+                                        check_status_code?: number;
+                                        objective_check_output?: {
+                                            failed_lists?: Array<number>;
+                                            status_code?: number;
+                                        };
+                                        subjective_check_output?: {
+                                            keypoints?: Array<string>;
+                                            key_point_match_details?: Array<{
+                                                key_point_match_details?: Array<{
+                                                    start_timestamp?: string;
+                                                    matched_text?: string;
+                                                }>;
+                                            }>;
+                                            user_prompt_outputs?: Array<string>;
+                                            status_code?: number;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/my_ai_vc/fetch_meeting_analyze`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -9219,6 +15625,53 @@ export default abstract class Client extends vault {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=scope_config&apiName=access_code&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=access_code&project=vc&resource=scope_config&version=v1 document }
+                 *
+                 * 创建部署码
+                 *
+                 * 该接口可以用来创建会议室或者签到板的部署码。
+                 */
+                accessCode: async (
+                    payload?: {
+                        data: {
+                            scope_type: number;
+                            scope_id: string;
+                            valid_day: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { access_code: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/scope_config/access_code`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * reserve_config.form
@@ -10545,6 +16998,184 @@ export default abstract class Client extends vault {
                 },
             },
             /**
+             * meeting.pull_subtitle
+             */
+            meetingPullSubtitle: {
+                getWithIterator: async (
+                    payload?: {
+                        params: {
+                            uid: string;
+                            page_token?: string;
+                            page_size?: string;
+                            did: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { meeting_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/pull_subtitle`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    meeting_subtitles?: Array<{
+                                                        seg_id?: number;
+                                                        subtitle?: {
+                                                            content?: string;
+                                                            language?: string;
+                                                            speaker_user_id?: number;
+                                                            speaker_device_id?: number;
+                                                            ssd_speaker?: {
+                                                                user_id?: string;
+                                                                speaker_id?: number;
+                                                                speaker_id_type?: number;
+                                                            };
+                                                        };
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting.pull_subtitle&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=meeting.pull_subtitle&version=v1 document }
+                 *
+                 * 获取会议或录音字幕
+                 *
+                 * 支持视频会议、妙记录音场景。可通过会议编号、订阅用户、订阅设备作为查询条件，获取目标字幕内容。
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            uid: string;
+                            page_token?: string;
+                            page_size?: string;
+                            did: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { meeting_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    meeting_subtitles?: Array<{
+                                        seg_id?: number;
+                                        subtitle?: {
+                                            content?: string;
+                                            language?: string;
+                                            speaker_user_id?: number;
+                                            speaker_device_id?: number;
+                                            ssd_speaker?: {
+                                                user_id?: string;
+                                                speaker_id?: number;
+                                                speaker_id_type?: number;
+                                            };
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/pull_subtitle`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * note
              */
             note: {
@@ -10626,6 +17257,203 @@ export default abstract class Client extends vault {
                             throw e;
                         });
                 },
+                unifiedNoteTranscriptWithIterator: async (
+                    payload?: {
+                        params?: {
+                            format?: string;
+                            cursor_id?: string;
+                            page_size?: number;
+                            locale?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { note_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/vc/v1/notes/:note_id/unified_note_transcript`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    transcript?: {
+                                                        format?: number;
+                                                        plain_text?: string;
+                                                        markdown?: string;
+                                                        structured_transcript_content?: {
+                                                            paragraphs?: Array<{
+                                                                speaker?: {
+                                                                    speaker_id?: string;
+                                                                    speaker_type?: number;
+                                                                    speaker_name?: string;
+                                                                    extra?: {
+                                                                        room_name?: string;
+                                                                        other_device_user_id?: string;
+                                                                        other_device_user_name?: string;
+                                                                    };
+                                                                };
+                                                                speak_ms?: number;
+                                                                sentences?: Array<{
+                                                                    sentence_id?: string;
+                                                                    content: string;
+                                                                    start_ms?: number;
+                                                                    stop_ms?: number;
+                                                                }>;
+                                                            }>;
+                                                        };
+                                                    };
+                                                    next_cursor_id?: string;
+                                                    page_size?: number;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=unified_note_transcript&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unified_note_transcript&project=vc&resource=note&version=v1 document }
+                 *
+                 * 获取三合一纪要文档的原始转写记录（支持分页）
+                 */
+                unifiedNoteTranscript: async (
+                    payload?: {
+                        params?: {
+                            format?: string;
+                            cursor_id?: string;
+                            page_size?: number;
+                            locale?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { note_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    transcript?: {
+                                        format?: number;
+                                        plain_text?: string;
+                                        markdown?: string;
+                                        structured_transcript_content?: {
+                                            paragraphs?: Array<{
+                                                speaker?: {
+                                                    speaker_id?: string;
+                                                    speaker_type?: number;
+                                                    speaker_name?: string;
+                                                    extra?: {
+                                                        room_name?: string;
+                                                        other_device_user_id?: string;
+                                                        other_device_user_name?: string;
+                                                    };
+                                                };
+                                                speak_ms?: number;
+                                                sentences?: Array<{
+                                                    sentence_id?: string;
+                                                    content: string;
+                                                    start_ms?: number;
+                                                    stop_ms?: number;
+                                                }>;
+                                            }>;
+                                        };
+                                    };
+                                    next_cursor_id?: string;
+                                    page_size?: number;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/notes/:note_id/unified_note_transcript`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=get&version=v1 click to debug }
                  *
@@ -10695,9 +17523,228 @@ export default abstract class Client extends vault {
                 },
             },
             /**
+             * recording
+             */
+            recording: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=recording&apiName=unsubscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=vc&resource=recording&version=v1 document }
+                 *
+                 * 取消订阅录音事件
+                 */
+                unsubscription: async (
+                    payload?: {
+                        data: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/recordings/unsubscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=recording&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=vc&resource=recording&version=v1 document }
+                 *
+                 * 订阅录音事件
+                 */
+                subscription: async (
+                    payload?: {
+                        data: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/recordings/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * bot
              */
             bot: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=realtime_endpoint&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=realtime_endpoint&project=vc&resource=bot&version=v1 document }
+                 *
+                 * 获取会议机器人实时 WebSocket 连接地址
+                 */
+                realtimeEndpoint: async (
+                    payload?: {
+                        params: { meeting_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    websocket_url?: string;
+                                    expires_time?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/realtime/endpoint`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=leave&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=leave&project=vc&resource=bot&version=v1 document }
+                 *
+                 * 离开会议
+                 *
+                 * 通过会议 ID 将智能体离开指定的视频会议。调用成功后会返回离会用户信息。
+                 */
+                leave: async (
+                    payload?: {
+                        data: { meeting_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    leave_user?: {
+                                        id?: string;
+                                        user_type?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/bots/leave`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=message&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=message&project=vc&resource=bot&version=v1 document }
+                 *
+                 * 发送会中消息
+                 *
+                 * 向指定的视频会议发送会中消息。智能体需已加入目标会议。
+                 */
+                message: async (
+                    payload?: {
+                        data: {
+                            meeting_id: string;
+                            msg_type: string;
+                            content: string;
+                            uuid?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { uuid?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/bots/message`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=user_active_meeting&version=v1 click to debug }
                  *
@@ -10741,6 +17788,67 @@ export default abstract class Client extends vault {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=join&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=join&project=vc&resource=bot&version=v1 document }
+                 *
+                 * 加入会议
+                 *
+                 * 通过会议号将智能体加入指定的视频会议。调用成功后会返回会议 ID，该 ID 可用于后续的智能体离会、发送会中消息等操作。
+                 *
+                 * 目前智能体入离会能力灰度中
+                 */
+                join: async (
+                    payload?: {
+                        data: {
+                            join_type: number;
+                            join_identify: { meeting_no?: string };
+                            password?: string;
+                            call_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    meeting?: {
+                                        id?: string;
+                                        meeting_no?: string;
+                                        start_time?: string;
+                                        topic?: string;
+                                    };
+                                    join_user?: {
+                                        id?: string;
+                                        user_type?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/bots/join`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -10913,6 +18021,35 @@ export default abstract class Client extends vault {
                                                                 share_id?: string;
                                                                 time?: string;
                                                             }>;
+                                                            document_context_changed_items?: Array<{
+                                                                operator?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                share_id?: string;
+                                                                share_doc?: {
+                                                                    url?: string;
+                                                                    title?: string;
+                                                                };
+                                                                time?: string;
+                                                                comment_focus?: {
+                                                                    comment_id?: string;
+                                                                    focused?: boolean;
+                                                                };
+                                                                section_location?: {
+                                                                    title?: string;
+                                                                    level?: number;
+                                                                    parent_titles?: Array<string>;
+                                                                };
+                                                                element_preview?: {
+                                                                    action?: string;
+                                                                    element_type?: string;
+                                                                    element_token?: string;
+                                                                    block_id?: string;
+                                                                };
+                                                            }>;
                                                         };
                                                     }>;
                                                 };
@@ -11053,6 +18190,35 @@ export default abstract class Client extends vault {
                                                 };
                                                 share_id?: string;
                                                 time?: string;
+                                            }>;
+                                            document_context_changed_items?: Array<{
+                                                operator?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                share_id?: string;
+                                                share_doc?: {
+                                                    url?: string;
+                                                    title?: string;
+                                                };
+                                                time?: string;
+                                                comment_focus?: {
+                                                    comment_id?: string;
+                                                    focused?: boolean;
+                                                };
+                                                section_location?: {
+                                                    title?: string;
+                                                    level?: number;
+                                                    parent_titles?: Array<string>;
+                                                };
+                                                element_preview?: {
+                                                    action?: string;
+                                                    element_type?: string;
+                                                    element_token?: string;
+                                                    block_id?: string;
+                                                };
                                             }>;
                                         };
                                     }>;

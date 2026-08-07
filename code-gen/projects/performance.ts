@@ -34,6 +34,123 @@ export default abstract class Client extends people_bytedance {
     performance = {
         v1: {
             /**
+             * indicator
+             */
+            indicator: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=indicator&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=performance&resource=indicator&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            semester_id?: string;
+                            indicator_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    semesters: Array<{
+                                        semester_id?: string;
+                                        indicators?: Array<{
+                                            id?: string;
+                                            is_final_review_stage_used?: boolean;
+                                        }>;
+                                    }>;
+                                    indicators: Array<{
+                                        id: string;
+                                        name: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        rule_id: string;
+                                    }>;
+                                    rules: Array<{
+                                        id: string;
+                                        name: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        type: string;
+                                        level_setting?: {
+                                            level_options: Array<{
+                                                id: string;
+                                                name: {
+                                                    "zh-CN"?: string;
+                                                    "en-US"?: string;
+                                                };
+                                                label: {
+                                                    "zh-CN"?: string;
+                                                    "en-US"?: string;
+                                                };
+                                                order: number;
+                                                color: string;
+                                            }>;
+                                        };
+                                        score_level_setting?: {
+                                            min: number;
+                                            max: number;
+                                            decimal: number;
+                                            score_interval_type: string;
+                                            score_type: string;
+                                            score_options: Array<{
+                                                id: string;
+                                                name: {
+                                                    "zh-CN"?: string;
+                                                    "en-US"?: string;
+                                                };
+                                                label: {
+                                                    "zh-CN"?: string;
+                                                    "en-US"?: string;
+                                                };
+                                                order: number;
+                                                max: number;
+                                            }>;
+                                        };
+                                        score_setting?: {
+                                            min: number;
+                                            max: number;
+                                            decimal: number;
+                                            score_interval_type: string;
+                                            score_type: string;
+                                            fix_score_options?: Array<{
+                                                score: number;
+                                                order: number;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v1/indicators`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * review_data
              */
             reviewData: {
@@ -757,6 +874,316 @@ export default abstract class Client extends people_bytedance {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/performance/v2/metric_details/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * evaluation_scale
+             */
+            evaluationScale: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=evaluation_scale&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=performance&resource=evaluation_scale&version=v2 document }
+                 *
+                 * 获取 360° 评估人的评估尺度
+                 *
+                 * 获取指定周期 360° 评估人的评估尺度。
+                 */
+                query: async (
+                    payload?: {
+                        data: { semester_id: string; user_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    evaluation_scale?: Array<{
+                                        user_id?: string;
+                                        user_evaluation_scales?: Array<{
+                                            indicator_id?: string;
+                                            distribute_type?: number;
+                                            avg_diff?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/evaluation_scale/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * review_data_permission
+             */
+            reviewDataPermission: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=review_data_permission&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=performance&resource=review_data_permission&version=v2 document }
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            semester_id: string;
+                            reviewer_user_id: string;
+                            reviewee_user_ids: Array<string>;
+                            stage_types: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    datas?: Array<{
+                                        user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        semester_id?: string;
+                                        activity_id?: string;
+                                        review_template_id?: string;
+                                        stages?: Array<{
+                                            stage_id?: string;
+                                            stage_type?: string;
+                                            units?: Array<{
+                                                unit_id?: string;
+                                                fields?: Array<{
+                                                    field_id?: string;
+                                                    indicator_id?: string;
+                                                    action?: Array<string>;
+                                                }>;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/review_data_permission/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * default_invitation
+             */
+            defaultInvitation: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=default_invitation&apiName=remove&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove&project=performance&resource=default_invitation&version=v2 document }
+                 *
+                 * 删除默认邀请
+                 *
+                 * 为被评估人删除openapi接口导入的默认邀请关系
+                 */
+                remove: async (
+                    payload?: {
+                        data: {
+                            semester_id: string;
+                            activity_id: string;
+                            invitations: Array<{
+                                reviewee_user_id: string;
+                                reviewer_user_ids: Array<string>;
+                            }>;
+                        };
+                        params: {
+                            client_token: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/default_invitation/remove`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=default_invitation&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=performance&resource=default_invitation&version=v2 document }
+                 *
+                 * 查询默认邀请
+                 *
+                 * 查询被评估人通过 名单导入/openapi 导入的默认邀请。
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            semester_id: string;
+                            activity_id: string;
+                            reviewee_user_ids: Array<string>;
+                            source?: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invitations?: Array<{
+                                        reviewee_user_id?: string;
+                                        reviewers?: Array<{
+                                            reviewer_user_id?: string;
+                                            source?: "file" | "openapi";
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/default_invitation/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=default_invitation&apiName=import&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=performance&resource=default_invitation&version=v2 document }
+                 *
+                 * 导入360默认邀请
+                 *
+                 * 为被评估人导入360默认邀请关系
+                 */
+                import: async (
+                    payload?: {
+                        data: {
+                            semester_id: string;
+                            activity_id: string;
+                            invitations: Array<{
+                                reviewee_user_id: string;
+                                reviewer_user_ids: Array<string>;
+                            }>;
+                        };
+                        params: {
+                            client_token: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/default_invitation/import`,
                                 path
                             ),
                             method: "POST",
@@ -2060,6 +2487,184 @@ export default abstract class Client extends people_bytedance {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/performance/v2/user_info/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * semester_stage
+             */
+            semesterStage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=semester_stage&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=performance&resource=semester_stage&version=v2 document }
+                 *
+                 * 获取周期环节
+                 *
+                 * 获取指定周期的周期环节信息，包括周期环节 ID、名称以及模板环节等信息。
+                 */
+                query: async (
+                    payload?: {
+                        data: { semester_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    semester_stages?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        stages?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            template_group_id?: string;
+                                            stage_type?:
+                                                | "summarize_key_outputs"
+                                                | "review"
+                                                | "communication_and_open_result"
+                                                | "view_result"
+                                                | "reconsideration"
+                                                | "calibration"
+                                                | "invitation"
+                                                | "confirm_invitation"
+                                                | "metric_setting"
+                                                | "metric_confirm"
+                                                | "data_source_input";
+                                            perform_role?:
+                                                | "reviewee"
+                                                | "invited_reviewer"
+                                                | "solid_line_leader"
+                                                | "dotted_line_leader"
+                                                | "secondary_solid_line_leader"
+                                                | "direct_project_leader"
+                                                | "custom_review_role"
+                                                | "metric_reviewer"
+                                                | "adjuster"
+                                                | "appeal_handler"
+                                                | "data_source_admin";
+                                            as_final_result?: boolean;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/semester_stage/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_okr
+             */
+            userOkr: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=user_okr&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=performance&resource=user_okr&version=v2 document }
+                 *
+                 * 获取绩效周期用于评估参考的 OKR 数据
+                 *
+                 * 获取指定绩效周期下，被评估人用于评估参考的 OKR 数据。
+                 */
+                query: async (
+                    payload?: {
+                        data: { semester_id: string; user_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    semester_id?: string;
+                                    okr_snapshot_infos?: Array<{
+                                        reviewee_user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        okrs?: Array<{
+                                            id?: string;
+                                            period_id?: string;
+                                            create_date?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            objectives?: Array<{
+                                                id?: string;
+                                                content?: string;
+                                                score?: number;
+                                                weight?: number;
+                                                progress_rate?: {
+                                                    percent?: number;
+                                                    status?: string;
+                                                };
+                                                key_results?: Array<{
+                                                    id?: string;
+                                                    content?: string;
+                                                    score?: number;
+                                                    weight?: number;
+                                                    progress_rate?: {
+                                                        percent?: number;
+                                                        status?: string;
+                                                    };
+                                                }>;
+                                                category_id?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/user_okr/query`,
                                 path
                             ),
                             method: "POST",

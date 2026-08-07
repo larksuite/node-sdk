@@ -31,5 +31,52 @@ export default abstract class Client extends myai_ai_extension {
     /**
          
          */
-    myai_assistant = {};
+    myai_assistant = {
+        v1: {
+            /**
+             * assistant_talk
+             */
+            assistantTalk: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=myai_assistant&resource=assistant_talk&apiName=answer&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=answer&project=myai_assistant&resource=assistant_talk&version=v1 document }
+                 */
+                answer: async (
+                    payload?: {
+                        data?: { tool_raw_instruction?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { result?: { answer?: string } };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/myai_assistant/v1/assistant_talk/answer`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+    };
 }

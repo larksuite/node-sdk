@@ -141,6 +141,106 @@ export default abstract class Client extends task {
                     });
             },
         },
+        v1: {
+            /**
+             * company_info
+             */
+            companyInfo: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=company_info&apiName=info_get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=info_get&project=tenant&resource=company_info&version=v1 document }
+                 */
+                infoGet: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    name?: string;
+                                    id?: string;
+                                    industry?: string;
+                                    scale?: string;
+                                    domain?: string;
+                                    contact?: {
+                                        name?: string;
+                                        email?: string;
+                                        mobile?: string;
+                                        telephone?: string;
+                                        postcode?: string;
+                                        address?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/tenant/v1/info/get`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=company_info&apiName=info_patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=info_patch&project=tenant&resource=company_info&version=v1 document }
+                 */
+                infoPatch: async (
+                    payload?: {
+                        data?: {
+                            name?: string;
+                            contact?: {
+                                name?: string;
+                                email?: string;
+                                mobile?: string;
+                                telephone?: string;
+                                postcode?: string;
+                                address?: string;
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/tenant/v1/info/patch`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
         v2: {
             /**
              * tenant

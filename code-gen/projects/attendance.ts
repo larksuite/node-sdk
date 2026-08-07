@@ -33,6 +33,139 @@ export default abstract class Client extends attendance_machine {
          */
     attendance = {
         /**
+         * location_setting
+         */
+        locationSetting: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=location_setting&apiName=modify&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=attendance&resource=location_setting&version=v1 document }
+             */
+            modify: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        wifi_status?: "open" | "close";
+                        location_status?: "open" | "close";
+                    };
+                    params: { user_id_type: "open_id" | "user_id" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { is_success: boolean };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/location_settings/modify`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=location_setting&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=location_setting&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        location_setting: {
+                            location?: {
+                                status: number;
+                                geofences?: Array<{
+                                    type: string;
+                                    center?: {
+                                        longitude: number;
+                                        latitude: number;
+                                        accuracy?: number;
+                                    };
+                                    radius?: string;
+                                    coords?: Array<{
+                                        longitude: number;
+                                        latitude: number;
+                                        accuracy?: number;
+                                    }>;
+                                }>;
+                            };
+                            wifi?: { status: number };
+                            user_id?: string;
+                        };
+                    };
+                    params: { user_id_type: "open_id" | "user_id" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                location_setting?: {
+                                    location?: {
+                                        status: number;
+                                        geofences?: Array<{
+                                            type: string;
+                                            center?: {
+                                                longitude: number;
+                                                latitude: number;
+                                                accuracy?: number;
+                                            };
+                                            radius?: string;
+                                            coords?: Array<{
+                                                longitude: number;
+                                                latitude: number;
+                                                accuracy?: number;
+                                            }>;
+                                        }>;
+                                    };
+                                    wifi?: { status: number };
+                                    user_id?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/location_settings`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * file
          */
         file: {
@@ -135,6 +268,168 @@ export default abstract class Client extends attendance_machine {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/files/upload`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=download_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_enterprise&project=attendance&resource=file&version=v1 document }
+             */
+            downloadEnterprise: async (
+                payload?: {
+                    path: { file_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/files/:file_id/download_enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=upload_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_enterprise&project=attendance&resource=file&version=v1 document }
+             */
+            uploadEnterprise: async (
+                payload?: {
+                    data?: { file?: Buffer | fs.ReadStream };
+                    params: { file_name: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file?: { file_id: string } };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/files/upload_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=upload_attachment&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_attachment&project=attendance&resource=file&version=v1 document }
+             *
+             * 附件上传
+             */
+            uploadAttachment: async (
+                payload?: {
+                    data?: { file?: Buffer | fs.ReadStream };
+                    params: { file_name: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                attachment?: {
+                                    file_id?: string;
+                                    name?: string;
+                                    size?: number;
+                                    mime_type?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/files/upload_attachment`,
                             path
                         ),
                         method: "POST",
@@ -367,6 +662,140 @@ export default abstract class Client extends attendance_machine {
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_enterprise&project=attendance&resource=group&version=v1 document }
+             *
+             * 查询所有考勤组
+             *
+             * 使用方法同旧版，加入了开放平台应用数据范围鉴权。查询所有考勤组 每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+             */
+            listEnterprise: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                group_lists?: Array<{
+                                    group_id: string;
+                                    group_name: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/list_enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search_enterprise&project=attendance&resource=group&version=v1 document }
+             *
+             * 按名称查询考勤组
+             *
+             * 使用方法同旧版，加入了开放平台应用数据范围鉴权。按名称查询考勤组 每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+             */
+            searchEnterprise: async (
+                payload?: {
+                    data: { group_name: string; exactly_matched?: boolean };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                group_lists?: Array<{
+                                    group_id: string;
+                                    group_name: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/search_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=d_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=d_enterprise&project=attendance&resource=group&version=v1 document }
+             *
+             * 删除考勤组
+             *
+             * 删除考勤组，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            dEnterprise: async (
+                payload?: {
+                    path: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/:group_id/d_enterprise`,
                             path
                         ),
                         method: "DELETE",
@@ -827,6 +1256,608 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=create_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=group&version=v1 document }
+             *
+             * 创建或修改考勤组
+             *
+             * 创建或修改考勤组，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            createEnterprise: async (
+                payload?: {
+                    data?: {
+                        group?: {
+                            group_id?: string;
+                            group_name: string;
+                            time_zone: string;
+                            bind_dept_ids?: Array<string>;
+                            except_dept_ids?: Array<string>;
+                            bind_user_ids?: Array<string>;
+                            except_user_ids?: Array<string>;
+                            group_leader_ids: Array<string>;
+                            sub_group_leader_ids?: Array<string>;
+                            allow_out_punch?: boolean;
+                            out_punch_need_approval?: boolean;
+                            out_punch_need_post_approval?: boolean;
+                            out_punch_need_remark?: boolean;
+                            out_punch_need_photo?: boolean;
+                            out_punch_allowed_hide_addr?: boolean;
+                            out_punch_allowed_adjust_addr?: boolean;
+                            adjust_range?: number;
+                            allow_pc_punch?: boolean;
+                            allow_remedy?: boolean;
+                            remedy_limit?: boolean;
+                            remedy_limit_count?: number;
+                            remedy_date_limit?: boolean;
+                            remedy_date_num?: number;
+                            allow_remedy_type_lack?: boolean;
+                            allow_remedy_type_late?: boolean;
+                            allow_remedy_type_early?: boolean;
+                            allow_remedy_type_normal?: boolean;
+                            show_cumulative_time?: boolean;
+                            show_over_time?: boolean;
+                            hide_staff_punch_time?: boolean;
+                            hide_clock_in_rule?: boolean;
+                            face_punch?: boolean;
+                            face_punch_cfg?: number;
+                            face_live_need_action?: boolean;
+                            face_downgrade?: boolean;
+                            replace_basic_pic?: boolean;
+                            anti_cheat_punch_config?: {
+                                intercept_suspected_cheat_punch: boolean;
+                                check_cheat_software_punch?: boolean;
+                                check_buddy_punch?: boolean;
+                                check_simulate_wifi_punch?: boolean;
+                                check_change_device_punch?: boolean;
+                                allow_change_device_num?: number;
+                                suspected_cheat_handle_method?: number;
+                            };
+                            machines?: Array<{
+                                machine_sn: string;
+                                machine_name: string;
+                            }>;
+                            gps_range?: number;
+                            locations?: Array<{
+                                location_id?: string;
+                                location_name: string;
+                                location_type: number;
+                                latitude?: number;
+                                longitude?: number;
+                                ssid?: string;
+                                bssid?: string;
+                                map_type?: number;
+                                address?: string;
+                                ip?: string;
+                                feature?: string;
+                                gps_range?: number;
+                            }>;
+                            group_type: number;
+                            punch_day_shift_ids: Array<string>;
+                            free_punch_cfg?: {
+                                free_start_time: string;
+                                free_end_time: string;
+                                punch_day: number;
+                                work_day_no_punch_as_lack?: boolean;
+                                work_hours_demand?: boolean;
+                                work_hours?: number;
+                                free_clock_setting?: {
+                                    clock_mode?: number;
+                                    clock_internal_hhmm?: number;
+                                };
+                            };
+                            calendar_id: number;
+                            need_punch_special_days?: Array<{
+                                punch_day: number;
+                                shift_id: string;
+                            }>;
+                            no_need_punch_special_days?: Array<{
+                                punch_day: number;
+                                shift_id: string;
+                            }>;
+                            work_day_no_punch_as_lack?: boolean;
+                            effect_now?: boolean;
+                            remedy_period_type?: number;
+                            remedy_period_custom_date?: number;
+                            punch_type?: number;
+                            effect_time?: string;
+                            fixshift_effect_time?: string;
+                            member_effect_time?: string;
+                            rest_clockIn_need_approval?: boolean;
+                            clockIn_need_photo?: boolean;
+                            member_status_change?: {
+                                onboarding_on_no_need_punch?: boolean;
+                                onboarding_off_no_need_punch?: boolean;
+                                offboarding_on_no_need_punch?: boolean;
+                                offboarding_off_no_need_punch?: boolean;
+                            };
+                            leave_need_punch?: boolean;
+                            leave_need_punch_cfg?: {
+                                late_minutes_as_late?: number;
+                                late_minutes_as_lack?: number;
+                                early_minutes_as_early?: number;
+                                early_minutes_as_lack?: number;
+                                not_during_shift?: boolean;
+                            };
+                            go_out_need_punch?: number;
+                            go_out_need_punch_cfg?: {
+                                late_minutes_as_late?: number;
+                                late_minutes_as_lack?: number;
+                                early_minutes_as_early?: number;
+                                early_minutes_as_lack?: number;
+                                not_during_shift?: boolean;
+                            };
+                            travel_need_punch?: number;
+                            travel_need_punch_cfg?: {
+                                late_minutes_as_late?: number;
+                                late_minutes_as_lack?: number;
+                                early_minutes_as_early?: number;
+                                early_minutes_as_lack?: number;
+                                not_during_shift?: boolean;
+                            };
+                            need_punch_members?: Array<{
+                                rule_scope_type?: number;
+                                scope_group_list?: {
+                                    scope_value_type?: number;
+                                    operation_type?: number;
+                                    right?: Array<{
+                                        key?: string;
+                                        name?: string;
+                                    }>;
+                                    member_ids?: Array<string>;
+                                    custom_field_ID?: string;
+                                    custom_field_obj_type?: string;
+                                };
+                            }>;
+                            no_need_punch_members?: Array<{
+                                rule_scope_type?: number;
+                                scope_group_list?: {
+                                    scope_value_type?: number;
+                                    operation_type?: number;
+                                    right?: Array<{
+                                        key?: string;
+                                        name?: string;
+                                    }>;
+                                    member_ids?: Array<string>;
+                                    custom_field_ID?: string;
+                                    custom_field_obj_type?: string;
+                                };
+                            }>;
+                            save_auto_changes?: boolean;
+                            org_change_auto_adjust?: boolean;
+                            bind_default_dept_ids?: Array<string>;
+                            bind_default_user_ids?: Array<string>;
+                            overtime_clock_cfg?: {
+                                allow_punch_approval?: boolean;
+                                need_clock_over_time_start_and_end?: boolean;
+                            };
+                            new_calendar_id?: string;
+                            allow_apply_punch?: boolean;
+                            clock_in_abnormal_settings?: {
+                                ignore_until_latest_clockout?: boolean;
+                            };
+                        };
+                        operator_id?: string;
+                    };
+                    params: { employee_type: string; dept_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                group?: {
+                                    group_id?: string;
+                                    group_name: string;
+                                    time_zone: string;
+                                    bind_dept_ids?: Array<string>;
+                                    except_dept_ids?: Array<string>;
+                                    bind_user_ids?: Array<string>;
+                                    except_user_ids?: Array<string>;
+                                    group_leader_ids: Array<string>;
+                                    sub_group_leader_ids?: Array<string>;
+                                    allow_out_punch?: boolean;
+                                    out_punch_need_approval?: boolean;
+                                    out_punch_need_post_approval?: boolean;
+                                    out_punch_need_remark?: boolean;
+                                    out_punch_need_photo?: boolean;
+                                    out_punch_allowed_hide_addr?: boolean;
+                                    out_punch_allowed_adjust_addr?: boolean;
+                                    adjust_range?: number;
+                                    allow_pc_punch?: boolean;
+                                    allow_remedy?: boolean;
+                                    remedy_limit?: boolean;
+                                    remedy_limit_count?: number;
+                                    remedy_date_limit?: boolean;
+                                    remedy_date_num?: number;
+                                    allow_remedy_type_lack?: boolean;
+                                    allow_remedy_type_late?: boolean;
+                                    allow_remedy_type_early?: boolean;
+                                    allow_remedy_type_normal?: boolean;
+                                    show_cumulative_time?: boolean;
+                                    show_over_time?: boolean;
+                                    hide_staff_punch_time?: boolean;
+                                    hide_clock_in_rule?: boolean;
+                                    face_punch?: boolean;
+                                    face_punch_cfg?: number;
+                                    face_live_need_action?: boolean;
+                                    face_downgrade?: boolean;
+                                    replace_basic_pic?: boolean;
+                                    anti_cheat_punch_config?: {
+                                        intercept_suspected_cheat_punch: boolean;
+                                        check_cheat_software_punch?: boolean;
+                                        check_buddy_punch?: boolean;
+                                        check_simulate_wifi_punch?: boolean;
+                                        check_change_device_punch?: boolean;
+                                        allow_change_device_num?: number;
+                                        suspected_cheat_handle_method?: number;
+                                    };
+                                    machines?: Array<{
+                                        machine_sn: string;
+                                        machine_name: string;
+                                    }>;
+                                    gps_range?: number;
+                                    locations?: Array<{
+                                        location_id?: string;
+                                        location_name: string;
+                                        location_type: number;
+                                        latitude?: number;
+                                        longitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        map_type?: number;
+                                        address?: string;
+                                        ip?: string;
+                                        feature?: string;
+                                        gps_range?: number;
+                                    }>;
+                                    group_type: number;
+                                    punch_day_shift_ids: Array<string>;
+                                    free_punch_cfg?: {
+                                        free_start_time: string;
+                                        free_end_time: string;
+                                        punch_day: number;
+                                        work_day_no_punch_as_lack?: boolean;
+                                        work_hours_demand?: boolean;
+                                        work_hours?: number;
+                                        free_clock_setting?: {
+                                            clock_mode?: number;
+                                            clock_internal_hhmm?: number;
+                                        };
+                                    };
+                                    calendar_id: number;
+                                    need_punch_special_days?: Array<{
+                                        punch_day: number;
+                                        shift_id: string;
+                                    }>;
+                                    no_need_punch_special_days?: Array<{
+                                        punch_day: number;
+                                        shift_id: string;
+                                    }>;
+                                    work_day_no_punch_as_lack?: boolean;
+                                    effect_now?: boolean;
+                                    remedy_period_type?: number;
+                                    remedy_period_custom_date?: number;
+                                    punch_type?: number;
+                                    effect_time?: string;
+                                    fixshift_effect_time?: string;
+                                    member_effect_time?: string;
+                                    rest_clockIn_need_approval?: boolean;
+                                    clockIn_need_photo?: boolean;
+                                    member_status_change?: {
+                                        onboarding_on_no_need_punch?: boolean;
+                                        onboarding_off_no_need_punch?: boolean;
+                                        offboarding_on_no_need_punch?: boolean;
+                                        offboarding_off_no_need_punch?: boolean;
+                                    };
+                                    leave_need_punch?: boolean;
+                                    leave_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    go_out_need_punch?: number;
+                                    go_out_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    travel_need_punch?: number;
+                                    travel_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    need_punch_members?: Array<{
+                                        rule_scope_type?: number;
+                                        scope_group_list?: {
+                                            scope_value_type?: number;
+                                            operation_type?: number;
+                                            right?: Array<{
+                                                key?: string;
+                                                name?: string;
+                                            }>;
+                                            member_ids?: Array<string>;
+                                            custom_field_ID?: string;
+                                            custom_field_obj_type?: string;
+                                        };
+                                    }>;
+                                    no_need_punch_members?: Array<{
+                                        rule_scope_type?: number;
+                                        scope_group_list?: {
+                                            scope_value_type?: number;
+                                            operation_type?: number;
+                                            right?: Array<{
+                                                key?: string;
+                                                name?: string;
+                                            }>;
+                                            member_ids?: Array<string>;
+                                            custom_field_ID?: string;
+                                            custom_field_obj_type?: string;
+                                        };
+                                    }>;
+                                    save_auto_changes?: boolean;
+                                    org_change_auto_adjust?: boolean;
+                                    bind_default_dept_ids?: Array<string>;
+                                    bind_default_user_ids?: Array<string>;
+                                    overtime_clock_cfg?: {
+                                        allow_punch_approval?: boolean;
+                                        need_clock_over_time_start_and_end?: boolean;
+                                    };
+                                    new_calendar_id?: string;
+                                    allow_apply_punch?: boolean;
+                                    clock_in_abnormal_settings?: {
+                                        ignore_until_latest_clockout?: boolean;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/create_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=enterprise&project=attendance&resource=group&version=v1 document }
+             *
+             * 按 ID 查询考勤组
+             *
+             * 按 ID 查询考勤组，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            enterprise: async (
+                payload?: {
+                    params: { employee_type: string; dept_type: string };
+                    path: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                group?: {
+                                    group_id?: string;
+                                    group_name: string;
+                                    time_zone: string;
+                                    bind_dept_ids?: Array<string>;
+                                    except_dept_ids?: Array<string>;
+                                    bind_user_ids?: Array<string>;
+                                    except_user_ids?: Array<string>;
+                                    group_leader_ids: Array<string>;
+                                    sub_group_leader_ids?: Array<string>;
+                                    allow_out_punch?: boolean;
+                                    out_punch_need_approval?: boolean;
+                                    out_punch_need_post_approval?: boolean;
+                                    out_punch_need_remark?: boolean;
+                                    out_punch_need_photo?: boolean;
+                                    out_punch_allowed_hide_addr?: boolean;
+                                    out_punch_allowed_adjust_addr?: boolean;
+                                    adjust_range?: number;
+                                    allow_pc_punch?: boolean;
+                                    allow_remedy?: boolean;
+                                    remedy_limit?: boolean;
+                                    remedy_limit_count?: number;
+                                    remedy_date_limit?: boolean;
+                                    remedy_date_num?: number;
+                                    allow_remedy_type_lack?: boolean;
+                                    allow_remedy_type_late?: boolean;
+                                    allow_remedy_type_early?: boolean;
+                                    allow_remedy_type_normal?: boolean;
+                                    show_cumulative_time?: boolean;
+                                    show_over_time?: boolean;
+                                    hide_staff_punch_time?: boolean;
+                                    hide_clock_in_rule?: boolean;
+                                    face_punch?: boolean;
+                                    face_punch_cfg?: number;
+                                    face_live_need_action?: boolean;
+                                    face_downgrade?: boolean;
+                                    replace_basic_pic?: boolean;
+                                    anti_cheat_punch_config?: {
+                                        intercept_suspected_cheat_punch: boolean;
+                                        check_cheat_software_punch?: boolean;
+                                        check_buddy_punch?: boolean;
+                                        check_simulate_wifi_punch?: boolean;
+                                        check_change_device_punch?: boolean;
+                                        allow_change_device_num?: number;
+                                        suspected_cheat_handle_method?: number;
+                                    };
+                                    machines?: Array<{
+                                        machine_sn: string;
+                                        machine_name: string;
+                                    }>;
+                                    gps_range?: number;
+                                    locations?: Array<{
+                                        location_id?: string;
+                                        location_name: string;
+                                        location_type: number;
+                                        latitude?: number;
+                                        longitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        map_type?: number;
+                                        address?: string;
+                                        ip?: string;
+                                        feature?: string;
+                                        gps_range?: number;
+                                    }>;
+                                    group_type: number;
+                                    punch_day_shift_ids: Array<string>;
+                                    free_punch_cfg?: {
+                                        free_start_time: string;
+                                        free_end_time: string;
+                                        punch_day: number;
+                                        work_day_no_punch_as_lack?: boolean;
+                                        work_hours_demand?: boolean;
+                                        work_hours?: number;
+                                        free_clock_setting?: {
+                                            clock_mode?: number;
+                                            clock_internal_hhmm?: number;
+                                        };
+                                    };
+                                    calendar_id: number;
+                                    need_punch_special_days?: Array<{
+                                        punch_day: number;
+                                        shift_id: string;
+                                    }>;
+                                    no_need_punch_special_days?: Array<{
+                                        punch_day: number;
+                                        shift_id: string;
+                                    }>;
+                                    work_day_no_punch_as_lack?: boolean;
+                                    effect_now?: boolean;
+                                    remedy_period_type?: number;
+                                    remedy_period_custom_date?: number;
+                                    punch_type?: number;
+                                    effect_time?: string;
+                                    fixshift_effect_time?: string;
+                                    member_effect_time?: string;
+                                    rest_clockIn_need_approval?: boolean;
+                                    clockIn_need_photo?: boolean;
+                                    member_status_change?: {
+                                        onboarding_on_no_need_punch?: boolean;
+                                        onboarding_off_no_need_punch?: boolean;
+                                        offboarding_on_no_need_punch?: boolean;
+                                        offboarding_off_no_need_punch?: boolean;
+                                    };
+                                    leave_need_punch?: boolean;
+                                    leave_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    go_out_need_punch?: number;
+                                    go_out_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    travel_need_punch?: number;
+                                    travel_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    need_punch_members?: Array<{
+                                        rule_scope_type?: number;
+                                        scope_group_list?: {
+                                            scope_value_type?: number;
+                                            operation_type?: number;
+                                            right?: Array<{
+                                                key?: string;
+                                                name?: string;
+                                            }>;
+                                            member_ids?: Array<string>;
+                                            custom_field_ID?: string;
+                                            custom_field_obj_type?: string;
+                                        };
+                                    }>;
+                                    no_need_punch_members?: Array<{
+                                        rule_scope_type?: number;
+                                        scope_group_list?: {
+                                            scope_value_type?: number;
+                                            operation_type?: number;
+                                            right?: Array<{
+                                                key?: string;
+                                                name?: string;
+                                            }>;
+                                            member_ids?: Array<string>;
+                                            custom_field_ID?: string;
+                                            custom_field_obj_type?: string;
+                                        };
+                                    }>;
+                                    save_auto_changes?: boolean;
+                                    org_change_auto_adjust?: boolean;
+                                    bind_default_dept_ids?: Array<string>;
+                                    bind_default_user_ids?: Array<string>;
+                                    overtime_clock_cfg?: {
+                                        allow_punch_approval?: boolean;
+                                        need_clock_over_time_start_and_end?: boolean;
+                                    };
+                                    new_calendar_id?: string;
+                                    allow_apply_punch?: boolean;
+                                    clock_in_abnormal_settings?: {
+                                        ignore_until_latest_clockout?: boolean;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/:group_id/enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=group&version=v1 document }
@@ -1169,6 +2200,126 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_daily_shift&version=v1 document }
+             *
+             * 查询排班表
+             *
+             * 查询排班表，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_date_from: number;
+                        check_date_to: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_daily_shifts?: Array<{
+                                    group_id: string;
+                                    shift_id: string;
+                                    month: number;
+                                    user_id: string;
+                                    day_no: number;
+                                    is_clear_schedule?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=create_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=user_daily_shift&version=v1 document }
+             *
+             * 创建或修改排班表
+             *
+             * 创建或修改排班表，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            createEnterprise: async (
+                payload?: {
+                    data: {
+                        user_daily_shifts: Array<{
+                            group_id: string;
+                            shift_id: string;
+                            month: number;
+                            user_id: string;
+                            day_no: number;
+                            is_clear_schedule?: boolean;
+                        }>;
+                        operator_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_daily_shifts?: Array<{
+                                    group_id: string;
+                                    shift_id: string;
+                                    month: number;
+                                    user_id: string;
+                                    day_no: number;
+                                    is_clear_schedule?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/create_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
@@ -1419,6 +2570,260 @@ export default abstract class Client extends attendance_machine {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_user_allowed_remedys_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_user_allowed_remedys_enterprise&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 获取可补卡时间
+             *
+             * 获取可补卡时间，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            queryUserAllowedRemedysEnterprise: async (
+                payload?: {
+                    data: { user_id: string; remedy_date: number };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_allowed_remedys?: Array<{
+                                    user_id: string;
+                                    remedy_date: number;
+                                    is_free_punch?: boolean;
+                                    punch_no?: number;
+                                    work_type?: number;
+                                    punch_status?: string;
+                                    normal_punch_time?: string;
+                                    remedy_start_time?: string;
+                                    remedy_end_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 通知补卡审批发起
+             *
+             * 通知补卡审批发起，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            createEnterprise: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        remedy_date: number;
+                        punch_no: number;
+                        work_type: number;
+                        approval_id?: string;
+                        remedy_time: string;
+                        status?: number;
+                        reason: string;
+                        time?: string;
+                        time_zone?: string;
+                        create_time?: string;
+                        update_time?: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_remedy?: {
+                                    user_id: string;
+                                    remedy_date: number;
+                                    punch_no: number;
+                                    work_type: number;
+                                    approval_id?: string;
+                                    remedy_time: string;
+                                    status?: number;
+                                    reason: string;
+                                    time?: string;
+                                    time_zone?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/create_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 获取补卡记录
+             *
+             * 获取补卡记录，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_time_from: string;
+                        check_time_to: string;
+                        check_date_type?:
+                            | "PeriodTime"
+                            | "CreateTime"
+                            | "UpdateTime";
+                        status?: number;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_remedys?: Array<{
+                                    user_id: string;
+                                    remedy_date: number;
+                                    punch_no: number;
+                                    work_type: number;
+                                    approval_id?: string;
+                                    remedy_time: string;
+                                    status?: number;
+                                    reason: string;
+                                    time?: string;
+                                    time_zone?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create_bpm&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_bpm&project=attendance&resource=user_task_remedy&version=v1 document }
+             *
+             * 写入补卡BPM审批
+             *
+             * 对于假勤设置-应用配置-申请设置-补卡，申请方式为“飞书人事「企业版」审批”的企业，可以通过该接口，写入补卡审批到飞书假勤系统中。
+             */
+            createBpm: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        remedy_records: Array<{
+                            remedy_date: string;
+                            punch_no: number;
+                            work_type: number;
+                            remedy_time: string;
+                        }>;
+                        remedy_reason?: string;
+                        custom_form_data?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                check_result: number;
+                                check_message: string;
+                                approval_record_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_task_remedys/create_bpm`,
                             path
                         ),
                         method: "POST",
@@ -1728,6 +3133,364 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=shift&version=v1 document }
+             *
+             * 按名称查询班次
+             *
+             * 使用方法同旧版，加入了开放平台应用数据范围鉴权。按名称查询班次每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+             *
+             * 详见错误信息
+             */
+            queryEnterprise: async (
+                payload?: {
+                    params: { shift_name: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                shift?: {
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
+                                    }>;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/shifts/query_enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=list_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_enterprise&project=attendance&resource=shift&version=v1 document }
+             *
+             * 查询所有班次
+             *
+             * 使用方法同旧版，加入了开放平台应用数据范围鉴权。查询所有班次 每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+             */
+            listEnterprise: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                shift_lists?: Array<{
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
+                                    }>;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/shifts/list_enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=d_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=d_enterprise&project=attendance&resource=shift&version=v1 document }
+             *
+             * 删除班次
+             *
+             * 删除班次，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            dEnterprise: async (
+                payload?: {
+                    path: { shift_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/shifts/:shift_id/d_enterprise`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=enterprise&project=attendance&resource=shift&version=v1 document }
+             *
+             * 按 ID 查询班次
+             *
+             * 按 ID 查询班次，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            enterprise: async (
+                payload?: {
+                    path: { shift_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                shift?: {
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
+                                    }>;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/shifts/:shift_id/enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=shift&version=v1 document }
@@ -1921,6 +3684,174 @@ export default abstract class Client extends attendance_machine {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/shifts/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=create_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=shift&version=v1 document }
+             *
+             * 创建班次
+             *
+             * 创建班次，使用方法同旧版，加入了开放平台应用数据范围鉴权。
+             */
+            createEnterprise: async (
+                payload?: {
+                    data: {
+                        shift_id: string;
+                        shift_name: string;
+                        punch_times: number;
+                        sub_shift_leader_ids?: Array<string>;
+                        is_flexible?: boolean;
+                        flexible_minutes?: number;
+                        flexible_rule?: Array<{
+                            flexible_early_minutes: number;
+                            flexible_late_minutes: number;
+                        }>;
+                        no_need_off?: boolean;
+                        punch_time_rule: Array<{
+                            on_time: string;
+                            off_time: string;
+                            late_minutes_as_late: number;
+                            late_minutes_as_lack: number;
+                            on_advance_minutes: number;
+                            early_minutes_as_early: number;
+                            early_minutes_as_lack: number;
+                            off_delay_minutes: number;
+                            late_minutes_as_serious_late?: number;
+                            no_need_on?: boolean;
+                            no_need_off?: boolean;
+                        }>;
+                        late_off_late_on_rule?: Array<{
+                            late_off_minutes: number;
+                            late_on_minutes: number;
+                        }>;
+                        rest_time_rule?: Array<{
+                            rest_begin_time: string;
+                            rest_end_time: string;
+                        }>;
+                        overtime_rule?: Array<{
+                            on_overtime: string;
+                            off_overtime: string;
+                        }>;
+                        day_type?: number;
+                        overtime_rest_time_rule?: Array<{
+                            rest_begin_time: string;
+                            rest_end_time: string;
+                        }>;
+                        late_minutes_as_serious_late?: number;
+                        shift_middle_time_rule?: {
+                            middle_time_type?: number;
+                            fixed_middle_time?: string;
+                        };
+                        shift_attendance_time_config?: {
+                            attendance_time?: number;
+                            on_attendance_time?: number;
+                            off_attendance_time?: number;
+                        };
+                        late_off_late_on_setting?: {
+                            late_off_base_on_time_type?: number;
+                            late_on_base_on_time_type?: number;
+                        };
+                        id?: string;
+                        rest_time_flexible_configs?: Array<{
+                            need_flexible?: boolean;
+                            late_mins?: number;
+                        }>;
+                    };
+                    params?: { employee_type?: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                shift?: {
+                                    shift_id: string;
+                                    shift_name: string;
+                                    punch_times: number;
+                                    sub_shift_leader_ids?: Array<string>;
+                                    is_flexible?: boolean;
+                                    flexible_minutes?: number;
+                                    flexible_rule?: Array<{
+                                        flexible_early_minutes: number;
+                                        flexible_late_minutes: number;
+                                    }>;
+                                    no_need_off?: boolean;
+                                    punch_time_rule: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                        late_minutes_as_late: number;
+                                        late_minutes_as_lack: number;
+                                        on_advance_minutes: number;
+                                        early_minutes_as_early: number;
+                                        early_minutes_as_lack: number;
+                                        off_delay_minutes: number;
+                                        late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
+                                    }>;
+                                    late_off_late_on_rule?: Array<{
+                                        late_off_minutes: number;
+                                        late_on_minutes: number;
+                                    }>;
+                                    rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    overtime_rule?: Array<{
+                                        on_overtime: string;
+                                        off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
+                                    id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/shifts/create_enterprise`,
                             path
                         ),
                         method: "POST",
@@ -2174,6 +4105,65 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_field&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_stats_field&version=v1 document }
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
+                        start_date: number;
+                        end_date: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_stats_field?: {
+                                    stats_type: "daily" | "month";
+                                    user_id: string;
+                                    fields: Array<{
+                                        code: string;
+                                        title: string;
+                                        child_fields?: Array<{
+                                            code: string;
+                                            title: string;
+                                            time_unit?: string;
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_fields/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * user_stats_view
@@ -2325,6 +4315,148 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=update_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_enterprise&project=attendance&resource=user_stats_view&version=v1 document }
+             */
+            updateEnterprise: async (
+                payload?: {
+                    data?: {
+                        view?: {
+                            view_id: string;
+                            stats_type: "daily" | "month";
+                            user_id: string;
+                            items?: Array<{
+                                code: string;
+                                title?: string;
+                                child_items?: Array<{
+                                    code: string;
+                                    value: string;
+                                    title?: string;
+                                    column_type?: number;
+                                    read_only?: boolean;
+                                    min_value?: string;
+                                    max_value?: string;
+                                }>;
+                            }>;
+                        };
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                    path: { user_stats_view_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                view?: {
+                                    view_id: string;
+                                    stats_type: "daily" | "month";
+                                    user_id: string;
+                                    items?: Array<{
+                                        code: string;
+                                        title?: string;
+                                        child_items?: Array<{
+                                            code: string;
+                                            value: string;
+                                            title?: string;
+                                            column_type?: number;
+                                            read_only?: boolean;
+                                            min_value?: string;
+                                            max_value?: string;
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id/update_enterprise`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_stats_view&version=v1 document }
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        locale: string;
+                        stats_type: string;
+                        user_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                view?: {
+                                    view_id: string;
+                                    stats_type: "daily" | "month";
+                                    user_id: string;
+                                    items?: Array<{
+                                        code: string;
+                                        title?: string;
+                                        child_items?: Array<{
+                                            code: string;
+                                            value: string;
+                                            title?: string;
+                                            column_type?: number;
+                                            read_only?: boolean;
+                                            min_value?: string;
+                                            max_value?: string;
+                                        }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_views/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * approval_info
@@ -2374,6 +4506,60 @@ export default abstract class Client extends attendance_machine {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_info&apiName=process_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=process_enterprise&project=attendance&resource=approval_info&version=v1 document }
+             */
+            processEnterprise: async (
+                payload?: {
+                    data: {
+                        approval_id: string;
+                        approval_type: string;
+                        status: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                approval_info?: {
+                                    approval_id: string;
+                                    approval_type:
+                                        | "leave"
+                                        | "overtime"
+                                        | "trip"
+                                        | "out"
+                                        | "remedy";
+                                    status: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/approval_infos/process_enterprise`,
                             path
                         ),
                         method: "POST",
@@ -2499,6 +4685,112 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_setting&version=v1 document }
+             *
+             * 批量查询用户人脸识别信息
+             *
+             * 批量查询用户人脸识别信息，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_settings?: Array<{
+                                    user_id: string;
+                                    face_key: string;
+                                    face_key_update_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_settings/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=modify_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify_enterprise&project=attendance&resource=user_setting&version=v1 document }
+             *
+             * 修改用户人脸识别信息
+             *
+             * 修改用户人脸识别信息，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            modifyEnterprise: async (
+                payload?: {
+                    data?: {
+                        user_setting?: {
+                            user_id: string;
+                            face_key: string;
+                            face_key_update_time?: string;
+                        };
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_setting?: {
+                                    user_id: string;
+                                    face_key: string;
+                                    face_key_update_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_settings/modify_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * user_stats_data
@@ -2565,6 +4857,1472 @@ export default abstract class Client extends attendance_machine {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_data&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_stats_data&version=v1 document }
+             *
+             * 查询统计数据
+             *
+             * 查询统计数据，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        locale: string;
+                        stats_type: string;
+                        start_date: number;
+                        end_date: number;
+                        user_ids?: Array<string>;
+                        need_history?: boolean;
+                        current_group_only?: boolean;
+                        user_id?: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_datas?: Array<{
+                                    name: string;
+                                    user_id: string;
+                                    datas?: Array<{
+                                        code: string;
+                                        value: string;
+                                        features?: Array<{
+                                            key: string;
+                                            value: string;
+                                        }>;
+                                        title?: string;
+                                        duration_num?: {
+                                            day?: string;
+                                            half_day?: string;
+                                            hour?: string;
+                                            half_hour?: string;
+                                            minute?: string;
+                                        };
+                                    }>;
+                                }>;
+                                invalid_user_lists?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_stats_datas/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * schedule
+         */
+        schedule: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=schedule&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=schedule&version=v1 document }
+             */
+            query: async (
+                payload?: {
+                    params: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { group_id: string; shifts: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/schedules/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_arrange_shift_group
+         */
+        userArrangeShiftGroup: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_arrange_shift_group&apiName=mget&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=attendance&resource=user_arrange_shift_group&version=v1 document }
+             *
+             * 获取用户归属的班组
+             */
+            mget: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_shift_groups: Array<{
+                                    user_id?: string;
+                                    shift_group?: {
+                                        shift_group_id?: string;
+                                        group_id?: string;
+                                        shift_group_name?: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_arrange_shift_group/mget`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_shift_group
+         */
+        userShiftGroup: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_shift_group&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=user_shift_group&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: { page_size: number; page_token?: string };
+                    path: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                shift_groups?: Array<{
+                                    shift_group_id?: string;
+                                    shift_group_name?: string;
+                                    group_id?: string;
+                                    update_time?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_shift_group/:group_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_shift_group_list
+         */
+        userShiftGroupList: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_shift_group_list&apiName=users&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=users&project=attendance&resource=user_shift_group_list&version=v1 document }
+             */
+            users: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        group_id: string;
+                        shift_group_id: string;
+                        user_id_type:
+                            | "open_id"
+                            | "union_id"
+                            | "user_id"
+                            | "people_corehr_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                users?: Array<{
+                                    shift_group_id?: string;
+                                    user_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_shift_group_list/users`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * approval_overtime_detail
+         */
+        approvalOvertimeDetail: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        user_id: string;
+                        instance_id: string;
+                        employee_type: "employee_id" | "employee_no";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/apply_overtime_details`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                details: Array<{
+                                                    user_id: string;
+                                                    date: string;
+                                                    date_type: number;
+                                                    duration: string;
+                                                    unit: number;
+                                                    is_time_bank: boolean;
+                                                    update_time: string;
+                                                }>;
+                                                page_token?: number;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_overtime_detail&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=approval_overtime_detail&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        user_id: string;
+                        instance_id: string;
+                        employee_type: "employee_id" | "employee_no";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                details: Array<{
+                                    user_id: string;
+                                    date: string;
+                                    date_type: number;
+                                    duration: string;
+                                    unit: number;
+                                    is_time_bank: boolean;
+                                    update_time: string;
+                                }>;
+                                page_token?: number;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/apply_overtime_details`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * overtime_detail
+         */
+        overtimeDetail: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_detail&apiName=apply_approval&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply_approval&project=attendance&resource=overtime_detail&version=v1 document }
+             *
+             * 发起或撤销加班审批
+             *
+             * 发起或撤销加班审批
+             */
+            applyApproval: async (
+                payload?: {
+                    data: {
+                        instance_id: string;
+                        time_ranges: Array<{
+                            overtime_attribution_date?: string;
+                            time_range: {
+                                start_time: string;
+                                end_time: string;
+                            };
+                        }>;
+                        settle_type: number;
+                        time_offset: number;
+                        reason: string;
+                        status?: number;
+                        user_id: string;
+                        rest_time_ranges?: Array<{
+                            start_time: string;
+                            end_time: string;
+                        }>;
+                        rule_type?: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                duration?: number;
+                                unit?: number;
+                                items?: Array<{
+                                    date?: string;
+                                    duration?: number;
+                                    unit?: number;
+                                    settlement_type?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_details/apply_approval`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        overtime_date_start?: string;
+                        overtime_date_end?: string;
+                        overtime_user_ids?: Array<string>;
+                        effect_time_start?: string;
+                        effect_time_end?: string;
+                        with_progress_time_start?: boolean;
+                        time_zone?: string;
+                        is_time_bank?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        with_delete?: boolean;
+                        with_approval_status?: boolean;
+                        modify_time_end?: string;
+                        modify_time_start?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_details`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                details?: Array<{
+                                                    id: string;
+                                                    user_id: string;
+                                                    start_time: string;
+                                                    end_time: string;
+                                                    duration: string;
+                                                    unit: number;
+                                                    date_type: number;
+                                                    settle_type: number;
+                                                    effective_time: string;
+                                                    progress_start_time?: string;
+                                                    date: string;
+                                                    update_time?: string;
+                                                    is_time_bank?: boolean;
+                                                    instance_id?: string;
+                                                    overtime_approval_status?: number;
+                                                    is_delete?: number;
+                                                }>;
+                                                page_token: string;
+                                                has_more: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_detail&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=overtime_detail&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        overtime_date_start?: string;
+                        overtime_date_end?: string;
+                        overtime_user_ids?: Array<string>;
+                        effect_time_start?: string;
+                        effect_time_end?: string;
+                        with_progress_time_start?: boolean;
+                        time_zone?: string;
+                        is_time_bank?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        with_delete?: boolean;
+                        with_approval_status?: boolean;
+                        modify_time_end?: string;
+                        modify_time_start?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                details?: Array<{
+                                    id: string;
+                                    user_id: string;
+                                    start_time: string;
+                                    end_time: string;
+                                    duration: string;
+                                    unit: number;
+                                    date_type: number;
+                                    settle_type: number;
+                                    effective_time: string;
+                                    progress_start_time?: string;
+                                    date: string;
+                                    update_time?: string;
+                                    is_time_bank?: boolean;
+                                    instance_id?: string;
+                                    overtime_approval_status?: number;
+                                    is_delete?: number;
+                                }>;
+                                page_token: string;
+                                has_more: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_details`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * statistics_field
+         */
+        statisticsField: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=statistics_field&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    path: { statistics_field_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                statistics_field?: {
+                                    field_id?: string;
+                                    field_content?: string;
+                                    title?: string;
+                                    field_desc?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/statistics_field/:statistics_field_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/statistics_field`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    field_id?: string;
+                                                    field_content?: string;
+                                                    title?: string;
+                                                    field_desc?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=statistics_field&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    field_id?: string;
+                                    field_content?: string;
+                                    title?: string;
+                                    field_desc?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/statistics_field`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=save&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=save&project=attendance&resource=statistics_field&version=v1 document }
+             */
+            save: async (
+                payload?: {
+                    data?: {
+                        statistics_fields?: Array<{
+                            field_id?: string;
+                            field_content?: string;
+                            title?: string;
+                            field_desc?: string;
+                        }>;
+                        operator_id?: string;
+                    };
+                    params?: { employee_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/statistics_field/save`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            queryReportWithIterator: async (
+                payload?: {
+                    data?: {
+                        field_ids?: Array<{
+                            field_id?: string;
+                            field_content?: string;
+                            title?: string;
+                            field_desc?: string;
+                        }>;
+                        operator_id?: string;
+                        filter_items?: Array<{
+                            scope_value_type?: number;
+                            operation_type?: number;
+                            right?: Array<{ key?: string; name?: string }>;
+                            member_ids?: Array<string>;
+                            custom_field_ID?: string;
+                            custom_field_obj_type?: string;
+                        }>;
+                        start_time?: string;
+                        end_time?: string;
+                    };
+                    params?: {
+                        employee_type?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/statistics_field/query_report`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                total?: number;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                report_data?: Array<string>;
+                                                field_data?: {
+                                                    group_id?: string;
+                                                    group_name: string;
+                                                    time_zone: string;
+                                                    bind_dept_ids?: Array<string>;
+                                                    except_dept_ids?: Array<string>;
+                                                    bind_user_ids?: Array<string>;
+                                                    except_user_ids?: Array<string>;
+                                                    group_leader_ids: Array<string>;
+                                                    sub_group_leader_ids?: Array<string>;
+                                                    allow_out_punch?: boolean;
+                                                    out_punch_need_approval?: boolean;
+                                                    out_punch_need_post_approval?: boolean;
+                                                    out_punch_need_remark?: boolean;
+                                                    out_punch_need_photo?: boolean;
+                                                    out_punch_allowed_hide_addr?: boolean;
+                                                    out_punch_allowed_adjust_addr?: boolean;
+                                                    adjust_range?: number;
+                                                    allow_pc_punch?: boolean;
+                                                    allow_remedy?: boolean;
+                                                    remedy_limit?: boolean;
+                                                    remedy_limit_count?: number;
+                                                    remedy_date_limit?: boolean;
+                                                    remedy_date_num?: number;
+                                                    allow_remedy_type_lack?: boolean;
+                                                    allow_remedy_type_late?: boolean;
+                                                    allow_remedy_type_early?: boolean;
+                                                    allow_remedy_type_normal?: boolean;
+                                                    show_cumulative_time?: boolean;
+                                                    show_over_time?: boolean;
+                                                    hide_staff_punch_time?: boolean;
+                                                    hide_clock_in_rule?: boolean;
+                                                    face_punch?: boolean;
+                                                    face_punch_cfg?: number;
+                                                    face_live_need_action?: boolean;
+                                                    face_downgrade?: boolean;
+                                                    replace_basic_pic?: boolean;
+                                                    anti_cheat_punch_config?: {
+                                                        intercept_suspected_cheat_punch: boolean;
+                                                        check_cheat_software_punch?: boolean;
+                                                        check_buddy_punch?: boolean;
+                                                        check_simulate_wifi_punch?: boolean;
+                                                        check_change_device_punch?: boolean;
+                                                        allow_change_device_num?: number;
+                                                        suspected_cheat_handle_method?: number;
+                                                    };
+                                                    machines?: Array<{
+                                                        machine_sn: string;
+                                                        machine_name: string;
+                                                    }>;
+                                                    gps_range?: number;
+                                                    locations?: Array<{
+                                                        location_id?: string;
+                                                        location_name: string;
+                                                        location_type: number;
+                                                        latitude?: number;
+                                                        longitude?: number;
+                                                        ssid?: string;
+                                                        bssid?: string;
+                                                        map_type?: number;
+                                                        address?: string;
+                                                        ip?: string;
+                                                        feature?: string;
+                                                        gps_range?: number;
+                                                    }>;
+                                                    group_type: number;
+                                                    punch_day_shift_ids: Array<string>;
+                                                    free_punch_cfg?: {
+                                                        free_start_time: string;
+                                                        free_end_time: string;
+                                                        punch_day: number;
+                                                        work_day_no_punch_as_lack?: boolean;
+                                                        work_hours_demand?: boolean;
+                                                        work_hours?: number;
+                                                        free_clock_setting?: {
+                                                            clock_mode?: number;
+                                                            clock_internal_hhmm?: number;
+                                                        };
+                                                    };
+                                                    calendar_id: number;
+                                                    need_punch_special_days?: Array<{
+                                                        punch_day: number;
+                                                        shift_id: string;
+                                                    }>;
+                                                    no_need_punch_special_days?: Array<{
+                                                        punch_day: number;
+                                                        shift_id: string;
+                                                    }>;
+                                                    work_day_no_punch_as_lack?: boolean;
+                                                    effect_now?: boolean;
+                                                    remedy_period_type?: number;
+                                                    remedy_period_custom_date?: number;
+                                                    punch_type?: number;
+                                                    effect_time?: string;
+                                                    fixshift_effect_time?: string;
+                                                    member_effect_time?: string;
+                                                    rest_clockIn_need_approval?: boolean;
+                                                    clockIn_need_photo?: boolean;
+                                                    member_status_change?: {
+                                                        onboarding_on_no_need_punch?: boolean;
+                                                        onboarding_off_no_need_punch?: boolean;
+                                                        offboarding_on_no_need_punch?: boolean;
+                                                        offboarding_off_no_need_punch?: boolean;
+                                                    };
+                                                    leave_need_punch?: boolean;
+                                                    leave_need_punch_cfg?: {
+                                                        late_minutes_as_late?: number;
+                                                        late_minutes_as_lack?: number;
+                                                        early_minutes_as_early?: number;
+                                                        early_minutes_as_lack?: number;
+                                                        not_during_shift?: boolean;
+                                                    };
+                                                    go_out_need_punch?: number;
+                                                    go_out_need_punch_cfg?: {
+                                                        late_minutes_as_late?: number;
+                                                        late_minutes_as_lack?: number;
+                                                        early_minutes_as_early?: number;
+                                                        early_minutes_as_lack?: number;
+                                                        not_during_shift?: boolean;
+                                                    };
+                                                    travel_need_punch?: number;
+                                                    travel_need_punch_cfg?: {
+                                                        late_minutes_as_late?: number;
+                                                        late_minutes_as_lack?: number;
+                                                        early_minutes_as_early?: number;
+                                                        early_minutes_as_lack?: number;
+                                                        not_during_shift?: boolean;
+                                                    };
+                                                    need_punch_members?: Array<{
+                                                        rule_scope_type?: number;
+                                                        scope_group_list?: {
+                                                            scope_value_type?: number;
+                                                            operation_type?: number;
+                                                            right?: Array<{
+                                                                key?: string;
+                                                                name?: string;
+                                                            }>;
+                                                            member_ids?: Array<string>;
+                                                            custom_field_ID?: string;
+                                                            custom_field_obj_type?: string;
+                                                        };
+                                                    }>;
+                                                    no_need_punch_members?: Array<{
+                                                        rule_scope_type?: number;
+                                                        scope_group_list?: {
+                                                            scope_value_type?: number;
+                                                            operation_type?: number;
+                                                            right?: Array<{
+                                                                key?: string;
+                                                                name?: string;
+                                                            }>;
+                                                            member_ids?: Array<string>;
+                                                            custom_field_ID?: string;
+                                                            custom_field_obj_type?: string;
+                                                        };
+                                                    }>;
+                                                    save_auto_changes?: boolean;
+                                                    org_change_auto_adjust?: boolean;
+                                                    bind_default_dept_ids?: Array<string>;
+                                                    bind_default_user_ids?: Array<string>;
+                                                    overtime_clock_cfg?: {
+                                                        allow_punch_approval?: boolean;
+                                                        need_clock_over_time_start_and_end?: boolean;
+                                                    };
+                                                    new_calendar_id?: string;
+                                                    allow_apply_punch?: boolean;
+                                                    clock_in_abnormal_settings?: {
+                                                        ignore_until_latest_clockout?: boolean;
+                                                    };
+                                                };
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=query_report&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_report&project=attendance&resource=statistics_field&version=v1 document }
+             */
+            queryReport: async (
+                payload?: {
+                    data?: {
+                        field_ids?: Array<{
+                            field_id?: string;
+                            field_content?: string;
+                            title?: string;
+                            field_desc?: string;
+                        }>;
+                        operator_id?: string;
+                        filter_items?: Array<{
+                            scope_value_type?: number;
+                            operation_type?: number;
+                            right?: Array<{ key?: string; name?: string }>;
+                            member_ids?: Array<string>;
+                            custom_field_ID?: string;
+                            custom_field_obj_type?: string;
+                        }>;
+                        start_time?: string;
+                        end_time?: string;
+                    };
+                    params?: {
+                        employee_type?: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                total?: number;
+                                has_more?: boolean;
+                                page_token?: string;
+                                report_data?: Array<string>;
+                                field_data?: {
+                                    group_id?: string;
+                                    group_name: string;
+                                    time_zone: string;
+                                    bind_dept_ids?: Array<string>;
+                                    except_dept_ids?: Array<string>;
+                                    bind_user_ids?: Array<string>;
+                                    except_user_ids?: Array<string>;
+                                    group_leader_ids: Array<string>;
+                                    sub_group_leader_ids?: Array<string>;
+                                    allow_out_punch?: boolean;
+                                    out_punch_need_approval?: boolean;
+                                    out_punch_need_post_approval?: boolean;
+                                    out_punch_need_remark?: boolean;
+                                    out_punch_need_photo?: boolean;
+                                    out_punch_allowed_hide_addr?: boolean;
+                                    out_punch_allowed_adjust_addr?: boolean;
+                                    adjust_range?: number;
+                                    allow_pc_punch?: boolean;
+                                    allow_remedy?: boolean;
+                                    remedy_limit?: boolean;
+                                    remedy_limit_count?: number;
+                                    remedy_date_limit?: boolean;
+                                    remedy_date_num?: number;
+                                    allow_remedy_type_lack?: boolean;
+                                    allow_remedy_type_late?: boolean;
+                                    allow_remedy_type_early?: boolean;
+                                    allow_remedy_type_normal?: boolean;
+                                    show_cumulative_time?: boolean;
+                                    show_over_time?: boolean;
+                                    hide_staff_punch_time?: boolean;
+                                    hide_clock_in_rule?: boolean;
+                                    face_punch?: boolean;
+                                    face_punch_cfg?: number;
+                                    face_live_need_action?: boolean;
+                                    face_downgrade?: boolean;
+                                    replace_basic_pic?: boolean;
+                                    anti_cheat_punch_config?: {
+                                        intercept_suspected_cheat_punch: boolean;
+                                        check_cheat_software_punch?: boolean;
+                                        check_buddy_punch?: boolean;
+                                        check_simulate_wifi_punch?: boolean;
+                                        check_change_device_punch?: boolean;
+                                        allow_change_device_num?: number;
+                                        suspected_cheat_handle_method?: number;
+                                    };
+                                    machines?: Array<{
+                                        machine_sn: string;
+                                        machine_name: string;
+                                    }>;
+                                    gps_range?: number;
+                                    locations?: Array<{
+                                        location_id?: string;
+                                        location_name: string;
+                                        location_type: number;
+                                        latitude?: number;
+                                        longitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        map_type?: number;
+                                        address?: string;
+                                        ip?: string;
+                                        feature?: string;
+                                        gps_range?: number;
+                                    }>;
+                                    group_type: number;
+                                    punch_day_shift_ids: Array<string>;
+                                    free_punch_cfg?: {
+                                        free_start_time: string;
+                                        free_end_time: string;
+                                        punch_day: number;
+                                        work_day_no_punch_as_lack?: boolean;
+                                        work_hours_demand?: boolean;
+                                        work_hours?: number;
+                                        free_clock_setting?: {
+                                            clock_mode?: number;
+                                            clock_internal_hhmm?: number;
+                                        };
+                                    };
+                                    calendar_id: number;
+                                    need_punch_special_days?: Array<{
+                                        punch_day: number;
+                                        shift_id: string;
+                                    }>;
+                                    no_need_punch_special_days?: Array<{
+                                        punch_day: number;
+                                        shift_id: string;
+                                    }>;
+                                    work_day_no_punch_as_lack?: boolean;
+                                    effect_now?: boolean;
+                                    remedy_period_type?: number;
+                                    remedy_period_custom_date?: number;
+                                    punch_type?: number;
+                                    effect_time?: string;
+                                    fixshift_effect_time?: string;
+                                    member_effect_time?: string;
+                                    rest_clockIn_need_approval?: boolean;
+                                    clockIn_need_photo?: boolean;
+                                    member_status_change?: {
+                                        onboarding_on_no_need_punch?: boolean;
+                                        onboarding_off_no_need_punch?: boolean;
+                                        offboarding_on_no_need_punch?: boolean;
+                                        offboarding_off_no_need_punch?: boolean;
+                                    };
+                                    leave_need_punch?: boolean;
+                                    leave_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    go_out_need_punch?: number;
+                                    go_out_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    travel_need_punch?: number;
+                                    travel_need_punch_cfg?: {
+                                        late_minutes_as_late?: number;
+                                        late_minutes_as_lack?: number;
+                                        early_minutes_as_early?: number;
+                                        early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
+                                    };
+                                    need_punch_members?: Array<{
+                                        rule_scope_type?: number;
+                                        scope_group_list?: {
+                                            scope_value_type?: number;
+                                            operation_type?: number;
+                                            right?: Array<{
+                                                key?: string;
+                                                name?: string;
+                                            }>;
+                                            member_ids?: Array<string>;
+                                            custom_field_ID?: string;
+                                            custom_field_obj_type?: string;
+                                        };
+                                    }>;
+                                    no_need_punch_members?: Array<{
+                                        rule_scope_type?: number;
+                                        scope_group_list?: {
+                                            scope_value_type?: number;
+                                            operation_type?: number;
+                                            right?: Array<{
+                                                key?: string;
+                                                name?: string;
+                                            }>;
+                                            member_ids?: Array<string>;
+                                            custom_field_ID?: string;
+                                            custom_field_obj_type?: string;
+                                        };
+                                    }>;
+                                    save_auto_changes?: boolean;
+                                    org_change_auto_adjust?: boolean;
+                                    bind_default_dept_ids?: Array<string>;
+                                    bind_default_user_ids?: Array<string>;
+                                    overtime_clock_cfg?: {
+                                        allow_punch_approval?: boolean;
+                                        need_clock_over_time_start_and_end?: boolean;
+                                    };
+                                    new_calendar_id?: string;
+                                    allow_apply_punch?: boolean;
+                                    clock_in_abnormal_settings?: {
+                                        ignore_until_latest_clockout?: boolean;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/statistics_field/query_report`,
                             path
                         ),
                         method: "POST",
@@ -2742,6 +6500,320 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 写入归档报表结果
+             *
+             * 写入归档报表结果，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            uploadReportEnterprise: async (
+                payload?: {
+                    data?: {
+                        month?: string;
+                        operator_id?: string;
+                        archive_report_datas?: Array<{
+                            member_id: string;
+                            start_time: string;
+                            end_time: string;
+                            field_datas?: Array<{
+                                code: string;
+                                value?: string;
+                            }>;
+                        }>;
+                        archive_rule_id?: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                invalid_codes?: Array<string>;
+                                invalid_member_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listEnterpriseWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/list_enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    report_id?: string;
+                                                    report_name?: {
+                                                        zh?: string;
+                                                        en?: string;
+                                                        ja?: string;
+                                                    };
+                                                    archive_rule_id?: string;
+                                                    archive_rule_name?: {
+                                                        zh?: string;
+                                                        en?: string;
+                                                        ja?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 查询所有归档规则
+             *
+             * 查询所有归档规则，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            listEnterprise: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    report_id?: string;
+                                    report_name?: {
+                                        zh?: string;
+                                        en?: string;
+                                        ja?: string;
+                                    };
+                                    archive_rule_id?: string;
+                                    archive_rule_name?: {
+                                        zh?: string;
+                                        en?: string;
+                                        ja?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/list_enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 查询归档报表表头
+             *
+             * 查询归档报表表头，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            userStatsFieldsQueryEnterprise: async (
+                payload?: {
+                    data?: {
+                        locale?: string;
+                        month?: string;
+                        archive_rule_id?: string;
+                        operator_id?: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                archive_report_fields?: Array<{
+                                    code?: string;
+                                    title?: string;
+                                    upper_titles?: Array<string>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 删除归档报表行数据
+             *
+             * 删除归档报表行数据，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            delEnterprise: async (
+                payload?: {
+                    data: {
+                        month?: string;
+                        operator_id: string;
+                        archive_rule_id?: string;
+                        user_ids?: Array<string>;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/del_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
@@ -2886,6 +6958,73 @@ export default abstract class Client extends attendance_machine {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=export_user_records&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=export_user_records&project=attendance&resource=archive_rule&version=v1 document }
+             *
+             * 查询归档报表记录
+             *
+             * 归档报表数据查询接口。返回匹配考勤起止日期的所有列字段ID、字段名称、数据。
+             */
+            exportUserRecords: async (
+                payload?: {
+                    data: {
+                        start_date: string;
+                        end_date: string;
+                        user_ids: Array<string>;
+                    };
+                    params?: { employee_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_report_data?: boolean;
+                                report_fields?: Array<{
+                                    code?: string;
+                                    title?: string;
+                                    is_calculable?: boolean;
+                                    field_id?: string;
+                                    sub_fields?: string;
+                                    i18n_name?: Array<{
+                                        text?: string;
+                                        local?: string;
+                                        is_default?: boolean;
+                                    }>;
+                                }>;
+                                report_rows?: Array<{
+                                    name?: string;
+                                    user_id?: string;
+                                    column_map?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/export_user_records`,
                             path
                         ),
                         method: "POST",
@@ -3070,6 +7209,379 @@ export default abstract class Client extends attendance_machine {
             },
         },
         /**
+         * overtime_approval
+         */
+        overtimeApproval: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        overtime_date_start: string;
+                        overtime_date_end: string;
+                        overtime_user_ids: Array<string>;
+                        status: Array<number>;
+                        time_zone?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_approvals`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                approvals?: Array<{
+                                                    user_id: string;
+                                                    start_time: string;
+                                                    end_time: string;
+                                                    create_time?: string;
+                                                    approval_daily_details?: Array<{
+                                                        date?: string;
+                                                        duration?: string;
+                                                        overtime_unit?: number;
+                                                        overtime_date_type?: number;
+                                                        settle_type_enum?: number;
+                                                    }>;
+                                                    status: number;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=overtime_approval&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        overtime_date_start: string;
+                        overtime_date_end: string;
+                        overtime_user_ids: Array<string>;
+                        status: Array<number>;
+                        time_zone?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                approvals?: Array<{
+                                    user_id: string;
+                                    start_time: string;
+                                    end_time: string;
+                                    create_time?: string;
+                                    approval_daily_details?: Array<{
+                                        date?: string;
+                                        duration?: string;
+                                        overtime_unit?: number;
+                                        overtime_date_type?: number;
+                                        settle_type_enum?: number;
+                                    }>;
+                                    status: number;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_approvals`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=overtime_approval&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        employee_id: string;
+                        time_zone?: string;
+                        work_time_details: Array<{
+                            work_start_time: string;
+                            work_end_time: string;
+                            settlement_type?: string;
+                            check_fail_reason?: string;
+                            overtime_date?: string;
+                        }>;
+                        reason?: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                check_result: number;
+                                check_message: string;
+                                approval_record_id?: string;
+                                time_zone?: string;
+                                check_details?: Array<{
+                                    work_start_time: string;
+                                    work_end_time: string;
+                                    settlement_type?: string;
+                                    check_fail_reason?: string;
+                                    overtime_date?: string;
+                                }>;
+                                reason?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_approvals`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=ai_render_form&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_form&project=attendance&resource=overtime_approval&version=v1 document }
+             *
+             * 通过ai交互逐步渲染表单字段
+             */
+            aiRenderForm: async (
+                payload?: {
+                    data?: { form_info?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { form_info?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_approvals/ai_render_form`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=ai_render_options&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_options&project=attendance&resource=overtime_approval&version=v1 document }
+             *
+             * 获取表单中 下拉控件的可选项列表
+             */
+            aiRenderOptions: async (
+                payload?: {
+                    data?: { form_info?: string; query_path?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                options?: Array<{
+                                    key?: string;
+                                    name?: string;
+                                    desc?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_approvals/ai_render_options`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=ai_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_create&project=attendance&resource=overtime_approval&version=v1 document }
+             *
+             * ai发起休假申请
+             */
+            aiCreate: async (
+                payload?: {
+                    data?: { form_info?: string; time_zone?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                record_id?: string;
+                                create_result?: boolean;
+                                create_invalid_msg?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/overtime_approvals/ai_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * user_flow
          */
         userFlow: {
@@ -3238,7 +7750,7 @@ export default abstract class Client extends attendance_machine {
              *
              * 批量查询打卡流水
              *
-             * 通过用户 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（wifi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+             * 通过用户 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息; * GPS 打卡：location_name（定位地址信息）; * Wi-Fi 打卡：ssid（wifi名称）、bssid（mac地址）; * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
              *
              * 这里只返回有效的打卡流水，无效或待生效的不会返回;;如果只需获取打卡结果，而不需要详细的打卡数据，可使用“获取打卡结果”的接口。
              */
@@ -3317,13 +7829,273 @@ export default abstract class Client extends attendance_machine {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_flow&version=v1 document }
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_time_from: string;
+                        check_time_to: string;
+                    };
+                    params: {
+                        employee_type: string;
+                        include_terminated_user?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_flow_results?: Array<{
+                                    user_id: string;
+                                    creator_id: string;
+                                    location_name: string;
+                                    check_time: string;
+                                    comment: string;
+                                    record_id?: string;
+                                    longitude?: number;
+                                    latitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    is_field?: boolean;
+                                    is_wifi?: boolean;
+                                    type?: number;
+                                    photo_urls?: Array<string>;
+                                    device_id?: string;
+                                    check_result?:
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
+                                    external_id?: string;
+                                    idempotent_id?: string;
+                                    create_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=enterprise&project=attendance&resource=user_flow&version=v1 document }
+             */
+            enterprise: async (
+                payload?: {
+                    params: {
+                        employee_type:
+                            | "open_id"
+                            | "employee_id"
+                            | "employee_no";
+                    };
+                    path: { user_flow_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_flow?: {
+                                    user_id: string;
+                                    creator_id: string;
+                                    location_name: string;
+                                    check_time: string;
+                                    comment: string;
+                                    record_id?: string;
+                                    longitude?: number;
+                                    latitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    is_field?: boolean;
+                                    is_wifi?: boolean;
+                                    type?: number;
+                                    photo_urls?: Array<string>;
+                                    device_id?: string;
+                                    check_result?:
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
+                                    external_id?: string;
+                                    idempotent_id?: string;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id/enterprise`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_create_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_enterprise&project=attendance&resource=user_flow&version=v1 document }
+             */
+            batchCreateEnterprise: async (
+                payload?: {
+                    data: {
+                        flow_records: Array<{
+                            user_id: string;
+                            creator_id: string;
+                            location_name: string;
+                            check_time: string;
+                            comment: string;
+                            record_id?: string;
+                            longitude?: number;
+                            latitude?: number;
+                            ssid?: string;
+                            bssid?: string;
+                            is_field?: boolean;
+                            is_wifi?: boolean;
+                            type?: number;
+                            photo_urls?: Array<string>;
+                            device_id?: string;
+                            check_result?:
+                                | "NoNeedCheck"
+                                | "SystemCheck"
+                                | "Normal"
+                                | "Early"
+                                | "Late"
+                                | "SeriousLate"
+                                | "Lack"
+                                | "Invalid"
+                                | "None"
+                                | "Todo";
+                            external_id?: string;
+                            idempotent_id?: string;
+                            create_time?: string;
+                        }>;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                flow_records?: Array<{
+                                    user_id: string;
+                                    creator_id: string;
+                                    location_name: string;
+                                    check_time: string;
+                                    comment: string;
+                                    record_id?: string;
+                                    longitude?: number;
+                                    latitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    is_field?: boolean;
+                                    is_wifi?: boolean;
+                                    type?: number;
+                                    photo_urls?: Array<string>;
+                                    device_id?: string;
+                                    check_result?:
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
+                                    external_id?: string;
+                                    idempotent_id?: string;
+                                    create_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/batch_create_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=user_flow&version=v1 document }
              *
              * 查询打卡流水
              *
-             * 通过打卡记录 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（Wi-Fi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+             * 通过打卡记录 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息; * GPS 打卡：location_name（定位地址信息）; * Wi-Fi 打卡：ssid（Wi-Fi名称）、bssid（mac地址）; * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
              */
             get: async (
                 payload?: {
@@ -3392,9 +8164,443 @@ export default abstract class Client extends attendance_machine {
             },
         },
         /**
+         * out
+         */
+        out: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=out&apiName=create_bpm&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_bpm&project=attendance&resource=out&version=v1 document }
+             *
+             * 发起外出BPM审批
+             *
+             * 对于假勤设置-应用配置-申请设置-外出，申请方式为“飞书人事「企业版」审批”的企业，可以通过该接口，写入外出审批到飞书假勤系统中。
+             */
+            createBpm: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        out_record: {
+                            duration_unit: "hour" | "half_day" | "day";
+                            start_time: {
+                                datetime: string;
+                                day_type?: "morning" | "afternoon";
+                            };
+                            end_time: {
+                                datetime: string;
+                                day_type?: "morning" | "afternoon";
+                            };
+                        };
+                        out_reason?: string;
+                        custom_form_data?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                check_result: number;
+                                check_message?: string;
+                                approval_record_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/out/create_bpm`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * user_approval
          */
         userApproval: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=user_approval&version=v1 document }
+             *
+             * 写入审批结果
+             *
+             * 写入审批结果，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            createEnterprise: async (
+                payload?: {
+                    data?: {
+                        user_approval?: {
+                            user_id: string;
+                            date: string;
+                            outs?: Array<{
+                                approval_id?: string;
+                                uniq_id: string;
+                                unit: number;
+                                interval: number;
+                                start_time: string;
+                                end_time: string;
+                                i18n_names: {
+                                    ch?: string;
+                                    en?: string;
+                                    ja?: string;
+                                };
+                                default_locale: string;
+                                reason: string;
+                                approve_pass_time?: string;
+                                approve_apply_time?: string;
+                                idempotent_id?: string;
+                                correct_process_id?: Array<string>;
+                                cancel_process_id?: Array<string>;
+                                process_id?: Array<string>;
+                            }>;
+                            leaves?: Array<{
+                                approval_id?: string;
+                                uniq_id?: string;
+                                unit: number;
+                                interval: number;
+                                start_time: string;
+                                end_time: string;
+                                i18n_names: {
+                                    ch?: string;
+                                    en?: string;
+                                    ja?: string;
+                                };
+                                default_locale: "ch" | "en" | "ja";
+                                reason: string;
+                                approve_pass_time?: string;
+                                approve_apply_time?: string;
+                                idempotent_id?: string;
+                                leave_detail_range_objs?: Array<{
+                                    day?: number;
+                                    time_ranges?: Array<{
+                                        start_time_stamp?: number;
+                                        end_time_stamp?: number;
+                                    }>;
+                                }>;
+                            }>;
+                            overtime_works?: Array<{
+                                approval_id?: string;
+                                duration: number;
+                                unit: number;
+                                category: number;
+                                type: number;
+                                start_time: string;
+                                end_time: string;
+                                reason?: string;
+                                idempotent_id?: string;
+                                correct_process_id?: Array<string>;
+                                cancel_process_id?: Array<string>;
+                                process_id?: Array<string>;
+                            }>;
+                            trips?: Array<{
+                                approval_id?: string;
+                                start_time: string;
+                                end_time: string;
+                                reason: string;
+                                approve_pass_time: string;
+                                approve_apply_time: string;
+                                idempotent_id?: string;
+                                correct_process_id?: Array<string>;
+                                cancel_process_id?: Array<string>;
+                                process_id?: Array<string>;
+                                departure?: {
+                                    region_level?: string;
+                                    region_id?: string;
+                                };
+                                destinations?: Array<{
+                                    region_level?: string;
+                                    region_id?: string;
+                                }>;
+                                transportation?: Array<number>;
+                                trip_type?: number;
+                                remarks?: string;
+                            }>;
+                            time_zone?: string;
+                        };
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_approval?: {
+                                    user_id: string;
+                                    date: string;
+                                    outs?: Array<{
+                                        approval_id?: string;
+                                        uniq_id: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: string;
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
+                                    }>;
+                                    leaves?: Array<{
+                                        approval_id?: string;
+                                        uniq_id?: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: "ch" | "en" | "ja";
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        idempotent_id?: string;
+                                        leave_detail_range_objs?: Array<{
+                                            day?: number;
+                                            time_ranges?: Array<{
+                                                start_time_stamp?: number;
+                                                end_time_stamp?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    overtime_works?: Array<{
+                                        approval_id?: string;
+                                        duration: number;
+                                        unit: number;
+                                        category: number;
+                                        type: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason?: string;
+                                        idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
+                                    }>;
+                                    trips?: Array<{
+                                        approval_id?: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason: string;
+                                        approve_pass_time: string;
+                                        approve_apply_time: string;
+                                        idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
+                                        departure?: {
+                                            region_level?: string;
+                                            region_id?: string;
+                                        };
+                                        destinations?: Array<{
+                                            region_level?: string;
+                                            region_id?: string;
+                                        }>;
+                                        transportation?: Array<number>;
+                                        trip_type?: number;
+                                        remarks?: string;
+                                    }>;
+                                    time_zone?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals/create_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_approval&version=v1 document }
+             *
+             * 获取审批数据
+             *
+             * 获取审批数据，使用方法参考https://open.feishu.cn/open-apis/attendance/v1/user_approvals/query，额外加入了开放平台应用数据范围鉴权
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_date_from: number;
+                        check_date_to: number;
+                        check_date_type?:
+                            | "PeriodTime"
+                            | "CreateTime"
+                            | "UpdateTime";
+                        status?: number;
+                        check_time_from?: string;
+                        check_time_to?: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_approvals?: Array<{
+                                    user_id: string;
+                                    date: string;
+                                    outs?: Array<{
+                                        approval_id?: string;
+                                        uniq_id: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: string;
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
+                                    }>;
+                                    leaves?: Array<{
+                                        approval_id?: string;
+                                        uniq_id?: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: "ch" | "en" | "ja";
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        idempotent_id?: string;
+                                        leave_detail_range_objs?: Array<{
+                                            day?: number;
+                                            time_ranges?: Array<{
+                                                start_time_stamp?: number;
+                                                end_time_stamp?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    overtime_works?: Array<{
+                                        approval_id?: string;
+                                        duration: number;
+                                        unit: number;
+                                        category: number;
+                                        type: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason?: string;
+                                        idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
+                                    }>;
+                                    trips?: Array<{
+                                        approval_id?: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason: string;
+                                        approve_pass_time: string;
+                                        approve_apply_time: string;
+                                        idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
+                                        departure?: {
+                                            region_level?: string;
+                                            region_id?: string;
+                                        };
+                                        destinations?: Array<{
+                                            region_level?: string;
+                                            region_id?: string;
+                                        }>;
+                                        transportation?: Array<number>;
+                                        trip_type?: number;
+                                        remarks?: string;
+                                    }>;
+                                    time_zone?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create&version=v1 click to debug }
              *
@@ -3767,11 +8973,584 @@ export default abstract class Client extends attendance_machine {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=ai_render_approval&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_approval&project=attendance&resource=user_approval&version=v1 document }
+             *
+             * 通过ai交互逐步渲染表单字段
+             */
+            aiRenderApproval: async (
+                payload?: {
+                    data?: {
+                        type?: string;
+                        form_info?: string;
+                        time_zone?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { form_info?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals/ai_render_approval`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=ai_create_approval&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_create_approval&project=attendance&resource=user_approval&version=v1 document }
+             *
+             * ai发起休假申请
+             */
+            aiCreateApproval: async (
+                payload?: {
+                    data?: {
+                        type?: string;
+                        form_info?: string;
+                        time_zone?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                record_id?: string;
+                                create_result?: boolean;
+                                create_invalid_msg?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals/ai_create_approval`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=ai_render_options&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_options&project=attendance&resource=user_approval&version=v1 document }
+             *
+             * 获取表单中 下拉控件的可选项列表
+             */
+            aiRenderOptions: async (
+                payload?: {
+                    data?: {
+                        type?: string;
+                        form_info?: string;
+                        query_path?: string;
+                        time_zone?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                options?: Array<{
+                                    key?: string;
+                                    name?: string;
+                                    desc?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals/ai_render_options`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * normal_leave_type
+         */
+        normalLeaveType: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=normal_leave_type&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=normal_leave_type&version=v1 document }
+             *
+             * 查询标准版假期类型
+             *
+             * 标准版查询本租户全部假期类型
+             *
+             * 不支持按用户过滤
+             */
+            list: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    leave_type_id: string;
+                                    names: Array<{
+                                        text?: string;
+                                        local?: string;
+                                        is_default?: boolean;
+                                    }>;
+                                    is_balance_used: boolean;
+                                    is_active: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/normal_leave_types`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * normal_leave_user_first_work_time
+         */
+        normalLeaveUserFirstWorkTime: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=normal_leave_user_first_work_time&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=normal_leave_user_first_work_time&version=v1 document }
+             *
+             * 创建用户首次工作时间
+             *
+             * 创建用户首次工作时间，仅用于标准休假额度计算
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        leave_normal_user_first_work_times: Array<{
+                            user_id: string;
+                            first_work_time: number;
+                        }>;
+                    };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/normal_leave_user_first_work_times`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * normal_leave_user_account
+         */
+        normalLeaveUserAccount: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=normal_leave_user_account&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=normal_leave_user_account&version=v1 document }
+             *
+             * 查询标准版假期余额
+             *
+             * 查询标准版休假员工的授予记录&余额，可查询批量用户，可指定假期类型
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                        leave_type_ids: Array<string>;
+                        user_ids: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    user_id: string;
+                                    leave_type_id: string;
+                                    quota: string;
+                                    unit?: "day" | "hour";
+                                    sub_type_accounts: Array<{
+                                        sub_type:
+                                            | "normal"
+                                            | "official"
+                                            | "welfare";
+                                        quota: string;
+                                    }>;
+                                    balances: Array<{
+                                        balance_id: string;
+                                        user_id: string;
+                                        leave_type_id: string;
+                                        quota: string;
+                                        grant_quota: string;
+                                        used_quota: string;
+                                        unit: "day" | "hour";
+                                        sub_type:
+                                            | "normal"
+                                            | "official"
+                                            | "welfare";
+                                        expire_time: number;
+                                        effective_time: number;
+                                        grant_source:
+                                            | "system"
+                                            | "manu"
+                                            | "overtime"
+                                            | "virtual"
+                                            | "oldSystemMigrate";
+                                        status:
+                                            | "active"
+                                            | "waitActive"
+                                            | "expired";
+                                        desc?: string;
+                                        plan_target_quota?: string;
+                                        plan_end_time?: number;
+                                        grant_daily?: boolean;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/normal_leave_user_accounts`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_normal_leave_type
+         */
+        userNormalLeaveType: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_normal_leave_type&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=user_normal_leave_type&version=v1 document }
+             *
+             * 查询用户的假期类型
+             *
+             * 查询用户的假期类型，支持批量查询
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                        user_ids: Array<string>;
+                        filter_leave_balance_used?: boolean;
+                        filter_active?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    user_id: string;
+                                    leave_type_ids: Array<string>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_normal_leave_types`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * user_task
          */
         userTask: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task&apiName=query_enterprise&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_task&version=v1 document }
+             *
+             * 查询打卡结果
+             *
+             * 查询打卡结果，使用方法同旧版，加入了开放平台应用数据范围鉴权
+             */
+            queryEnterprise: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_date_from: number;
+                        check_date_to: number;
+                        need_overtime_result?: boolean;
+                    };
+                    params: {
+                        employee_type: string;
+                        ignore_invalid_users?: boolean;
+                        include_terminated_user?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_task_results?: Array<{
+                                    result_id: string;
+                                    user_id: string;
+                                    employee_name: string;
+                                    day: number;
+                                    group_id: string;
+                                    shift_id: string;
+                                    records: Array<{
+                                        check_in_record_id: string;
+                                        check_in_record?: {
+                                            user_id: string;
+                                            creator_id: string;
+                                            location_name: string;
+                                            check_time: string;
+                                            comment: string;
+                                            record_id?: string;
+                                            longitude?: number;
+                                            latitude?: number;
+                                            ssid?: string;
+                                            bssid?: string;
+                                            is_field?: boolean;
+                                            is_wifi?: boolean;
+                                            type?: number;
+                                            photo_urls?: Array<string>;
+                                            device_id?: string;
+                                            check_result?:
+                                                | "NoNeedCheck"
+                                                | "SystemCheck"
+                                                | "Normal"
+                                                | "Early"
+                                                | "Late"
+                                                | "SeriousLate"
+                                                | "Lack"
+                                                | "Invalid"
+                                                | "None"
+                                                | "Todo";
+                                            external_id?: string;
+                                            idempotent_id?: string;
+                                            create_time?: string;
+                                        };
+                                        check_out_record_id: string;
+                                        check_out_record?: {
+                                            user_id: string;
+                                            creator_id: string;
+                                            location_name: string;
+                                            check_time: string;
+                                            comment: string;
+                                            record_id?: string;
+                                            longitude?: number;
+                                            latitude?: number;
+                                            ssid?: string;
+                                            bssid?: string;
+                                            is_field?: boolean;
+                                            is_wifi?: boolean;
+                                            type?: number;
+                                            photo_urls?: Array<string>;
+                                            device_id?: string;
+                                            check_result?:
+                                                | "NoNeedCheck"
+                                                | "SystemCheck"
+                                                | "Normal"
+                                                | "Early"
+                                                | "Late"
+                                                | "SeriousLate"
+                                                | "Lack"
+                                                | "Invalid"
+                                                | "None"
+                                                | "Todo";
+                                            external_id?: string;
+                                            idempotent_id?: string;
+                                            create_time?: string;
+                                        };
+                                        check_in_result:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "Lack"
+                                            | "Todo";
+                                        check_out_result:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "Lack"
+                                            | "Todo";
+                                        check_in_result_supplement:
+                                            | "None"
+                                            | "ManagerModification"
+                                            | "CardReplacement"
+                                            | "ShiftChange"
+                                            | "Travel"
+                                            | "Leave"
+                                            | "GoOut"
+                                            | "CardReplacementApplication"
+                                            | "FieldPunch";
+                                        check_out_result_supplement:
+                                            | "None"
+                                            | "ManagerModification"
+                                            | "CardReplacement"
+                                            | "ShiftChange"
+                                            | "Travel"
+                                            | "Leave"
+                                            | "GoOut"
+                                            | "CardReplacementApplication"
+                                            | "FieldPunch";
+                                        check_in_shift_time?: string;
+                                        check_out_shift_time?: string;
+                                        task_shift_type?: number;
+                                    }>;
+                                }>;
+                                invalid_user_ids?: Array<string>;
+                                unauthorized_user_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_tasks/query_enterprise`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task&apiName=query&version=v1 click to debug }
              *
@@ -3944,7 +9723,1014 @@ export default abstract class Client extends attendance_machine {
                     });
             },
         },
+        /**
+         * user_approval_over_time
+         */
+        userApprovalOverTime: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval_over_time&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=user_approval_over_time&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        check_date_from: number;
+                        check_date_to: number;
+                        check_date_type?:
+                            | "PeriodTime"
+                            | "CreateTime"
+                            | "UpdateTime";
+                        status?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    approval_id: string;
+                                    duration: number;
+                                    unit: number;
+                                    start_time: string;
+                                    end_time: string;
+                                    status?: number;
+                                    reason?: string;
+                                    date?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approval_over_times`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_trip_approval
+         */
+        userTripApproval: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_trip_approval&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_trip_approval&version=v1 document }
+             *
+             * 查询当前用户出差审批详情
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        begin_day: number;
+                        end_day: number;
+                        query_time_type?: number;
+                        approval_status?: number;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_trip_approvals?: Array<{
+                                    approval_id?: string;
+                                    start_time: string;
+                                    end_time: string;
+                                    reason: string;
+                                    approve_pass_time: string;
+                                    approve_apply_time: string;
+                                    departure?: {
+                                        region_level?: string;
+                                        region_id?: string;
+                                    };
+                                    destinations?: Array<{
+                                        region_level?: string;
+                                        region_id?: string;
+                                    }>;
+                                    transportation?: Array<number>;
+                                    trip_type?: number;
+                                    remarks?: string;
+                                    status?: number;
+                                    time_zone?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_trip_approvals/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_summary
+         */
+        userSummary: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_summary&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_summary&version=v1 document }
+             *
+             * 查询用户月度考勤统计
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        start_date: number;
+                        end_date: number;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_summary?: {
+                                    metrics?: Array<{
+                                        code?: string;
+                                        name?: string;
+                                        value?: string;
+                                        unit?: string;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_summaries/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_shift_change_approval
+         */
+        userShiftChangeApproval: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_shift_change_approval&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_shift_change_approval&version=v1 document }
+             *
+             * 查询当前用户换班审批详情
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        begin_day: number;
+                        end_day: number;
+                        query_time_type?: number;
+                        approval_status?: number;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_shift_change_approvals?: Array<{
+                                    approval_id?: string;
+                                    reason?: string;
+                                    approve_pass_time?: string;
+                                    approve_apply_time?: string;
+                                    shift_time?: string;
+                                    return_time?: string;
+                                    swap_type?: number;
+                                    swap_date_record_map?: string;
+                                    status?: number;
+                                    time_zone?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_shift_change_approvals/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_out_approval
+         */
+        userOutApproval: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_out_approval&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_out_approval&version=v1 document }
+             *
+             * 查询当前用户外出审批详情
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        begin_day: number;
+                        end_day: number;
+                        query_time_type?: number;
+                        approval_status?: number;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_out_approvals?: Array<{
+                                    approval_id?: string;
+                                    interval: number;
+                                    start_time: string;
+                                    end_time: string;
+                                    reason: string;
+                                    approve_pass_time?: string;
+                                    approve_apply_time?: string;
+                                    status?: number;
+                                    time_zone?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_out_approvals/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_remedy_approval
+         */
+        userRemedyApproval: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_remedy_approval&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_remedy_approval&version=v1 document }
+             *
+             * 查询当前用户补卡审批详情
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        begin_day: number;
+                        end_day: number;
+                        query_time_type?: number;
+                        approval_status?: number;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_remedy_approvals?: Array<{
+                                    approval_id?: string;
+                                    reason?: string;
+                                    approve_pass_time?: string;
+                                    approve_apply_time?: string;
+                                    remedy_time?: string;
+                                    clock_no?: string;
+                                    clock_type?: number;
+                                    day?: string;
+                                    remedy_type?: number;
+                                    status?: number;
+                                    time_zone?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_remedy_approvals/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * rulemanager
+         */
+        rulemanager: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=rulemanager&apiName=query_time_code_infos&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_time_code_infos&project=attendance&resource=rulemanager&version=v1 document }
+             *
+             * 根据表单内容获取可选的类型组配置
+             */
+            queryTimeCodeInfos: async (
+                payload?: {
+                    data?: { form_info?: string };
+                    params?: { time_type?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                time_code_infos?: Array<{
+                                    period_index?: number;
+                                    time_code_infos?: {
+                                        time_code_id?: string;
+                                        time_code_group_id?: string;
+                                        time_input_way?: number;
+                                        unit_type?: number;
+                                        step?: string;
+                                        default_duration?: string;
+                                        display_names?: Array<{
+                                            text?: string;
+                                            local?: string;
+                                            is_default?: boolean;
+                                        }>;
+                                        labels?: Array<{
+                                            text?: string;
+                                            local?: string;
+                                            is_default?: boolean;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/rulemanager/query_time_code_infos`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_attendance_rule
+         */
+        userAttendanceRule: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_attendance_rule&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_attendance_rule&version=v1 document }
+             *
+             * 查询当前用户指定日期考勤规则
+             */
+            query: async (
+                payload?: {
+                    data: { day: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                attendance_rule?: {
+                                    rule_id?: string;
+                                    name?: string;
+                                    shift_rotation_type?: number;
+                                    need_photo?: boolean;
+                                    allow_field?: boolean;
+                                    allow_remedy?: boolean;
+                                    allow_pc?: boolean;
+                                    need_risk?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_attendance_rules/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * employee_identity
+         */
+        employeeIdentity: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=employee_identity&apiName=admin_search_employee&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=admin_search_employee&project=attendance&resource=employee_identity&version=v1 document }
+             *
+             * 管理员按姓名、工号或邮箱搜索员工
+             */
+            adminSearchEmployee: async (
+                payload?: {
+                    params: { query: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                employees?: Array<{
+                                    employee_no: string;
+                                    emp_id: string;
+                                    display_name?: string;
+                                    department_name?: string;
+                                    email?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/employee_identities/admin_search_employee`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * leave_record
+         */
+        leaveRecord: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_record&apiName=admin_query_leave_record&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=admin_query_leave_record&project=attendance&resource=leave_record&version=v1 document }
+             *
+             * 管理员查询员工休假记录
+             */
+            adminQueryLeaveRecord: async (
+                payload?: {
+                    params: {
+                        emp_id: string;
+                        date: string;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                leave_records?: Array<{
+                                    fields?: Array<{
+                                        code: string;
+                                        value?: string;
+                                        text?: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/leave_records/admin_query_leave_record`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * submission
+         */
+        submission: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=legacy_admin_query_submission_record&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=legacy_admin_query_submission_record&project=attendance&resource=submission&version=v1 document }
+             *
+             * 管理员查询员工老加班记录
+             */
+            legacyAdminQuerySubmissionRecord: async (
+                payload?: {
+                    params: {
+                        emp_id: string;
+                        date: string;
+                        accept_language?: string;
+                        time_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rows?: Array<{
+                                    column?: Array<{
+                                        code: string;
+                                        value?: string;
+                                        text?: string;
+                                    }>;
+                                    children?: Array<{
+                                        column?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/submission/legacy_admin_query_submission_record`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=admin_query_submission_record&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=admin_query_submission_record&project=attendance&resource=submission&version=v1 document }
+             *
+             * 管理员查询员工新出勤加班记录
+             */
+            adminQuerySubmissionRecord: async (
+                payload?: {
+                    params: {
+                        emp_id: string;
+                        date: string;
+                        accept_language?: string;
+                        time_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rows?: Array<{
+                                    column?: Array<{
+                                        code: string;
+                                        value?: string;
+                                        text?: string;
+                                    }>;
+                                    children?: Array<{
+                                        column?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/submission/admin_query_submission_record`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=query_month_summary&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_month_summary&project=attendance&resource=submission&version=v1 document }
+             *
+             * OpenAPI 获取月度汇总统计
+             */
+            queryMonthSummary: async (
+                payload?: {
+                    params: { month: number; accept_language?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                overtime_summary_stats?: Array<{
+                                    label?: string;
+                                    value?: string;
+                                    detail_stats_lists?: Array<{
+                                        label?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                                attendance_summary_stats?: Array<{
+                                    label?: string;
+                                    value?: string;
+                                    detail_stats_lists?: Array<{
+                                        label?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/submission/query_month_summary`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=submission&version=v1 document }
+             *
+             * OpenAPI 获取加班出勤记录
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        date?: string;
+                        time_type: number;
+                        accept_language?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rows?: Array<{
+                                    column?: Array<{
+                                        code: string;
+                                        value?: string;
+                                        text?: string;
+                                    }>;
+                                    children?: Array<{
+                                        column?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/submission`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
+            /**
+             * location_setting
+             */
+            locationSetting: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=location_setting&apiName=modify&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=attendance&resource=location_setting&version=v1 document }
+                 */
+                modify: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            wifi_status?: "open" | "close";
+                            location_status?: "open" | "close";
+                        };
+                        params: { user_id_type: "open_id" | "user_id" };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { is_success: boolean };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/location_settings/modify`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=location_setting&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=location_setting&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            location_setting: {
+                                location?: {
+                                    status: number;
+                                    geofences?: Array<{
+                                        type: string;
+                                        center?: {
+                                            longitude: number;
+                                            latitude: number;
+                                            accuracy?: number;
+                                        };
+                                        radius?: string;
+                                        coords?: Array<{
+                                            longitude: number;
+                                            latitude: number;
+                                            accuracy?: number;
+                                        }>;
+                                    }>;
+                                };
+                                wifi?: { status: number };
+                                user_id?: string;
+                            };
+                        };
+                        params: { user_id_type: "open_id" | "user_id" };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    location_setting?: {
+                                        location?: {
+                                            status: number;
+                                            geofences?: Array<{
+                                                type: string;
+                                                center?: {
+                                                    longitude: number;
+                                                    latitude: number;
+                                                    accuracy?: number;
+                                                };
+                                                radius?: string;
+                                                coords?: Array<{
+                                                    longitude: number;
+                                                    latitude: number;
+                                                    accuracy?: number;
+                                                }>;
+                                            }>;
+                                        };
+                                        wifi?: { status: number };
+                                        user_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/location_settings`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * file
              */
@@ -4048,6 +10834,168 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/files/upload`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=download_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_enterprise&project=attendance&resource=file&version=v1 document }
+                 */
+                downloadEnterprise: async (
+                    payload?: {
+                        path: { file_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/files/:file_id/download_enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=upload_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_enterprise&project=attendance&resource=file&version=v1 document }
+                 */
+                uploadEnterprise: async (
+                    payload?: {
+                        data?: { file?: Buffer | fs.ReadStream };
+                        params: { file_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file?: { file_id: string } };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/files/upload_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=file&apiName=upload_attachment&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_attachment&project=attendance&resource=file&version=v1 document }
+                 *
+                 * 附件上传
+                 */
+                uploadAttachment: async (
+                    payload?: {
+                        data?: { file?: Buffer | fs.ReadStream };
+                        params: { file_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    attachment?: {
+                                        file_id?: string;
+                                        name?: string;
+                                        size?: number;
+                                        mime_type?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/files/upload_attachment`,
                                 path
                             ),
                             method: "POST",
@@ -4285,6 +11233,143 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_enterprise&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 查询所有考勤组
+                 *
+                 * 使用方法同旧版，加入了开放平台应用数据范围鉴权。查询所有考勤组 每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+                 */
+                listEnterprise: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group_lists?: Array<{
+                                        group_id: string;
+                                        group_name: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/list_enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search_enterprise&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 按名称查询考勤组
+                 *
+                 * 使用方法同旧版，加入了开放平台应用数据范围鉴权。按名称查询考勤组 每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+                 */
+                searchEnterprise: async (
+                    payload?: {
+                        data: { group_name: string; exactly_matched?: boolean };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group_lists?: Array<{
+                                        group_id: string;
+                                        group_name: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/search_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=d_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=d_enterprise&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 删除考勤组
+                 *
+                 * 删除考勤组，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                dEnterprise: async (
+                    payload?: {
+                        path: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/:group_id/d_enterprise`,
                                 path
                             ),
                             method: "DELETE",
@@ -4745,6 +11830,608 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=create_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 创建或修改考勤组
+                 *
+                 * 创建或修改考勤组，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                createEnterprise: async (
+                    payload?: {
+                        data?: {
+                            group?: {
+                                group_id?: string;
+                                group_name: string;
+                                time_zone: string;
+                                bind_dept_ids?: Array<string>;
+                                except_dept_ids?: Array<string>;
+                                bind_user_ids?: Array<string>;
+                                except_user_ids?: Array<string>;
+                                group_leader_ids: Array<string>;
+                                sub_group_leader_ids?: Array<string>;
+                                allow_out_punch?: boolean;
+                                out_punch_need_approval?: boolean;
+                                out_punch_need_post_approval?: boolean;
+                                out_punch_need_remark?: boolean;
+                                out_punch_need_photo?: boolean;
+                                out_punch_allowed_hide_addr?: boolean;
+                                out_punch_allowed_adjust_addr?: boolean;
+                                adjust_range?: number;
+                                allow_pc_punch?: boolean;
+                                allow_remedy?: boolean;
+                                remedy_limit?: boolean;
+                                remedy_limit_count?: number;
+                                remedy_date_limit?: boolean;
+                                remedy_date_num?: number;
+                                allow_remedy_type_lack?: boolean;
+                                allow_remedy_type_late?: boolean;
+                                allow_remedy_type_early?: boolean;
+                                allow_remedy_type_normal?: boolean;
+                                show_cumulative_time?: boolean;
+                                show_over_time?: boolean;
+                                hide_staff_punch_time?: boolean;
+                                hide_clock_in_rule?: boolean;
+                                face_punch?: boolean;
+                                face_punch_cfg?: number;
+                                face_live_need_action?: boolean;
+                                face_downgrade?: boolean;
+                                replace_basic_pic?: boolean;
+                                anti_cheat_punch_config?: {
+                                    intercept_suspected_cheat_punch: boolean;
+                                    check_cheat_software_punch?: boolean;
+                                    check_buddy_punch?: boolean;
+                                    check_simulate_wifi_punch?: boolean;
+                                    check_change_device_punch?: boolean;
+                                    allow_change_device_num?: number;
+                                    suspected_cheat_handle_method?: number;
+                                };
+                                machines?: Array<{
+                                    machine_sn: string;
+                                    machine_name: string;
+                                }>;
+                                gps_range?: number;
+                                locations?: Array<{
+                                    location_id?: string;
+                                    location_name: string;
+                                    location_type: number;
+                                    latitude?: number;
+                                    longitude?: number;
+                                    ssid?: string;
+                                    bssid?: string;
+                                    map_type?: number;
+                                    address?: string;
+                                    ip?: string;
+                                    feature?: string;
+                                    gps_range?: number;
+                                }>;
+                                group_type: number;
+                                punch_day_shift_ids: Array<string>;
+                                free_punch_cfg?: {
+                                    free_start_time: string;
+                                    free_end_time: string;
+                                    punch_day: number;
+                                    work_day_no_punch_as_lack?: boolean;
+                                    work_hours_demand?: boolean;
+                                    work_hours?: number;
+                                    free_clock_setting?: {
+                                        clock_mode?: number;
+                                        clock_internal_hhmm?: number;
+                                    };
+                                };
+                                calendar_id: number;
+                                need_punch_special_days?: Array<{
+                                    punch_day: number;
+                                    shift_id: string;
+                                }>;
+                                no_need_punch_special_days?: Array<{
+                                    punch_day: number;
+                                    shift_id: string;
+                                }>;
+                                work_day_no_punch_as_lack?: boolean;
+                                effect_now?: boolean;
+                                remedy_period_type?: number;
+                                remedy_period_custom_date?: number;
+                                punch_type?: number;
+                                effect_time?: string;
+                                fixshift_effect_time?: string;
+                                member_effect_time?: string;
+                                rest_clockIn_need_approval?: boolean;
+                                clockIn_need_photo?: boolean;
+                                member_status_change?: {
+                                    onboarding_on_no_need_punch?: boolean;
+                                    onboarding_off_no_need_punch?: boolean;
+                                    offboarding_on_no_need_punch?: boolean;
+                                    offboarding_off_no_need_punch?: boolean;
+                                };
+                                leave_need_punch?: boolean;
+                                leave_need_punch_cfg?: {
+                                    late_minutes_as_late?: number;
+                                    late_minutes_as_lack?: number;
+                                    early_minutes_as_early?: number;
+                                    early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
+                                };
+                                go_out_need_punch?: number;
+                                go_out_need_punch_cfg?: {
+                                    late_minutes_as_late?: number;
+                                    late_minutes_as_lack?: number;
+                                    early_minutes_as_early?: number;
+                                    early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
+                                };
+                                travel_need_punch?: number;
+                                travel_need_punch_cfg?: {
+                                    late_minutes_as_late?: number;
+                                    late_minutes_as_lack?: number;
+                                    early_minutes_as_early?: number;
+                                    early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
+                                };
+                                need_punch_members?: Array<{
+                                    rule_scope_type?: number;
+                                    scope_group_list?: {
+                                        scope_value_type?: number;
+                                        operation_type?: number;
+                                        right?: Array<{
+                                            key?: string;
+                                            name?: string;
+                                        }>;
+                                        member_ids?: Array<string>;
+                                        custom_field_ID?: string;
+                                        custom_field_obj_type?: string;
+                                    };
+                                }>;
+                                no_need_punch_members?: Array<{
+                                    rule_scope_type?: number;
+                                    scope_group_list?: {
+                                        scope_value_type?: number;
+                                        operation_type?: number;
+                                        right?: Array<{
+                                            key?: string;
+                                            name?: string;
+                                        }>;
+                                        member_ids?: Array<string>;
+                                        custom_field_ID?: string;
+                                        custom_field_obj_type?: string;
+                                    };
+                                }>;
+                                save_auto_changes?: boolean;
+                                org_change_auto_adjust?: boolean;
+                                bind_default_dept_ids?: Array<string>;
+                                bind_default_user_ids?: Array<string>;
+                                overtime_clock_cfg?: {
+                                    allow_punch_approval?: boolean;
+                                    need_clock_over_time_start_and_end?: boolean;
+                                };
+                                new_calendar_id?: string;
+                                allow_apply_punch?: boolean;
+                                clock_in_abnormal_settings?: {
+                                    ignore_until_latest_clockout?: boolean;
+                                };
+                            };
+                            operator_id?: string;
+                        };
+                        params: { employee_type: string; dept_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group?: {
+                                        group_id?: string;
+                                        group_name: string;
+                                        time_zone: string;
+                                        bind_dept_ids?: Array<string>;
+                                        except_dept_ids?: Array<string>;
+                                        bind_user_ids?: Array<string>;
+                                        except_user_ids?: Array<string>;
+                                        group_leader_ids: Array<string>;
+                                        sub_group_leader_ids?: Array<string>;
+                                        allow_out_punch?: boolean;
+                                        out_punch_need_approval?: boolean;
+                                        out_punch_need_post_approval?: boolean;
+                                        out_punch_need_remark?: boolean;
+                                        out_punch_need_photo?: boolean;
+                                        out_punch_allowed_hide_addr?: boolean;
+                                        out_punch_allowed_adjust_addr?: boolean;
+                                        adjust_range?: number;
+                                        allow_pc_punch?: boolean;
+                                        allow_remedy?: boolean;
+                                        remedy_limit?: boolean;
+                                        remedy_limit_count?: number;
+                                        remedy_date_limit?: boolean;
+                                        remedy_date_num?: number;
+                                        allow_remedy_type_lack?: boolean;
+                                        allow_remedy_type_late?: boolean;
+                                        allow_remedy_type_early?: boolean;
+                                        allow_remedy_type_normal?: boolean;
+                                        show_cumulative_time?: boolean;
+                                        show_over_time?: boolean;
+                                        hide_staff_punch_time?: boolean;
+                                        hide_clock_in_rule?: boolean;
+                                        face_punch?: boolean;
+                                        face_punch_cfg?: number;
+                                        face_live_need_action?: boolean;
+                                        face_downgrade?: boolean;
+                                        replace_basic_pic?: boolean;
+                                        anti_cheat_punch_config?: {
+                                            intercept_suspected_cheat_punch: boolean;
+                                            check_cheat_software_punch?: boolean;
+                                            check_buddy_punch?: boolean;
+                                            check_simulate_wifi_punch?: boolean;
+                                            check_change_device_punch?: boolean;
+                                            allow_change_device_num?: number;
+                                            suspected_cheat_handle_method?: number;
+                                        };
+                                        machines?: Array<{
+                                            machine_sn: string;
+                                            machine_name: string;
+                                        }>;
+                                        gps_range?: number;
+                                        locations?: Array<{
+                                            location_id?: string;
+                                            location_name: string;
+                                            location_type: number;
+                                            latitude?: number;
+                                            longitude?: number;
+                                            ssid?: string;
+                                            bssid?: string;
+                                            map_type?: number;
+                                            address?: string;
+                                            ip?: string;
+                                            feature?: string;
+                                            gps_range?: number;
+                                        }>;
+                                        group_type: number;
+                                        punch_day_shift_ids: Array<string>;
+                                        free_punch_cfg?: {
+                                            free_start_time: string;
+                                            free_end_time: string;
+                                            punch_day: number;
+                                            work_day_no_punch_as_lack?: boolean;
+                                            work_hours_demand?: boolean;
+                                            work_hours?: number;
+                                            free_clock_setting?: {
+                                                clock_mode?: number;
+                                                clock_internal_hhmm?: number;
+                                            };
+                                        };
+                                        calendar_id: number;
+                                        need_punch_special_days?: Array<{
+                                            punch_day: number;
+                                            shift_id: string;
+                                        }>;
+                                        no_need_punch_special_days?: Array<{
+                                            punch_day: number;
+                                            shift_id: string;
+                                        }>;
+                                        work_day_no_punch_as_lack?: boolean;
+                                        effect_now?: boolean;
+                                        remedy_period_type?: number;
+                                        remedy_period_custom_date?: number;
+                                        punch_type?: number;
+                                        effect_time?: string;
+                                        fixshift_effect_time?: string;
+                                        member_effect_time?: string;
+                                        rest_clockIn_need_approval?: boolean;
+                                        clockIn_need_photo?: boolean;
+                                        member_status_change?: {
+                                            onboarding_on_no_need_punch?: boolean;
+                                            onboarding_off_no_need_punch?: boolean;
+                                            offboarding_on_no_need_punch?: boolean;
+                                            offboarding_off_no_need_punch?: boolean;
+                                        };
+                                        leave_need_punch?: boolean;
+                                        leave_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        go_out_need_punch?: number;
+                                        go_out_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        travel_need_punch?: number;
+                                        travel_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        need_punch_members?: Array<{
+                                            rule_scope_type?: number;
+                                            scope_group_list?: {
+                                                scope_value_type?: number;
+                                                operation_type?: number;
+                                                right?: Array<{
+                                                    key?: string;
+                                                    name?: string;
+                                                }>;
+                                                member_ids?: Array<string>;
+                                                custom_field_ID?: string;
+                                                custom_field_obj_type?: string;
+                                            };
+                                        }>;
+                                        no_need_punch_members?: Array<{
+                                            rule_scope_type?: number;
+                                            scope_group_list?: {
+                                                scope_value_type?: number;
+                                                operation_type?: number;
+                                                right?: Array<{
+                                                    key?: string;
+                                                    name?: string;
+                                                }>;
+                                                member_ids?: Array<string>;
+                                                custom_field_ID?: string;
+                                                custom_field_obj_type?: string;
+                                            };
+                                        }>;
+                                        save_auto_changes?: boolean;
+                                        org_change_auto_adjust?: boolean;
+                                        bind_default_dept_ids?: Array<string>;
+                                        bind_default_user_ids?: Array<string>;
+                                        overtime_clock_cfg?: {
+                                            allow_punch_approval?: boolean;
+                                            need_clock_over_time_start_and_end?: boolean;
+                                        };
+                                        new_calendar_id?: string;
+                                        allow_apply_punch?: boolean;
+                                        clock_in_abnormal_settings?: {
+                                            ignore_until_latest_clockout?: boolean;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/create_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=enterprise&project=attendance&resource=group&version=v1 document }
+                 *
+                 * 按 ID 查询考勤组
+                 *
+                 * 按 ID 查询考勤组，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                enterprise: async (
+                    payload?: {
+                        params: { employee_type: string; dept_type: string };
+                        path: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group?: {
+                                        group_id?: string;
+                                        group_name: string;
+                                        time_zone: string;
+                                        bind_dept_ids?: Array<string>;
+                                        except_dept_ids?: Array<string>;
+                                        bind_user_ids?: Array<string>;
+                                        except_user_ids?: Array<string>;
+                                        group_leader_ids: Array<string>;
+                                        sub_group_leader_ids?: Array<string>;
+                                        allow_out_punch?: boolean;
+                                        out_punch_need_approval?: boolean;
+                                        out_punch_need_post_approval?: boolean;
+                                        out_punch_need_remark?: boolean;
+                                        out_punch_need_photo?: boolean;
+                                        out_punch_allowed_hide_addr?: boolean;
+                                        out_punch_allowed_adjust_addr?: boolean;
+                                        adjust_range?: number;
+                                        allow_pc_punch?: boolean;
+                                        allow_remedy?: boolean;
+                                        remedy_limit?: boolean;
+                                        remedy_limit_count?: number;
+                                        remedy_date_limit?: boolean;
+                                        remedy_date_num?: number;
+                                        allow_remedy_type_lack?: boolean;
+                                        allow_remedy_type_late?: boolean;
+                                        allow_remedy_type_early?: boolean;
+                                        allow_remedy_type_normal?: boolean;
+                                        show_cumulative_time?: boolean;
+                                        show_over_time?: boolean;
+                                        hide_staff_punch_time?: boolean;
+                                        hide_clock_in_rule?: boolean;
+                                        face_punch?: boolean;
+                                        face_punch_cfg?: number;
+                                        face_live_need_action?: boolean;
+                                        face_downgrade?: boolean;
+                                        replace_basic_pic?: boolean;
+                                        anti_cheat_punch_config?: {
+                                            intercept_suspected_cheat_punch: boolean;
+                                            check_cheat_software_punch?: boolean;
+                                            check_buddy_punch?: boolean;
+                                            check_simulate_wifi_punch?: boolean;
+                                            check_change_device_punch?: boolean;
+                                            allow_change_device_num?: number;
+                                            suspected_cheat_handle_method?: number;
+                                        };
+                                        machines?: Array<{
+                                            machine_sn: string;
+                                            machine_name: string;
+                                        }>;
+                                        gps_range?: number;
+                                        locations?: Array<{
+                                            location_id?: string;
+                                            location_name: string;
+                                            location_type: number;
+                                            latitude?: number;
+                                            longitude?: number;
+                                            ssid?: string;
+                                            bssid?: string;
+                                            map_type?: number;
+                                            address?: string;
+                                            ip?: string;
+                                            feature?: string;
+                                            gps_range?: number;
+                                        }>;
+                                        group_type: number;
+                                        punch_day_shift_ids: Array<string>;
+                                        free_punch_cfg?: {
+                                            free_start_time: string;
+                                            free_end_time: string;
+                                            punch_day: number;
+                                            work_day_no_punch_as_lack?: boolean;
+                                            work_hours_demand?: boolean;
+                                            work_hours?: number;
+                                            free_clock_setting?: {
+                                                clock_mode?: number;
+                                                clock_internal_hhmm?: number;
+                                            };
+                                        };
+                                        calendar_id: number;
+                                        need_punch_special_days?: Array<{
+                                            punch_day: number;
+                                            shift_id: string;
+                                        }>;
+                                        no_need_punch_special_days?: Array<{
+                                            punch_day: number;
+                                            shift_id: string;
+                                        }>;
+                                        work_day_no_punch_as_lack?: boolean;
+                                        effect_now?: boolean;
+                                        remedy_period_type?: number;
+                                        remedy_period_custom_date?: number;
+                                        punch_type?: number;
+                                        effect_time?: string;
+                                        fixshift_effect_time?: string;
+                                        member_effect_time?: string;
+                                        rest_clockIn_need_approval?: boolean;
+                                        clockIn_need_photo?: boolean;
+                                        member_status_change?: {
+                                            onboarding_on_no_need_punch?: boolean;
+                                            onboarding_off_no_need_punch?: boolean;
+                                            offboarding_on_no_need_punch?: boolean;
+                                            offboarding_off_no_need_punch?: boolean;
+                                        };
+                                        leave_need_punch?: boolean;
+                                        leave_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        go_out_need_punch?: number;
+                                        go_out_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        travel_need_punch?: number;
+                                        travel_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        need_punch_members?: Array<{
+                                            rule_scope_type?: number;
+                                            scope_group_list?: {
+                                                scope_value_type?: number;
+                                                operation_type?: number;
+                                                right?: Array<{
+                                                    key?: string;
+                                                    name?: string;
+                                                }>;
+                                                member_ids?: Array<string>;
+                                                custom_field_ID?: string;
+                                                custom_field_obj_type?: string;
+                                            };
+                                        }>;
+                                        no_need_punch_members?: Array<{
+                                            rule_scope_type?: number;
+                                            scope_group_list?: {
+                                                scope_value_type?: number;
+                                                operation_type?: number;
+                                                right?: Array<{
+                                                    key?: string;
+                                                    name?: string;
+                                                }>;
+                                                member_ids?: Array<string>;
+                                                custom_field_ID?: string;
+                                                custom_field_obj_type?: string;
+                                            };
+                                        }>;
+                                        save_auto_changes?: boolean;
+                                        org_change_auto_adjust?: boolean;
+                                        bind_default_dept_ids?: Array<string>;
+                                        bind_default_user_ids?: Array<string>;
+                                        overtime_clock_cfg?: {
+                                            allow_punch_approval?: boolean;
+                                            need_clock_over_time_start_and_end?: boolean;
+                                        };
+                                        new_calendar_id?: string;
+                                        allow_apply_punch?: boolean;
+                                        clock_in_abnormal_settings?: {
+                                            ignore_until_latest_clockout?: boolean;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/:group_id/enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=group&version=v1 document }
@@ -5091,6 +12778,130 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_daily_shift&version=v1 document }
+                 *
+                 * 查询排班表
+                 *
+                 * 查询排班表，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_date_from: number;
+                            check_date_to: number;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_daily_shifts?: Array<{
+                                        group_id: string;
+                                        shift_id: string;
+                                        month: number;
+                                        user_id: string;
+                                        day_no: number;
+                                        is_clear_schedule?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=create_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=user_daily_shift&version=v1 document }
+                 *
+                 * 创建或修改排班表
+                 *
+                 * 创建或修改排班表，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                createEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_daily_shifts: Array<{
+                                group_id: string;
+                                shift_id: string;
+                                month: number;
+                                user_id: string;
+                                day_no: number;
+                                is_clear_schedule?: boolean;
+                            }>;
+                            operator_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_daily_shifts?: Array<{
+                                        group_id: string;
+                                        shift_id: string;
+                                        month: number;
+                                        user_id: string;
+                                        day_no: number;
+                                        is_clear_schedule?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/create_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
@@ -5349,6 +13160,262 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_user_allowed_remedys_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_user_allowed_remedys_enterprise&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 获取可补卡时间
+                 *
+                 * 获取可补卡时间，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                queryUserAllowedRemedysEnterprise: async (
+                    payload?: {
+                        data: { user_id: string; remedy_date: number };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_allowed_remedys?: Array<{
+                                        user_id: string;
+                                        remedy_date: number;
+                                        is_free_punch?: boolean;
+                                        punch_no?: number;
+                                        work_type?: number;
+                                        punch_status?: string;
+                                        normal_punch_time?: string;
+                                        remedy_start_time?: string;
+                                        remedy_end_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 通知补卡审批发起
+                 *
+                 * 通知补卡审批发起，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                createEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            remedy_date: number;
+                            punch_no: number;
+                            work_type: number;
+                            approval_id?: string;
+                            remedy_time: string;
+                            status?: number;
+                            reason: string;
+                            time?: string;
+                            time_zone?: string;
+                            create_time?: string;
+                            update_time?: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_remedy?: {
+                                        user_id: string;
+                                        remedy_date: number;
+                                        punch_no: number;
+                                        work_type: number;
+                                        approval_id?: string;
+                                        remedy_time: string;
+                                        status?: number;
+                                        reason: string;
+                                        time?: string;
+                                        time_zone?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/create_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 获取补卡记录
+                 *
+                 * 获取补卡记录，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_time_from: string;
+                            check_time_to: string;
+                            check_date_type?:
+                                | "PeriodTime"
+                                | "CreateTime"
+                                | "UpdateTime";
+                            status?: number;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_remedys?: Array<{
+                                        user_id: string;
+                                        remedy_date: number;
+                                        punch_no: number;
+                                        work_type: number;
+                                        approval_id?: string;
+                                        remedy_time: string;
+                                        status?: number;
+                                        reason: string;
+                                        time?: string;
+                                        time_zone?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task_remedy&apiName=create_bpm&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_bpm&project=attendance&resource=user_task_remedy&version=v1 document }
+                 *
+                 * 写入补卡BPM审批
+                 *
+                 * 对于假勤设置-应用配置-申请设置-补卡，申请方式为“飞书人事「企业版」审批”的企业，可以通过该接口，写入补卡审批到飞书假勤系统中。
+                 */
+                createBpm: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            remedy_records: Array<{
+                                remedy_date: string;
+                                punch_no: number;
+                                work_type: number;
+                                remedy_time: string;
+                            }>;
+                            remedy_reason?: string;
+                            custom_form_data?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    check_result: number;
+                                    check_message: string;
+                                    approval_record_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_task_remedys/create_bpm`,
                                 path
                             ),
                             method: "POST",
@@ -5663,6 +13730,367 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 按名称查询班次
+                 *
+                 * 使用方法同旧版，加入了开放平台应用数据范围鉴权。按名称查询班次每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+                 *
+                 * 详见错误信息
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        params: { shift_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    shift?: {
+                                        shift_id: string;
+                                        shift_name: string;
+                                        punch_times: number;
+                                        sub_shift_leader_ids?: Array<string>;
+                                        is_flexible?: boolean;
+                                        flexible_minutes?: number;
+                                        flexible_rule?: Array<{
+                                            flexible_early_minutes: number;
+                                            flexible_late_minutes: number;
+                                        }>;
+                                        no_need_off?: boolean;
+                                        punch_time_rule: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                            late_minutes_as_late: number;
+                                            late_minutes_as_lack: number;
+                                            on_advance_minutes: number;
+                                            early_minutes_as_early: number;
+                                            early_minutes_as_lack: number;
+                                            off_delay_minutes: number;
+                                            late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
+                                        }>;
+                                        late_off_late_on_rule?: Array<{
+                                            late_off_minutes: number;
+                                            late_on_minutes: number;
+                                        }>;
+                                        rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        overtime_rule?: Array<{
+                                            on_overtime: string;
+                                            off_overtime: string;
+                                        }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
+                                        id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/shifts/query_enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=list_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_enterprise&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 查询所有班次
+                 *
+                 * 使用方法同旧版，加入了开放平台应用数据范围鉴权。查询所有班次 每页返回的数据会校验是否在应用配置的数据范围内，如果不在数据范围内该数据不会返回
+                 */
+                listEnterprise: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    shift_lists?: Array<{
+                                        shift_id: string;
+                                        shift_name: string;
+                                        punch_times: number;
+                                        sub_shift_leader_ids?: Array<string>;
+                                        is_flexible?: boolean;
+                                        flexible_minutes?: number;
+                                        flexible_rule?: Array<{
+                                            flexible_early_minutes: number;
+                                            flexible_late_minutes: number;
+                                        }>;
+                                        no_need_off?: boolean;
+                                        punch_time_rule: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                            late_minutes_as_late: number;
+                                            late_minutes_as_lack: number;
+                                            on_advance_minutes: number;
+                                            early_minutes_as_early: number;
+                                            early_minutes_as_lack: number;
+                                            off_delay_minutes: number;
+                                            late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
+                                        }>;
+                                        late_off_late_on_rule?: Array<{
+                                            late_off_minutes: number;
+                                            late_on_minutes: number;
+                                        }>;
+                                        rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        overtime_rule?: Array<{
+                                            on_overtime: string;
+                                            off_overtime: string;
+                                        }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
+                                        id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/shifts/list_enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=d_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=d_enterprise&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 删除班次
+                 *
+                 * 删除班次，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                dEnterprise: async (
+                    payload?: {
+                        path: { shift_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/shifts/:shift_id/d_enterprise`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=enterprise&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 按 ID 查询班次
+                 *
+                 * 按 ID 查询班次，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                enterprise: async (
+                    payload?: {
+                        path: { shift_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    shift?: {
+                                        shift_id: string;
+                                        shift_name: string;
+                                        punch_times: number;
+                                        sub_shift_leader_ids?: Array<string>;
+                                        is_flexible?: boolean;
+                                        flexible_minutes?: number;
+                                        flexible_rule?: Array<{
+                                            flexible_early_minutes: number;
+                                            flexible_late_minutes: number;
+                                        }>;
+                                        no_need_off?: boolean;
+                                        punch_time_rule: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                            late_minutes_as_late: number;
+                                            late_minutes_as_lack: number;
+                                            on_advance_minutes: number;
+                                            early_minutes_as_early: number;
+                                            early_minutes_as_lack: number;
+                                            off_delay_minutes: number;
+                                            late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
+                                        }>;
+                                        late_off_late_on_rule?: Array<{
+                                            late_off_minutes: number;
+                                            late_on_minutes: number;
+                                        }>;
+                                        rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        overtime_rule?: Array<{
+                                            on_overtime: string;
+                                            off_overtime: string;
+                                        }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
+                                        id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/shifts/:shift_id/enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=shift&version=v1 document }
@@ -5856,6 +14284,176 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/shifts/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=shift&apiName=create_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=shift&version=v1 document }
+                 *
+                 * 创建班次
+                 *
+                 * 创建班次，使用方法同旧版，加入了开放平台应用数据范围鉴权。
+                 */
+                createEnterprise: async (
+                    payload?: {
+                        data: {
+                            shift_id: string;
+                            shift_name: string;
+                            punch_times: number;
+                            sub_shift_leader_ids?: Array<string>;
+                            is_flexible?: boolean;
+                            flexible_minutes?: number;
+                            flexible_rule?: Array<{
+                                flexible_early_minutes: number;
+                                flexible_late_minutes: number;
+                            }>;
+                            no_need_off?: boolean;
+                            punch_time_rule: Array<{
+                                on_time: string;
+                                off_time: string;
+                                late_minutes_as_late: number;
+                                late_minutes_as_lack: number;
+                                on_advance_minutes: number;
+                                early_minutes_as_early: number;
+                                early_minutes_as_lack: number;
+                                off_delay_minutes: number;
+                                late_minutes_as_serious_late?: number;
+                                no_need_on?: boolean;
+                                no_need_off?: boolean;
+                            }>;
+                            late_off_late_on_rule?: Array<{
+                                late_off_minutes: number;
+                                late_on_minutes: number;
+                            }>;
+                            rest_time_rule?: Array<{
+                                rest_begin_time: string;
+                                rest_end_time: string;
+                            }>;
+                            overtime_rule?: Array<{
+                                on_overtime: string;
+                                off_overtime: string;
+                            }>;
+                            day_type?: number;
+                            overtime_rest_time_rule?: Array<{
+                                rest_begin_time: string;
+                                rest_end_time: string;
+                            }>;
+                            late_minutes_as_serious_late?: number;
+                            shift_middle_time_rule?: {
+                                middle_time_type?: number;
+                                fixed_middle_time?: string;
+                            };
+                            shift_attendance_time_config?: {
+                                attendance_time?: number;
+                                on_attendance_time?: number;
+                                off_attendance_time?: number;
+                            };
+                            late_off_late_on_setting?: {
+                                late_off_base_on_time_type?: number;
+                                late_on_base_on_time_type?: number;
+                            };
+                            id?: string;
+                            rest_time_flexible_configs?: Array<{
+                                need_flexible?: boolean;
+                                late_mins?: number;
+                            }>;
+                        };
+                        params?: {
+                            employee_type?: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    shift?: {
+                                        shift_id: string;
+                                        shift_name: string;
+                                        punch_times: number;
+                                        sub_shift_leader_ids?: Array<string>;
+                                        is_flexible?: boolean;
+                                        flexible_minutes?: number;
+                                        flexible_rule?: Array<{
+                                            flexible_early_minutes: number;
+                                            flexible_late_minutes: number;
+                                        }>;
+                                        no_need_off?: boolean;
+                                        punch_time_rule: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                            late_minutes_as_late: number;
+                                            late_minutes_as_lack: number;
+                                            on_advance_minutes: number;
+                                            early_minutes_as_early: number;
+                                            early_minutes_as_lack: number;
+                                            off_delay_minutes: number;
+                                            late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
+                                        }>;
+                                        late_off_late_on_rule?: Array<{
+                                            late_off_minutes: number;
+                                            late_on_minutes: number;
+                                        }>;
+                                        rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        overtime_rule?: Array<{
+                                            on_overtime: string;
+                                            off_overtime: string;
+                                        }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
+                                        id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/shifts/create_enterprise`,
                                 path
                             ),
                             method: "POST",
@@ -6113,6 +14711,67 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_field&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_stats_field&version=v1 document }
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            locale: "en" | "ja" | "zh";
+                            stats_type: "daily" | "month";
+                            start_date: number;
+                            end_date: number;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_stats_field?: {
+                                        stats_type: "daily" | "month";
+                                        user_id: string;
+                                        fields: Array<{
+                                            code: string;
+                                            title: string;
+                                            child_fields?: Array<{
+                                                code: string;
+                                                title: string;
+                                                time_unit?: string;
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_fields/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * user_stats_view
@@ -6268,6 +14927,152 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=update_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_enterprise&project=attendance&resource=user_stats_view&version=v1 document }
+                 */
+                updateEnterprise: async (
+                    payload?: {
+                        data?: {
+                            view?: {
+                                view_id: string;
+                                stats_type: "daily" | "month";
+                                user_id: string;
+                                items?: Array<{
+                                    code: string;
+                                    title?: string;
+                                    child_items?: Array<{
+                                        code: string;
+                                        value: string;
+                                        title?: string;
+                                        column_type?: number;
+                                        read_only?: boolean;
+                                        min_value?: string;
+                                        max_value?: string;
+                                    }>;
+                                }>;
+                            };
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                        path: { user_stats_view_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    view?: {
+                                        view_id: string;
+                                        stats_type: "daily" | "month";
+                                        user_id: string;
+                                        items?: Array<{
+                                            code: string;
+                                            title?: string;
+                                            child_items?: Array<{
+                                                code: string;
+                                                value: string;
+                                                title?: string;
+                                                column_type?: number;
+                                                read_only?: boolean;
+                                                min_value?: string;
+                                                max_value?: string;
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id/update_enterprise`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_view&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_stats_view&version=v1 document }
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            locale: string;
+                            stats_type: string;
+                            user_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    view?: {
+                                        view_id: string;
+                                        stats_type: "daily" | "month";
+                                        user_id: string;
+                                        items?: Array<{
+                                            code: string;
+                                            title?: string;
+                                            child_items?: Array<{
+                                                code: string;
+                                                value: string;
+                                                title?: string;
+                                                column_type?: number;
+                                                read_only?: boolean;
+                                                min_value?: string;
+                                                max_value?: string;
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_views/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * approval_info
@@ -6317,6 +15122,60 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_info&apiName=process_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=process_enterprise&project=attendance&resource=approval_info&version=v1 document }
+                 */
+                processEnterprise: async (
+                    payload?: {
+                        data: {
+                            approval_id: string;
+                            approval_type: string;
+                            status: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    approval_info?: {
+                                        approval_id: string;
+                                        approval_type:
+                                            | "leave"
+                                            | "overtime"
+                                            | "trip"
+                                            | "out"
+                                            | "remedy";
+                                        status: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/approval_infos/process_enterprise`,
                                 path
                             ),
                             method: "POST",
@@ -6446,6 +15305,114 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_setting&version=v1 document }
+                 *
+                 * 批量查询用户人脸识别信息
+                 *
+                 * 批量查询用户人脸识别信息，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_settings?: Array<{
+                                        user_id: string;
+                                        face_key: string;
+                                        face_key_update_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_settings/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_setting&apiName=modify_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify_enterprise&project=attendance&resource=user_setting&version=v1 document }
+                 *
+                 * 修改用户人脸识别信息
+                 *
+                 * 修改用户人脸识别信息，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                modifyEnterprise: async (
+                    payload?: {
+                        data?: {
+                            user_setting?: {
+                                user_id: string;
+                                face_key: string;
+                                face_key_update_time?: string;
+                            };
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_setting?: {
+                                        user_id: string;
+                                        face_key: string;
+                                        face_key_update_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_settings/modify_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * user_stats_data
@@ -6514,6 +15481,1488 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_stats_data&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_stats_data&version=v1 document }
+                 *
+                 * 查询统计数据
+                 *
+                 * 查询统计数据，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            locale: string;
+                            stats_type: string;
+                            start_date: number;
+                            end_date: number;
+                            user_ids?: Array<string>;
+                            need_history?: boolean;
+                            current_group_only?: boolean;
+                            user_id?: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_datas?: Array<{
+                                        name: string;
+                                        user_id: string;
+                                        datas?: Array<{
+                                            code: string;
+                                            value: string;
+                                            features?: Array<{
+                                                key: string;
+                                                value: string;
+                                            }>;
+                                            title?: string;
+                                            duration_num?: {
+                                                day?: string;
+                                                half_day?: string;
+                                                hour?: string;
+                                                half_hour?: string;
+                                                minute?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    invalid_user_lists?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_stats_datas/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * schedule
+             */
+            schedule: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=schedule&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=schedule&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        params: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    group_id: string;
+                                    shifts: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/schedules/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_arrange_shift_group
+             */
+            userArrangeShiftGroup: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_arrange_shift_group&apiName=mget&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=attendance&resource=user_arrange_shift_group&version=v1 document }
+                 *
+                 * 获取用户归属的班组
+                 */
+                mget: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_shift_groups: Array<{
+                                        user_id?: string;
+                                        shift_group?: {
+                                            shift_group_id?: string;
+                                            group_id?: string;
+                                            shift_group_name?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_arrange_shift_group/mget`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_shift_group
+             */
+            userShiftGroup: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_shift_group&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=user_shift_group&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params: { page_size: number; page_token?: string };
+                        path: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    shift_groups?: Array<{
+                                        shift_group_id?: string;
+                                        shift_group_name?: string;
+                                        group_id?: string;
+                                        update_time?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_shift_group/:group_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_shift_group_list
+             */
+            userShiftGroupList: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_shift_group_list&apiName=users&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=users&project=attendance&resource=user_shift_group_list&version=v1 document }
+                 */
+                users: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            group_id: string;
+                            shift_group_id: string;
+                            user_id_type:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    users?: Array<{
+                                        shift_group_id?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_shift_group_list/users`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * approval_overtime_detail
+             */
+            approvalOvertimeDetail: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            user_id: string;
+                            instance_id: string;
+                            employee_type: "employee_id" | "employee_no";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/apply_overtime_details`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    details: Array<{
+                                                        user_id: string;
+                                                        date: string;
+                                                        date_type: number;
+                                                        duration: string;
+                                                        unit: number;
+                                                        is_time_bank: boolean;
+                                                        update_time: string;
+                                                    }>;
+                                                    page_token?: number;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=approval_overtime_detail&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=approval_overtime_detail&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            user_id: string;
+                            instance_id: string;
+                            employee_type: "employee_id" | "employee_no";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    details: Array<{
+                                        user_id: string;
+                                        date: string;
+                                        date_type: number;
+                                        duration: string;
+                                        unit: number;
+                                        is_time_bank: boolean;
+                                        update_time: string;
+                                    }>;
+                                    page_token?: number;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/apply_overtime_details`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * overtime_detail
+             */
+            overtimeDetail: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_detail&apiName=apply_approval&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=apply_approval&project=attendance&resource=overtime_detail&version=v1 document }
+                 *
+                 * 发起或撤销加班审批
+                 *
+                 * 发起或撤销加班审批
+                 */
+                applyApproval: async (
+                    payload?: {
+                        data: {
+                            instance_id: string;
+                            time_ranges: Array<{
+                                overtime_attribution_date?: string;
+                                time_range: {
+                                    start_time: string;
+                                    end_time: string;
+                                };
+                            }>;
+                            settle_type: number;
+                            time_offset: number;
+                            reason: string;
+                            status?: number;
+                            user_id: string;
+                            rest_time_ranges?: Array<{
+                                start_time: string;
+                                end_time: string;
+                            }>;
+                            rule_type?: number;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    duration?: number;
+                                    unit?: number;
+                                    items?: Array<{
+                                        date?: string;
+                                        duration?: number;
+                                        unit?: number;
+                                        settlement_type?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_details/apply_approval`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            overtime_date_start?: string;
+                            overtime_date_end?: string;
+                            overtime_user_ids?: Array<string>;
+                            effect_time_start?: string;
+                            effect_time_end?: string;
+                            with_progress_time_start?: boolean;
+                            time_zone?: string;
+                            is_time_bank?: boolean;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            with_delete?: boolean;
+                            with_approval_status?: boolean;
+                            modify_time_end?: string;
+                            modify_time_start?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/overtime_details`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    details?: Array<{
+                                                        id: string;
+                                                        user_id: string;
+                                                        start_time: string;
+                                                        end_time: string;
+                                                        duration: string;
+                                                        unit: number;
+                                                        date_type: number;
+                                                        settle_type: number;
+                                                        effective_time: string;
+                                                        progress_start_time?: string;
+                                                        date: string;
+                                                        update_time?: string;
+                                                        is_time_bank?: boolean;
+                                                        instance_id?: string;
+                                                        overtime_approval_status?: number;
+                                                        is_delete?: number;
+                                                    }>;
+                                                    page_token: string;
+                                                    has_more: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_detail&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=overtime_detail&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            overtime_date_start?: string;
+                            overtime_date_end?: string;
+                            overtime_user_ids?: Array<string>;
+                            effect_time_start?: string;
+                            effect_time_end?: string;
+                            with_progress_time_start?: boolean;
+                            time_zone?: string;
+                            is_time_bank?: boolean;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            with_delete?: boolean;
+                            with_approval_status?: boolean;
+                            modify_time_end?: string;
+                            modify_time_start?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    details?: Array<{
+                                        id: string;
+                                        user_id: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        duration: string;
+                                        unit: number;
+                                        date_type: number;
+                                        settle_type: number;
+                                        effective_time: string;
+                                        progress_start_time?: string;
+                                        date: string;
+                                        update_time?: string;
+                                        is_time_bank?: boolean;
+                                        instance_id?: string;
+                                        overtime_approval_status?: number;
+                                        is_delete?: number;
+                                    }>;
+                                    page_token: string;
+                                    has_more: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_details`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * statistics_field
+             */
+            statisticsField: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=statistics_field&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        path: { statistics_field_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    statistics_field?: {
+                                        field_id?: string;
+                                        field_content?: string;
+                                        title?: string;
+                                        field_desc?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/statistics_field/:statistics_field_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/statistics_field`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        field_id?: string;
+                                                        field_content?: string;
+                                                        title?: string;
+                                                        field_desc?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=statistics_field&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        field_id?: string;
+                                        field_content?: string;
+                                        title?: string;
+                                        field_desc?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/statistics_field`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=save&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=save&project=attendance&resource=statistics_field&version=v1 document }
+                 */
+                save: async (
+                    payload?: {
+                        data?: {
+                            statistics_fields?: Array<{
+                                field_id?: string;
+                                field_content?: string;
+                                title?: string;
+                                field_desc?: string;
+                            }>;
+                            operator_id?: string;
+                        };
+                        params?: { employee_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/statistics_field/save`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryReportWithIterator: async (
+                    payload?: {
+                        data?: {
+                            field_ids?: Array<{
+                                field_id?: string;
+                                field_content?: string;
+                                title?: string;
+                                field_desc?: string;
+                            }>;
+                            operator_id?: string;
+                            filter_items?: Array<{
+                                scope_value_type?: number;
+                                operation_type?: number;
+                                right?: Array<{ key?: string; name?: string }>;
+                                member_ids?: Array<string>;
+                                custom_field_ID?: string;
+                                custom_field_obj_type?: string;
+                            }>;
+                            start_time?: string;
+                            end_time?: string;
+                        };
+                        params?: {
+                            employee_type?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/statistics_field/query_report`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    total?: number;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    report_data?: Array<string>;
+                                                    field_data?: {
+                                                        group_id?: string;
+                                                        group_name: string;
+                                                        time_zone: string;
+                                                        bind_dept_ids?: Array<string>;
+                                                        except_dept_ids?: Array<string>;
+                                                        bind_user_ids?: Array<string>;
+                                                        except_user_ids?: Array<string>;
+                                                        group_leader_ids: Array<string>;
+                                                        sub_group_leader_ids?: Array<string>;
+                                                        allow_out_punch?: boolean;
+                                                        out_punch_need_approval?: boolean;
+                                                        out_punch_need_post_approval?: boolean;
+                                                        out_punch_need_remark?: boolean;
+                                                        out_punch_need_photo?: boolean;
+                                                        out_punch_allowed_hide_addr?: boolean;
+                                                        out_punch_allowed_adjust_addr?: boolean;
+                                                        adjust_range?: number;
+                                                        allow_pc_punch?: boolean;
+                                                        allow_remedy?: boolean;
+                                                        remedy_limit?: boolean;
+                                                        remedy_limit_count?: number;
+                                                        remedy_date_limit?: boolean;
+                                                        remedy_date_num?: number;
+                                                        allow_remedy_type_lack?: boolean;
+                                                        allow_remedy_type_late?: boolean;
+                                                        allow_remedy_type_early?: boolean;
+                                                        allow_remedy_type_normal?: boolean;
+                                                        show_cumulative_time?: boolean;
+                                                        show_over_time?: boolean;
+                                                        hide_staff_punch_time?: boolean;
+                                                        hide_clock_in_rule?: boolean;
+                                                        face_punch?: boolean;
+                                                        face_punch_cfg?: number;
+                                                        face_live_need_action?: boolean;
+                                                        face_downgrade?: boolean;
+                                                        replace_basic_pic?: boolean;
+                                                        anti_cheat_punch_config?: {
+                                                            intercept_suspected_cheat_punch: boolean;
+                                                            check_cheat_software_punch?: boolean;
+                                                            check_buddy_punch?: boolean;
+                                                            check_simulate_wifi_punch?: boolean;
+                                                            check_change_device_punch?: boolean;
+                                                            allow_change_device_num?: number;
+                                                            suspected_cheat_handle_method?: number;
+                                                        };
+                                                        machines?: Array<{
+                                                            machine_sn: string;
+                                                            machine_name: string;
+                                                        }>;
+                                                        gps_range?: number;
+                                                        locations?: Array<{
+                                                            location_id?: string;
+                                                            location_name: string;
+                                                            location_type: number;
+                                                            latitude?: number;
+                                                            longitude?: number;
+                                                            ssid?: string;
+                                                            bssid?: string;
+                                                            map_type?: number;
+                                                            address?: string;
+                                                            ip?: string;
+                                                            feature?: string;
+                                                            gps_range?: number;
+                                                        }>;
+                                                        group_type: number;
+                                                        punch_day_shift_ids: Array<string>;
+                                                        free_punch_cfg?: {
+                                                            free_start_time: string;
+                                                            free_end_time: string;
+                                                            punch_day: number;
+                                                            work_day_no_punch_as_lack?: boolean;
+                                                            work_hours_demand?: boolean;
+                                                            work_hours?: number;
+                                                            free_clock_setting?: {
+                                                                clock_mode?: number;
+                                                                clock_internal_hhmm?: number;
+                                                            };
+                                                        };
+                                                        calendar_id: number;
+                                                        need_punch_special_days?: Array<{
+                                                            punch_day: number;
+                                                            shift_id: string;
+                                                        }>;
+                                                        no_need_punch_special_days?: Array<{
+                                                            punch_day: number;
+                                                            shift_id: string;
+                                                        }>;
+                                                        work_day_no_punch_as_lack?: boolean;
+                                                        effect_now?: boolean;
+                                                        remedy_period_type?: number;
+                                                        remedy_period_custom_date?: number;
+                                                        punch_type?: number;
+                                                        effect_time?: string;
+                                                        fixshift_effect_time?: string;
+                                                        member_effect_time?: string;
+                                                        rest_clockIn_need_approval?: boolean;
+                                                        clockIn_need_photo?: boolean;
+                                                        member_status_change?: {
+                                                            onboarding_on_no_need_punch?: boolean;
+                                                            onboarding_off_no_need_punch?: boolean;
+                                                            offboarding_on_no_need_punch?: boolean;
+                                                            offboarding_off_no_need_punch?: boolean;
+                                                        };
+                                                        leave_need_punch?: boolean;
+                                                        leave_need_punch_cfg?: {
+                                                            late_minutes_as_late?: number;
+                                                            late_minutes_as_lack?: number;
+                                                            early_minutes_as_early?: number;
+                                                            early_minutes_as_lack?: number;
+                                                            not_during_shift?: boolean;
+                                                        };
+                                                        go_out_need_punch?: number;
+                                                        go_out_need_punch_cfg?: {
+                                                            late_minutes_as_late?: number;
+                                                            late_minutes_as_lack?: number;
+                                                            early_minutes_as_early?: number;
+                                                            early_minutes_as_lack?: number;
+                                                            not_during_shift?: boolean;
+                                                        };
+                                                        travel_need_punch?: number;
+                                                        travel_need_punch_cfg?: {
+                                                            late_minutes_as_late?: number;
+                                                            late_minutes_as_lack?: number;
+                                                            early_minutes_as_early?: number;
+                                                            early_minutes_as_lack?: number;
+                                                            not_during_shift?: boolean;
+                                                        };
+                                                        need_punch_members?: Array<{
+                                                            rule_scope_type?: number;
+                                                            scope_group_list?: {
+                                                                scope_value_type?: number;
+                                                                operation_type?: number;
+                                                                right?: Array<{
+                                                                    key?: string;
+                                                                    name?: string;
+                                                                }>;
+                                                                member_ids?: Array<string>;
+                                                                custom_field_ID?: string;
+                                                                custom_field_obj_type?: string;
+                                                            };
+                                                        }>;
+                                                        no_need_punch_members?: Array<{
+                                                            rule_scope_type?: number;
+                                                            scope_group_list?: {
+                                                                scope_value_type?: number;
+                                                                operation_type?: number;
+                                                                right?: Array<{
+                                                                    key?: string;
+                                                                    name?: string;
+                                                                }>;
+                                                                member_ids?: Array<string>;
+                                                                custom_field_ID?: string;
+                                                                custom_field_obj_type?: string;
+                                                            };
+                                                        }>;
+                                                        save_auto_changes?: boolean;
+                                                        org_change_auto_adjust?: boolean;
+                                                        bind_default_dept_ids?: Array<string>;
+                                                        bind_default_user_ids?: Array<string>;
+                                                        overtime_clock_cfg?: {
+                                                            allow_punch_approval?: boolean;
+                                                            need_clock_over_time_start_and_end?: boolean;
+                                                        };
+                                                        new_calendar_id?: string;
+                                                        allow_apply_punch?: boolean;
+                                                        clock_in_abnormal_settings?: {
+                                                            ignore_until_latest_clockout?: boolean;
+                                                        };
+                                                    };
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=statistics_field&apiName=query_report&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_report&project=attendance&resource=statistics_field&version=v1 document }
+                 */
+                queryReport: async (
+                    payload?: {
+                        data?: {
+                            field_ids?: Array<{
+                                field_id?: string;
+                                field_content?: string;
+                                title?: string;
+                                field_desc?: string;
+                            }>;
+                            operator_id?: string;
+                            filter_items?: Array<{
+                                scope_value_type?: number;
+                                operation_type?: number;
+                                right?: Array<{ key?: string; name?: string }>;
+                                member_ids?: Array<string>;
+                                custom_field_ID?: string;
+                                custom_field_obj_type?: string;
+                            }>;
+                            start_time?: string;
+                            end_time?: string;
+                        };
+                        params?: {
+                            employee_type?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total?: number;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    report_data?: Array<string>;
+                                    field_data?: {
+                                        group_id?: string;
+                                        group_name: string;
+                                        time_zone: string;
+                                        bind_dept_ids?: Array<string>;
+                                        except_dept_ids?: Array<string>;
+                                        bind_user_ids?: Array<string>;
+                                        except_user_ids?: Array<string>;
+                                        group_leader_ids: Array<string>;
+                                        sub_group_leader_ids?: Array<string>;
+                                        allow_out_punch?: boolean;
+                                        out_punch_need_approval?: boolean;
+                                        out_punch_need_post_approval?: boolean;
+                                        out_punch_need_remark?: boolean;
+                                        out_punch_need_photo?: boolean;
+                                        out_punch_allowed_hide_addr?: boolean;
+                                        out_punch_allowed_adjust_addr?: boolean;
+                                        adjust_range?: number;
+                                        allow_pc_punch?: boolean;
+                                        allow_remedy?: boolean;
+                                        remedy_limit?: boolean;
+                                        remedy_limit_count?: number;
+                                        remedy_date_limit?: boolean;
+                                        remedy_date_num?: number;
+                                        allow_remedy_type_lack?: boolean;
+                                        allow_remedy_type_late?: boolean;
+                                        allow_remedy_type_early?: boolean;
+                                        allow_remedy_type_normal?: boolean;
+                                        show_cumulative_time?: boolean;
+                                        show_over_time?: boolean;
+                                        hide_staff_punch_time?: boolean;
+                                        hide_clock_in_rule?: boolean;
+                                        face_punch?: boolean;
+                                        face_punch_cfg?: number;
+                                        face_live_need_action?: boolean;
+                                        face_downgrade?: boolean;
+                                        replace_basic_pic?: boolean;
+                                        anti_cheat_punch_config?: {
+                                            intercept_suspected_cheat_punch: boolean;
+                                            check_cheat_software_punch?: boolean;
+                                            check_buddy_punch?: boolean;
+                                            check_simulate_wifi_punch?: boolean;
+                                            check_change_device_punch?: boolean;
+                                            allow_change_device_num?: number;
+                                            suspected_cheat_handle_method?: number;
+                                        };
+                                        machines?: Array<{
+                                            machine_sn: string;
+                                            machine_name: string;
+                                        }>;
+                                        gps_range?: number;
+                                        locations?: Array<{
+                                            location_id?: string;
+                                            location_name: string;
+                                            location_type: number;
+                                            latitude?: number;
+                                            longitude?: number;
+                                            ssid?: string;
+                                            bssid?: string;
+                                            map_type?: number;
+                                            address?: string;
+                                            ip?: string;
+                                            feature?: string;
+                                            gps_range?: number;
+                                        }>;
+                                        group_type: number;
+                                        punch_day_shift_ids: Array<string>;
+                                        free_punch_cfg?: {
+                                            free_start_time: string;
+                                            free_end_time: string;
+                                            punch_day: number;
+                                            work_day_no_punch_as_lack?: boolean;
+                                            work_hours_demand?: boolean;
+                                            work_hours?: number;
+                                            free_clock_setting?: {
+                                                clock_mode?: number;
+                                                clock_internal_hhmm?: number;
+                                            };
+                                        };
+                                        calendar_id: number;
+                                        need_punch_special_days?: Array<{
+                                            punch_day: number;
+                                            shift_id: string;
+                                        }>;
+                                        no_need_punch_special_days?: Array<{
+                                            punch_day: number;
+                                            shift_id: string;
+                                        }>;
+                                        work_day_no_punch_as_lack?: boolean;
+                                        effect_now?: boolean;
+                                        remedy_period_type?: number;
+                                        remedy_period_custom_date?: number;
+                                        punch_type?: number;
+                                        effect_time?: string;
+                                        fixshift_effect_time?: string;
+                                        member_effect_time?: string;
+                                        rest_clockIn_need_approval?: boolean;
+                                        clockIn_need_photo?: boolean;
+                                        member_status_change?: {
+                                            onboarding_on_no_need_punch?: boolean;
+                                            onboarding_off_no_need_punch?: boolean;
+                                            offboarding_on_no_need_punch?: boolean;
+                                            offboarding_off_no_need_punch?: boolean;
+                                        };
+                                        leave_need_punch?: boolean;
+                                        leave_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        go_out_need_punch?: number;
+                                        go_out_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        travel_need_punch?: number;
+                                        travel_need_punch_cfg?: {
+                                            late_minutes_as_late?: number;
+                                            late_minutes_as_lack?: number;
+                                            early_minutes_as_early?: number;
+                                            early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
+                                        };
+                                        need_punch_members?: Array<{
+                                            rule_scope_type?: number;
+                                            scope_group_list?: {
+                                                scope_value_type?: number;
+                                                operation_type?: number;
+                                                right?: Array<{
+                                                    key?: string;
+                                                    name?: string;
+                                                }>;
+                                                member_ids?: Array<string>;
+                                                custom_field_ID?: string;
+                                                custom_field_obj_type?: string;
+                                            };
+                                        }>;
+                                        no_need_punch_members?: Array<{
+                                            rule_scope_type?: number;
+                                            scope_group_list?: {
+                                                scope_value_type?: number;
+                                                operation_type?: number;
+                                                right?: Array<{
+                                                    key?: string;
+                                                    name?: string;
+                                                }>;
+                                                member_ids?: Array<string>;
+                                                custom_field_ID?: string;
+                                                custom_field_obj_type?: string;
+                                            };
+                                        }>;
+                                        save_auto_changes?: boolean;
+                                        org_change_auto_adjust?: boolean;
+                                        bind_default_dept_ids?: Array<string>;
+                                        bind_default_user_ids?: Array<string>;
+                                        overtime_clock_cfg?: {
+                                            allow_punch_approval?: boolean;
+                                            need_clock_over_time_start_and_end?: boolean;
+                                        };
+                                        new_calendar_id?: string;
+                                        allow_apply_punch?: boolean;
+                                        clock_in_abnormal_settings?: {
+                                            ignore_until_latest_clockout?: boolean;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/statistics_field/query_report`,
                                 path
                             ),
                             method: "POST",
@@ -6693,6 +17142,325 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 写入归档报表结果
+                 *
+                 * 写入归档报表结果，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                uploadReportEnterprise: async (
+                    payload?: {
+                        data?: {
+                            month?: string;
+                            operator_id?: string;
+                            archive_report_datas?: Array<{
+                                member_id: string;
+                                start_time: string;
+                                end_time: string;
+                                field_datas?: Array<{
+                                    code: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            archive_rule_id?: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invalid_codes?: Array<string>;
+                                    invalid_member_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listEnterpriseWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/archive_rule/list_enterprise`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        report_id?: string;
+                                                        report_name?: {
+                                                            zh?: string;
+                                                            en?: string;
+                                                            ja?: string;
+                                                        };
+                                                        archive_rule_id?: string;
+                                                        archive_rule_name?: {
+                                                            zh?: string;
+                                                            en?: string;
+                                                            ja?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 查询所有归档规则
+                 *
+                 * 查询所有归档规则，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                listEnterprise: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        report_id?: string;
+                                        report_name?: {
+                                            zh?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        archive_rule_id?: string;
+                                        archive_rule_name?: {
+                                            zh?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/list_enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 查询归档报表表头
+                 *
+                 * 查询归档报表表头，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                userStatsFieldsQueryEnterprise: async (
+                    payload?: {
+                        data?: {
+                            locale?: string;
+                            month?: string;
+                            archive_rule_id?: string;
+                            operator_id?: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    archive_report_fields?: Array<{
+                                        code?: string;
+                                        title?: string;
+                                        upper_titles?: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_enterprise&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 删除归档报表行数据
+                 *
+                 * 删除归档报表行数据，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                delEnterprise: async (
+                    payload?: {
+                        data: {
+                            month?: string;
+                            operator_id: string;
+                            archive_rule_id?: string;
+                            user_ids?: Array<string>;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/del_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
@@ -6840,6 +17608,73 @@ export default abstract class Client extends attendance_machine {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=export_user_records&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=export_user_records&project=attendance&resource=archive_rule&version=v1 document }
+                 *
+                 * 查询归档报表记录
+                 *
+                 * 归档报表数据查询接口。返回匹配考勤起止日期的所有列字段ID、字段名称、数据。
+                 */
+                exportUserRecords: async (
+                    payload?: {
+                        data: {
+                            start_date: string;
+                            end_date: string;
+                            user_ids: Array<string>;
+                        };
+                        params?: { employee_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_report_data?: boolean;
+                                    report_fields?: Array<{
+                                        code?: string;
+                                        title?: string;
+                                        is_calculable?: boolean;
+                                        field_id?: string;
+                                        sub_fields?: string;
+                                        i18n_name?: Array<{
+                                            text?: string;
+                                            local?: string;
+                                            is_default?: boolean;
+                                        }>;
+                                    }>;
+                                    report_rows?: Array<{
+                                        name?: string;
+                                        user_id?: string;
+                                        column_map?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/export_user_records`,
                                 path
                             ),
                             method: "POST",
@@ -7024,6 +17859,381 @@ export default abstract class Client extends attendance_machine {
                 },
             },
             /**
+             * overtime_approval
+             */
+            overtimeApproval: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            overtime_date_start: string;
+                            overtime_date_end: string;
+                            overtime_user_ids: Array<string>;
+                            status: Array<number>;
+                            time_zone?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/overtime_approvals`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    approvals?: Array<{
+                                                        user_id: string;
+                                                        start_time: string;
+                                                        end_time: string;
+                                                        create_time?: string;
+                                                        approval_daily_details?: Array<{
+                                                            date?: string;
+                                                            duration?: string;
+                                                            overtime_unit?: number;
+                                                            overtime_date_type?: number;
+                                                            settle_type_enum?: number;
+                                                        }>;
+                                                        status: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=overtime_approval&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            overtime_date_start: string;
+                            overtime_date_end: string;
+                            overtime_user_ids: Array<string>;
+                            status: Array<number>;
+                            time_zone?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    approvals?: Array<{
+                                        user_id: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        create_time?: string;
+                                        approval_daily_details?: Array<{
+                                            date?: string;
+                                            duration?: string;
+                                            overtime_unit?: number;
+                                            overtime_date_type?: number;
+                                            settle_type_enum?: number;
+                                        }>;
+                                        status: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_approvals`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=overtime_approval&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            employee_id: string;
+                            time_zone?: string;
+                            work_time_details: Array<{
+                                work_start_time: string;
+                                work_end_time: string;
+                                settlement_type?: string;
+                                check_fail_reason?: string;
+                                overtime_date?: string;
+                            }>;
+                            reason?: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    check_result: number;
+                                    check_message: string;
+                                    approval_record_id?: string;
+                                    time_zone?: string;
+                                    check_details?: Array<{
+                                        work_start_time: string;
+                                        work_end_time: string;
+                                        settlement_type?: string;
+                                        check_fail_reason?: string;
+                                        overtime_date?: string;
+                                    }>;
+                                    reason?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_approvals`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=ai_render_form&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_form&project=attendance&resource=overtime_approval&version=v1 document }
+                 *
+                 * 通过ai交互逐步渲染表单字段
+                 */
+                aiRenderForm: async (
+                    payload?: {
+                        data?: { form_info?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { form_info?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_approvals/ai_render_form`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=ai_render_options&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_options&project=attendance&resource=overtime_approval&version=v1 document }
+                 *
+                 * 获取表单中 下拉控件的可选项列表
+                 */
+                aiRenderOptions: async (
+                    payload?: {
+                        data?: { form_info?: string; query_path?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    options?: Array<{
+                                        key?: string;
+                                        name?: string;
+                                        desc?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_approvals/ai_render_options`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=overtime_approval&apiName=ai_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_create&project=attendance&resource=overtime_approval&version=v1 document }
+                 *
+                 * ai发起休假申请
+                 */
+                aiCreate: async (
+                    payload?: {
+                        data?: { form_info?: string; time_zone?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    record_id?: string;
+                                    create_result?: boolean;
+                                    create_invalid_msg?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/overtime_approvals/ai_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * user_flow
              */
             userFlow: {
@@ -7194,7 +18404,7 @@ export default abstract class Client extends attendance_machine {
                  *
                  * 批量查询打卡流水
                  *
-                 * 通过用户 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（wifi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+                 * 通过用户 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息; * GPS 打卡：location_name（定位地址信息）; * Wi-Fi 打卡：ssid（wifi名称）、bssid（mac地址）; * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
                  *
                  * 这里只返回有效的打卡流水，无效或待生效的不会返回;;如果只需获取打卡结果，而不需要详细的打卡数据，可使用“获取打卡结果”的接口。
                  */
@@ -7273,13 +18483,273 @@ export default abstract class Client extends attendance_machine {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_flow&version=v1 document }
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_time_from: string;
+                            check_time_to: string;
+                        };
+                        params: {
+                            employee_type: string;
+                            include_terminated_user?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_flow_results?: Array<{
+                                        user_id: string;
+                                        creator_id: string;
+                                        location_name: string;
+                                        check_time: string;
+                                        comment: string;
+                                        record_id?: string;
+                                        longitude?: number;
+                                        latitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        is_field?: boolean;
+                                        is_wifi?: boolean;
+                                        type?: number;
+                                        photo_urls?: Array<string>;
+                                        device_id?: string;
+                                        check_result?:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "SeriousLate"
+                                            | "Lack"
+                                            | "Invalid"
+                                            | "None"
+                                            | "Todo";
+                                        external_id?: string;
+                                        idempotent_id?: string;
+                                        create_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=enterprise&project=attendance&resource=user_flow&version=v1 document }
+                 */
+                enterprise: async (
+                    payload?: {
+                        params: {
+                            employee_type:
+                                | "open_id"
+                                | "employee_id"
+                                | "employee_no";
+                        };
+                        path: { user_flow_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_flow?: {
+                                        user_id: string;
+                                        creator_id: string;
+                                        location_name: string;
+                                        check_time: string;
+                                        comment: string;
+                                        record_id?: string;
+                                        longitude?: number;
+                                        latitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        is_field?: boolean;
+                                        is_wifi?: boolean;
+                                        type?: number;
+                                        photo_urls?: Array<string>;
+                                        device_id?: string;
+                                        check_result?:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "SeriousLate"
+                                            | "Lack"
+                                            | "Invalid"
+                                            | "None"
+                                            | "Todo";
+                                        external_id?: string;
+                                        idempotent_id?: string;
+                                        create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id/enterprise`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_create_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_enterprise&project=attendance&resource=user_flow&version=v1 document }
+                 */
+                batchCreateEnterprise: async (
+                    payload?: {
+                        data: {
+                            flow_records: Array<{
+                                user_id: string;
+                                creator_id: string;
+                                location_name: string;
+                                check_time: string;
+                                comment: string;
+                                record_id?: string;
+                                longitude?: number;
+                                latitude?: number;
+                                ssid?: string;
+                                bssid?: string;
+                                is_field?: boolean;
+                                is_wifi?: boolean;
+                                type?: number;
+                                photo_urls?: Array<string>;
+                                device_id?: string;
+                                check_result?:
+                                    | "NoNeedCheck"
+                                    | "SystemCheck"
+                                    | "Normal"
+                                    | "Early"
+                                    | "Late"
+                                    | "SeriousLate"
+                                    | "Lack"
+                                    | "Invalid"
+                                    | "None"
+                                    | "Todo";
+                                external_id?: string;
+                                idempotent_id?: string;
+                                create_time?: string;
+                            }>;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    flow_records?: Array<{
+                                        user_id: string;
+                                        creator_id: string;
+                                        location_name: string;
+                                        check_time: string;
+                                        comment: string;
+                                        record_id?: string;
+                                        longitude?: number;
+                                        latitude?: number;
+                                        ssid?: string;
+                                        bssid?: string;
+                                        is_field?: boolean;
+                                        is_wifi?: boolean;
+                                        type?: number;
+                                        photo_urls?: Array<string>;
+                                        device_id?: string;
+                                        check_result?:
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "SeriousLate"
+                                            | "Lack"
+                                            | "Invalid"
+                                            | "None"
+                                            | "Todo";
+                                        external_id?: string;
+                                        idempotent_id?: string;
+                                        create_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/batch_create_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=user_flow&version=v1 document }
                  *
                  * 查询打卡流水
                  *
-                 * 通过打卡记录 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息;   * GPS 打卡：location_name（定位地址信息）;   * Wi-Fi 打卡：ssid（Wi-Fi名称）、bssid（mac地址）;   * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
+                 * 通过打卡记录 ID 获取用户的打卡流水记录。返回信息主要包含：;* 用户id和创建者id;* 记录信息;* 打卡位置信息、时间信息;* 打卡方式信息; * GPS 打卡：location_name（定位地址信息）; * Wi-Fi 打卡：ssid（Wi-Fi名称）、bssid（mac地址）; * 考勤机打卡：device_id（考勤机设备id）;;对应页面功能打卡管理-[打卡记录](https://example.feishu.cn/people/workforce-management/manage/statistics/flow)
                  */
                 get: async (
                     payload?: {
@@ -7350,9 +18820,445 @@ export default abstract class Client extends attendance_machine {
                 },
             },
             /**
+             * out
+             */
+            out: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=out&apiName=create_bpm&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_bpm&project=attendance&resource=out&version=v1 document }
+                 *
+                 * 发起外出BPM审批
+                 *
+                 * 对于假勤设置-应用配置-申请设置-外出，申请方式为“飞书人事「企业版」审批”的企业，可以通过该接口，写入外出审批到飞书假勤系统中。
+                 */
+                createBpm: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            out_record: {
+                                duration_unit: "hour" | "half_day" | "day";
+                                start_time: {
+                                    datetime: string;
+                                    day_type?: "morning" | "afternoon";
+                                };
+                                end_time: {
+                                    datetime: string;
+                                    day_type?: "morning" | "afternoon";
+                                };
+                            };
+                            out_reason?: string;
+                            custom_form_data?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    check_result: number;
+                                    check_message?: string;
+                                    approval_record_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/out/create_bpm`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * user_approval
              */
             userApproval: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_enterprise&project=attendance&resource=user_approval&version=v1 document }
+                 *
+                 * 写入审批结果
+                 *
+                 * 写入审批结果，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                createEnterprise: async (
+                    payload?: {
+                        data?: {
+                            user_approval?: {
+                                user_id: string;
+                                date: string;
+                                outs?: Array<{
+                                    approval_id?: string;
+                                    uniq_id: string;
+                                    unit: number;
+                                    interval: number;
+                                    start_time: string;
+                                    end_time: string;
+                                    i18n_names: {
+                                        ch?: string;
+                                        en?: string;
+                                        ja?: string;
+                                    };
+                                    default_locale: string;
+                                    reason: string;
+                                    approve_pass_time?: string;
+                                    approve_apply_time?: string;
+                                    idempotent_id?: string;
+                                    correct_process_id?: Array<string>;
+                                    cancel_process_id?: Array<string>;
+                                    process_id?: Array<string>;
+                                }>;
+                                leaves?: Array<{
+                                    approval_id?: string;
+                                    uniq_id?: string;
+                                    unit: number;
+                                    interval: number;
+                                    start_time: string;
+                                    end_time: string;
+                                    i18n_names: {
+                                        ch?: string;
+                                        en?: string;
+                                        ja?: string;
+                                    };
+                                    default_locale: "ch" | "en" | "ja";
+                                    reason: string;
+                                    approve_pass_time?: string;
+                                    approve_apply_time?: string;
+                                    idempotent_id?: string;
+                                    leave_detail_range_objs?: Array<{
+                                        day?: number;
+                                        time_ranges?: Array<{
+                                            start_time_stamp?: number;
+                                            end_time_stamp?: number;
+                                        }>;
+                                    }>;
+                                }>;
+                                overtime_works?: Array<{
+                                    approval_id?: string;
+                                    duration: number;
+                                    unit: number;
+                                    category: number;
+                                    type: number;
+                                    start_time: string;
+                                    end_time: string;
+                                    reason?: string;
+                                    idempotent_id?: string;
+                                    correct_process_id?: Array<string>;
+                                    cancel_process_id?: Array<string>;
+                                    process_id?: Array<string>;
+                                }>;
+                                trips?: Array<{
+                                    approval_id?: string;
+                                    start_time: string;
+                                    end_time: string;
+                                    reason: string;
+                                    approve_pass_time: string;
+                                    approve_apply_time: string;
+                                    idempotent_id?: string;
+                                    correct_process_id?: Array<string>;
+                                    cancel_process_id?: Array<string>;
+                                    process_id?: Array<string>;
+                                    departure?: {
+                                        region_level?: string;
+                                        region_id?: string;
+                                    };
+                                    destinations?: Array<{
+                                        region_level?: string;
+                                        region_id?: string;
+                                    }>;
+                                    transportation?: Array<number>;
+                                    trip_type?: number;
+                                    remarks?: string;
+                                }>;
+                                time_zone?: string;
+                            };
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_approval?: {
+                                        user_id: string;
+                                        date: string;
+                                        outs?: Array<{
+                                            approval_id?: string;
+                                            uniq_id: string;
+                                            unit: number;
+                                            interval: number;
+                                            start_time: string;
+                                            end_time: string;
+                                            i18n_names: {
+                                                ch?: string;
+                                                en?: string;
+                                                ja?: string;
+                                            };
+                                            default_locale: string;
+                                            reason: string;
+                                            approve_pass_time?: string;
+                                            approve_apply_time?: string;
+                                            idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
+                                        }>;
+                                        leaves?: Array<{
+                                            approval_id?: string;
+                                            uniq_id?: string;
+                                            unit: number;
+                                            interval: number;
+                                            start_time: string;
+                                            end_time: string;
+                                            i18n_names: {
+                                                ch?: string;
+                                                en?: string;
+                                                ja?: string;
+                                            };
+                                            default_locale: "ch" | "en" | "ja";
+                                            reason: string;
+                                            approve_pass_time?: string;
+                                            approve_apply_time?: string;
+                                            idempotent_id?: string;
+                                            leave_detail_range_objs?: Array<{
+                                                day?: number;
+                                                time_ranges?: Array<{
+                                                    start_time_stamp?: number;
+                                                    end_time_stamp?: number;
+                                                }>;
+                                            }>;
+                                        }>;
+                                        overtime_works?: Array<{
+                                            approval_id?: string;
+                                            duration: number;
+                                            unit: number;
+                                            category: number;
+                                            type: number;
+                                            start_time: string;
+                                            end_time: string;
+                                            reason?: string;
+                                            idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
+                                        }>;
+                                        trips?: Array<{
+                                            approval_id?: string;
+                                            start_time: string;
+                                            end_time: string;
+                                            reason: string;
+                                            approve_pass_time: string;
+                                            approve_apply_time: string;
+                                            idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
+                                            departure?: {
+                                                region_level?: string;
+                                                region_id?: string;
+                                            };
+                                            destinations?: Array<{
+                                                region_level?: string;
+                                                region_id?: string;
+                                            }>;
+                                            transportation?: Array<number>;
+                                            trip_type?: number;
+                                            remarks?: string;
+                                        }>;
+                                        time_zone?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_approvals/create_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_approval&version=v1 document }
+                 *
+                 * 获取审批数据
+                 *
+                 * 获取审批数据，使用方法参考https://open.feishu.cn/open-apis/attendance/v1/user_approvals/query，额外加入了开放平台应用数据范围鉴权
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_date_from: number;
+                            check_date_to: number;
+                            check_date_type?:
+                                | "PeriodTime"
+                                | "CreateTime"
+                                | "UpdateTime";
+                            status?: number;
+                            check_time_from?: string;
+                            check_time_to?: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_approvals?: Array<{
+                                        user_id: string;
+                                        date: string;
+                                        outs?: Array<{
+                                            approval_id?: string;
+                                            uniq_id: string;
+                                            unit: number;
+                                            interval: number;
+                                            start_time: string;
+                                            end_time: string;
+                                            i18n_names: {
+                                                ch?: string;
+                                                en?: string;
+                                                ja?: string;
+                                            };
+                                            default_locale: string;
+                                            reason: string;
+                                            approve_pass_time?: string;
+                                            approve_apply_time?: string;
+                                            idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
+                                        }>;
+                                        leaves?: Array<{
+                                            approval_id?: string;
+                                            uniq_id?: string;
+                                            unit: number;
+                                            interval: number;
+                                            start_time: string;
+                                            end_time: string;
+                                            i18n_names: {
+                                                ch?: string;
+                                                en?: string;
+                                                ja?: string;
+                                            };
+                                            default_locale: "ch" | "en" | "ja";
+                                            reason: string;
+                                            approve_pass_time?: string;
+                                            approve_apply_time?: string;
+                                            idempotent_id?: string;
+                                            leave_detail_range_objs?: Array<{
+                                                day?: number;
+                                                time_ranges?: Array<{
+                                                    start_time_stamp?: number;
+                                                    end_time_stamp?: number;
+                                                }>;
+                                            }>;
+                                        }>;
+                                        overtime_works?: Array<{
+                                            approval_id?: string;
+                                            duration: number;
+                                            unit: number;
+                                            category: number;
+                                            type: number;
+                                            start_time: string;
+                                            end_time: string;
+                                            reason?: string;
+                                            idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
+                                        }>;
+                                        trips?: Array<{
+                                            approval_id?: string;
+                                            start_time: string;
+                                            end_time: string;
+                                            reason: string;
+                                            approve_pass_time: string;
+                                            approve_apply_time: string;
+                                            idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
+                                            departure?: {
+                                                region_level?: string;
+                                                region_id?: string;
+                                            };
+                                            destinations?: Array<{
+                                                region_level?: string;
+                                                region_id?: string;
+                                            }>;
+                                            transportation?: Array<number>;
+                                            trip_type?: number;
+                                            remarks?: string;
+                                        }>;
+                                        time_zone?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_approvals/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create&version=v1 click to debug }
                  *
@@ -7725,11 +19631,587 @@ export default abstract class Client extends attendance_machine {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=ai_render_approval&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_approval&project=attendance&resource=user_approval&version=v1 document }
+                 *
+                 * 通过ai交互逐步渲染表单字段
+                 */
+                aiRenderApproval: async (
+                    payload?: {
+                        data?: {
+                            type?: string;
+                            form_info?: string;
+                            time_zone?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { form_info?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_approvals/ai_render_approval`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=ai_create_approval&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_create_approval&project=attendance&resource=user_approval&version=v1 document }
+                 *
+                 * ai发起休假申请
+                 */
+                aiCreateApproval: async (
+                    payload?: {
+                        data?: {
+                            type?: string;
+                            form_info?: string;
+                            time_zone?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    record_id?: string;
+                                    create_result?: boolean;
+                                    create_invalid_msg?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_approvals/ai_create_approval`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=ai_render_options&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=ai_render_options&project=attendance&resource=user_approval&version=v1 document }
+                 *
+                 * 获取表单中 下拉控件的可选项列表
+                 */
+                aiRenderOptions: async (
+                    payload?: {
+                        data?: {
+                            type?: string;
+                            form_info?: string;
+                            query_path?: string;
+                            time_zone?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    options?: Array<{
+                                        key?: string;
+                                        name?: string;
+                                        desc?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_approvals/ai_render_options`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * normal_leave_type
+             */
+            normalLeaveType: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=normal_leave_type&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=normal_leave_type&version=v1 document }
+                 *
+                 * 查询标准版假期类型
+                 *
+                 * 标准版查询本租户全部假期类型
+                 *
+                 * 不支持按用户过滤
+                 */
+                list: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        leave_type_id: string;
+                                        names: Array<{
+                                            text?: string;
+                                            local?: string;
+                                            is_default?: boolean;
+                                        }>;
+                                        is_balance_used: boolean;
+                                        is_active: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/normal_leave_types`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * normal_leave_user_first_work_time
+             */
+            normalLeaveUserFirstWorkTime: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=normal_leave_user_first_work_time&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=attendance&resource=normal_leave_user_first_work_time&version=v1 document }
+                 *
+                 * 创建用户首次工作时间
+                 *
+                 * 创建用户首次工作时间，仅用于标准休假额度计算
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            leave_normal_user_first_work_times: Array<{
+                                user_id: string;
+                                first_work_time: number;
+                            }>;
+                        };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/normal_leave_user_first_work_times`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * normal_leave_user_account
+             */
+            normalLeaveUserAccount: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=normal_leave_user_account&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=normal_leave_user_account&version=v1 document }
+                 *
+                 * 查询标准版假期余额
+                 *
+                 * 查询标准版休假员工的授予记录&余额，可查询批量用户，可指定假期类型
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                            leave_type_ids: Array<string>;
+                            user_ids: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        user_id: string;
+                                        leave_type_id: string;
+                                        quota: string;
+                                        unit?: "day" | "hour";
+                                        sub_type_accounts: Array<{
+                                            sub_type:
+                                                | "normal"
+                                                | "official"
+                                                | "welfare";
+                                            quota: string;
+                                        }>;
+                                        balances: Array<{
+                                            balance_id: string;
+                                            user_id: string;
+                                            leave_type_id: string;
+                                            quota: string;
+                                            grant_quota: string;
+                                            used_quota: string;
+                                            unit: "day" | "hour";
+                                            sub_type:
+                                                | "normal"
+                                                | "official"
+                                                | "welfare";
+                                            expire_time: number;
+                                            effective_time: number;
+                                            grant_source:
+                                                | "system"
+                                                | "manu"
+                                                | "overtime"
+                                                | "virtual"
+                                                | "oldSystemMigrate";
+                                            status:
+                                                | "active"
+                                                | "waitActive"
+                                                | "expired";
+                                            desc?: string;
+                                            plan_target_quota?: string;
+                                            plan_end_time?: number;
+                                            grant_daily?: boolean;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/normal_leave_user_accounts`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_normal_leave_type
+             */
+            userNormalLeaveType: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_normal_leave_type&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=user_normal_leave_type&version=v1 document }
+                 *
+                 * 查询用户的假期类型
+                 *
+                 * 查询用户的假期类型，支持批量查询
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                            user_ids: Array<string>;
+                            filter_leave_balance_used?: boolean;
+                            filter_active?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        user_id: string;
+                                        leave_type_ids: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_normal_leave_types`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * user_task
              */
             userTask: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task&apiName=query_enterprise&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_enterprise&project=attendance&resource=user_task&version=v1 document }
+                 *
+                 * 查询打卡结果
+                 *
+                 * 查询打卡结果，使用方法同旧版，加入了开放平台应用数据范围鉴权
+                 */
+                queryEnterprise: async (
+                    payload?: {
+                        data: {
+                            user_ids: Array<string>;
+                            check_date_from: number;
+                            check_date_to: number;
+                            need_overtime_result?: boolean;
+                        };
+                        params: {
+                            employee_type: string;
+                            ignore_invalid_users?: boolean;
+                            include_terminated_user?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_task_results?: Array<{
+                                        result_id: string;
+                                        user_id: string;
+                                        employee_name: string;
+                                        day: number;
+                                        group_id: string;
+                                        shift_id: string;
+                                        records: Array<{
+                                            check_in_record_id: string;
+                                            check_in_record?: {
+                                                user_id: string;
+                                                creator_id: string;
+                                                location_name: string;
+                                                check_time: string;
+                                                comment: string;
+                                                record_id?: string;
+                                                longitude?: number;
+                                                latitude?: number;
+                                                ssid?: string;
+                                                bssid?: string;
+                                                is_field?: boolean;
+                                                is_wifi?: boolean;
+                                                type?: number;
+                                                photo_urls?: Array<string>;
+                                                device_id?: string;
+                                                check_result?:
+                                                    | "NoNeedCheck"
+                                                    | "SystemCheck"
+                                                    | "Normal"
+                                                    | "Early"
+                                                    | "Late"
+                                                    | "SeriousLate"
+                                                    | "Lack"
+                                                    | "Invalid"
+                                                    | "None"
+                                                    | "Todo";
+                                                external_id?: string;
+                                                idempotent_id?: string;
+                                                create_time?: string;
+                                            };
+                                            check_out_record_id: string;
+                                            check_out_record?: {
+                                                user_id: string;
+                                                creator_id: string;
+                                                location_name: string;
+                                                check_time: string;
+                                                comment: string;
+                                                record_id?: string;
+                                                longitude?: number;
+                                                latitude?: number;
+                                                ssid?: string;
+                                                bssid?: string;
+                                                is_field?: boolean;
+                                                is_wifi?: boolean;
+                                                type?: number;
+                                                photo_urls?: Array<string>;
+                                                device_id?: string;
+                                                check_result?:
+                                                    | "NoNeedCheck"
+                                                    | "SystemCheck"
+                                                    | "Normal"
+                                                    | "Early"
+                                                    | "Late"
+                                                    | "SeriousLate"
+                                                    | "Lack"
+                                                    | "Invalid"
+                                                    | "None"
+                                                    | "Todo";
+                                                external_id?: string;
+                                                idempotent_id?: string;
+                                                create_time?: string;
+                                            };
+                                            check_in_result:
+                                                | "NoNeedCheck"
+                                                | "SystemCheck"
+                                                | "Normal"
+                                                | "Early"
+                                                | "Late"
+                                                | "Lack"
+                                                | "Todo";
+                                            check_out_result:
+                                                | "NoNeedCheck"
+                                                | "SystemCheck"
+                                                | "Normal"
+                                                | "Early"
+                                                | "Late"
+                                                | "Lack"
+                                                | "Todo";
+                                            check_in_result_supplement:
+                                                | "None"
+                                                | "ManagerModification"
+                                                | "CardReplacement"
+                                                | "ShiftChange"
+                                                | "Travel"
+                                                | "Leave"
+                                                | "GoOut"
+                                                | "CardReplacementApplication"
+                                                | "FieldPunch";
+                                            check_out_result_supplement:
+                                                | "None"
+                                                | "ManagerModification"
+                                                | "CardReplacement"
+                                                | "ShiftChange"
+                                                | "Travel"
+                                                | "Leave"
+                                                | "GoOut"
+                                                | "CardReplacementApplication"
+                                                | "FieldPunch";
+                                            check_in_shift_time?: string;
+                                            check_out_shift_time?: string;
+                                            task_shift_type?: number;
+                                        }>;
+                                    }>;
+                                    invalid_user_ids?: Array<string>;
+                                    unauthorized_user_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_tasks/query_enterprise`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_task&apiName=query&version=v1 click to debug }
                  *
@@ -7890,6 +20372,880 @@ export default abstract class Client extends attendance_machine {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_approval_over_time
+             */
+            userApprovalOverTime: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval_over_time&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=user_approval_over_time&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            check_date_from: number;
+                            check_date_to: number;
+                            check_date_type?:
+                                | "PeriodTime"
+                                | "CreateTime"
+                                | "UpdateTime";
+                            status?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        approval_id: string;
+                                        duration: number;
+                                        unit: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        status?: number;
+                                        reason?: string;
+                                        date?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_approval_over_times`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_trip_approval
+             */
+            userTripApproval: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_trip_approval&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_trip_approval&version=v1 document }
+                 *
+                 * 查询当前用户出差审批详情
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            begin_day: number;
+                            end_day: number;
+                            query_time_type?: number;
+                            approval_status?: number;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_trip_approvals?: Array<{
+                                        approval_id?: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason: string;
+                                        approve_pass_time: string;
+                                        approve_apply_time: string;
+                                        departure?: {
+                                            region_level?: string;
+                                            region_id?: string;
+                                        };
+                                        destinations?: Array<{
+                                            region_level?: string;
+                                            region_id?: string;
+                                        }>;
+                                        transportation?: Array<number>;
+                                        trip_type?: number;
+                                        remarks?: string;
+                                        status?: number;
+                                        time_zone?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_trip_approvals/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_summary
+             */
+            userSummary: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_summary&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_summary&version=v1 document }
+                 *
+                 * 查询用户月度考勤统计
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            start_date: number;
+                            end_date: number;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_summary?: {
+                                        metrics?: Array<{
+                                            code?: string;
+                                            name?: string;
+                                            value?: string;
+                                            unit?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_summaries/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_shift_change_approval
+             */
+            userShiftChangeApproval: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_shift_change_approval&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_shift_change_approval&version=v1 document }
+                 *
+                 * 查询当前用户换班审批详情
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            begin_day: number;
+                            end_day: number;
+                            query_time_type?: number;
+                            approval_status?: number;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_shift_change_approvals?: Array<{
+                                        approval_id?: string;
+                                        reason?: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        shift_time?: string;
+                                        return_time?: string;
+                                        swap_type?: number;
+                                        swap_date_record_map?: string;
+                                        status?: number;
+                                        time_zone?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_shift_change_approvals/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_out_approval
+             */
+            userOutApproval: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_out_approval&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_out_approval&version=v1 document }
+                 *
+                 * 查询当前用户外出审批详情
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            begin_day: number;
+                            end_day: number;
+                            query_time_type?: number;
+                            approval_status?: number;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_out_approvals?: Array<{
+                                        approval_id?: string;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        status?: number;
+                                        time_zone?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_out_approvals/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_remedy_approval
+             */
+            userRemedyApproval: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_remedy_approval&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_remedy_approval&version=v1 document }
+                 *
+                 * 查询当前用户补卡审批详情
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            begin_day: number;
+                            end_day: number;
+                            query_time_type?: number;
+                            approval_status?: number;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_remedy_approvals?: Array<{
+                                        approval_id?: string;
+                                        reason?: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                        remedy_time?: string;
+                                        clock_no?: string;
+                                        clock_type?: number;
+                                        day?: string;
+                                        remedy_type?: number;
+                                        status?: number;
+                                        time_zone?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_remedy_approvals/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * rulemanager
+             */
+            rulemanager: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=rulemanager&apiName=query_time_code_infos&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_time_code_infos&project=attendance&resource=rulemanager&version=v1 document }
+                 *
+                 * 根据表单内容获取可选的类型组配置
+                 */
+                queryTimeCodeInfos: async (
+                    payload?: {
+                        data?: { form_info?: string };
+                        params?: { time_type?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    time_code_infos?: Array<{
+                                        period_index?: number;
+                                        time_code_infos?: {
+                                            time_code_id?: string;
+                                            time_code_group_id?: string;
+                                            time_input_way?: number;
+                                            unit_type?: number;
+                                            step?: string;
+                                            default_duration?: string;
+                                            display_names?: Array<{
+                                                text?: string;
+                                                local?: string;
+                                                is_default?: boolean;
+                                            }>;
+                                            labels?: Array<{
+                                                text?: string;
+                                                local?: string;
+                                                is_default?: boolean;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/rulemanager/query_time_code_infos`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_attendance_rule
+             */
+            userAttendanceRule: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_attendance_rule&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=attendance&resource=user_attendance_rule&version=v1 document }
+                 *
+                 * 查询当前用户指定日期考勤规则
+                 */
+                query: async (
+                    payload?: {
+                        data: { day: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    attendance_rule?: {
+                                        rule_id?: string;
+                                        name?: string;
+                                        shift_rotation_type?: number;
+                                        need_photo?: boolean;
+                                        allow_field?: boolean;
+                                        allow_remedy?: boolean;
+                                        allow_pc?: boolean;
+                                        need_risk?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_attendance_rules/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * employee_identity
+             */
+            employeeIdentity: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=employee_identity&apiName=admin_search_employee&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=admin_search_employee&project=attendance&resource=employee_identity&version=v1 document }
+                 *
+                 * 管理员按姓名、工号或邮箱搜索员工
+                 */
+                adminSearchEmployee: async (
+                    payload?: {
+                        params: { query: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    employees?: Array<{
+                                        employee_no: string;
+                                        emp_id: string;
+                                        display_name?: string;
+                                        department_name?: string;
+                                        email?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/employee_identities/admin_search_employee`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * leave_record
+             */
+            leaveRecord: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=leave_record&apiName=admin_query_leave_record&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=admin_query_leave_record&project=attendance&resource=leave_record&version=v1 document }
+                 *
+                 * 管理员查询员工休假记录
+                 */
+                adminQueryLeaveRecord: async (
+                    payload?: {
+                        params: {
+                            emp_id: string;
+                            date: string;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    leave_records?: Array<{
+                                        fields?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/leave_records/admin_query_leave_record`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * submission
+             */
+            submission: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=legacy_admin_query_submission_record&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=legacy_admin_query_submission_record&project=attendance&resource=submission&version=v1 document }
+                 *
+                 * 管理员查询员工老加班记录
+                 */
+                legacyAdminQuerySubmissionRecord: async (
+                    payload?: {
+                        params: {
+                            emp_id: string;
+                            date: string;
+                            accept_language?: string;
+                            time_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    rows?: Array<{
+                                        column?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                        children?: Array<{
+                                            column?: Array<{
+                                                code: string;
+                                                value?: string;
+                                                text?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/submission/legacy_admin_query_submission_record`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=admin_query_submission_record&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=admin_query_submission_record&project=attendance&resource=submission&version=v1 document }
+                 *
+                 * 管理员查询员工新出勤加班记录
+                 */
+                adminQuerySubmissionRecord: async (
+                    payload?: {
+                        params: {
+                            emp_id: string;
+                            date: string;
+                            accept_language?: string;
+                            time_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    rows?: Array<{
+                                        column?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                        children?: Array<{
+                                            column?: Array<{
+                                                code: string;
+                                                value?: string;
+                                                text?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/submission/admin_query_submission_record`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=query_month_summary&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_month_summary&project=attendance&resource=submission&version=v1 document }
+                 *
+                 * OpenAPI 获取月度汇总统计
+                 */
+                queryMonthSummary: async (
+                    payload?: {
+                        params: { month: number; accept_language?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    overtime_summary_stats?: Array<{
+                                        label?: string;
+                                        value?: string;
+                                        detail_stats_lists?: Array<{
+                                            label?: string;
+                                            value?: string;
+                                        }>;
+                                    }>;
+                                    attendance_summary_stats?: Array<{
+                                        label?: string;
+                                        value?: string;
+                                        detail_stats_lists?: Array<{
+                                            label?: string;
+                                            value?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/submission/query_month_summary`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=submission&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=attendance&resource=submission&version=v1 document }
+                 *
+                 * OpenAPI 获取加班出勤记录
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            date?: string;
+                            time_type: number;
+                            accept_language?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    rows?: Array<{
+                                        column?: Array<{
+                                            code: string;
+                                            value?: string;
+                                            text?: string;
+                                        }>;
+                                        children?: Array<{
+                                            column?: Array<{
+                                                code: string;
+                                                value?: string;
+                                                text?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/submission`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,

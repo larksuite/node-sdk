@@ -31,5 +31,81 @@ export default abstract class Client extends mail {
     /**
          
          */
-    mcp = {};
+    mcp = {
+        v1: {
+            /**
+             * search
+             */
+            search: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mcp&resource=search&apiName=search_doc&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search_doc&project=mcp&resource=search&version=v1 document }
+                 */
+                searchDoc: async (
+                    payload?: {
+                        data?: {
+                            req?: {
+                                query?: string;
+                                filters?: {
+                                    doc_types?: string;
+                                    owners?: string;
+                                    sort_rule?: string;
+                                    locations?: {
+                                        groups?: string;
+                                        spaces?: string;
+                                    };
+                                    create_time?: string;
+                                    open_time?: string;
+                                };
+                                page?: {
+                                    size?: number;
+                                    offset?: number;
+                                    page_token?: string;
+                                };
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    res?: {
+                                        items: Array<{
+                                            title: string;
+                                            id: string;
+                                        }>;
+                                        offset?: number;
+                                        has_more: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mcp/v1/search/search_doc`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+    };
 }

@@ -3350,6 +3350,39 @@ export default abstract class Client extends gtm_ai {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=helpdesk&resource=ticket.message&version=v1 document }
+             */
+            update: async (
+                payload?: {
+                    data: { msg_type: string; content: string };
+                    path: { ticket_id: string; id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages/:id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * bot.message
@@ -3394,6 +3427,299 @@ export default abstract class Client extends gtm_ai {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/message`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * migration_ticket_message
+         */
+        migrationTicketMessage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket_message&apiName=import&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=helpdesk&resource=migration_ticket_message&version=v1 document }
+             */
+            import: async (
+                payload?: {
+                    data: {
+                        ticket_id: string;
+                        messages: Array<{
+                            uuid?: string;
+                            user_id?: string;
+                            message_type: string;
+                            content: {
+                                content?: string;
+                                msg_type?: string;
+                                image_keys?: Array<string>;
+                                image_key?: string;
+                                audio_key?: string;
+                                media_key?: string;
+                                file_key?: string;
+                            };
+                            created_at_ms: string;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/migration_ticket_message/import`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket_message&apiName=export&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=export&project=helpdesk&resource=migration_ticket_message&version=v1 document }
+             *
+             * 导出工单消息
+             */
+            export: async (
+                payload?: {
+                    params: {
+                        ticket_id: string;
+                        page: number;
+                        size: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                messages?: Array<{
+                                    id?: string;
+                                    message_type?: string;
+                                    created_at_ms?: string;
+                                    user_id?: string;
+                                    content?: {
+                                        content?: string;
+                                        msg_type?: string;
+                                        image_keys?: Array<string>;
+                                        image_key?: string;
+                                        audio_key?: string;
+                                        media_key?: string;
+                                        file_key?: string;
+                                    };
+                                }>;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/tickets/export_ticket_message`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * migration_ticket
+         */
+        migrationTicket: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket&apiName=export&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=export&project=helpdesk&resource=migration_ticket&version=v1 document }
+             *
+             * 导出服务台工单
+             */
+            export: async (
+                payload?: {
+                    params: {
+                        page: number;
+                        page_size: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tickets?: Array<{
+                                    guest_id: string;
+                                    close_by?: string;
+                                    creator_id: string;
+                                    owner_agent_id?: string;
+                                    create_at_ms: string;
+                                    close_at_ms?: string;
+                                    update_at_ms?: string;
+                                    queued_at_ms?: string;
+                                    first_response_ms?: string;
+                                    last_response_ms?: string;
+                                    stage: number;
+                                    status: number;
+                                    score: number;
+                                    channel: number;
+                                    agent_entry_time_ms?: string;
+                                    comments?: Array<{
+                                        user_id: string;
+                                        create_at_ms: string;
+                                        content: string;
+                                    }>;
+                                    dissatisfaction_reasons?: Array<{
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    }>;
+                                    actual_processing_time?: string;
+                                    language?: string;
+                                    first_agent_entry_chat_time?: string;
+                                    guest_country?: string;
+                                    guest_city?: string;
+                                    agent_group_name?: string;
+                                    transfer_comment?: string;
+                                    description?: string;
+                                    close_way?: number;
+                                    collaborators?: Array<string>;
+                                    agent_ids?: Array<string>;
+                                    id?: string;
+                                }>;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/migration_ticket/export`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket&apiName=import&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=helpdesk&resource=migration_ticket&version=v1 document }
+             */
+            import: async (
+                payload?: {
+                    data: {
+                        uuid?: string;
+                        migration_ticket: {
+                            guest_id: string;
+                            close_by?: string;
+                            creator_id: string;
+                            owner_agent_id?: string;
+                            create_at_ms: string;
+                            close_at_ms?: string;
+                            update_at_ms?: string;
+                            queued_at_ms?: string;
+                            first_response_ms?: string;
+                            last_response_ms?: string;
+                            stage: number;
+                            status: number;
+                            score: number;
+                            channel: number;
+                            agent_entry_time_ms?: string;
+                            comments?: Array<{
+                                user_id: string;
+                                create_at_ms: string;
+                                content: string;
+                            }>;
+                            dissatisfaction_reasons?: Array<{
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            }>;
+                            actual_processing_time?: string;
+                            language?: string;
+                            first_agent_entry_chat_time?: string;
+                            guest_country?: string;
+                            guest_city?: string;
+                            agent_group_name?: string;
+                            transfer_comment?: string;
+                            description?: string;
+                            close_way?: number;
+                            collaborators?: Array<string>;
+                            agent_ids?: Array<string>;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { ticket_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/helpdesk/v1/migration_ticket/import`,
                             path
                         ),
                         method: "POST",
@@ -6810,6 +7136,42 @@ export default abstract class Client extends gtm_ai {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=ticket.message&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=helpdesk&resource=ticket.message&version=v1 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: { msg_type: string; content: string };
+                        path: { ticket_id: string; id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages/:id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * bot.message
@@ -6854,6 +7216,302 @@ export default abstract class Client extends gtm_ai {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/helpdesk/v1/message`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * migration_ticket_message
+             */
+            migrationTicketMessage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket_message&apiName=import&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=helpdesk&resource=migration_ticket_message&version=v1 document }
+                 */
+                import: async (
+                    payload?: {
+                        data: {
+                            ticket_id: string;
+                            messages: Array<{
+                                uuid?: string;
+                                user_id?: string;
+                                message_type: string;
+                                content: {
+                                    content?: string;
+                                    msg_type?: string;
+                                    image_keys?: Array<string>;
+                                    image_key?: string;
+                                    audio_key?: string;
+                                    media_key?: string;
+                                    file_key?: string;
+                                };
+                                created_at_ms: string;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/migration_ticket_message/import`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket_message&apiName=export&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=export&project=helpdesk&resource=migration_ticket_message&version=v1 document }
+                 *
+                 * 导出工单消息
+                 */
+                export: async (
+                    payload?: {
+                        params: {
+                            ticket_id: string;
+                            page: number;
+                            size: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    messages?: Array<{
+                                        id?: string;
+                                        message_type?: string;
+                                        created_at_ms?: string;
+                                        user_id?: string;
+                                        content?: {
+                                            content?: string;
+                                            msg_type?: string;
+                                            image_keys?: Array<string>;
+                                            image_key?: string;
+                                            audio_key?: string;
+                                            media_key?: string;
+                                            file_key?: string;
+                                        };
+                                    }>;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/tickets/export_ticket_message`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * migration_ticket
+             */
+            migrationTicket: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket&apiName=export&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=export&project=helpdesk&resource=migration_ticket&version=v1 document }
+                 *
+                 * 导出服务台工单
+                 */
+                export: async (
+                    payload?: {
+                        params: {
+                            page: number;
+                            page_size: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tickets?: Array<{
+                                        guest_id: string;
+                                        close_by?: string;
+                                        creator_id: string;
+                                        owner_agent_id?: string;
+                                        create_at_ms: string;
+                                        close_at_ms?: string;
+                                        update_at_ms?: string;
+                                        queued_at_ms?: string;
+                                        first_response_ms?: string;
+                                        last_response_ms?: string;
+                                        stage: number;
+                                        status: number;
+                                        score: number;
+                                        channel: number;
+                                        agent_entry_time_ms?: string;
+                                        comments?: Array<{
+                                            user_id: string;
+                                            create_at_ms: string;
+                                            content: string;
+                                        }>;
+                                        dissatisfaction_reasons?: Array<{
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        }>;
+                                        actual_processing_time?: string;
+                                        language?: string;
+                                        first_agent_entry_chat_time?: string;
+                                        guest_country?: string;
+                                        guest_city?: string;
+                                        agent_group_name?: string;
+                                        transfer_comment?: string;
+                                        description?: string;
+                                        close_way?: number;
+                                        collaborators?: Array<string>;
+                                        agent_ids?: Array<string>;
+                                        id?: string;
+                                    }>;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/migration_ticket/export`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=helpdesk&resource=migration_ticket&apiName=import&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=import&project=helpdesk&resource=migration_ticket&version=v1 document }
+                 */
+                import: async (
+                    payload?: {
+                        data: {
+                            uuid?: string;
+                            migration_ticket: {
+                                guest_id: string;
+                                close_by?: string;
+                                creator_id: string;
+                                owner_agent_id?: string;
+                                create_at_ms: string;
+                                close_at_ms?: string;
+                                update_at_ms?: string;
+                                queued_at_ms?: string;
+                                first_response_ms?: string;
+                                last_response_ms?: string;
+                                stage: number;
+                                status: number;
+                                score: number;
+                                channel: number;
+                                agent_entry_time_ms?: string;
+                                comments?: Array<{
+                                    user_id: string;
+                                    create_at_ms: string;
+                                    content: string;
+                                }>;
+                                dissatisfaction_reasons?: Array<{
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                }>;
+                                actual_processing_time?: string;
+                                language?: string;
+                                first_agent_entry_chat_time?: string;
+                                guest_country?: string;
+                                guest_city?: string;
+                                agent_group_name?: string;
+                                transfer_comment?: string;
+                                description?: string;
+                                close_way?: number;
+                                collaborators?: Array<string>;
+                                agent_ids?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { ticket_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/helpdesk/v1/migration_ticket/import`,
                                 path
                             ),
                             method: "POST",

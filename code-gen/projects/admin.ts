@@ -33,6 +33,421 @@ export default abstract class Client extends acs {
          */
     admin = {
         /**
+         * splash_page_stat
+         */
+        splashPageStat: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=splash_page_stat&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=splash_page_stat&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        start_date?: string;
+                        end_date: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    date?: string;
+                                    splash_id?: string;
+                                    impression_count?: number;
+                                    click_count?: number;
+                                    skip_count?: number;
+                                    impression_count_accumulate?: number;
+                                    click_count_accumulate?: number;
+                                    skip_count_accumulate?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/splash_page_stats`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=splash_page_stat&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=splash_page_stat&version=v1 document }
+             */
+            query: async (
+                payload?: {
+                    params: { start_date?: string; end_date: string };
+                    path?: { splash_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                splash_page_stat?: {
+                                    date?: string;
+                                    splash_id?: string;
+                                    impression_count?: number;
+                                    click_count?: number;
+                                    skip_count?: number;
+                                    impression_count_accumulate?: number;
+                                    click_count_accumulate?: number;
+                                    skip_count_accumulate?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/splash_page_stats/:splash_id/query`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * administrator
+         */
+        administrator: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        response_user_id_type?:
+                            | "open_id"
+                            | "union_id"
+                            | "user_id";
+                        permission_filter: number;
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/administrators`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                administrators?: Array<{
+                                                    user_id?: string;
+                                                    is_super_administrator: boolean;
+                                                    is_administrator: boolean;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=administrator&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=administrator&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        response_user_id_type?:
+                            | "open_id"
+                            | "union_id"
+                            | "user_id";
+                        permission_filter: number;
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                administrators?: Array<{
+                                    user_id?: string;
+                                    is_super_administrator: boolean;
+                                    is_administrator: boolean;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/administrators`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * file
+         */
+        file: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=file&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=admin&resource=file&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    params: { type: "1" | "2" | "3" | "4" | "5" | "6" | "7" };
+                    path: { file_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/files/:file_token`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=file&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=admin&resource=file&version=v1 document }
+             */
+            search: async (
+                payload?: {
+                    data?: { file_token?: string };
+                    params?: {
+                        email?: string;
+                        user_id?: string;
+                        user_id_type?: "user_id" | "open_id" | "union_id";
+                        offset?: number;
+                        limit?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                files?: Array<{
+                                    title?: string;
+                                    type?:
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5"
+                                        | "6"
+                                        | "7";
+                                    owner?: {
+                                        name: string;
+                                        avatar: string;
+                                        id: string;
+                                    };
+                                    size?: string;
+                                    last_op_time?: string;
+                                    status?: "2" | "3";
+                                    token?: string;
+                                }>;
+                                total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/files/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=file&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=admin&resource=file&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    params: {
+                        target_user_id?: string;
+                        user_id_type?: "user_id" | "open_id" | "union_id";
+                        target_owner_email?: string;
+                        type: "1" | "2" | "3" | "4" | "5" | "6" | "7";
+                    };
+                    path: { file_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/files/:file_token`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * badge.grant
          */
         badgeGrant: {
@@ -1418,6 +1833,1600 @@ export default abstract class Client extends acs {
             },
         },
         /**
+         * admin_user_ext_contact_stat
+         */
+        adminUserExtContactStat: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        user_id?: string;
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        department_id?: string;
+                        start_date: string;
+                        end_date: string;
+                        page_size?: number;
+                        page_token?: string;
+                        target_geo?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/admin_user_ext_contact_stats`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    date?: string;
+                                                    user_id?: string;
+                                                    user_name?: string;
+                                                    department_name?: string;
+                                                    ref_contact_ucnt?: string;
+                                                    ref_contact_tcnt?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_ext_contact_stat&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_user_ext_contact_stat&version=v1 document }
+             *
+             * 获取成员所拥有的外部联系人总数
+             *
+             * 获取成员拥有的外部联系人总数和外部租户总数：成员仅包含已激活未离职的用户；外部联系人仅包含当前关系状态为正常的用户（不限制外部联系人的离职状态）包含私有化租户的外部联系人。
+             *
+             * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出 (CN时区: UTC+8，非CN时区: UTC+0);;- 日期范围不超过90天，超过90天接口容易超时;;- 仅支持13层级部门数据查询，超过13层级的数据汇聚到第13层级
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        user_id?: string;
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        department_id?: string;
+                        start_date: string;
+                        end_date: string;
+                        page_size?: number;
+                        page_token?: string;
+                        target_geo?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    date?: string;
+                                    user_id?: string;
+                                    user_name?: string;
+                                    department_name?: string;
+                                    ref_contact_ucnt?: string;
+                                    ref_contact_tcnt?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/admin_user_ext_contact_stats`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * task
+         */
+        task: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=task&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=admin&resource=task&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "union_id" | "open_id" | "user_id";
+                    };
+                    path?: { task_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                original_user_id?: string;
+                                target_owner_id?: string;
+                                file_list?: Array<{
+                                    title?: string;
+                                    type?:
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5"
+                                        | "6"
+                                        | "7";
+                                    owner?: {
+                                        name: string;
+                                        avatar: string;
+                                        id: string;
+                                    };
+                                    size?: string;
+                                    last_op_time?: string;
+                                    status?: "2" | "3";
+                                    token?: string;
+                                }>;
+                                task_id?: string;
+                                status?: number;
+                                original_user_email?: string;
+                                target_owner_email?: string;
+                                type?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/tasks/:task_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=task&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=task&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        original_user_id?: string;
+                        target_owner_id?: string;
+                        file_list?: Array<{
+                            title?: string;
+                            type?: "1" | "2" | "3" | "4" | "5" | "6" | "7";
+                            owner?: {
+                                name: string;
+                                avatar: string;
+                                id: string;
+                            };
+                            size?: string;
+                            last_op_time?: string;
+                            status?: "2" | "3";
+                            token?: string;
+                        }>;
+                        task_id?: string;
+                        status?: number;
+                        original_user_email?: string;
+                        target_owner_email?: string;
+                        type?: number;
+                    };
+                    params?: {
+                        user_id_type?: "union_id" | "open_id" | "user_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                original_user_id?: string;
+                                target_owner_id?: string;
+                                file_list?: Array<{
+                                    title?: string;
+                                    type?:
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5"
+                                        | "6"
+                                        | "7";
+                                    owner?: {
+                                        name: string;
+                                        avatar: string;
+                                        id: string;
+                                    };
+                                    size?: string;
+                                    last_op_time?: string;
+                                    status?: "2" | "3";
+                                    token?: string;
+                                }>;
+                                task_id?: string;
+                                status?: number;
+                                original_user_email?: string;
+                                target_owner_email?: string;
+                                type?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/tasks`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_annual_report
+         */
+        userAnnualReport: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        year: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/user_annual_reports`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    year_2021?: {
+                                                        active_day_count?: number;
+                                                        busy_week?: string;
+                                                        p2p_chat_count?: string;
+                                                        talked_chat_count?: string;
+                                                        favorite_emoji?: string;
+                                                        reaction_count?: string;
+                                                        conference_create_count?: string;
+                                                        total_parti_count?: string;
+                                                        minutes_object_count?: string;
+                                                        minutes_duration?: number;
+                                                        create_edit_file_count?: string;
+                                                        create_file_count?: string;
+                                                        cooperate_edit_file_count?: string;
+                                                        like_record_count?: string;
+                                                        okr_cum_o_count?: string;
+                                                        okr_cum_kr_count?: string;
+                                                        okr_aligned_user_rankfirst?: string;
+                                                        approval_start_count?: string;
+                                                        approval_execute_count?: string;
+                                                        approval_relation_user_rankfirst?: string;
+                                                        user_id?: string;
+                                                        busy_week_sum_duration?: string;
+                                                        busy_week_mdate?: string;
+                                                        busy_week_act_days?: number;
+                                                        create_read_user_count?: string;
+                                                    };
+                                                    year_2022?: {
+                                                        user_id?: string;
+                                                        user_register_date?: string;
+                                                        active_day_count?: number;
+                                                        msg_busy_date?: string;
+                                                        msg_busy_date_send_msg_count?: string;
+                                                        p2p_chat_count?: string;
+                                                        talked_chat_count?: string;
+                                                        positive_reaction_count?: string;
+                                                        first_positive_reaction?: string;
+                                                        second_positive_reaction?: string;
+                                                        third_positive_reaction?: string;
+                                                        fourth_positive_reaction?: string;
+                                                        fifth_positive_reaction?: string;
+                                                        create_file_count?: string;
+                                                        created_file_view_count?: string;
+                                                        comment_file_count?: string;
+                                                        attend_event_count?: string;
+                                                        event_busy_date?: string;
+                                                        event_busy_date_event_count?: string;
+                                                        event_start_time_range1?: string;
+                                                        conference_create_count?: string;
+                                                        total_parti_count?: string;
+                                                        okr_cum_o_count?: string;
+                                                        okr_cum_kr_count?: string;
+                                                        okr_aligned_user_count?: string;
+                                                        people_interview_num?: string;
+                                                        send_email_count?: string;
+                                                        receive_email_count?: string;
+                                                    };
+                                                    year_2023?: {
+                                                        user_id?: string;
+                                                        tenant_all_cnt?: number;
+                                                        user_register_date?: string;
+                                                        all_day_cnt?: number;
+                                                        active_day_cnt?: number;
+                                                        duration_cnt_2?: Array<{
+                                                            year?: string;
+                                                            num?: number;
+                                                        }>;
+                                                        duration_cnt_rank?: string;
+                                                        busy_month?: string;
+                                                        busy_month_sum_duration?: number;
+                                                        busy_month_send_msg_cnt?: number;
+                                                        busy_month_meeting_cnt?: number;
+                                                        busy_month_last_meeting_time?: string;
+                                                        busy_month_create_edit_file_cnt?: number;
+                                                        im_send_msg_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        im_send_msg_cnt_rank?: string;
+                                                        im_busy_date?: string;
+                                                        im_busy_date_send_msg_cnt?: number;
+                                                        im_last_send_msg_time?: string;
+                                                        im_talked_chat_cnt?: number;
+                                                        im_private_chat_cnt?: number;
+                                                        im_emoji_top1?: string;
+                                                        im_emoji_top1_cnt?: string;
+                                                        im_emoji_top2?: string;
+                                                        im_emoji_top2_cnt?: string;
+                                                        im_emoji_top3?: string;
+                                                        im_emoji_top3_cnt?: string;
+                                                        im_positive_reaction_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        im_positive_reaction_cnt_rank?: string;
+                                                        ccm_create_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        ccm_create_cnt_rank?: string;
+                                                        ccm_create_busy_month?: string;
+                                                        ccm_create_busy_month_cnt?: number;
+                                                        ccm_create_viewed_ucnt?: number;
+                                                        ccm_create_liked_cnt?: number;
+                                                        ccm_create_liked_cnt_rank?: string;
+                                                        ccm_edit_comment_fcnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        ccm_edit_comment_fcnt_rank?: string;
+                                                        ccm_view_other_fcnt?: number;
+                                                        ccm_view_other_fcnt_rank?: string;
+                                                        vc_sent_meeting_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        vc_sent_meeting_cnt_rank?: string;
+                                                        vc_sent_meeting_ucnt?: number;
+                                                        vc_join_meeting_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        vc_join_meeting_cnt_rank?: string;
+                                                        vc_all_meeting_cnt?: number;
+                                                        vc_all_meeting_cnt_rank?: string;
+                                                        vc_all_meeting_duration_2?: Array<{
+                                                            year?: string;
+                                                            num?: number;
+                                                        }>;
+                                                        cal_comment_cal_time?: string;
+                                                        people_profile_view_cnt?: string;
+                                                        people_interview_num_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        people_interview_num_rank?: string;
+                                                        people_interview_offer_num_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        people_interview_offer_num_rank?: string;
+                                                        email_send_email_count?: number;
+                                                        email_receive_email_count?: number;
+                                                    };
+                                                    year_2024?: {
+                                                        user_id?: string;
+                                                        tenant_all_cnt?: string;
+                                                        user_register_date?: string;
+                                                        feishu_day_cnt?: string;
+                                                        duration_cnt_2?: Array<{
+                                                            year?: string;
+                                                            num?: number;
+                                                        }>;
+                                                        im_send_msg_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        avg_im_send_msg_cnt_2?: Array<{
+                                                            year?: string;
+                                                            num?: number;
+                                                        }>;
+                                                        im_talked_chat_cnt?: string;
+                                                        im_private_chat_cnt?: string;
+                                                        im_emoji_top1?: string;
+                                                        im_emoji_top1_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        im_emoji_top2?: string;
+                                                        im_emoji_top2_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        im_emoji_top3?: string;
+                                                        im_emoji_top3_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        im_positive_reaction_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        im_positive_reaction_cnt_rank?: string;
+                                                        im_positive_reaction_cnt_denominator?: string;
+                                                        busy_day?: string;
+                                                        busy_day_send_msg_cnt?: string;
+                                                        ccm_create_cnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        ccm_create_viewed_ucnt?: string;
+                                                        ccm_create_liked_cnt?: string;
+                                                        ccm_create_liked_max_cnt?: string;
+                                                        vc_join_meeting_cnt?: string;
+                                                        vc_all_meeting_duration_2?: Array<{
+                                                            year?: string;
+                                                            num?: number;
+                                                        }>;
+                                                        vc_join_meeting_all_user_cnt?: string;
+                                                        vc_last_meeting_time?: string;
+                                                        base_create_fcnt_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        base_view_fcnt?: string;
+                                                        base_create_dashboard_cnt?: string;
+                                                        base_create_dashboard_rank?: string;
+                                                        base_create_dashboard_rank_ucnt?: string;
+                                                        base_create_chat_cnt?: string;
+                                                        base_workflow_ins_cnt?: string;
+                                                        base_workflow_ins_rank?: string;
+                                                        base_workflow_ins_rank_ucnt?: string;
+                                                        vc_all_read_notes_cnt?: string;
+                                                        meego_role_wi_cnt_v2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        meego_common_wi_ucnt?: string;
+                                                        meego_workflow_wi_cnt?: string;
+                                                        people_interview_num_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                        people_interview_num_rank?: string;
+                                                        people_interview_num_rank_ucnt?: string;
+                                                        people_interview_offer_num_2?: Array<{
+                                                            year?: string;
+                                                            count?: string;
+                                                        }>;
+                                                    };
+                                                    year_2025: {
+                                                        user_id?: string;
+                                                        tenant_all_cnt?: string;
+                                                        user_register_date?: string;
+                                                        feishu_active_days?: string;
+                                                        feishu_duration_busy_month?: string;
+                                                        feishu_duration_busy_month_hours?: number;
+                                                        busy_month_send_msg_cnt?: string;
+                                                        busy_month_edit_doc_cnt?: string;
+                                                        busy_month_read_doc_cnt?: string;
+                                                        busy_month_join_meeting_cnt?: string;
+                                                        busy_month_meeting_duration?: number;
+                                                        im_talked_chat_cnt?: string;
+                                                        im_private_chat_cnt?: string;
+                                                        im_send_msg_cnt?: string;
+                                                        im_emoji_top1?: string;
+                                                        im_emoji_top1_cnt?: string;
+                                                        im_emoji_top2?: string;
+                                                        im_emoji_top2_cnt?: string;
+                                                        im_emoji_top3?: string;
+                                                        im_emoji_top3_cnt?: string;
+                                                        ccm_create_fcnt?: string;
+                                                        ccm_create_rank?: string;
+                                                        ccm_create_rank_ucnt?: string;
+                                                        ccm_create_viewed_ucnt?: string;
+                                                        ccm_create_liked_cnt?: string;
+                                                        ccm_create_viewed_most_ucnt?: string;
+                                                        ccm_all_read_doc_cnt?: string;
+                                                        docs_ai_quickview_use_cnt?: string;
+                                                        vc_join_meeting_cnt?: string;
+                                                        vc_join_meeting_duration?: number;
+                                                        vc_org_meeting_cnt?: Array<{
+                                                            organized_meeting_cnt?: string;
+                                                            organized_cal_meeting_cnt?: string;
+                                                            organized_instant_meeting_cnt?: string;
+                                                        }>;
+                                                        ai_notes_create_cnt?: string;
+                                                        ai_notes_read_cnt?: string;
+                                                        knowledge_ai_use_cnt?: string;
+                                                        knowledge_ai_use_busy_day?: string;
+                                                        knowledge_ai_use_busy_day_cnt?: string;
+                                                        base_create_fcnt?: string;
+                                                        base_ai_top1_name_map?: Array<{
+                                                            name_cn?: string;
+                                                            name_en?: string;
+                                                            name_cn_list?: string;
+                                                            name_en_list?: string;
+                                                        }>;
+                                                        base_create_view_ucnt?: string;
+                                                        base_most_rows_cnt?: string;
+                                                        base_create_dashboard_cnt?: string;
+                                                        base_workflow_create_cnt?: string;
+                                                        base_workflow_ins_cnt?: string;
+                                                        aily_develop_app_cnt?: string;
+                                                        aily_develop_app_active_ucnt?: string;
+                                                        aily_develop_active_most_app_intents?: string;
+                                                        aily_chat_cnt?: string;
+                                                        aily_artifact_create_cnt?: string;
+                                                        apaas_develop_app_cnt?: string;
+                                                        apaas_develop_app_active_ucnt?: string;
+                                                        apaas_develop_active_most_app_ucnt?: string;
+                                                        apaas_develop_ai_run_cnt?: string;
+                                                        meego_is_project_admin?: string;
+                                                        meego_create_wi_cnt?: string;
+                                                        meego_create_wi_role_ucnt?: string;
+                                                        meego_most_view_wi_ucnt?: string;
+                                                        meego_set_ai_field_cnt?: string;
+                                                        meego_ai_field_run_cnt?: string;
+                                                        meego_ai_gantt_use_cnt?: string;
+                                                        meego_ai_weekly_report_use_cnt?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=user_annual_report&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=user_annual_report&version=v1 document }
+             *
+             * 批量获取飞书用户的年度行为报告数据
+             *
+             * 用于分页获取用户的年度飞书行为报告，可以通过has_more字段遍历所有的用户。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        year: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    year_2021?: {
+                                        active_day_count?: number;
+                                        busy_week?: string;
+                                        p2p_chat_count?: string;
+                                        talked_chat_count?: string;
+                                        favorite_emoji?: string;
+                                        reaction_count?: string;
+                                        conference_create_count?: string;
+                                        total_parti_count?: string;
+                                        minutes_object_count?: string;
+                                        minutes_duration?: number;
+                                        create_edit_file_count?: string;
+                                        create_file_count?: string;
+                                        cooperate_edit_file_count?: string;
+                                        like_record_count?: string;
+                                        okr_cum_o_count?: string;
+                                        okr_cum_kr_count?: string;
+                                        okr_aligned_user_rankfirst?: string;
+                                        approval_start_count?: string;
+                                        approval_execute_count?: string;
+                                        approval_relation_user_rankfirst?: string;
+                                        user_id?: string;
+                                        busy_week_sum_duration?: string;
+                                        busy_week_mdate?: string;
+                                        busy_week_act_days?: number;
+                                        create_read_user_count?: string;
+                                    };
+                                    year_2022?: {
+                                        user_id?: string;
+                                        user_register_date?: string;
+                                        active_day_count?: number;
+                                        msg_busy_date?: string;
+                                        msg_busy_date_send_msg_count?: string;
+                                        p2p_chat_count?: string;
+                                        talked_chat_count?: string;
+                                        positive_reaction_count?: string;
+                                        first_positive_reaction?: string;
+                                        second_positive_reaction?: string;
+                                        third_positive_reaction?: string;
+                                        fourth_positive_reaction?: string;
+                                        fifth_positive_reaction?: string;
+                                        create_file_count?: string;
+                                        created_file_view_count?: string;
+                                        comment_file_count?: string;
+                                        attend_event_count?: string;
+                                        event_busy_date?: string;
+                                        event_busy_date_event_count?: string;
+                                        event_start_time_range1?: string;
+                                        conference_create_count?: string;
+                                        total_parti_count?: string;
+                                        okr_cum_o_count?: string;
+                                        okr_cum_kr_count?: string;
+                                        okr_aligned_user_count?: string;
+                                        people_interview_num?: string;
+                                        send_email_count?: string;
+                                        receive_email_count?: string;
+                                    };
+                                    year_2023?: {
+                                        user_id?: string;
+                                        tenant_all_cnt?: number;
+                                        user_register_date?: string;
+                                        all_day_cnt?: number;
+                                        active_day_cnt?: number;
+                                        duration_cnt_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        duration_cnt_rank?: string;
+                                        busy_month?: string;
+                                        busy_month_sum_duration?: number;
+                                        busy_month_send_msg_cnt?: number;
+                                        busy_month_meeting_cnt?: number;
+                                        busy_month_last_meeting_time?: string;
+                                        busy_month_create_edit_file_cnt?: number;
+                                        im_send_msg_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_send_msg_cnt_rank?: string;
+                                        im_busy_date?: string;
+                                        im_busy_date_send_msg_cnt?: number;
+                                        im_last_send_msg_time?: string;
+                                        im_talked_chat_cnt?: number;
+                                        im_private_chat_cnt?: number;
+                                        im_emoji_top1?: string;
+                                        im_emoji_top1_cnt?: string;
+                                        im_emoji_top2?: string;
+                                        im_emoji_top2_cnt?: string;
+                                        im_emoji_top3?: string;
+                                        im_emoji_top3_cnt?: string;
+                                        im_positive_reaction_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_positive_reaction_cnt_rank?: string;
+                                        ccm_create_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        ccm_create_cnt_rank?: string;
+                                        ccm_create_busy_month?: string;
+                                        ccm_create_busy_month_cnt?: number;
+                                        ccm_create_viewed_ucnt?: number;
+                                        ccm_create_liked_cnt?: number;
+                                        ccm_create_liked_cnt_rank?: string;
+                                        ccm_edit_comment_fcnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        ccm_edit_comment_fcnt_rank?: string;
+                                        ccm_view_other_fcnt?: number;
+                                        ccm_view_other_fcnt_rank?: string;
+                                        vc_sent_meeting_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        vc_sent_meeting_cnt_rank?: string;
+                                        vc_sent_meeting_ucnt?: number;
+                                        vc_join_meeting_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        vc_join_meeting_cnt_rank?: string;
+                                        vc_all_meeting_cnt?: number;
+                                        vc_all_meeting_cnt_rank?: string;
+                                        vc_all_meeting_duration_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        cal_comment_cal_time?: string;
+                                        people_profile_view_cnt?: string;
+                                        people_interview_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        people_interview_num_rank?: string;
+                                        people_interview_offer_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        people_interview_offer_num_rank?: string;
+                                        email_send_email_count?: number;
+                                        email_receive_email_count?: number;
+                                    };
+                                    year_2024?: {
+                                        user_id?: string;
+                                        tenant_all_cnt?: string;
+                                        user_register_date?: string;
+                                        feishu_day_cnt?: string;
+                                        duration_cnt_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        im_send_msg_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        avg_im_send_msg_cnt_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        im_talked_chat_cnt?: string;
+                                        im_private_chat_cnt?: string;
+                                        im_emoji_top1?: string;
+                                        im_emoji_top1_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_emoji_top2?: string;
+                                        im_emoji_top2_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_emoji_top3?: string;
+                                        im_emoji_top3_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_positive_reaction_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_positive_reaction_cnt_rank?: string;
+                                        im_positive_reaction_cnt_denominator?: string;
+                                        busy_day?: string;
+                                        busy_day_send_msg_cnt?: string;
+                                        ccm_create_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        ccm_create_viewed_ucnt?: string;
+                                        ccm_create_liked_cnt?: string;
+                                        ccm_create_liked_max_cnt?: string;
+                                        vc_join_meeting_cnt?: string;
+                                        vc_all_meeting_duration_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        vc_join_meeting_all_user_cnt?: string;
+                                        vc_last_meeting_time?: string;
+                                        base_create_fcnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        base_view_fcnt?: string;
+                                        base_create_dashboard_cnt?: string;
+                                        base_create_dashboard_rank?: string;
+                                        base_create_dashboard_rank_ucnt?: string;
+                                        base_create_chat_cnt?: string;
+                                        base_workflow_ins_cnt?: string;
+                                        base_workflow_ins_rank?: string;
+                                        base_workflow_ins_rank_ucnt?: string;
+                                        vc_all_read_notes_cnt?: string;
+                                        meego_role_wi_cnt_v2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        meego_common_wi_ucnt?: string;
+                                        meego_workflow_wi_cnt?: string;
+                                        people_interview_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        people_interview_num_rank?: string;
+                                        people_interview_num_rank_ucnt?: string;
+                                        people_interview_offer_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                    };
+                                    year_2025: {
+                                        user_id?: string;
+                                        tenant_all_cnt?: string;
+                                        user_register_date?: string;
+                                        feishu_active_days?: string;
+                                        feishu_duration_busy_month?: string;
+                                        feishu_duration_busy_month_hours?: number;
+                                        busy_month_send_msg_cnt?: string;
+                                        busy_month_edit_doc_cnt?: string;
+                                        busy_month_read_doc_cnt?: string;
+                                        busy_month_join_meeting_cnt?: string;
+                                        busy_month_meeting_duration?: number;
+                                        im_talked_chat_cnt?: string;
+                                        im_private_chat_cnt?: string;
+                                        im_send_msg_cnt?: string;
+                                        im_emoji_top1?: string;
+                                        im_emoji_top1_cnt?: string;
+                                        im_emoji_top2?: string;
+                                        im_emoji_top2_cnt?: string;
+                                        im_emoji_top3?: string;
+                                        im_emoji_top3_cnt?: string;
+                                        ccm_create_fcnt?: string;
+                                        ccm_create_rank?: string;
+                                        ccm_create_rank_ucnt?: string;
+                                        ccm_create_viewed_ucnt?: string;
+                                        ccm_create_liked_cnt?: string;
+                                        ccm_create_viewed_most_ucnt?: string;
+                                        ccm_all_read_doc_cnt?: string;
+                                        docs_ai_quickview_use_cnt?: string;
+                                        vc_join_meeting_cnt?: string;
+                                        vc_join_meeting_duration?: number;
+                                        vc_org_meeting_cnt?: Array<{
+                                            organized_meeting_cnt?: string;
+                                            organized_cal_meeting_cnt?: string;
+                                            organized_instant_meeting_cnt?: string;
+                                        }>;
+                                        ai_notes_create_cnt?: string;
+                                        ai_notes_read_cnt?: string;
+                                        knowledge_ai_use_cnt?: string;
+                                        knowledge_ai_use_busy_day?: string;
+                                        knowledge_ai_use_busy_day_cnt?: string;
+                                        base_create_fcnt?: string;
+                                        base_ai_top1_name_map?: Array<{
+                                            name_cn?: string;
+                                            name_en?: string;
+                                            name_cn_list?: string;
+                                            name_en_list?: string;
+                                        }>;
+                                        base_create_view_ucnt?: string;
+                                        base_most_rows_cnt?: string;
+                                        base_create_dashboard_cnt?: string;
+                                        base_workflow_create_cnt?: string;
+                                        base_workflow_ins_cnt?: string;
+                                        aily_develop_app_cnt?: string;
+                                        aily_develop_app_active_ucnt?: string;
+                                        aily_develop_active_most_app_intents?: string;
+                                        aily_chat_cnt?: string;
+                                        aily_artifact_create_cnt?: string;
+                                        apaas_develop_app_cnt?: string;
+                                        apaas_develop_app_active_ucnt?: string;
+                                        apaas_develop_active_most_app_ucnt?: string;
+                                        apaas_develop_ai_run_cnt?: string;
+                                        meego_is_project_admin?: string;
+                                        meego_create_wi_cnt?: string;
+                                        meego_create_wi_role_ucnt?: string;
+                                        meego_most_view_wi_ucnt?: string;
+                                        meego_set_ai_field_cnt?: string;
+                                        meego_ai_field_run_cnt?: string;
+                                        meego_ai_gantt_use_cnt?: string;
+                                        meego_ai_weekly_report_use_cnt?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/user_annual_reports`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=user_annual_report&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=user_annual_report&version=v1 document }
+             *
+             * 获取单个飞书用户的年度行为报告数据
+             *
+             * 获取单个用户的年度飞书使用报告情况，包括活跃、使用习惯、文档创建数量、OKR数量、审批流使用情况等指标。
+             */
+            query: async (
+                payload?: {
+                    params: {
+                        year: number;
+                        user_id_type: "open_id" | "union_id" | "user_id";
+                        user_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_annual_report?: {
+                                    year_2021?: {
+                                        active_day_count?: number;
+                                        busy_week?: string;
+                                        p2p_chat_count?: string;
+                                        talked_chat_count?: string;
+                                        favorite_emoji?: string;
+                                        reaction_count?: string;
+                                        conference_create_count?: string;
+                                        total_parti_count?: string;
+                                        minutes_object_count?: string;
+                                        minutes_duration?: number;
+                                        create_edit_file_count?: string;
+                                        create_file_count?: string;
+                                        cooperate_edit_file_count?: string;
+                                        like_record_count?: string;
+                                        okr_cum_o_count?: string;
+                                        okr_cum_kr_count?: string;
+                                        okr_aligned_user_rankfirst?: string;
+                                        approval_start_count?: string;
+                                        approval_execute_count?: string;
+                                        approval_relation_user_rankfirst?: string;
+                                        user_id?: string;
+                                        busy_week_sum_duration?: string;
+                                        busy_week_mdate?: string;
+                                        busy_week_act_days?: number;
+                                        create_read_user_count?: string;
+                                    };
+                                    year_2022?: {
+                                        user_id?: string;
+                                        user_register_date?: string;
+                                        active_day_count?: number;
+                                        msg_busy_date?: string;
+                                        msg_busy_date_send_msg_count?: string;
+                                        p2p_chat_count?: string;
+                                        talked_chat_count?: string;
+                                        positive_reaction_count?: string;
+                                        first_positive_reaction?: string;
+                                        second_positive_reaction?: string;
+                                        third_positive_reaction?: string;
+                                        fourth_positive_reaction?: string;
+                                        fifth_positive_reaction?: string;
+                                        create_file_count?: string;
+                                        created_file_view_count?: string;
+                                        comment_file_count?: string;
+                                        attend_event_count?: string;
+                                        event_busy_date?: string;
+                                        event_busy_date_event_count?: string;
+                                        event_start_time_range1?: string;
+                                        conference_create_count?: string;
+                                        total_parti_count?: string;
+                                        okr_cum_o_count?: string;
+                                        okr_cum_kr_count?: string;
+                                        okr_aligned_user_count?: string;
+                                        people_interview_num?: string;
+                                        send_email_count?: string;
+                                        receive_email_count?: string;
+                                    };
+                                    year_2023?: {
+                                        user_id?: string;
+                                        tenant_all_cnt?: number;
+                                        user_register_date?: string;
+                                        all_day_cnt?: number;
+                                        active_day_cnt?: number;
+                                        duration_cnt_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        duration_cnt_rank?: string;
+                                        busy_month?: string;
+                                        busy_month_sum_duration?: number;
+                                        busy_month_send_msg_cnt?: number;
+                                        busy_month_meeting_cnt?: number;
+                                        busy_month_last_meeting_time?: string;
+                                        busy_month_create_edit_file_cnt?: number;
+                                        im_send_msg_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_send_msg_cnt_rank?: string;
+                                        im_busy_date?: string;
+                                        im_busy_date_send_msg_cnt?: number;
+                                        im_last_send_msg_time?: string;
+                                        im_talked_chat_cnt?: number;
+                                        im_private_chat_cnt?: number;
+                                        im_emoji_top1?: string;
+                                        im_emoji_top1_cnt?: string;
+                                        im_emoji_top2?: string;
+                                        im_emoji_top2_cnt?: string;
+                                        im_emoji_top3?: string;
+                                        im_emoji_top3_cnt?: string;
+                                        im_positive_reaction_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_positive_reaction_cnt_rank?: string;
+                                        ccm_create_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        ccm_create_cnt_rank?: string;
+                                        ccm_create_busy_month?: string;
+                                        ccm_create_busy_month_cnt?: number;
+                                        ccm_create_viewed_ucnt?: number;
+                                        ccm_create_liked_cnt?: number;
+                                        ccm_create_liked_cnt_rank?: string;
+                                        ccm_edit_comment_fcnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        ccm_edit_comment_fcnt_rank?: string;
+                                        ccm_view_other_fcnt?: number;
+                                        ccm_view_other_fcnt_rank?: string;
+                                        vc_sent_meeting_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        vc_sent_meeting_cnt_rank?: string;
+                                        vc_sent_meeting_ucnt?: number;
+                                        vc_join_meeting_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        vc_join_meeting_cnt_rank?: string;
+                                        vc_all_meeting_cnt?: number;
+                                        vc_all_meeting_cnt_rank?: string;
+                                        vc_all_meeting_duration_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        cal_comment_cal_time?: string;
+                                        people_profile_view_cnt?: string;
+                                        people_interview_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        people_interview_num_rank?: string;
+                                        people_interview_offer_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        people_interview_offer_num_rank?: string;
+                                        email_send_email_count?: number;
+                                        email_receive_email_count?: number;
+                                    };
+                                    year_2024?: {
+                                        user_id?: string;
+                                        tenant_all_cnt?: string;
+                                        user_register_date?: string;
+                                        feishu_day_cnt?: string;
+                                        duration_cnt_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        im_send_msg_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        avg_im_send_msg_cnt_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        im_talked_chat_cnt?: string;
+                                        im_private_chat_cnt?: string;
+                                        im_emoji_top1?: string;
+                                        im_emoji_top1_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_emoji_top2?: string;
+                                        im_emoji_top2_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_emoji_top3?: string;
+                                        im_emoji_top3_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_positive_reaction_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        im_positive_reaction_cnt_rank?: string;
+                                        im_positive_reaction_cnt_denominator?: string;
+                                        busy_day?: string;
+                                        busy_day_send_msg_cnt?: string;
+                                        ccm_create_cnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        ccm_create_viewed_ucnt?: string;
+                                        ccm_create_liked_cnt?: string;
+                                        ccm_create_liked_max_cnt?: string;
+                                        vc_join_meeting_cnt?: string;
+                                        vc_all_meeting_duration_2?: Array<{
+                                            year?: string;
+                                            num?: number;
+                                        }>;
+                                        vc_join_meeting_all_user_cnt?: string;
+                                        vc_last_meeting_time?: string;
+                                        base_create_fcnt_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        base_view_fcnt?: string;
+                                        base_create_dashboard_cnt?: string;
+                                        base_create_dashboard_rank?: string;
+                                        base_create_dashboard_rank_ucnt?: string;
+                                        base_create_chat_cnt?: string;
+                                        base_workflow_ins_cnt?: string;
+                                        base_workflow_ins_rank?: string;
+                                        base_workflow_ins_rank_ucnt?: string;
+                                        vc_all_read_notes_cnt?: string;
+                                        meego_role_wi_cnt_v2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        meego_common_wi_ucnt?: string;
+                                        meego_workflow_wi_cnt?: string;
+                                        people_interview_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                        people_interview_num_rank?: string;
+                                        people_interview_num_rank_ucnt?: string;
+                                        people_interview_offer_num_2?: Array<{
+                                            year?: string;
+                                            count?: string;
+                                        }>;
+                                    };
+                                    year_2025: {
+                                        user_id?: string;
+                                        tenant_all_cnt?: string;
+                                        user_register_date?: string;
+                                        feishu_active_days?: string;
+                                        feishu_duration_busy_month?: string;
+                                        feishu_duration_busy_month_hours?: number;
+                                        busy_month_send_msg_cnt?: string;
+                                        busy_month_edit_doc_cnt?: string;
+                                        busy_month_read_doc_cnt?: string;
+                                        busy_month_join_meeting_cnt?: string;
+                                        busy_month_meeting_duration?: number;
+                                        im_talked_chat_cnt?: string;
+                                        im_private_chat_cnt?: string;
+                                        im_send_msg_cnt?: string;
+                                        im_emoji_top1?: string;
+                                        im_emoji_top1_cnt?: string;
+                                        im_emoji_top2?: string;
+                                        im_emoji_top2_cnt?: string;
+                                        im_emoji_top3?: string;
+                                        im_emoji_top3_cnt?: string;
+                                        ccm_create_fcnt?: string;
+                                        ccm_create_rank?: string;
+                                        ccm_create_rank_ucnt?: string;
+                                        ccm_create_viewed_ucnt?: string;
+                                        ccm_create_liked_cnt?: string;
+                                        ccm_create_viewed_most_ucnt?: string;
+                                        ccm_all_read_doc_cnt?: string;
+                                        docs_ai_quickview_use_cnt?: string;
+                                        vc_join_meeting_cnt?: string;
+                                        vc_join_meeting_duration?: number;
+                                        vc_org_meeting_cnt?: Array<{
+                                            organized_meeting_cnt?: string;
+                                            organized_cal_meeting_cnt?: string;
+                                            organized_instant_meeting_cnt?: string;
+                                        }>;
+                                        ai_notes_create_cnt?: string;
+                                        ai_notes_read_cnt?: string;
+                                        knowledge_ai_use_cnt?: string;
+                                        knowledge_ai_use_busy_day?: string;
+                                        knowledge_ai_use_busy_day_cnt?: string;
+                                        base_create_fcnt?: string;
+                                        base_ai_top1_name_map?: Array<{
+                                            name_cn?: string;
+                                            name_en?: string;
+                                            name_cn_list?: string;
+                                            name_en_list?: string;
+                                        }>;
+                                        base_create_view_ucnt?: string;
+                                        base_most_rows_cnt?: string;
+                                        base_create_dashboard_cnt?: string;
+                                        base_workflow_create_cnt?: string;
+                                        base_workflow_ins_cnt?: string;
+                                        aily_develop_app_cnt?: string;
+                                        aily_develop_app_active_ucnt?: string;
+                                        aily_develop_active_most_app_intents?: string;
+                                        aily_chat_cnt?: string;
+                                        aily_artifact_create_cnt?: string;
+                                        apaas_develop_app_cnt?: string;
+                                        apaas_develop_app_active_ucnt?: string;
+                                        apaas_develop_active_most_app_ucnt?: string;
+                                        apaas_develop_ai_run_cnt?: string;
+                                        meego_is_project_admin?: string;
+                                        meego_create_wi_cnt?: string;
+                                        meego_create_wi_role_ucnt?: string;
+                                        meego_most_view_wi_ucnt?: string;
+                                        meego_set_ai_field_cnt?: string;
+                                        meego_ai_field_run_cnt?: string;
+                                        meego_ai_gantt_use_cnt?: string;
+                                        meego_ai_weekly_report_use_cnt?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/user_annual_reports/query`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * admin_dept_ext_contact_stat
+         */
+        adminDeptExtContactStat: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_dept_ext_contact_stat&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_dept_ext_contact_stat&version=v1 document }
+             *
+             * 获取部门所拥有的外部联系人总数
+             *
+             * 获取部门外部联系人总数包括：部门拥有外部联系人的成员数、部门拥有外部联系人的总数和总外部租户数。部门下纳入统计的成员仅包含已激活未离职的用户；外部联系人仅包含当前关系状态为正常的用户（不限制外部联系人的离职状态），包含私有化租户的外部联系人
+             *
+             * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出 (CN时区: UTC+8，非CN时区: UTC+0);;- 日期范围不超过90天，超过90天接口容易超时;;- 仅支持13层级部门数据查询，超过13层级的数据汇聚到第13层级;;;不能简单将多区域的数据加总汇聚，例如一个部门对应多个区域，多个区域都包含同一个外部联系人，则部门下实际外部联系人是1，但是简单加总结果>1
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        department_id?: string;
+                        start_date: string;
+                        end_date: string;
+                        page_size?: number;
+                        page_token?: string;
+                        target_geo?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    date?: string;
+                                    department_id?: string;
+                                    department_name?: string;
+                                    has_ref_contact_ucnt?: string;
+                                    ref_contact_ucnt?: string;
+                                    ref_contact_tcnt?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/admin_dept_ext_contact_stats`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * ai_usage_detail
+         */
+        aiUsageDetail: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=ai_usage_detail&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=ai_usage_detail&version=v1 document }
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        date_start: number;
+                        date_end: number;
+                        subject_type: number;
+                        subjects: Array<{
+                            entity_type: number;
+                            entity_ids: Array<string>;
+                        }>;
+                        filters?: {
+                            feature_keys?: Array<number>;
+                            usage_type?: number;
+                            scenario_ids?: Array<{
+                                biz_type: string;
+                                biz1_type?: string;
+                                biz2_type?: string;
+                            }>;
+                        };
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    entity_type?: number;
+                                    entity_id?: string;
+                                    usage_value_general_ai_quota?: number;
+                                    usage_value_ai_notes_quota?: number;
+                                    usage_value_feishu_aily_quota?: number;
+                                }>;
+                                has_more: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/ai_usage_detail/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * admin_user_stat
          */
         adminUserStat: {
@@ -1627,7 +3636,530 @@ export default abstract class Client extends acs {
                     });
             },
         },
+        /**
+         * ai_usage_log
+         */
+        aiUsageLog: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=ai_usage_log&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=ai_usage_log&version=v1 document }
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        date_start: number;
+                        date_end: number;
+                        subject_type: number;
+                        subjects: Array<{
+                            entity_type: number;
+                            entity_ids: Array<string>;
+                        }>;
+                        filters?: {
+                            feature_keys?: Array<number>;
+                            usage_type?: number;
+                            scenario_ids?: Array<{
+                                biz_type: string;
+                                biz1_type?: string;
+                                biz2_type?: string;
+                            }>;
+                        };
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    entity_type?: number;
+                                    entity_id?: string;
+                                    department_id?: string;
+                                    time?: number;
+                                    scenario_translate?: string;
+                                    scenarios?: Array<{
+                                        biz_type: string;
+                                        biz1_type?: string;
+                                        biz2_type?: string;
+                                    }>;
+                                    feature_key?: number;
+                                    usage_type?: number;
+                                    used_quota?: number;
+                                    notes?: {
+                                        key_name: string;
+                                        key_type: number;
+                                        value: string;
+                                    };
+                                    descriptions?: Array<{
+                                        key_name: string;
+                                        key_type: number;
+                                        value: string;
+                                    }>;
+                                }>;
+                                has_more: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/ai_usage_log/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
+            /**
+             * splash_page_stat
+             */
+            splashPageStat: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=splash_page_stat&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=splash_page_stat&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            start_date?: string;
+                            end_date: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        date?: string;
+                                        splash_id?: string;
+                                        impression_count?: number;
+                                        click_count?: number;
+                                        skip_count?: number;
+                                        impression_count_accumulate?: number;
+                                        click_count_accumulate?: number;
+                                        skip_count_accumulate?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/splash_page_stats`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=splash_page_stat&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=splash_page_stat&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        params: { start_date?: string; end_date: string };
+                        path?: { splash_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    splash_page_stat?: {
+                                        date?: string;
+                                        splash_id?: string;
+                                        impression_count?: number;
+                                        click_count?: number;
+                                        skip_count?: number;
+                                        impression_count_accumulate?: number;
+                                        click_count_accumulate?: number;
+                                        skip_count_accumulate?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/splash_page_stats/:splash_id/query`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * administrator
+             */
+            administrator: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            response_user_id_type?:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id";
+                            permission_filter: number;
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/admin/v1/administrators`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    administrators?: Array<{
+                                                        user_id?: string;
+                                                        is_super_administrator: boolean;
+                                                        is_administrator: boolean;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=administrator&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=administrator&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            response_user_id_type?:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id";
+                            permission_filter: number;
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    administrators?: Array<{
+                                        user_id?: string;
+                                        is_super_administrator: boolean;
+                                        is_administrator: boolean;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/administrators`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * file
+             */
+            file: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=file&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=admin&resource=file&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        params: {
+                            type: "1" | "2" | "3" | "4" | "5" | "6" | "7";
+                        };
+                        path: { file_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/files/:file_token`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=file&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=admin&resource=file&version=v1 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: { file_token?: string };
+                        params?: {
+                            email?: string;
+                            user_id?: string;
+                            user_id_type?: "user_id" | "open_id" | "union_id";
+                            offset?: number;
+                            limit?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    files?: Array<{
+                                        title?: string;
+                                        type?:
+                                            | "1"
+                                            | "2"
+                                            | "3"
+                                            | "4"
+                                            | "5"
+                                            | "6"
+                                            | "7";
+                                        owner?: {
+                                            name: string;
+                                            avatar: string;
+                                            id: string;
+                                        };
+                                        size?: string;
+                                        last_op_time?: string;
+                                        status?: "2" | "3";
+                                        token?: string;
+                                    }>;
+                                    total?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/files/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=file&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=admin&resource=file&version=v1 document }
+                 */
+                patch: async (
+                    payload?: {
+                        params: {
+                            target_user_id?: string;
+                            user_id_type?: "user_id" | "open_id" | "union_id";
+                            target_owner_email?: string;
+                            type: "1" | "2" | "3" | "4" | "5" | "6" | "7";
+                        };
+                        path: { file_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/files/:file_token`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * badge.grant
              */
@@ -3026,6 +5558,1604 @@ export default abstract class Client extends acs {
                 },
             },
             /**
+             * admin_user_ext_contact_stat
+             */
+            adminUserExtContactStat: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            user_id?: string;
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            department_id?: string;
+                            start_date: string;
+                            end_date: string;
+                            page_size?: number;
+                            page_token?: string;
+                            target_geo?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/admin/v1/admin_user_ext_contact_stats`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        date?: string;
+                                                        user_id?: string;
+                                                        user_name?: string;
+                                                        department_name?: string;
+                                                        ref_contact_ucnt?: string;
+                                                        ref_contact_tcnt?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_ext_contact_stat&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_user_ext_contact_stat&version=v1 document }
+                 *
+                 * 获取成员所拥有的外部联系人总数
+                 *
+                 * 获取成员拥有的外部联系人总数和外部租户总数：成员仅包含已激活未离职的用户；外部联系人仅包含当前关系状态为正常的用户（不限制外部联系人的离职状态）包含私有化租户的外部联系人。
+                 *
+                 * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出 (CN时区: UTC+8，非CN时区: UTC+0);;- 日期范围不超过90天，超过90天接口容易超时;;- 仅支持13层级部门数据查询，超过13层级的数据汇聚到第13层级
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            user_id?: string;
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            department_id?: string;
+                            start_date: string;
+                            end_date: string;
+                            page_size?: number;
+                            page_token?: string;
+                            target_geo?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        date?: string;
+                                        user_id?: string;
+                                        user_name?: string;
+                                        department_name?: string;
+                                        ref_contact_ucnt?: string;
+                                        ref_contact_tcnt?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/admin_user_ext_contact_stats`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * task
+             */
+            task: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=task&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=admin&resource=task&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "union_id" | "open_id" | "user_id";
+                        };
+                        path?: { task_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    original_user_id?: string;
+                                    target_owner_id?: string;
+                                    file_list?: Array<{
+                                        title?: string;
+                                        type?:
+                                            | "1"
+                                            | "2"
+                                            | "3"
+                                            | "4"
+                                            | "5"
+                                            | "6"
+                                            | "7";
+                                        owner?: {
+                                            name: string;
+                                            avatar: string;
+                                            id: string;
+                                        };
+                                        size?: string;
+                                        last_op_time?: string;
+                                        status?: "2" | "3";
+                                        token?: string;
+                                    }>;
+                                    task_id?: string;
+                                    status?: number;
+                                    original_user_email?: string;
+                                    target_owner_email?: string;
+                                    type?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/tasks/:task_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=task&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=admin&resource=task&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            original_user_id?: string;
+                            target_owner_id?: string;
+                            file_list?: Array<{
+                                title?: string;
+                                type?: "1" | "2" | "3" | "4" | "5" | "6" | "7";
+                                owner?: {
+                                    name: string;
+                                    avatar: string;
+                                    id: string;
+                                };
+                                size?: string;
+                                last_op_time?: string;
+                                status?: "2" | "3";
+                                token?: string;
+                            }>;
+                            task_id?: string;
+                            status?: number;
+                            original_user_email?: string;
+                            target_owner_email?: string;
+                            type?: number;
+                        };
+                        params?: {
+                            user_id_type?: "union_id" | "open_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    original_user_id?: string;
+                                    target_owner_id?: string;
+                                    file_list?: Array<{
+                                        title?: string;
+                                        type?:
+                                            | "1"
+                                            | "2"
+                                            | "3"
+                                            | "4"
+                                            | "5"
+                                            | "6"
+                                            | "7";
+                                        owner?: {
+                                            name: string;
+                                            avatar: string;
+                                            id: string;
+                                        };
+                                        size?: string;
+                                        last_op_time?: string;
+                                        status?: "2" | "3";
+                                        token?: string;
+                                    }>;
+                                    task_id?: string;
+                                    status?: number;
+                                    original_user_email?: string;
+                                    target_owner_email?: string;
+                                    type?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/tasks`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_annual_report
+             */
+            userAnnualReport: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            year: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/admin/v1/user_annual_reports`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        year_2021?: {
+                                                            active_day_count?: number;
+                                                            busy_week?: string;
+                                                            p2p_chat_count?: string;
+                                                            talked_chat_count?: string;
+                                                            favorite_emoji?: string;
+                                                            reaction_count?: string;
+                                                            conference_create_count?: string;
+                                                            total_parti_count?: string;
+                                                            minutes_object_count?: string;
+                                                            minutes_duration?: number;
+                                                            create_edit_file_count?: string;
+                                                            create_file_count?: string;
+                                                            cooperate_edit_file_count?: string;
+                                                            like_record_count?: string;
+                                                            okr_cum_o_count?: string;
+                                                            okr_cum_kr_count?: string;
+                                                            okr_aligned_user_rankfirst?: string;
+                                                            approval_start_count?: string;
+                                                            approval_execute_count?: string;
+                                                            approval_relation_user_rankfirst?: string;
+                                                            user_id?: string;
+                                                            busy_week_sum_duration?: string;
+                                                            busy_week_mdate?: string;
+                                                            busy_week_act_days?: number;
+                                                            create_read_user_count?: string;
+                                                        };
+                                                        year_2022?: {
+                                                            user_id?: string;
+                                                            user_register_date?: string;
+                                                            active_day_count?: number;
+                                                            msg_busy_date?: string;
+                                                            msg_busy_date_send_msg_count?: string;
+                                                            p2p_chat_count?: string;
+                                                            talked_chat_count?: string;
+                                                            positive_reaction_count?: string;
+                                                            first_positive_reaction?: string;
+                                                            second_positive_reaction?: string;
+                                                            third_positive_reaction?: string;
+                                                            fourth_positive_reaction?: string;
+                                                            fifth_positive_reaction?: string;
+                                                            create_file_count?: string;
+                                                            created_file_view_count?: string;
+                                                            comment_file_count?: string;
+                                                            attend_event_count?: string;
+                                                            event_busy_date?: string;
+                                                            event_busy_date_event_count?: string;
+                                                            event_start_time_range1?: string;
+                                                            conference_create_count?: string;
+                                                            total_parti_count?: string;
+                                                            okr_cum_o_count?: string;
+                                                            okr_cum_kr_count?: string;
+                                                            okr_aligned_user_count?: string;
+                                                            people_interview_num?: string;
+                                                            send_email_count?: string;
+                                                            receive_email_count?: string;
+                                                        };
+                                                        year_2023?: {
+                                                            user_id?: string;
+                                                            tenant_all_cnt?: number;
+                                                            user_register_date?: string;
+                                                            all_day_cnt?: number;
+                                                            active_day_cnt?: number;
+                                                            duration_cnt_2?: Array<{
+                                                                year?: string;
+                                                                num?: number;
+                                                            }>;
+                                                            duration_cnt_rank?: string;
+                                                            busy_month?: string;
+                                                            busy_month_sum_duration?: number;
+                                                            busy_month_send_msg_cnt?: number;
+                                                            busy_month_meeting_cnt?: number;
+                                                            busy_month_last_meeting_time?: string;
+                                                            busy_month_create_edit_file_cnt?: number;
+                                                            im_send_msg_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            im_send_msg_cnt_rank?: string;
+                                                            im_busy_date?: string;
+                                                            im_busy_date_send_msg_cnt?: number;
+                                                            im_last_send_msg_time?: string;
+                                                            im_talked_chat_cnt?: number;
+                                                            im_private_chat_cnt?: number;
+                                                            im_emoji_top1?: string;
+                                                            im_emoji_top1_cnt?: string;
+                                                            im_emoji_top2?: string;
+                                                            im_emoji_top2_cnt?: string;
+                                                            im_emoji_top3?: string;
+                                                            im_emoji_top3_cnt?: string;
+                                                            im_positive_reaction_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            im_positive_reaction_cnt_rank?: string;
+                                                            ccm_create_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            ccm_create_cnt_rank?: string;
+                                                            ccm_create_busy_month?: string;
+                                                            ccm_create_busy_month_cnt?: number;
+                                                            ccm_create_viewed_ucnt?: number;
+                                                            ccm_create_liked_cnt?: number;
+                                                            ccm_create_liked_cnt_rank?: string;
+                                                            ccm_edit_comment_fcnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            ccm_edit_comment_fcnt_rank?: string;
+                                                            ccm_view_other_fcnt?: number;
+                                                            ccm_view_other_fcnt_rank?: string;
+                                                            vc_sent_meeting_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            vc_sent_meeting_cnt_rank?: string;
+                                                            vc_sent_meeting_ucnt?: number;
+                                                            vc_join_meeting_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            vc_join_meeting_cnt_rank?: string;
+                                                            vc_all_meeting_cnt?: number;
+                                                            vc_all_meeting_cnt_rank?: string;
+                                                            vc_all_meeting_duration_2?: Array<{
+                                                                year?: string;
+                                                                num?: number;
+                                                            }>;
+                                                            cal_comment_cal_time?: string;
+                                                            people_profile_view_cnt?: string;
+                                                            people_interview_num_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            people_interview_num_rank?: string;
+                                                            people_interview_offer_num_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            people_interview_offer_num_rank?: string;
+                                                            email_send_email_count?: number;
+                                                            email_receive_email_count?: number;
+                                                        };
+                                                        year_2024?: {
+                                                            user_id?: string;
+                                                            tenant_all_cnt?: string;
+                                                            user_register_date?: string;
+                                                            feishu_day_cnt?: string;
+                                                            duration_cnt_2?: Array<{
+                                                                year?: string;
+                                                                num?: number;
+                                                            }>;
+                                                            im_send_msg_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            avg_im_send_msg_cnt_2?: Array<{
+                                                                year?: string;
+                                                                num?: number;
+                                                            }>;
+                                                            im_talked_chat_cnt?: string;
+                                                            im_private_chat_cnt?: string;
+                                                            im_emoji_top1?: string;
+                                                            im_emoji_top1_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            im_emoji_top2?: string;
+                                                            im_emoji_top2_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            im_emoji_top3?: string;
+                                                            im_emoji_top3_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            im_positive_reaction_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            im_positive_reaction_cnt_rank?: string;
+                                                            im_positive_reaction_cnt_denominator?: string;
+                                                            busy_day?: string;
+                                                            busy_day_send_msg_cnt?: string;
+                                                            ccm_create_cnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            ccm_create_viewed_ucnt?: string;
+                                                            ccm_create_liked_cnt?: string;
+                                                            ccm_create_liked_max_cnt?: string;
+                                                            vc_join_meeting_cnt?: string;
+                                                            vc_all_meeting_duration_2?: Array<{
+                                                                year?: string;
+                                                                num?: number;
+                                                            }>;
+                                                            vc_join_meeting_all_user_cnt?: string;
+                                                            vc_last_meeting_time?: string;
+                                                            base_create_fcnt_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            base_view_fcnt?: string;
+                                                            base_create_dashboard_cnt?: string;
+                                                            base_create_dashboard_rank?: string;
+                                                            base_create_dashboard_rank_ucnt?: string;
+                                                            base_create_chat_cnt?: string;
+                                                            base_workflow_ins_cnt?: string;
+                                                            base_workflow_ins_rank?: string;
+                                                            base_workflow_ins_rank_ucnt?: string;
+                                                            vc_all_read_notes_cnt?: string;
+                                                            meego_role_wi_cnt_v2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            meego_common_wi_ucnt?: string;
+                                                            meego_workflow_wi_cnt?: string;
+                                                            people_interview_num_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                            people_interview_num_rank?: string;
+                                                            people_interview_num_rank_ucnt?: string;
+                                                            people_interview_offer_num_2?: Array<{
+                                                                year?: string;
+                                                                count?: string;
+                                                            }>;
+                                                        };
+                                                        year_2025: {
+                                                            user_id?: string;
+                                                            tenant_all_cnt?: string;
+                                                            user_register_date?: string;
+                                                            feishu_active_days?: string;
+                                                            feishu_duration_busy_month?: string;
+                                                            feishu_duration_busy_month_hours?: number;
+                                                            busy_month_send_msg_cnt?: string;
+                                                            busy_month_edit_doc_cnt?: string;
+                                                            busy_month_read_doc_cnt?: string;
+                                                            busy_month_join_meeting_cnt?: string;
+                                                            busy_month_meeting_duration?: number;
+                                                            im_talked_chat_cnt?: string;
+                                                            im_private_chat_cnt?: string;
+                                                            im_send_msg_cnt?: string;
+                                                            im_emoji_top1?: string;
+                                                            im_emoji_top1_cnt?: string;
+                                                            im_emoji_top2?: string;
+                                                            im_emoji_top2_cnt?: string;
+                                                            im_emoji_top3?: string;
+                                                            im_emoji_top3_cnt?: string;
+                                                            ccm_create_fcnt?: string;
+                                                            ccm_create_rank?: string;
+                                                            ccm_create_rank_ucnt?: string;
+                                                            ccm_create_viewed_ucnt?: string;
+                                                            ccm_create_liked_cnt?: string;
+                                                            ccm_create_viewed_most_ucnt?: string;
+                                                            ccm_all_read_doc_cnt?: string;
+                                                            docs_ai_quickview_use_cnt?: string;
+                                                            vc_join_meeting_cnt?: string;
+                                                            vc_join_meeting_duration?: number;
+                                                            vc_org_meeting_cnt?: Array<{
+                                                                organized_meeting_cnt?: string;
+                                                                organized_cal_meeting_cnt?: string;
+                                                                organized_instant_meeting_cnt?: string;
+                                                            }>;
+                                                            ai_notes_create_cnt?: string;
+                                                            ai_notes_read_cnt?: string;
+                                                            knowledge_ai_use_cnt?: string;
+                                                            knowledge_ai_use_busy_day?: string;
+                                                            knowledge_ai_use_busy_day_cnt?: string;
+                                                            base_create_fcnt?: string;
+                                                            base_ai_top1_name_map?: Array<{
+                                                                name_cn?: string;
+                                                                name_en?: string;
+                                                                name_cn_list?: string;
+                                                                name_en_list?: string;
+                                                            }>;
+                                                            base_create_view_ucnt?: string;
+                                                            base_most_rows_cnt?: string;
+                                                            base_create_dashboard_cnt?: string;
+                                                            base_workflow_create_cnt?: string;
+                                                            base_workflow_ins_cnt?: string;
+                                                            aily_develop_app_cnt?: string;
+                                                            aily_develop_app_active_ucnt?: string;
+                                                            aily_develop_active_most_app_intents?: string;
+                                                            aily_chat_cnt?: string;
+                                                            aily_artifact_create_cnt?: string;
+                                                            apaas_develop_app_cnt?: string;
+                                                            apaas_develop_app_active_ucnt?: string;
+                                                            apaas_develop_active_most_app_ucnt?: string;
+                                                            apaas_develop_ai_run_cnt?: string;
+                                                            meego_is_project_admin?: string;
+                                                            meego_create_wi_cnt?: string;
+                                                            meego_create_wi_role_ucnt?: string;
+                                                            meego_most_view_wi_ucnt?: string;
+                                                            meego_set_ai_field_cnt?: string;
+                                                            meego_ai_field_run_cnt?: string;
+                                                            meego_ai_gantt_use_cnt?: string;
+                                                            meego_ai_weekly_report_use_cnt?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=user_annual_report&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=user_annual_report&version=v1 document }
+                 *
+                 * 批量获取飞书用户的年度行为报告数据
+                 *
+                 * 用于分页获取用户的年度飞书行为报告，可以通过has_more字段遍历所有的用户。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            year: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        year_2021?: {
+                                            active_day_count?: number;
+                                            busy_week?: string;
+                                            p2p_chat_count?: string;
+                                            talked_chat_count?: string;
+                                            favorite_emoji?: string;
+                                            reaction_count?: string;
+                                            conference_create_count?: string;
+                                            total_parti_count?: string;
+                                            minutes_object_count?: string;
+                                            minutes_duration?: number;
+                                            create_edit_file_count?: string;
+                                            create_file_count?: string;
+                                            cooperate_edit_file_count?: string;
+                                            like_record_count?: string;
+                                            okr_cum_o_count?: string;
+                                            okr_cum_kr_count?: string;
+                                            okr_aligned_user_rankfirst?: string;
+                                            approval_start_count?: string;
+                                            approval_execute_count?: string;
+                                            approval_relation_user_rankfirst?: string;
+                                            user_id?: string;
+                                            busy_week_sum_duration?: string;
+                                            busy_week_mdate?: string;
+                                            busy_week_act_days?: number;
+                                            create_read_user_count?: string;
+                                        };
+                                        year_2022?: {
+                                            user_id?: string;
+                                            user_register_date?: string;
+                                            active_day_count?: number;
+                                            msg_busy_date?: string;
+                                            msg_busy_date_send_msg_count?: string;
+                                            p2p_chat_count?: string;
+                                            talked_chat_count?: string;
+                                            positive_reaction_count?: string;
+                                            first_positive_reaction?: string;
+                                            second_positive_reaction?: string;
+                                            third_positive_reaction?: string;
+                                            fourth_positive_reaction?: string;
+                                            fifth_positive_reaction?: string;
+                                            create_file_count?: string;
+                                            created_file_view_count?: string;
+                                            comment_file_count?: string;
+                                            attend_event_count?: string;
+                                            event_busy_date?: string;
+                                            event_busy_date_event_count?: string;
+                                            event_start_time_range1?: string;
+                                            conference_create_count?: string;
+                                            total_parti_count?: string;
+                                            okr_cum_o_count?: string;
+                                            okr_cum_kr_count?: string;
+                                            okr_aligned_user_count?: string;
+                                            people_interview_num?: string;
+                                            send_email_count?: string;
+                                            receive_email_count?: string;
+                                        };
+                                        year_2023?: {
+                                            user_id?: string;
+                                            tenant_all_cnt?: number;
+                                            user_register_date?: string;
+                                            all_day_cnt?: number;
+                                            active_day_cnt?: number;
+                                            duration_cnt_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            duration_cnt_rank?: string;
+                                            busy_month?: string;
+                                            busy_month_sum_duration?: number;
+                                            busy_month_send_msg_cnt?: number;
+                                            busy_month_meeting_cnt?: number;
+                                            busy_month_last_meeting_time?: string;
+                                            busy_month_create_edit_file_cnt?: number;
+                                            im_send_msg_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_send_msg_cnt_rank?: string;
+                                            im_busy_date?: string;
+                                            im_busy_date_send_msg_cnt?: number;
+                                            im_last_send_msg_time?: string;
+                                            im_talked_chat_cnt?: number;
+                                            im_private_chat_cnt?: number;
+                                            im_emoji_top1?: string;
+                                            im_emoji_top1_cnt?: string;
+                                            im_emoji_top2?: string;
+                                            im_emoji_top2_cnt?: string;
+                                            im_emoji_top3?: string;
+                                            im_emoji_top3_cnt?: string;
+                                            im_positive_reaction_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_positive_reaction_cnt_rank?: string;
+                                            ccm_create_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            ccm_create_cnt_rank?: string;
+                                            ccm_create_busy_month?: string;
+                                            ccm_create_busy_month_cnt?: number;
+                                            ccm_create_viewed_ucnt?: number;
+                                            ccm_create_liked_cnt?: number;
+                                            ccm_create_liked_cnt_rank?: string;
+                                            ccm_edit_comment_fcnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            ccm_edit_comment_fcnt_rank?: string;
+                                            ccm_view_other_fcnt?: number;
+                                            ccm_view_other_fcnt_rank?: string;
+                                            vc_sent_meeting_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            vc_sent_meeting_cnt_rank?: string;
+                                            vc_sent_meeting_ucnt?: number;
+                                            vc_join_meeting_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            vc_join_meeting_cnt_rank?: string;
+                                            vc_all_meeting_cnt?: number;
+                                            vc_all_meeting_cnt_rank?: string;
+                                            vc_all_meeting_duration_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            cal_comment_cal_time?: string;
+                                            people_profile_view_cnt?: string;
+                                            people_interview_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            people_interview_num_rank?: string;
+                                            people_interview_offer_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            people_interview_offer_num_rank?: string;
+                                            email_send_email_count?: number;
+                                            email_receive_email_count?: number;
+                                        };
+                                        year_2024?: {
+                                            user_id?: string;
+                                            tenant_all_cnt?: string;
+                                            user_register_date?: string;
+                                            feishu_day_cnt?: string;
+                                            duration_cnt_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            im_send_msg_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            avg_im_send_msg_cnt_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            im_talked_chat_cnt?: string;
+                                            im_private_chat_cnt?: string;
+                                            im_emoji_top1?: string;
+                                            im_emoji_top1_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_emoji_top2?: string;
+                                            im_emoji_top2_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_emoji_top3?: string;
+                                            im_emoji_top3_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_positive_reaction_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_positive_reaction_cnt_rank?: string;
+                                            im_positive_reaction_cnt_denominator?: string;
+                                            busy_day?: string;
+                                            busy_day_send_msg_cnt?: string;
+                                            ccm_create_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            ccm_create_viewed_ucnt?: string;
+                                            ccm_create_liked_cnt?: string;
+                                            ccm_create_liked_max_cnt?: string;
+                                            vc_join_meeting_cnt?: string;
+                                            vc_all_meeting_duration_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            vc_join_meeting_all_user_cnt?: string;
+                                            vc_last_meeting_time?: string;
+                                            base_create_fcnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            base_view_fcnt?: string;
+                                            base_create_dashboard_cnt?: string;
+                                            base_create_dashboard_rank?: string;
+                                            base_create_dashboard_rank_ucnt?: string;
+                                            base_create_chat_cnt?: string;
+                                            base_workflow_ins_cnt?: string;
+                                            base_workflow_ins_rank?: string;
+                                            base_workflow_ins_rank_ucnt?: string;
+                                            vc_all_read_notes_cnt?: string;
+                                            meego_role_wi_cnt_v2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            meego_common_wi_ucnt?: string;
+                                            meego_workflow_wi_cnt?: string;
+                                            people_interview_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            people_interview_num_rank?: string;
+                                            people_interview_num_rank_ucnt?: string;
+                                            people_interview_offer_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                        };
+                                        year_2025: {
+                                            user_id?: string;
+                                            tenant_all_cnt?: string;
+                                            user_register_date?: string;
+                                            feishu_active_days?: string;
+                                            feishu_duration_busy_month?: string;
+                                            feishu_duration_busy_month_hours?: number;
+                                            busy_month_send_msg_cnt?: string;
+                                            busy_month_edit_doc_cnt?: string;
+                                            busy_month_read_doc_cnt?: string;
+                                            busy_month_join_meeting_cnt?: string;
+                                            busy_month_meeting_duration?: number;
+                                            im_talked_chat_cnt?: string;
+                                            im_private_chat_cnt?: string;
+                                            im_send_msg_cnt?: string;
+                                            im_emoji_top1?: string;
+                                            im_emoji_top1_cnt?: string;
+                                            im_emoji_top2?: string;
+                                            im_emoji_top2_cnt?: string;
+                                            im_emoji_top3?: string;
+                                            im_emoji_top3_cnt?: string;
+                                            ccm_create_fcnt?: string;
+                                            ccm_create_rank?: string;
+                                            ccm_create_rank_ucnt?: string;
+                                            ccm_create_viewed_ucnt?: string;
+                                            ccm_create_liked_cnt?: string;
+                                            ccm_create_viewed_most_ucnt?: string;
+                                            ccm_all_read_doc_cnt?: string;
+                                            docs_ai_quickview_use_cnt?: string;
+                                            vc_join_meeting_cnt?: string;
+                                            vc_join_meeting_duration?: number;
+                                            vc_org_meeting_cnt?: Array<{
+                                                organized_meeting_cnt?: string;
+                                                organized_cal_meeting_cnt?: string;
+                                                organized_instant_meeting_cnt?: string;
+                                            }>;
+                                            ai_notes_create_cnt?: string;
+                                            ai_notes_read_cnt?: string;
+                                            knowledge_ai_use_cnt?: string;
+                                            knowledge_ai_use_busy_day?: string;
+                                            knowledge_ai_use_busy_day_cnt?: string;
+                                            base_create_fcnt?: string;
+                                            base_ai_top1_name_map?: Array<{
+                                                name_cn?: string;
+                                                name_en?: string;
+                                                name_cn_list?: string;
+                                                name_en_list?: string;
+                                            }>;
+                                            base_create_view_ucnt?: string;
+                                            base_most_rows_cnt?: string;
+                                            base_create_dashboard_cnt?: string;
+                                            base_workflow_create_cnt?: string;
+                                            base_workflow_ins_cnt?: string;
+                                            aily_develop_app_cnt?: string;
+                                            aily_develop_app_active_ucnt?: string;
+                                            aily_develop_active_most_app_intents?: string;
+                                            aily_chat_cnt?: string;
+                                            aily_artifact_create_cnt?: string;
+                                            apaas_develop_app_cnt?: string;
+                                            apaas_develop_app_active_ucnt?: string;
+                                            apaas_develop_active_most_app_ucnt?: string;
+                                            apaas_develop_ai_run_cnt?: string;
+                                            meego_is_project_admin?: string;
+                                            meego_create_wi_cnt?: string;
+                                            meego_create_wi_role_ucnt?: string;
+                                            meego_most_view_wi_ucnt?: string;
+                                            meego_set_ai_field_cnt?: string;
+                                            meego_ai_field_run_cnt?: string;
+                                            meego_ai_gantt_use_cnt?: string;
+                                            meego_ai_weekly_report_use_cnt?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/user_annual_reports`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=user_annual_report&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=user_annual_report&version=v1 document }
+                 *
+                 * 获取单个飞书用户的年度行为报告数据
+                 *
+                 * 获取单个用户的年度飞书使用报告情况，包括活跃、使用习惯、文档创建数量、OKR数量、审批流使用情况等指标。
+                 */
+                query: async (
+                    payload?: {
+                        params: {
+                            year: number;
+                            user_id_type: "open_id" | "union_id" | "user_id";
+                            user_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_annual_report?: {
+                                        year_2021?: {
+                                            active_day_count?: number;
+                                            busy_week?: string;
+                                            p2p_chat_count?: string;
+                                            talked_chat_count?: string;
+                                            favorite_emoji?: string;
+                                            reaction_count?: string;
+                                            conference_create_count?: string;
+                                            total_parti_count?: string;
+                                            minutes_object_count?: string;
+                                            minutes_duration?: number;
+                                            create_edit_file_count?: string;
+                                            create_file_count?: string;
+                                            cooperate_edit_file_count?: string;
+                                            like_record_count?: string;
+                                            okr_cum_o_count?: string;
+                                            okr_cum_kr_count?: string;
+                                            okr_aligned_user_rankfirst?: string;
+                                            approval_start_count?: string;
+                                            approval_execute_count?: string;
+                                            approval_relation_user_rankfirst?: string;
+                                            user_id?: string;
+                                            busy_week_sum_duration?: string;
+                                            busy_week_mdate?: string;
+                                            busy_week_act_days?: number;
+                                            create_read_user_count?: string;
+                                        };
+                                        year_2022?: {
+                                            user_id?: string;
+                                            user_register_date?: string;
+                                            active_day_count?: number;
+                                            msg_busy_date?: string;
+                                            msg_busy_date_send_msg_count?: string;
+                                            p2p_chat_count?: string;
+                                            talked_chat_count?: string;
+                                            positive_reaction_count?: string;
+                                            first_positive_reaction?: string;
+                                            second_positive_reaction?: string;
+                                            third_positive_reaction?: string;
+                                            fourth_positive_reaction?: string;
+                                            fifth_positive_reaction?: string;
+                                            create_file_count?: string;
+                                            created_file_view_count?: string;
+                                            comment_file_count?: string;
+                                            attend_event_count?: string;
+                                            event_busy_date?: string;
+                                            event_busy_date_event_count?: string;
+                                            event_start_time_range1?: string;
+                                            conference_create_count?: string;
+                                            total_parti_count?: string;
+                                            okr_cum_o_count?: string;
+                                            okr_cum_kr_count?: string;
+                                            okr_aligned_user_count?: string;
+                                            people_interview_num?: string;
+                                            send_email_count?: string;
+                                            receive_email_count?: string;
+                                        };
+                                        year_2023?: {
+                                            user_id?: string;
+                                            tenant_all_cnt?: number;
+                                            user_register_date?: string;
+                                            all_day_cnt?: number;
+                                            active_day_cnt?: number;
+                                            duration_cnt_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            duration_cnt_rank?: string;
+                                            busy_month?: string;
+                                            busy_month_sum_duration?: number;
+                                            busy_month_send_msg_cnt?: number;
+                                            busy_month_meeting_cnt?: number;
+                                            busy_month_last_meeting_time?: string;
+                                            busy_month_create_edit_file_cnt?: number;
+                                            im_send_msg_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_send_msg_cnt_rank?: string;
+                                            im_busy_date?: string;
+                                            im_busy_date_send_msg_cnt?: number;
+                                            im_last_send_msg_time?: string;
+                                            im_talked_chat_cnt?: number;
+                                            im_private_chat_cnt?: number;
+                                            im_emoji_top1?: string;
+                                            im_emoji_top1_cnt?: string;
+                                            im_emoji_top2?: string;
+                                            im_emoji_top2_cnt?: string;
+                                            im_emoji_top3?: string;
+                                            im_emoji_top3_cnt?: string;
+                                            im_positive_reaction_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_positive_reaction_cnt_rank?: string;
+                                            ccm_create_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            ccm_create_cnt_rank?: string;
+                                            ccm_create_busy_month?: string;
+                                            ccm_create_busy_month_cnt?: number;
+                                            ccm_create_viewed_ucnt?: number;
+                                            ccm_create_liked_cnt?: number;
+                                            ccm_create_liked_cnt_rank?: string;
+                                            ccm_edit_comment_fcnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            ccm_edit_comment_fcnt_rank?: string;
+                                            ccm_view_other_fcnt?: number;
+                                            ccm_view_other_fcnt_rank?: string;
+                                            vc_sent_meeting_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            vc_sent_meeting_cnt_rank?: string;
+                                            vc_sent_meeting_ucnt?: number;
+                                            vc_join_meeting_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            vc_join_meeting_cnt_rank?: string;
+                                            vc_all_meeting_cnt?: number;
+                                            vc_all_meeting_cnt_rank?: string;
+                                            vc_all_meeting_duration_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            cal_comment_cal_time?: string;
+                                            people_profile_view_cnt?: string;
+                                            people_interview_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            people_interview_num_rank?: string;
+                                            people_interview_offer_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            people_interview_offer_num_rank?: string;
+                                            email_send_email_count?: number;
+                                            email_receive_email_count?: number;
+                                        };
+                                        year_2024?: {
+                                            user_id?: string;
+                                            tenant_all_cnt?: string;
+                                            user_register_date?: string;
+                                            feishu_day_cnt?: string;
+                                            duration_cnt_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            im_send_msg_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            avg_im_send_msg_cnt_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            im_talked_chat_cnt?: string;
+                                            im_private_chat_cnt?: string;
+                                            im_emoji_top1?: string;
+                                            im_emoji_top1_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_emoji_top2?: string;
+                                            im_emoji_top2_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_emoji_top3?: string;
+                                            im_emoji_top3_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_positive_reaction_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            im_positive_reaction_cnt_rank?: string;
+                                            im_positive_reaction_cnt_denominator?: string;
+                                            busy_day?: string;
+                                            busy_day_send_msg_cnt?: string;
+                                            ccm_create_cnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            ccm_create_viewed_ucnt?: string;
+                                            ccm_create_liked_cnt?: string;
+                                            ccm_create_liked_max_cnt?: string;
+                                            vc_join_meeting_cnt?: string;
+                                            vc_all_meeting_duration_2?: Array<{
+                                                year?: string;
+                                                num?: number;
+                                            }>;
+                                            vc_join_meeting_all_user_cnt?: string;
+                                            vc_last_meeting_time?: string;
+                                            base_create_fcnt_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            base_view_fcnt?: string;
+                                            base_create_dashboard_cnt?: string;
+                                            base_create_dashboard_rank?: string;
+                                            base_create_dashboard_rank_ucnt?: string;
+                                            base_create_chat_cnt?: string;
+                                            base_workflow_ins_cnt?: string;
+                                            base_workflow_ins_rank?: string;
+                                            base_workflow_ins_rank_ucnt?: string;
+                                            vc_all_read_notes_cnt?: string;
+                                            meego_role_wi_cnt_v2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            meego_common_wi_ucnt?: string;
+                                            meego_workflow_wi_cnt?: string;
+                                            people_interview_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                            people_interview_num_rank?: string;
+                                            people_interview_num_rank_ucnt?: string;
+                                            people_interview_offer_num_2?: Array<{
+                                                year?: string;
+                                                count?: string;
+                                            }>;
+                                        };
+                                        year_2025: {
+                                            user_id?: string;
+                                            tenant_all_cnt?: string;
+                                            user_register_date?: string;
+                                            feishu_active_days?: string;
+                                            feishu_duration_busy_month?: string;
+                                            feishu_duration_busy_month_hours?: number;
+                                            busy_month_send_msg_cnt?: string;
+                                            busy_month_edit_doc_cnt?: string;
+                                            busy_month_read_doc_cnt?: string;
+                                            busy_month_join_meeting_cnt?: string;
+                                            busy_month_meeting_duration?: number;
+                                            im_talked_chat_cnt?: string;
+                                            im_private_chat_cnt?: string;
+                                            im_send_msg_cnt?: string;
+                                            im_emoji_top1?: string;
+                                            im_emoji_top1_cnt?: string;
+                                            im_emoji_top2?: string;
+                                            im_emoji_top2_cnt?: string;
+                                            im_emoji_top3?: string;
+                                            im_emoji_top3_cnt?: string;
+                                            ccm_create_fcnt?: string;
+                                            ccm_create_rank?: string;
+                                            ccm_create_rank_ucnt?: string;
+                                            ccm_create_viewed_ucnt?: string;
+                                            ccm_create_liked_cnt?: string;
+                                            ccm_create_viewed_most_ucnt?: string;
+                                            ccm_all_read_doc_cnt?: string;
+                                            docs_ai_quickview_use_cnt?: string;
+                                            vc_join_meeting_cnt?: string;
+                                            vc_join_meeting_duration?: number;
+                                            vc_org_meeting_cnt?: Array<{
+                                                organized_meeting_cnt?: string;
+                                                organized_cal_meeting_cnt?: string;
+                                                organized_instant_meeting_cnt?: string;
+                                            }>;
+                                            ai_notes_create_cnt?: string;
+                                            ai_notes_read_cnt?: string;
+                                            knowledge_ai_use_cnt?: string;
+                                            knowledge_ai_use_busy_day?: string;
+                                            knowledge_ai_use_busy_day_cnt?: string;
+                                            base_create_fcnt?: string;
+                                            base_ai_top1_name_map?: Array<{
+                                                name_cn?: string;
+                                                name_en?: string;
+                                                name_cn_list?: string;
+                                                name_en_list?: string;
+                                            }>;
+                                            base_create_view_ucnt?: string;
+                                            base_most_rows_cnt?: string;
+                                            base_create_dashboard_cnt?: string;
+                                            base_workflow_create_cnt?: string;
+                                            base_workflow_ins_cnt?: string;
+                                            aily_develop_app_cnt?: string;
+                                            aily_develop_app_active_ucnt?: string;
+                                            aily_develop_active_most_app_intents?: string;
+                                            aily_chat_cnt?: string;
+                                            aily_artifact_create_cnt?: string;
+                                            apaas_develop_app_cnt?: string;
+                                            apaas_develop_app_active_ucnt?: string;
+                                            apaas_develop_active_most_app_ucnt?: string;
+                                            apaas_develop_ai_run_cnt?: string;
+                                            meego_is_project_admin?: string;
+                                            meego_create_wi_cnt?: string;
+                                            meego_create_wi_role_ucnt?: string;
+                                            meego_most_view_wi_ucnt?: string;
+                                            meego_set_ai_field_cnt?: string;
+                                            meego_ai_field_run_cnt?: string;
+                                            meego_ai_gantt_use_cnt?: string;
+                                            meego_ai_weekly_report_use_cnt?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/user_annual_reports/query`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * admin_dept_ext_contact_stat
+             */
+            adminDeptExtContactStat: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_dept_ext_contact_stat&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=admin&resource=admin_dept_ext_contact_stat&version=v1 document }
+                 *
+                 * 获取部门所拥有的外部联系人总数
+                 *
+                 * 获取部门外部联系人总数包括：部门拥有外部联系人的成员数、部门拥有外部联系人的总数和总外部租户数。部门下纳入统计的成员仅包含已激活未离职的用户；外部联系人仅包含当前关系状态为正常的用户（不限制外部联系人的离职状态），包含私有化租户的外部联系人
+                 *
+                 * - 只有企业自建应用才有权限调用此接口;;- 当天的数据会在第二天的早上九点半产出 (CN时区: UTC+8，非CN时区: UTC+0);;- 日期范围不超过90天，超过90天接口容易超时;;- 仅支持13层级部门数据查询，超过13层级的数据汇聚到第13层级;;;不能简单将多区域的数据加总汇聚，例如一个部门对应多个区域，多个区域都包含同一个外部联系人，则部门下实际外部联系人是1，但是简单加总结果>1
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            department_id?: string;
+                            start_date: string;
+                            end_date: string;
+                            page_size?: number;
+                            page_token?: string;
+                            target_geo?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        date?: string;
+                                        department_id?: string;
+                                        department_name?: string;
+                                        has_ref_contact_ucnt?: string;
+                                        ref_contact_ucnt?: string;
+                                        ref_contact_tcnt?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/admin_dept_ext_contact_stats`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * ai_usage_detail
+             */
+            aiUsageDetail: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=ai_usage_detail&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=ai_usage_detail&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            date_start: number;
+                            date_end: number;
+                            subject_type: number;
+                            subjects: Array<{
+                                entity_type: number;
+                                entity_ids: Array<string>;
+                            }>;
+                            filters?: {
+                                feature_keys?: Array<number>;
+                                usage_type?: number;
+                                scenario_ids?: Array<{
+                                    biz_type: string;
+                                    biz1_type?: string;
+                                    biz2_type?: string;
+                                }>;
+                            };
+                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        entity_type?: number;
+                                        entity_id?: string;
+                                        usage_value_general_ai_quota?: number;
+                                        usage_value_ai_notes_quota?: number;
+                                        usage_value_feishu_aily_quota?: number;
+                                    }>;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/ai_usage_detail/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * admin_user_stat
              */
             adminUserStat: {
@@ -3223,6 +7353,104 @@ export default abstract class Client extends acs {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * ai_usage_log
+             */
+            aiUsageLog: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=ai_usage_log&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=admin&resource=ai_usage_log&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            date_start: number;
+                            date_end: number;
+                            subject_type: number;
+                            subjects: Array<{
+                                entity_type: number;
+                                entity_ids: Array<string>;
+                            }>;
+                            filters?: {
+                                feature_keys?: Array<number>;
+                                usage_type?: number;
+                                scenario_ids?: Array<{
+                                    biz_type: string;
+                                    biz1_type?: string;
+                                    biz2_type?: string;
+                                }>;
+                            };
+                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        entity_type?: number;
+                                        entity_id?: string;
+                                        department_id?: string;
+                                        time?: number;
+                                        scenario_translate?: string;
+                                        scenarios?: Array<{
+                                            biz_type: string;
+                                            biz1_type?: string;
+                                            biz2_type?: string;
+                                        }>;
+                                        feature_key?: number;
+                                        usage_type?: number;
+                                        used_quota?: number;
+                                        notes?: {
+                                            key_name: string;
+                                            key_type: number;
+                                            value: string;
+                                        };
+                                        descriptions?: Array<{
+                                            key_name: string;
+                                            key_type: number;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/ai_usage_log/query`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

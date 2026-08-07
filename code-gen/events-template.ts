@@ -45,6 +45,300 @@ export interface IHandles extends IOtherEventHandles {
         face_uploaded?: boolean;
     }) => Promise<any> | any;
     /**
+     * 设备人脸变更事件
+     *
+     * 设备人脸变更事件
+     */
+    "acs.user.face.bind_user_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        face_uploaded?: boolean;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "aily.message_with_operation.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        message?: {
+            id?: string;
+            title?: string;
+            content?: string;
+            message_status?: "RUNNING" | "FINISHED";
+            builtin_actions?: Array<{
+                builtin_action_type?:
+                    | "FEEDBACK"
+                    | "REVOKE"
+                    | "REGENERATE"
+                    | "PIN"
+                    | "DETAIL"
+                    | "CANCEL";
+                enable?: boolean;
+                action_status?: string;
+                extra?: string;
+            }>;
+            skill_base_infos?: Array<{
+                name: string;
+                skill_id: string;
+                type: string;
+                builtin_type?: string;
+            }>;
+            message_progress?: {
+                progress_type: "LIST";
+                progress_items?: Array<{
+                    progress_item_state?: "RUNNING" | "FINISHED" | "FAILED";
+                    content?: string;
+                    skill_id?: string;
+                    node_id?: string;
+                    node_type?: string;
+                    input?: string;
+                    output?: string;
+                    usages?: Array<string>;
+                    skill_strategy?: "AUTO" | "SLASH";
+                }>;
+            };
+            sender?: {
+                id?: string;
+                sender_type?: "USER" | "SYSTEM" | "SKILL";
+                name?: string;
+                desc?: string;
+                sender_id?: string;
+            };
+            error?: {
+                code: string;
+                message?: string;
+                error_type?: "SYSTEM" | "MAKER" | "USER";
+                log_id?: string;
+                title?: string;
+            };
+            trigger_type?: "SCHEDULER" | "PIN" | "REGENERATE";
+            visibility?: "SELF" | "ALL";
+        };
+        operation_type?: "APPEND" | "UPDATE" | "WITHDRAW";
+        operation_id?: string;
+        intent_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.metric.reported_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        metrics?: Array<{
+            name: string;
+            type: string;
+            value: number;
+            attributes?: string;
+            timestamp?: number;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.event.reported_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        events?: Array<{
+            id: string;
+            type: string;
+            start_timestamp?: number;
+            end_timestamp?: number;
+            is_finished?: boolean;
+            trace_id?: string;
+            detail?: string;
+            attributes?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.log.reported_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        logs?: Array<{
+            content?: string;
+            level?: string;
+            timestamp?: number;
+            event?: {
+                id: string;
+                type: string;
+                start_timestamp?: number;
+                end_timestamp?: number;
+                is_finished?: boolean;
+                trace_id?: string;
+                detail?: string;
+                attributes?: string;
+            };
+            trace_id?: string;
+            attributes?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 应用发布成功后的事件消息
+     *
+     * 应用发布成功后的事件消息，主要内容是应用的信息（namespace、名称、描述等）
+     */
+    "apaas.permission.publish_app_info_event_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        Namespace?: string;
+        Name?: Record<string, string>;
+        Description?: Record<string, string>;
+    }) => Promise<any> | any;
+    /**
+     * 创建应用成功的事件消息
+     *
+     * 创建应用成功的事件消息
+     */
+    "apaas.permission.create_app_info_event_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        Namespace?: string;
+        Name?: Record<string, string>;
+        Description?: Record<string, string>;
+    }) => Promise<any> | any;
+    /**
+     * 数据记录变更
+     *
+     * 当数据表记录发生变更时将触发此事件
+     */
+    "apaas.workspace.record_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        workspace?: string;
+        app?: string;
+        table?: string;
+        operator?: string;
+        before?: string;
+        after?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.release_task.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        version_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.release_task.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        version_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.release_task.updated_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        version_id?: string;
+        status?: number;
+        namespace?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "apaas.application.metric.reported_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        name?: string;
+        value?: number;
+        tags?: string;
+        timestamp?: number;
+    }) => Promise<any> | any;
+    /**
      * 新增应用反馈
      *
      * 当应用收到新反馈时，触发该事件
@@ -205,6 +499,98 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: { union_id?: string; user_id?: string; open_id?: string };
         }>;
         source?: number;
+    }) => Promise<any> | any;
+    /**
+     * 企业新安装应用
+     */
+    "application.application.installed_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        status?: number;
+        scene_type?: number;
+        payment_type?: number;
+        owner?: {
+            type: number;
+            name?: string;
+            help_desk?: string;
+            email?: string;
+            phone?: string;
+            owner_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            customer_service_account?: string;
+        };
+        redirect_urls?: Array<string>;
+        online_version_id?: string;
+        unaudit_version_id?: string;
+        app_name?: string;
+        avatar_url?: string;
+        description?: string;
+        scopes?: Array<{
+            scope: string;
+            description?: string;
+            level?: number;
+            token_types?: Array<"tenant" | "user">;
+        }>;
+        back_home_url?: string;
+        i18n?: Array<{
+            i18n_key:
+                | "zh_cn"
+                | "en_us"
+                | "ja_jp"
+                | "zh_hk"
+                | "zh_tw"
+                | "id_id"
+                | "ms_my"
+                | "de_de"
+                | "es_es"
+                | "fr_fr"
+                | "it_it"
+                | "pt_br"
+                | "vi_vn"
+                | "ru_ru"
+                | "th_th"
+                | "ko_kr";
+            name?: string;
+            description?: string;
+            help_use?: string;
+        }>;
+        primary_language?:
+            | "zh_cn"
+            | "en_us"
+            | "ja_jp"
+            | "zh_hk"
+            | "zh_tw"
+            | "id_id"
+            | "ms_my"
+            | "de_de"
+            | "es_es"
+            | "fr_fr"
+            | "it_it"
+            | "pt_br"
+            | "vi_vn"
+            | "ru_ru"
+            | "th_th"
+            | "ko_kr";
+        common_categories?: Array<string>;
+        create_source?:
+            | "developer_console"
+            | "base"
+            | "app_engine"
+            | "bot_builder"
+            | "aily"
+            | "unknown";
+        mobile_default_ability?: "gadget" | "web_app" | "bot";
+        pc_default_ability?: "gadget" | "web_app" | "bot";
     }) => Promise<any> | any;
     /**
      * 申请发布应用
@@ -505,6 +891,30 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "approval.instance.remedy_group_update_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            type?: string;
+            instance_code?: string;
+            employee_id?: string;
+            start_time?: number;
+            end_time?: number;
+            remedy_time?: number;
+            remedy_reason?: string;
+            status?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "approval.approval.updated_v4"?: (data: {
         event_id?: string;
         token?: string;
@@ -527,9 +937,215 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+     * 自定义控件关联实例变更推送
+     *
+     * 使用了自定义控件的实例状态变更时，向控件所属应用推送变更信息
+     */
+    "approval.widget.instance_changed_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        instance_info?: {
+            instance_code?: string;
+            status?:
+                | "PENDING"
+                | "REJECTED"
+                | "CANCELED"
+                | "DELETED"
+                | "REVERTED"
+                | "OVERTIME_CLOSE"
+                | "OVERTIME_RECOVER";
+            instance_operate_time?: string;
+            is_revert_approval?: boolean;
+            form_content?: string;
+            serial_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.instance.sign_group_update_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            instance_code?: string;
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            account_code?: string;
+            boilerplate_unique_code?: string;
+            start_time?: number;
+            end_time?: number;
+            type?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.instance.shift_group_update_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            type: string;
+            instance_code?: string;
+            user_id?: string;
+            swap_shift_user_id?: string;
+            start_time?: number;
+            end_time?: number;
+            shift_reason?: string;
+            swap_shift_details?: Array<{
+                date?: string;
+                return_date?: string;
+                shfit_id?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.instance.revert_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            type?: string;
+            instance_code?: string;
+            operate_time?: string;
+            status?: string;
+            approval_code?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.instance.trip_group_update_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            type?: string;
+            instance_code?: string;
+            start_user?: {
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name?: string;
+            };
+            start_time?: string;
+            end_time?: string;
+            trip_interval?: string;
+            trip_reason?: string;
+            schedules?: Array<{
+                trip_start_time?: string;
+                trip_end_time?: string;
+                trip_interval?: string;
+                departure?: string;
+                destination?: string;
+                transportation?: string;
+                trip_type?: string;
+                remark?: string;
+                departure_id?: string;
+                destination_ids?: Array<string>;
+            }>;
+            trip_peers?: Array<{
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.approval.created_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            approval_id?: string;
+            approval_code?: string;
+            version_id?: string;
+            widget_group_type?: number;
+            form_definition_id?: string;
+            process_obj?: string;
+            timestamp?: string;
+            extra?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.instance.comment.created_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        instance_id?: string;
+        instance_code?: string;
+        comment_id?: string;
+        commentator?: { union_id?: string; user_id?: string; open_id?: string };
+        parent_comment_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "approval.instance.comment.deleted_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        instance_id?: string;
+        instance_code?: string;
+        comment_id?: string;
+        commentator?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
      * 审批任务状态变更事件
      *
-     * 审批任务状态发生变更时会触发该事件。状态变更包括：;;- 用户创建审批实例后，推送第一个审批节点的审批任务 `PENDING` 状态。;- 如果当前审批节点是会签（AND）节点：;   - 	任一审批任务被同意，推送该任务的 `APPROVED`（已通过）状态，并推送当前节点剩余任务的 `PENDING` 状态。;   - 	任一审批任务被拒绝，推送该任务的 `REJECTED`（已拒绝）状态，并推送当前节点剩余任务的 `DONE` 状态。;- 如果当前节点是或签（OR）节点：;   -    任一审批任务被同意，推送该任务的 `APPROVED`（已通过）状态，并推送当前节点剩余任务的 `DONE`（已完成）状态、下一个节点所有任务的 `PENDING`（进行中）状态。;   -    任一审批任务被拒绝，推送该任务的 `REJECTED`（已拒绝）状态，并推送当前节点剩余任务的 `DONE`（已完成）状态。;- 如果用户对审批任务进行转交，推送该任务的 `TRANSFERRED`（已转交）状态，和被转交人任务的 `PENDING`（进行中）状态。;- 发起人撤回审批后，推送剩余所有任务的 `DONE`（已完成）状态。;- 审批定义被管理员删除后，推送剩余所有任务的 `DONE`（已完成）状态。;- 如果用户对审批任务进行退回，推送该任务的 `ROLLBACK`（已退回）状态，和被退回人任务的 `PENDING`（进行中）状态。;- 如果进行中的审批任务超时未处理被关闭，推送该任务的 `OVERTIME_CLOSE`（超时未处理被关闭）状态。;- 如果超时已关闭的审批任务被手动恢复，推送该任务的 `OVERTIME_RECOVER`（超时已关闭的任务被手动恢复）状态。
+     * 审批任务状态发生变更时会触发该事件。状态变更包括：;;- 用户创建审批实例后，推送第一个审批节点的审批任务 `PENDING` 状态。;- 如果当前审批节点是会签（AND）节点：; - 任一审批任务被同意，推送该任务的 `APPROVED`（已通过）状态，并推送当前节点剩余任务的 `PENDING` 状态。; - 任一审批任务被拒绝，推送该任务的 `REJECTED`（已拒绝）状态，并推送当前节点剩余任务的 `DONE` 状态。;- 如果当前节点是或签（OR）节点：; - 任一审批任务被同意，推送该任务的 `APPROVED`（已通过）状态，并推送当前节点剩余任务的 `DONE`（已完成）状态、下一个节点所有任务的 `PENDING`（进行中）状态。; - 任一审批任务被拒绝，推送该任务的 `REJECTED`（已拒绝）状态，并推送当前节点剩余任务的 `DONE`（已完成）状态。;- 如果用户对审批任务进行转交，推送该任务的 `TRANSFERRED`（已转交）状态，和被转交人任务的 `PENDING`（进行中）状态。;- 发起人撤回审批后，推送剩余所有任务的 `DONE`（已完成）状态。;- 审批定义被管理员删除后，推送剩余所有任务的 `DONE`（已完成）状态。;- 如果用户对审批任务进行退回，推送该任务的 `ROLLBACK`（已退回）状态，和被退回人任务的 `PENDING`（进行中）状态。;- 如果进行中的审批任务超时未处理被关闭，推送该任务的 `OVERTIME_CLOSE`（超时未处理被关闭）状态。;- 如果超时已关闭的审批任务被手动恢复，推送该任务的 `OVERTIME_RECOVER`（超时已关闭的任务被手动恢复）状态。
      */
     "approval.task.status_changed_v4"?: (data: {
         event_id?: string;
@@ -552,6 +1168,11 @@ export interface IHandles extends IOtherEventHandles {
         };
         status?: string;
         operate_time?: string;
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
     }) => Promise<any> | any;
     /**
      * 审批实例状态变更事件
@@ -574,6 +1195,233 @@ export interface IHandles extends IOtherEventHandles {
         status?: string;
         operate_time?: string;
         start_user?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance_machine.user.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        updated_at?: string;
+        device_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance_machine.user.face.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        face_uploaded?: boolean;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance.user_task.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        employee_id?: string;
+        group_id?: string;
+        shift_id?: string;
+        date?: number;
+        time_zone?: string;
+        status_changes?: Array<{
+            index: number;
+            before_status: string;
+            current_status: string;
+            before_supplement: string;
+            current_supplement: string;
+            work_type: string;
+        }>;
+        employee_no?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance.location_record.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        data?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            timestamp?: string;
+            location?: {
+                coord?: {
+                    longitude: number;
+                    latitude: number;
+                    accuracy?: number;
+                };
+            };
+            wifi?: {
+                ssid?: string;
+                bssid?: string;
+                lastssid?: string;
+                lastbssid?: string;
+            };
+            rule_snapshot_id?: string;
+            type?: string;
+            scan_wifi_list?: Array<{ ssid?: string; bssid?: string }>;
+            device_id?: string;
+            client_info?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance.user_flow.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        employee_id?: string;
+        employee_no?: string;
+        location_name?: string;
+        check_time?: string;
+        comment?: string;
+        record_id?: string;
+        longitude?: number;
+        latitude?: number;
+        ssid?: string;
+        bssid?: string;
+        is_field?: boolean;
+        is_wifi?: boolean;
+        photo_urls?: Array<string>;
+        risk_result?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance.user_flow.created_enterprise_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        employee_id?: string;
+        employee_no?: string;
+        location_name?: string;
+        check_time?: string;
+        comment?: string;
+        record_id?: string;
+        longitude?: number;
+        latitude?: number;
+        ssid?: string;
+        bssid?: string;
+        is_field?: boolean;
+        is_wifi?: boolean;
+        photo_urls?: Array<string>;
+        risk_result?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "attendance.user_task.updated_enterprise_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        employee_id?: string;
+        group_id?: string;
+        shift_id?: string;
+        date?: number;
+        time_zone?: string;
+        status_changes?: Array<{
+            index: number;
+            before_status: string;
+            current_status: string;
+            before_supplement: string;
+            current_supplement: string;
+            work_type: string;
+        }>;
+        employee_no?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "audio_video_ai.common_analysis_task.media_analysis_task_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        business_id?: string;
+        task_status?: string;
+        task_code?: number;
+        task_message?: string;
+        result?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "auth.user_access_token.revoked_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        revoke_token_type: string;
+        revoke_reason: string;
+        open_id: string;
+        union_id?: string;
+        user_id?: string;
     }) => Promise<any> | any;
     /**
      * 撤销用户授权事件
@@ -595,6 +1443,161 @@ export interface IHandles extends IOtherEventHandles {
         open_id: string;
         union_id: string;
         user_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 飞书用户绑定关系变更
+     *
+     * 绑定关系变更事件;;适用于获取“抖音员工号”运营者是否发生变更，即当“抖音员工号”关联的飞书账号发生变化时，可通过该权限获知到此事件。
+     */
+    "aweme_ecosystem.aweme_user.binded_account_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        event_aweme_user?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            aweme_user_id?: string;
+            is_binded?: boolean;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "board.whiteboard.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        whiteboard_id: string;
+        operator_ids: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 对象变更
+     *
+     * 对象变更
+     */
+    "c360.namespace.object.changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        namespace_id?: string;
+        object_name?: string;
+        change_type?: string;
+        commit_timestamp?: string;
+        commit_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        record_id?: string;
+        change_content?: Array<{
+            field_type: number;
+            field_name?: string;
+            field_label?: string;
+            after_value?: {
+                text?: string;
+                multi_line_text?: string;
+                number?: string;
+                currency?: string;
+                date?: string;
+                pick_list?: string;
+                multi_pick_list?: Array<string>;
+                url?: { link: string };
+                lookup?: { object_type: string; records: Array<string> };
+                single_lookup?: { object_type: string; record_id: string };
+                profile_list?: Array<{
+                    user_id?: {
+                        union_id?: string;
+                        user_id?: string;
+                        open_id?: string;
+                    };
+                    chat_id?: string;
+                    profile_type?: "Group" | "Person";
+                }>;
+                personnel?: {
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                };
+                personnel_list?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                editor_rich_text?: { plaintext?: string };
+            };
+            before_value?: {
+                text?: string;
+                multi_line_text?: string;
+                number?: string;
+                currency?: string;
+                date?: string;
+                pick_list?: string;
+                multi_pick_list?: Array<string>;
+                url?: { link: string };
+                lookup?: { object_type: string; records: Array<string> };
+                single_lookup?: { object_type: string; record_id: string };
+                profile_list?: Array<{
+                    user_id?: {
+                        union_id?: string;
+                        user_id?: string;
+                        open_id?: string;
+                    };
+                    chat_id?: string;
+                    profile_type?: "Group" | "Person";
+                }>;
+                personnel?: {
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                };
+                personnel_list?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                editor_rich_text?: { plaintext?: string };
+            };
+        }>;
+        changed_fields?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "calendar.calendar.event_rsvp.changed_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        calendar_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        calendar_event_id?: string;
+        rsvp_status?: string;
     }) => Promise<any> | any;
     /**
      * 日程变更
@@ -704,6 +1707,321 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "cardkit.action.event_trigger_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operator?: {
+            tenant_key?: string;
+            user_id?: string;
+            open_id?: string;
+            union_id?: string;
+        };
+        action?: {
+            value?: Record<string, string>;
+            tag?: string;
+            option?: string;
+            options?: Array<string>;
+            timezone?: string;
+            input_value?: string;
+            form_value?: Record<string, string>;
+            name?: string;
+            checked?: boolean;
+        };
+        host?: string;
+        context?: { open_message_id?: string; open_chat_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 关联关系创建
+     *
+     * URL和群绑定或者URL和文档绑定时会触发关联关系创建事件
+     */
+    "collab_plugins.relation.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 关联关系删除
+     *
+     * URL和群解绑或者URL和文档解绑时会触发关联关系删除事件。
+     */
+    "collab_plugins.relation.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 添加评论
+     *
+     * 添加评论将触发此事件
+     */
+    "comment_sdk.entity.comment.add_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_token?: string;
+        entity_obj_type?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        comment_id?: string;
+        reply_id?: string;
+        comment_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        reply_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        mention_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        content?: string;
+        reply_extra?: string;
+    }) => Promise<any> | any;
+    /**
+     * 删除回复
+     *
+     * 删除回复将触发此事件
+     */
+    "comment_sdk.entity.comment.reply.delete_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        comment_id?: string;
+        reply_id?: string;
+        comment_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        reply_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        mention_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        content?: string;
+        reply_extra?: string;
+        upstairs_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 解决评论
+     *
+     * 解决评论将触发此事件
+     */
+    "comment_sdk.entity.comment.finish_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        comment_id?: string;
+        reply_id?: string;
+        comment_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        reply_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        mention_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        content?: string;
+        reply_extra?: string;
+        upstairs_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 重新打开评论
+     *
+     * 重新打开评论将触发此事件
+     */
+    "comment_sdk.entity.comment.reopen_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        comment_id?: string;
+        reply_id?: string;
+        comment_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        reply_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        mention_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        content?: string;
+        reply_extra?: string;
+        upstairs_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 添加回复
+     *
+     * 添加回复将触发此事件
+     */
+    "comment_sdk.entity.comment.reply.add_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        comment_id?: string;
+        reply_id?: string;
+        comment_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        reply_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        mention_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        content?: string;
+        reply_extra?: string;
+        upstairs_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 更新回复
+     *
+     * 更新回复将触发此事件
+     */
+    "comment_sdk.entity.comment.reply.update_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        comment_id?: string;
+        reply_id?: string;
+        comment_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        reply_owner_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        mention_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        content?: string;
+        reply_extra?: string;
+        upstairs_user_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
      * 薪资档案变更
      *
      * 当应用订阅该事件后，如果员工薪资档案发生变更（例如，通过管理后台对员工定薪、调薪、更正或删除），则会触发该事件。
@@ -723,6 +2041,282 @@ export interface IHandles extends IOtherEventHandles {
         effective_date: string;
         before_tid?: string;
         after_tid?: string;
+    }) => Promise<any> | any;
+    /**
+     * 员工参保档案变更事件
+     *
+     * 员工参保档案变更时，订阅此事件且拥有对应数据权限的应用将收到此事件的推送
+     */
+    "compensation.social_archive.changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id: string;
+        user_id_type: string;
+        operate_time_ms: number;
+        archive_change_details: Array<{
+            insurance_type: "social_insurance" | "provident_fund";
+            operate_type: "increase" | "adjust" | "delete";
+            source_type:
+                | "new_join"
+                | "intern_to_official"
+                | "employee_type_change"
+                | "dismission"
+                | "job_change"
+                | "import_increase"
+                | "import_adjust"
+                | "manual_edit"
+                | "manual_adjust"
+                | "manual_delete"
+                | "to_attrition_import"
+                | "plan_sync_arc";
+            after_social_archive_detail?: {
+                description: { zh_cn?: string; en_us?: string };
+                insurance_type: "social_insurance" | "provident_fund";
+                insurance_status:
+                    | "contribution"
+                    | "not_contribution"
+                    | "stopped_contribution";
+                id?: string;
+                tid?: string;
+                plan_id?: string;
+                plan_tid?: string;
+                location_id?: string;
+                company_id?: string;
+                account_type?: "associated_company" | "supplier";
+                insurance_account?: string;
+                base_salary?: string;
+                insurance_details?: Array<{
+                    insurance_id: string;
+                    company_deduction: string;
+                    company_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    personal_deduction: string;
+                    personal_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    payment_frequency: "annually" | "monthly" | "quarterly";
+                    payment_months: Array<number>;
+                }>;
+                effective_date?: string;
+            };
+            before_social_archive_detail?: {
+                description: { zh_cn?: string; en_us?: string };
+                insurance_type: "social_insurance" | "provident_fund";
+                insurance_status:
+                    | "contribution"
+                    | "not_contribution"
+                    | "stopped_contribution";
+                id?: string;
+                tid?: string;
+                plan_id?: string;
+                plan_tid?: string;
+                location_id?: string;
+                company_id?: string;
+                account_type?: "associated_company" | "supplier";
+                insurance_account?: string;
+                base_salary?: string;
+                insurance_details?: Array<{
+                    insurance_id: string;
+                    company_deduction: string;
+                    company_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    personal_deduction: string;
+                    personal_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    payment_frequency: "annually" | "monthly" | "quarterly";
+                    payment_months: Array<number>;
+                }>;
+                effective_date?: string;
+            };
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 社保待增员/待减员记录变更事件;
+     *
+     * 员工社保代办记录变更时，订阅此事件且拥有对应数据权限的应用将收到此事件的推送。一次操作同时变更社保和公积金，只会发送一个事件，事件中的adjust_records会有俩个元素
+     */
+    "compensation.social_archive_adjust_record.changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id: string;
+        user_id_type: string;
+        operate_time_ms: string;
+        adjust_records: Array<{
+            id: string;
+            insurance_type: "social_insurance" | "provident_fund";
+            operate_type:
+                | "increase"
+                | "adjust"
+                | "confirm"
+                | "submit_confirm"
+                | "delete";
+            source_type:
+                | "new_join"
+                | "intern_to_official"
+                | "employee_type_change"
+                | "dismission"
+                | "job_change"
+                | "to_attrition_import";
+            record_type: "increase" | "attrition";
+            after_adjust_record_detail?: {
+                description: { zh_cn?: string; en_us?: string };
+                insurance_type: "social_insurance" | "provident_fund";
+                insurance_status:
+                    | "contribution"
+                    | "not_contribution"
+                    | "stopped_contribution";
+                id?: string;
+                tid?: string;
+                plan_id?: string;
+                plan_tid?: string;
+                location_id?: string;
+                company_id?: string;
+                account_type?: "associated_company" | "supplier";
+                insurance_account?: string;
+                base_salary?: string;
+                insurance_details?: Array<{
+                    insurance_id: string;
+                    company_deduction: string;
+                    company_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    personal_deduction: string;
+                    personal_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    payment_frequency: "annually" | "monthly" | "quarterly";
+                    payment_months: Array<number>;
+                }>;
+                effective_date?: string;
+            };
+            before_adjust_record_detail?: {
+                description: { zh_cn?: string; en_us?: string };
+                insurance_type: "social_insurance" | "provident_fund";
+                insurance_status:
+                    | "contribution"
+                    | "not_contribution"
+                    | "stopped_contribution";
+                id?: string;
+                tid?: string;
+                plan_id?: string;
+                plan_tid?: string;
+                location_id?: string;
+                company_id?: string;
+                account_type?: "associated_company" | "supplier";
+                insurance_account?: string;
+                base_salary?: string;
+                insurance_details?: Array<{
+                    insurance_id: string;
+                    company_deduction: string;
+                    company_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    personal_deduction: string;
+                    personal_setting: {
+                        lower_limit: string;
+                        upper_limit: string;
+                        payment_ratio: string;
+                        payment_rounding_rule:
+                            | "rounding"
+                            | "round_up"
+                            | "round_down";
+                        payment_decimals: number;
+                        fixed_payment: string;
+                    };
+                    payment_frequency: "annually" | "monthly" | "quarterly";
+                    payment_months: Array<number>;
+                }>;
+                effective_date?: string;
+            };
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contact.user_group.created_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: { user_group_id?: string; name?: string };
     }) => Promise<any> | any;
     /**
      * 部门信息变化
@@ -836,6 +2430,89 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "contact.user.deletedAbridged_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            open_id?: string;
+            union_id?: string;
+            user_id?: string;
+            name: string;
+            en_name?: string;
+            nickname?: string;
+            email?: string;
+            enterprise_email?: string;
+            job_title?: string;
+            mobile: string;
+            mobile_visible?: boolean;
+            gender?: number;
+            avatar?: {
+                avatar_72?: string;
+                avatar_240?: string;
+                avatar_640?: string;
+                avatar_origin?: string;
+            };
+            status?: {
+                is_frozen?: boolean;
+                is_resigned?: boolean;
+                is_activated?: boolean;
+                is_exited?: boolean;
+                is_unjoin?: boolean;
+            };
+            department_ids?: Array<string>;
+            leader_user_id?: string;
+            city?: string;
+            country?: string;
+            work_station?: string;
+            join_time?: number;
+            is_tenant_manager?: boolean;
+            employee_no?: string;
+            employee_type?: number;
+            positions?: Array<{
+                position_code?: string;
+                position_name?: string;
+                department_id?: string;
+                leader_user_id?: string;
+                leader_position_code?: string;
+                is_major?: boolean;
+            }>;
+            orders?: Array<{
+                department_id?: string;
+                user_order?: number;
+                department_order?: number;
+                is_primary_dept?: boolean;
+            }>;
+            time_zone?: string;
+            custom_attrs?: Array<{
+                type?: string;
+                id?: string;
+                value?: {
+                    text?: string;
+                    url?: string;
+                    pc_url?: string;
+                    option_id?: string;
+                    option_value?: string;
+                    name?: string;
+                    picture_url?: string;
+                    generic_user?: { id: string; type: number };
+                };
+            }>;
+            job_level_id?: string;
+            job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
+        };
+        old_object?: { department_ids?: Array<string>; open_id?: string };
+    }) => Promise<any> | any;
+    /**
      * 员工离职
      *
      * 当应用订阅该事件后，如果有员工离职（例如，通过管理后台离职成员、调用删除用户 API），则会触发该事件。
@@ -919,6 +2596,52 @@ export interface IHandles extends IOtherEventHandles {
             dotted_line_leader_user_ids?: Array<string>;
         };
         old_object?: { department_ids?: Array<string>; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contact.user_group.member.changed_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: { user_group_id?: string; name?: string };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contact.user_group.deleted_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: { user_group_id?: string; name?: string };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contact.user_group.updated_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: { user_group_id?: string; name?: string };
+        old_object?: { user_group_id?: string; name?: string };
     }) => Promise<any> | any;
     /**
      * 部门新建
@@ -1602,6 +3325,236 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "contract.vendor.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 合同新建付款
+     *
+     * 飞书合同侧发起付款时，触发此事件。
+     */
+    "contract.contract.payment.create_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: number;
+        payment_id?: string;
+        group_id?: string;
+        business_type_code?: number;
+        contract_number?: string;
+        apply_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        apply_time?: string;
+        has_invoice?: boolean;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contract.contract.sign_action_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sign_action_type?: "startSign" | "signSuccess";
+        contract_id?: string;
+        party_id?: string;
+        success?: boolean;
+    }) => Promise<any> | any;
+    /**
+     * 合同状态变更
+     *
+     * 合同状态变更时，触发该事件。
+     */
+    "contract.contract.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+        business_type_code?: number;
+        contract_stage_code?: number;
+        contract_stage_name?: string;
+        group_id?: string;
+        contract_number?: string;
+        extra_info?: string;
+        previous_id?: string;
+        previous_contract_number?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contract.process_instance.task_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        event_sequence_id?: string;
+        business_key?: string;
+        product_code?: string;
+        process_instance_id?: string;
+        task_instance_id?: string;
+        task_status?: string;
+        node_id?: string;
+        command_type?: string;
+        assignee_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        end_time?: string;
+        task_comment?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contract.legal_entity.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 合同协商事件
+     *
+     * 合同协商相关事件
+     */
+    "contract.contract.cooperation_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cooperation_event_code?: number;
+        cooperation_event_name?: string;
+        cooperation_id?: string;
+        operator_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        contract_id?: string;
+        contract_number?: string;
+        extra_info?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "contract.process_instance.notice_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        event_sequence_id?: string;
+        business_key?: string;
+        product_code?: string;
+        process_instance_id?: string;
+        notice_id?: string;
+        notice_status?: string;
+        task_instance_id?: string;
+        node_id?: string;
+        send_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        noticed_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 合同信息变更
+     *
+     * 合同发起审批后的信息变更时触发此事件。
+     */
+    "contract.contract.info_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        information_change_code?: number;
+        information_change_name?: string;
+        business_type_code?: number;
+        contract_id?: string;
+        group_id?: string;
+        contract_number?: string;
+        extra_info?: string;
+        handover_info?: {
+            source_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            target_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            operator_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            operation_time?: string;
+        };
+    }) => Promise<any> | any;
+    /**
      * 入职信息变更(不推荐)
      *
      * 待入职人员任职信息更新后，触发此事件，包括两种场景：;- 通过开放平台接口创建待入职、更新待入职;- 在飞书人事-入职系统，HR 补充任职信息;;如果有创建待入职后，更新数据的场景，请收到创建事件后延迟10s时间再执行更新操作
@@ -1893,6 +3846,24 @@ export interface IHandles extends IOtherEventHandles {
         feishu_id?: { union_id?: string; user_id?: string; open_id?: string };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "corehr.employment.primary_international_assignment_updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        lark_user_id?: string;
+        employment_id?: string;
+        new_primary_international_assignment?: string;
+        old_primary_international_assignment?: string;
+    }) => Promise<any> | any;
+    /**
      * 【事件】个人信息删除
      *
      * 个人信息删除
@@ -1973,6 +3944,41 @@ export interface IHandles extends IOtherEventHandles {
         code?: string;
     }) => Promise<any> | any;
     /**
+     * 角色授权变更事件
+     *
+     * 当组织类或非组织类角色授权变更时，会触发该事件，且需要注意事件发送的最小维度是角色加实体。;;举例：若角色有「员工」、「部门」两个实体，则会发送至少两次事件，分别对应「角色员工实体授权变更」、「角色部门实体授权变更」。
+     */
+    "corehr.role_authorization.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operate_type?: number;
+        role?: string;
+        grantee?: string;
+        grantor?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.person_info_chn.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_info_chn_id?: string;
+    }) => Promise<any> | any;
+    /**
      * 员工完成转正
      *
      * 当员工转正生效时触发该事件
@@ -1988,6 +3994,21 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         employment_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.person_info_chn.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_info_chn_id?: string;
     }) => Promise<any> | any;
     /**
      * 【事件】更新部门
@@ -2006,6 +4027,21 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         department_id?: string;
         field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.person_info_chn.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_info_chn_id?: string;
     }) => Promise<any> | any;
     /**
      * 【事件】创建部门
@@ -2169,11 +4205,9 @@ export interface IHandles extends IOtherEventHandles {
         actual_probation_end_date?: string;
     }) => Promise<any> | any;
     /**
-     * 抄送单据状态变更
-     *
-     * 流程中生成抄送单据后会触发该事件。抄送节点会生成抄送单据任务。如果一个节点有多个人抄送人，则会生成多个抄送单据（此功能不受数据权限范围控制）。
-     */
-    "corehr.process.cc.updated_v2"?: (data: {
+         
+         */
+    "corehr.onboarding_qr_code.inactive_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2183,242 +4217,7 @@ export interface IHandles extends IOtherEventHandles {
         uuid?: string;
         type?: string;
         app_id?: string;
-        process_id?: string;
-        approver_id?: string;
-        status?: number;
-        biz_type?: string;
-    }) => Promise<any> | any;
-    /**
-     * 离职申请状态变更
-     *
-     * 在发起离职审批、产生审批结果、离职生效、离职状态回退等离职申请状态变更时触发该事件推送对应消息。审批结果产生的场景包括撤销、通过、拒绝审批。;- 与原事件[离职申请状态变更](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated)相比，该事件多了直接离职产生的事件，且支持「员工数据」范围控制
-     */
-    "corehr.offboarding.status_updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-        offboarding_id?: string;
-        process_id?: string;
-        status?: number;
-    }) => Promise<any> | any;
-    /**
-     * 删除岗位事件
-     *
-     * 飞书人事中「岗位被删除」时将触发此事件。
-     */
-    "corehr.position.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        position_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 更新岗位事件
-     *
-     * 飞书人事中「岗位信息被更新」时将触发此事件。注意：触发时间为岗位更新实际生效时间，如在 2022-01-01 更新岗位，岗位更新生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
-     */
-    "corehr.position.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        position_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-     * 离职流转状态变更
-     *
-     * 离职流转流程的状态变更消息，当离职流转流程发起和产生审批结果时，会触发该事件。离职流转流程是在离职申请审批通过之后发起的流程，一般用于审批核实离职员工的交接事宜。
-     */
-    "corehr.offboarding.checklist_updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        employment_id?: string;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-        offboarding_id?: string;
-        checklist_process_id?: string;
-        checklist_status?: number;
-    }) => Promise<any> | any;
-    /**
-     * 人员信息变更
-     *
-     * 人员领域事件变更，通过业务界面、开放平台接口对个人信息、工作信息（雇佣信息）、任职信息、兼职信息等进行操作时会触发相应事件
-     */
-    "corehr.employee.domain_event_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: number;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        sub_event_type?: number;
-        operator_user_id?: string;
-        opt_scene?: string;
-        opt_desc?: string;
-        opt_time?: string;
-        opt_id?: string;
-        employment_id?: string;
-        data?: Array<{
-            id?: string;
-            entity?: string;
-            agg_entity?: string;
-            agg_entity_id?: string;
-            opt_type?: number;
-            fields?: Array<string>;
-        }>;
-    }) => Promise<any> | any;
-    /**
-     * 离职信息变更
-     *
-     * 当员工的离职信息变更会发送消息。例如在 [离职管理](https://people.feishu.cn/people/members/dimission/management) > 离职详情页 > 编辑 中修改了离职信息，该事件会推送对应变更的消息。
-     */
-    "corehr.offboarding.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        tenant_id?: string;
-        offboarding_info_id?: string;
-        process_id?: string;
-        checklist_process_id?: string;
-        employment_id?: string;
-        operator?: string;
-        status?: number;
-        checklist_status?: number;
-        updated_time?: string;
-        updated_fields?: Array<string>;
-        target_user_id?: {
-            union_id?: string;
-            user_id?: string;
-            open_id?: string;
-        };
-    }) => Promise<any> | any;
-    /**
-     * 【事件】删除地点
-     *
-     * 飞书人事中「地点被删除」时将触发此事件。
-     */
-    "corehr.location.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        location_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】删除职等
-     *
-     * 飞书人事中「职等被删除」时将触发此事件。;
-     */
-    "corehr.job_grade.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_grade_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】创建职级;
-     *
-     * 飞书人事中「职级被创建」时将触发此事件。
-     */
-    "corehr.job_level.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_level_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】创建序列;
-     *
-     * 飞书人事中「序列被创建」时将触发此事件。
-     */
-    "corehr.job_family.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_family_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】创建成本中心
-     *
-     * 飞书人事中「成本中心被创建」时将触发此事件。
-     */
-    "corehr.cost_center.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        cost_center_id?: string;
+        code_lists?: Array<string>;
     }) => Promise<any> | any;
     /**
      * 创建岗位事件
@@ -2456,41 +4255,6 @@ export interface IHandles extends IOtherEventHandles {
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-     * 【事件】更新职等
-     *
-     * 飞书人事中「职等被更新」时将触发此事件。
-     */
-    "corehr.job_grade.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_grade_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】删除成本中心
-     *
-     * 飞书人事中「成本中心被删除」时将触发此事件。;
-     */
-    "corehr.cost_center.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        cost_center_id?: string;
-    }) => Promise<any> | any;
-    /**
      * 【事件】删除公司
      *
      * 飞书人事中「公司被删除」时将触发此事件。;
@@ -2506,78 +4270,6 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         company_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】更新成本中心
-     *
-     * 飞书人事中「成本中心信息被更新」时将触发此事件。
-     */
-    "corehr.cost_center.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        cost_center_id?: string;
-        field_changes?: Array<string>;
-    }) => Promise<any> | any;
-    /**
-     * 电子签文件状态变更事件
-     *
-     * 当电子签文件状态发生变更的时候，会推送变更事件，包含文件变更前后的状态等信息
-     */
-    "corehr.signature_file.status_updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        signature_file_id?: string;
-        before_status?: string;
-        after_status?: string;
-        biz_process_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】创建职等;
-     *
-     * 飞书人事中「职等被创建」时将触发此事件。
-     */
-    "corehr.job_grade.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_grade_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】删除职级
-     *
-     * 飞书人事中「职级被删除」时将触发此事件。;
-     */
-    "corehr.job_level.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        job_level_id?: string;
     }) => Promise<any> | any;
     /**
      * 【事件】更新序列
@@ -2625,6 +4317,423 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
+     * 【事件】删除序列
+     *
+     * 飞书人事中「序列被删除」时将触发此事件。;
+     */
+    "corehr.job_family.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除自定义组织
+     *
+     * 飞书人事中「自定义组织被删除」时将触发此事件。
+     */
+    "corehr.custom_org.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        org_id?: string;
+        object_api_name?: string;
+    }) => Promise<any> | any;
+    /**
+     * 流程实例状态变化
+     *
+     * 流程实例是指用户发起的具体流程(process_id是其唯一标识)，流程实例状态变化时会触发该事件（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.status.update_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        status?: number;
+        biz_type?: string;
+        flow_definition_id?: string;
+        properties?: number;
+    }) => Promise<any> | any;
+    /**
+     * 删除待入职
+     *
+     * 待入职对象被删除后，触发此事件，包括两种场景：;- 在飞书人事-人员管理-入职管理，操作「回退 Offer 沟通阶段」;- 通过开放平台接口删除待入职
+     */
+    "corehr.pre_hire.prehire_deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        tenant_id?: string;
+        prehire_id?: string;
+        worker_id?: string;
+        preferred_name?: string;
+    }) => Promise<any> | any;
+    /**
+     * 流程评论事件
+     *
+     * 流程新增评论时会触发该事件，该事件包含评论所在的流程ID（process_id是其唯一标识）和评论唯一ID（comment_id）,此功能不受数据权限范围控制
+     */
+    "corehr.process_comment_info.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        process_id?: string;
+        comment_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 更新岗位事件
+     *
+     * 飞书人事中「岗位信息被更新」时将触发此事件。注意：触发时间为岗位更新实际生效时间，如在 2022-01-01 更新岗位，岗位更新生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.position.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 抄送单据状态变更
+     *
+     * 流程中生成抄送单据后会触发该事件。抄送节点会生成抄送单据任务。如果一个节点有多个人抄送人，则会生成多个抄送单据（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.cc.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        approver_id?: string;
+        status?: number;
+        biz_type?: string;
+    }) => Promise<any> | any;
+    /**
+     * 离职申请状态变更
+     *
+     * 在发起离职审批、产生审批结果、离职生效、离职状态回退等离职申请状态变更时触发该事件推送对应消息。审批结果产生的场景包括撤销、通过、拒绝审批。;- 与原事件[离职申请状态变更](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated)相比，该事件多了直接离职产生的事件，且支持「员工数据」范围控制
+     */
+    "corehr.offboarding.status_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        process_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+     * 离职流转状态变更
+     *
+     * 离职流转流程的状态变更消息，当离职流转流程发起和产生审批结果时，会触发该事件。离职流转流程是在离职申请审批通过之后发起的流程，一般用于审批核实离职员工的交接事宜。
+     */
+    "corehr.offboarding.checklist_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        checklist_process_id?: string;
+        checklist_status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.signature_template.changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 离职信息变更
+     *
+     * 当员工的离职信息变更会发送消息。例如在 [离职管理](https://people.feishu.cn/people/members/dimission/management) > 离职详情页 > 编辑 中修改了离职信息，该事件会推送对应变更的消息。
+     */
+    "corehr.offboarding.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        tenant_id?: string;
+        offboarding_info_id?: string;
+        process_id?: string;
+        checklist_process_id?: string;
+        employment_id?: string;
+        operator?: string;
+        status?: number;
+        checklist_status?: number;
+        updated_time?: string;
+        updated_fields?: Array<string>;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 人员信息变更
+     *
+     * 人员领域事件变更，通过业务界面、开放平台接口对个人信息、工作信息（雇佣信息）、任职信息、兼职信息等进行操作时会触发相应事件
+     */
+    "corehr.employee.domain_event_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: number;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sub_event_type?: number;
+        operator_user_id?: string;
+        opt_scene?: string;
+        opt_desc?: string;
+        opt_time?: string;
+        opt_id?: string;
+        employment_id?: string;
+        data?: Array<{
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            opt_type?: number;
+            fields?: Array<string>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建职级;
+     *
+     * 飞书人事中「职级被创建」时将触发此事件。
+     */
+    "corehr.job_level.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建成本中心
+     *
+     * 飞书人事中「成本中心被创建」时将触发此事件。
+     */
+    "corehr.cost_center.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新职等
+     *
+     * 飞书人事中「职等被更新」时将触发此事件。
+     */
+    "corehr.job_grade.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新成本中心
+     *
+     * 飞书人事中「成本中心信息被更新」时将触发此事件。
+     */
+    "corehr.cost_center.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 电子签文件状态变更事件
+     *
+     * 当电子签文件状态发生变更的时候，会推送变更事件，包含文件变更前后的状态等信息
+     */
+    "corehr.signature_file.status_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        signature_file_id?: string;
+        before_status?: string;
+        after_status?: string;
+        biz_process_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除成本中心
+     *
+     * 飞书人事中「成本中心被删除」时将触发此事件。;
+     */
+    "corehr.cost_center.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建职等;
+     *
+     * 飞书人事中「职等被创建」时将触发此事件。
+     */
+    "corehr.job_grade.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除职级
+     *
+     * 飞书人事中「职级被删除」时将触发此事件。;
+     */
+    "corehr.job_level.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 创建公司
+     *
+     * 飞书人事中「公司被创建」时将触发此事件。
+     */
+    "corehr.company.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+    }) => Promise<any> | any;
+    /**
      * 【事件】更新部门
      *
      * 飞书人事中「部门信息被更新」时将触发此事件。
@@ -2643,11 +4752,245 @@ export interface IHandles extends IOtherEventHandles {
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
-     * 【事件】删除序列
+     * 通道创建事件
      *
-     * 飞书人事中「序列被删除」时将触发此事件。;
+     * 通道创建后会发送该事件
      */
-    "corehr.job_family.deleted_v2"?: (data: {
+    "corehr.pathway.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        pathway_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新自定义组织
+     *
+     * 飞书人事中「自定义组织被更新」时将触发此事件。
+     */
+    "corehr.custom_org.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        org_id?: string;
+        field_changes?: Array<string>;
+        object_api_name?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】更新公司
+     *
+     * 飞书人事中「公司被更新」时将触发此事件。
+     */
+    "corehr.company.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+        field_changes?: Array<string>;
+        sub_events?: Array<{
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            agg_entity_field?: string;
+            opt_type?: number;
+            field_changes?: Array<string>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建部门
+     *
+     * 飞书人事中「部门被创建」时将触发此事件。
+     */
+    "corehr.department.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 流程实例信息变更
+     *
+     * 流程实例是指用户发起的具体流程(process_id是其唯一标识)，流程实例在以下时机会触发信息变更事件：流程中有审批人操作、流程数据更新、流程状态变化等。;;注意事项：若节点中有多个人时，可能会同时触发多个事件。例如流程运行到该节点，同时为多个人都生成了待办任务，就会导致触发多次事件（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        status?: number;
+        biz_type?: string;
+        flow_definition_id?: string;
+        properties?: number;
+    }) => Promise<any> | any;
+    /**
+     * 流程定义状态变更
+     *
+     * 流程定义状态变化会触发该事件(此功能不受数据权限范围控制）
+     */
+    "corehr.bpm_flow.status.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        flow_definition_id?: string;
+        biz_type?: string;
+        status?: number;
+        update_time?: string;
+    }) => Promise<any> | any;
+    /**
+     * 审批任务状态变更
+     *
+     * 单个审批任务的状态变化会触发该事件。例如，审批任务从待办变为已完成。审批任务（approver_id 是唯一标识），比如一个多人会签节点，会分别生成多人的审批任务（此功能不受数据权限范围控制）。
+     */
+    "corehr.process.approver.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        process_id?: string;
+        approver_id?: string;
+        status?: number;
+        biz_type?: string;
+        flow_definition_id?: string;
+        node_definition_id?: string;
+        node_id?: string;
+        node_id_str?: string;
+    }) => Promise<any> | any;
+    /**
+     * 删除岗位事件
+     *
+     * 飞书人事中「岗位被删除」时将触发此事件。
+     */
+    "corehr.position.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_change.transformed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        job_change_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.signature_file.changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+        task_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除地点
+     *
+     * 飞书人事中「地点被删除」时将触发此事件。
+     */
+    "corehr.location.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】删除职等
+     *
+     * 飞书人事中「职等被删除」时将触发此事件。;
+     */
+    "corehr.job_grade.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 【事件】创建序列;
+     *
+     * 飞书人事中「序列被创建」时将触发此事件。
+     */
+    "corehr.job_family.created_v2"?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
@@ -2677,115 +5020,6 @@ export interface IHandles extends IOtherEventHandles {
         location_id?: string;
     }) => Promise<any> | any;
     /**
-     * 创建公司
-     *
-     * 飞书人事中「公司被创建」时将触发此事件。
-     */
-    "corehr.company.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        company_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 通道创建事件
-     *
-     * 通道创建后会发送该事件
-     */
-    "corehr.pathway.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        pathway_id?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】删除自定义组织
-     *
-     * 飞书人事中「自定义组织被删除」时将触发此事件。
-     */
-    "corehr.custom_org.deleted_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        org_id?: string;
-        object_api_name?: string;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】更新自定义组织
-     *
-     * 飞书人事中「自定义组织被更新」时将触发此事件。
-     */
-    "corehr.custom_org.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        org_id?: string;
-        field_changes?: Array<string>;
-        object_api_name?: string;
-    }) => Promise<any> | any;
-    /**
-     * 流程实例状态变化
-     *
-     * 流程实例是指用户发起的具体流程(process_id是其唯一标识)，流程实例状态变化时会触发该事件（此功能不受数据权限范围控制）。
-     */
-    "corehr.process.status.update_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        process_id?: string;
-        status?: number;
-        biz_type?: string;
-        flow_definition_id?: string;
-        properties?: number;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】创建部门
-     *
-     * 飞书人事中「部门被创建」时将触发此事件。
-     */
-    "corehr.department.created_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        department_id?: string;
-    }) => Promise<any> | any;
-    /**
      * 组织架构调整状态变更事件
      *
      * - 当用户在『飞书人事-我的团队/人员管理-组织架构』，查看调整链接可以获取到 该用户发起的所有组织架构调整， 进入可找到审批流程。;- 当该审批单状态发生变更后， 用户会收到流程状态变更事件。 ;- 延迟说明：数据库主从延迟2s以内，即：用户接收到流程状态变更消息后2s内调用查询状态接口可能查不到变更信息。;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
@@ -2810,33 +5044,6 @@ export interface IHandles extends IOtherEventHandles {
         draft_id?: string;
         draft_status?: number;
         approval_group_status_v2?: number;
-    }) => Promise<any> | any;
-    /**
-     * 【事件】更新公司
-     *
-     * 飞书人事中「公司被更新」时将触发此事件。
-     */
-    "corehr.company.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        company_id?: string;
-        field_changes?: Array<string>;
-        sub_events?: Array<{
-            id?: string;
-            entity?: string;
-            agg_entity?: string;
-            agg_entity_id?: string;
-            agg_entity_field?: string;
-            opt_type?: number;
-            field_changes?: Array<string>;
-        }>;
     }) => Promise<any> | any;
     /**
      * 通道更新事件
@@ -2937,27 +5144,6 @@ export interface IHandles extends IOtherEventHandles {
         flow_info?: { id?: string; name?: { zh_cn?: string; en_us?: string } };
     }) => Promise<any> | any;
     /**
-     * 流程实例信息变更
-     *
-     * 流程实例是指用户发起的具体流程(process_id是其唯一标识)，流程实例在以下时机会触发信息变更事件：流程中有审批人操作、流程数据更新、流程状态变化等。;;注意事项：若节点中有多个人时，可能会同时触发多个事件。例如流程运行到该节点，同时为多个人都生成了待办任务，就会导致触发多次事件（此功能不受数据权限范围控制）。
-     */
-    "corehr.process.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        process_id?: string;
-        status?: number;
-        biz_type?: string;
-        flow_definition_id?: string;
-        properties?: number;
-    }) => Promise<any> | any;
-    /**
      * 流程节点状态变更
      *
      * 流程中节点状态发生变化会触发该事件。配置的节点为节点定义（node_definition_id 是唯一标识）。在流程实例中，每个流程实例生成的节点实例会不同（此功能不受数据权限范围控制）。
@@ -2979,48 +5165,6 @@ export interface IHandles extends IOtherEventHandles {
         node_type?: number;
         node_status?: number;
         biz_type?: string;
-    }) => Promise<any> | any;
-    /**
-     * 审批任务状态变更
-     *
-     * 单个审批任务的状态变化会触发该事件。例如，审批任务从待办变为已完成。审批任务（approver_id 是唯一标识），比如一个多人会签节点，会分别生成多人的审批任务（此功能不受数据权限范围控制）。
-     */
-    "corehr.process.approver.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: number;
-        app_id?: string;
-        process_id?: string;
-        approver_id?: string;
-        status?: number;
-        biz_type?: string;
-        flow_definition_id?: string;
-        node_definition_id?: string;
-        node_id?: string;
-        node_id_str?: string;
-    }) => Promise<any> | any;
-    /**
-     * 流程评论事件
-     *
-     * 流程新增评论时会触发该事件，该事件包含评论所在的流程ID（process_id是其唯一标识）和评论唯一ID（comment_id）,此功能不受数据权限范围控制
-     */
-    "corehr.process_comment_info.updated_v2"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: number;
-        app_id?: string;
-        process_id?: string;
-        comment_id?: string;
     }) => Promise<any> | any;
     /**
      * 异动状态变更
@@ -3055,6 +5199,24 @@ export interface IHandles extends IOtherEventHandles {
         details_of_job_status_change?: Array<string>;
     }) => Promise<any> | any;
     /**
+     * 入职信息变更
+     *
+     * 待入职信息更新后，触发此事件，包括：;- 在飞书人事-入职系统更新待入职;- 通过开放平台接口更新待入职
+     */
+    "corehr.pre_hire.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        prehire_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
      * 异动信息变更
      *
      * 员工发起异动后，异动信息变更会触发该事件
@@ -3082,6 +5244,1983 @@ export interface IHandles extends IOtherEventHandles {
         updated_fields?: Array<string>;
         transform_type?: string;
         transform_reason?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_change.info_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        tenant_id?: string;
+        process_id?: string;
+        initiator?: string;
+        operator?: string;
+        updated_time?: string;
+        job_change_id?: string;
+        status?: number;
+        operate_reason?: string;
+        transfer_type?: number;
+        updated_fields?: Array<string>;
+        transform_type?: string;
+        transform_reason?: string;
+    }) => Promise<any> | any;
+    /**
+     * 被动离职补偿金计算状态变更
+     *
+     * 当被动离职补偿金测算状态发生变化时推送该事件。
+     */
+    "corehr.severance_pay.calculate_status_update_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        tenant_id?: string;
+        severance_pay_id?: string;
+        process_id?: string;
+        employment_id?: string;
+        target_user_id?: string;
+        calculate_status?: number;
+    }) => Promise<any> | any;
+    /**
+     * 被动离职补偿金信息状态变更
+     *
+     * 当被动离职补偿金记录状态发生变化时推送该事件。
+     */
+    "corehr.severance_pay.status_update_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        tenant_id?: string;
+        severance_pay_id?: string;
+        process_id?: string;
+        employment_id?: string;
+        target_user_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+     * 员工信息被修改
+     *
+     * 在员工资料更新时接收事件通知。;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.employee.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        changed_properties?: Array<string>;
+        employee_prev?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        employee_curr?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 部门被删除;
+     *
+     * 在删除部门时接收事件通知。;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.department.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                phone_value?: {
+                    phone_number: string;
+                    extension_number?: string;
+                };
+                field_key?: string;
+            }>;
+            org_dimension?: string;
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 部门新建
+     *
+     * 在创建新部门时接收事件通知。;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.department.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                phone_value?: {
+                    phone_number: string;
+                    extension_number?: string;
+                };
+                field_key?: string;
+            }>;
+            org_dimension?: string;
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 员工被设置为待离职
+     *
+     * 当员工被设置为待离职时接收事件通知。;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.employee.to_be_resigned_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 员工离职
+     *
+     * 有员工离职时接收事件通知。;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.employee.resigned_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 部门信息被修改
+     *
+     * 在部门数据更改时接收事件通知。;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.department.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        changed_properties?: Array<string>;
+        department_prev?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                phone_value?: {
+                    phone_number: string;
+                    extension_number?: string;
+                };
+                field_key?: string;
+            }>;
+            org_dimension?: string;
+        };
+        department_curr?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                phone_value?: {
+                    phone_number: string;
+                    extension_number?: string;
+                };
+                field_key?: string;
+            }>;
+            org_dimension?: string;
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 离职恢复在职
+     *
+     * 在员工取消离职时接收事件通知;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.employee.resurrect_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 待离职恢复为在职
+     *
+     * 在员工取消待离职时接收事件通知。;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。
+     */
+    "directory.employee.regular_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 员工入职
+     *
+     * 在创建员工时接收事件通知;;;## 前提条件;你需要在应用中配置事件订阅，这样才可以在事件触发时接收到事件数据。了解事件订阅可参见[事件概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。;;;## 注意事项;该事件有部分字段权限要求，你可以参考相应的参数描述获取参数所需的权限。只有当应用开通了相应的字段权限后，才可以成功接收到完整的事件体数据。申请权限的具体操作，参见[申请 API 权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。;
+     */
+    "directory.employee.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_type?: "1" | "2" | "3" | "4" | "9" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                    phone_value?: {
+                        phone_number: string;
+                        extension_number?: string;
+                    };
+                    field_key?: string;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_type?:
+                                | "1"
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "9"
+                                | "10"
+                                | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                            phone_value?: {
+                                phone_number: string;
+                                extension_number?: string;
+                            };
+                            field_key?: string;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.download_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
     }) => Promise<any> | any;
     /**
      * 文件夹下文件创建
@@ -3508,6 +7647,581 @@ export interface IHandles extends IOtherEventHandles {
         is_mentioned?: boolean;
     }) => Promise<any> | any;
     /**
+     * 创建校区
+     *
+     * 校区创建后发送该事件
+     */
+    "edu.campus.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            campus_id?: string;
+            name?: string;
+            period_id_list?: Array<string>;
+            status?: "invalid" | "valid";
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除学科
+     *
+     * 学科删除后发送该事件
+     */
+    "edu.subject.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subject_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 创建班级
+     *
+     * 班级创建后发送该事件
+     */
+    "edu.class.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            class_id?: string;
+            name?: string;
+            grade_id?: string;
+            status?: "invalid" | "valid";
+            class_seq_id?: number;
+            class_alias?: string;
+            only_alias?: boolean;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 创建学科
+     *
+     * 学科创建后发送该事件
+     */
+    "edu.subject.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subject_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 创建年级
+     *
+     * 年级创建后发送该事件
+     */
+    "edu.grade.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            grade_id?: string;
+            name?: string;
+            class_id_list?: Array<string>;
+            period_id?: string;
+            status?: "invalid" | "valid";
+            start_year?: number;
+            grade_level?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 修改年级
+     *
+     * 年级修改后发送该事件
+     */
+    "edu.grade.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            grade_id?: string;
+            name?: string;
+            class_id_list?: Array<string>;
+            period_id?: string;
+            status?: "invalid" | "valid";
+            start_year?: number;
+            grade_level?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除班级
+     *
+     * 班级删除后
+     */
+    "edu.class.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            class_id?: string;
+            name?: string;
+            grade_id?: string;
+            status?: "invalid" | "valid";
+            class_seq_id?: number;
+            class_alias?: string;
+            only_alias?: boolean;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除家校群
+     *
+     * 删除家校群后发送该事件
+     */
+    "edu.home_school_chat.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            chat_id?: string;
+            class_id?: string;
+            chat_name?: string;
+            owner_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 修改班级
+     *
+     * 班级修改后发送该事件
+     */
+    "edu.class.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            class_id?: string;
+            name?: string;
+            grade_id?: string;
+            status?: "invalid" | "valid";
+            class_seq_id?: number;
+            class_alias?: string;
+            only_alias?: boolean;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除年级
+     *
+     * 年级删除后发送该事件
+     */
+    "edu.grade.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            grade_id?: string;
+            name?: string;
+            class_id_list?: Array<string>;
+            period_id?: string;
+            status?: "invalid" | "valid";
+            start_year?: number;
+            grade_level?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 学生家长修改
+     *
+     * 学生家长修改后会发送该事件
+     */
+    "edu.student.parent_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        student_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 修改校区
+     *
+     * 校区修改后发送该事件
+     */
+    "edu.campus.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            campus_id?: string;
+            name?: string;
+            period_id_list?: Array<string>;
+            status?: "invalid" | "valid";
+        };
+    }) => Promise<any> | any;
+    /**
+     * 创建学生
+     *
+     * 学生创建后会发送该事件
+     */
+    "edu.student.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            student_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            name?: string;
+            student_no?: string;
+            class_path_list?: Array<{
+                campus_id?: string;
+                period_id?: string;
+                grade_id?: string;
+                class_id?: string;
+            }>;
+            status?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除校区
+     *
+     * 校区删除后发送该事件
+     */
+    "edu.campus.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            campus_id?: string;
+            name?: string;
+            period_id_list?: Array<string>;
+            status?: "invalid" | "valid";
+        };
+    }) => Promise<any> | any;
+    /**
+     * 创建学段
+     *
+     * 学段创建后发送该事件
+     */
+    "edu.period.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            period_id?: string;
+            name?: string;
+            grade_id_list?: Array<string>;
+            campus_id?: string;
+            status?: "invalid" | "valid";
+            period_level?:
+                | "kindergarten"
+                | "primary_school"
+                | "junior_high_school"
+                | "senior_high_school";
+            junior_naming_type?: "number" | "text";
+        };
+    }) => Promise<any> | any;
+    /**
+     * 修改学生
+     *
+     * 学生基本信息修改后后会发送该事件
+     */
+    "edu.student.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            student_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            name?: string;
+            student_no?: string;
+            class_path_list?: Array<{
+                campus_id?: string;
+                period_id?: string;
+                grade_id?: string;
+                class_id?: string;
+            }>;
+            status?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除学生
+     *
+     * 学生删除后会发送该事件
+     */
+    "edu.student.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            student_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            name?: string;
+            student_no?: string;
+            class_path_list?: Array<{
+                campus_id?: string;
+                period_id?: string;
+                grade_id?: string;
+                class_id?: string;
+            }>;
+            status?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 学生调班
+     *
+     * 学生调班后会发送该事件
+     */
+    "edu.student.transfered_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        student_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 角色变更
+     *
+     * 教师的角色有变更的情况下会发送该事件
+     */
+    "edu.teacher.role_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        teacher_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * 创建家校群
+     *
+     * 创建家校群后发送该事件
+     */
+    "edu.home_school_chat.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            chat_id?: string;
+            class_id?: string;
+            chat_name?: string;
+            owner_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 删除学段
+     *
+     * 学段删除后发送该事件
+     */
+    "edu.period.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            period_id?: string;
+            name?: string;
+            grade_id_list?: Array<string>;
+            campus_id?: string;
+            status?: "invalid" | "valid";
+            period_level?:
+                | "kindergarten"
+                | "primary_school"
+                | "junior_high_school"
+                | "senior_high_school";
+            junior_naming_type?: "number" | "text";
+        };
+    }) => Promise<any> | any;
+    /**
+     * 修改学段
+     *
+     * 学段修改后发送该事件
+     */
+    "edu.period.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            period_id?: string;
+            name?: string;
+            grade_id_list?: Array<string>;
+            campus_id?: string;
+            status?: "invalid" | "valid";
+            period_level?:
+                | "kindergarten"
+                | "primary_school"
+                | "junior_high_school"
+                | "senior_high_school";
+            junior_naming_type?: "number" | "text";
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "edu.parent.activated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            parent_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            cp_id: string;
+            name: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "edu.parent.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            parent_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            cp_id: string;
+            name: string;
+        };
+        old_object?: { parent_id: string; cp_id: string; name: string };
+    }) => Promise<any> | any;
+    /**
      * 课程学习进度更新事件
      *
      * 课程学习进度更新时触发
@@ -3592,6 +8306,219 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "event.subscription.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subscription_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "event.subscription.activated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: number;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subscription_id?: string;
+        target_resource?: string;
+        authority?: { type?: string; open_id?: string; app_id?: string };
+        state?: string;
+        payload_options?: { include_resource_data?: boolean };
+        filter?: {
+            composite_condition?: {
+                logic_op?: string;
+                condition?: {
+                    operand?: string;
+                    op?: string;
+                    value?: string;
+                    list_value?: Array<string>;
+                };
+                composite_conditions?: Array<{}>;
+            };
+        };
+        suspension?: { code?: string };
+        expire_time?: number;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "event.subscription.expiration_reminder_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: number;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subscription_id?: string;
+        target_resource?: string;
+        authority?: { type?: string; open_id?: string; app_id?: string };
+        state?: string;
+        payload_options?: { include_resource_data?: boolean };
+        filter?: {
+            composite_condition?: {
+                logic_op?: string;
+                condition?: {
+                    operand?: string;
+                    op?: string;
+                    value?: string;
+                    list_value?: Array<string>;
+                };
+                composite_conditions?: Array<{}>;
+            };
+        };
+        suspension?: { code?: string };
+        expire_time?: number;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "event.subscription.expired_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: number;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subscription_id?: string;
+        target_resource?: string;
+        authority?: { type?: string; open_id?: string; app_id?: string };
+        state?: string;
+        payload_options?: { include_resource_data?: boolean };
+        filter?: {
+            composite_condition?: {
+                logic_op?: string;
+                condition?: {
+                    operand?: string;
+                    op?: string;
+                    value?: string;
+                    list_value?: Array<string>;
+                };
+                composite_conditions?: Array<{}>;
+            };
+        };
+        suspension?: { code?: string };
+        expire_time?: number;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "event.subscription.suspended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: number;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        subscription_id?: string;
+        target_resource?: string;
+        authority?: { type?: string; open_id?: string; app_id?: string };
+        state?: string;
+        payload_options?: { include_resource_data?: boolean };
+        filter?: {
+            composite_condition?: {
+                logic_op?: string;
+                condition?: {
+                    operand?: string;
+                    op?: string;
+                    value?: string;
+                    list_value?: Array<string>;
+                };
+                composite_conditions?: Array<{}>;
+            };
+        };
+        suspension?: { code?: string };
+        expire_time?: number;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "event.subscription.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        before?: {
+            subscription_id?: string;
+            authority?: { type?: string; open_id?: string; app_id?: string };
+            target_resource?: string;
+            event_type?: string;
+            payload_options?: { include_resource_data?: boolean };
+            filter?: {
+                composite_condition?: {
+                    logic_op?: string;
+                    condition?: {
+                        operand?: string;
+                        op?: string;
+                        value?: string;
+                        list_value?: Array<string>;
+                    };
+                    composite_conditions?: Array<{}>;
+                };
+            };
+            state?: string;
+            suspension?: { code?: string };
+            expire_time?: number;
+            create_time?: number;
+            update_time?: number;
+        };
+        after?: {
+            subscription_id?: string;
+            authority?: { type?: string; open_id?: string; app_id?: string };
+            target_resource?: string;
+            event_type?: string;
+            payload_options?: { include_resource_data?: boolean };
+            filter?: {
+                composite_condition?: {
+                    logic_op?: string;
+                    condition?: {
+                        operand?: string;
+                        op?: string;
+                        value?: string;
+                        list_value?: Array<string>;
+                    };
+                    composite_conditions?: Array<{}>;
+                };
+            };
+            state?: string;
+            suspension?: { code?: string };
+            expire_time?: number;
+            create_time?: number;
+            update_time?: number;
+        };
+    }) => Promise<any> | any;
+    /**
      * 推送审核通知
      *
      * 推送审核状态通知事件。
@@ -3649,6 +8576,123 @@ export interface IHandles extends IOtherEventHandles {
             editable?: boolean;
         }>;
         chat_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "helpdesk.ticket_message.user_send_message_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        message_id?: string;
+        ticket_message_id?: string;
+        msg_type?: string;
+        sender_id?: string;
+        sender_type?: number;
+        text?: string;
+        position?: number;
+        chat_id?: string;
+        helpdesk_id?: string;
+        content?: {
+            content?: string;
+            msg_type?: string;
+            image_keys?: Array<string>;
+            image_key?: string;
+        };
+        ticket?: {
+            ticket_id: string;
+            helpdesk_id?: string;
+            guest?: {
+                id?: string;
+                avatar_url?: string;
+                name?: string;
+                email?: string;
+                department?: string;
+                city?: string;
+                country?: string;
+            };
+            comments?: Array<{
+                content?: string;
+                created_at?: number;
+                id?: number;
+                user_avatar_url?: string;
+                user_name?: string;
+                user_id?: number;
+            }>;
+            ticket_type?: number;
+            status?: number;
+            score?: number;
+            created_at?: number;
+            updated_at?: number;
+            closed_at?: number;
+            dissatisfaction_reason?: {
+                zh_cn?: string;
+                en_us?: string;
+                ja_jp?: string;
+            };
+            agents?: Array<{
+                id?: string;
+                avatar_url?: string;
+                name?: string;
+                email?: string;
+                department?: string;
+                city?: string;
+                country?: string;
+            }>;
+            channel?: number;
+            solve?: number;
+            closed_by?: {
+                id?: string;
+                avatar_url?: string;
+                name?: string;
+                email?: string;
+                department?: string;
+                city?: string;
+                country?: string;
+            };
+            collaborators?: Array<{
+                id?: string;
+                avatar_url?: string;
+                name?: string;
+                email?: string;
+                department?: string;
+                city?: string;
+                country?: string;
+            }>;
+            customized_fields?: Array<{
+                id?: string;
+                value?: string;
+                key_name?: string;
+                display_name?: string;
+                position?: number;
+                required?: boolean;
+                editable?: boolean;
+            }>;
+            agent_service_duration?: number;
+            agent_first_response_duration?: number;
+            bot_service_duration?: number;
+            agent_resolution_time?: number;
+            actual_processing_time?: number;
+            agent_entry_time?: number;
+            agent_first_response_time?: number;
+            agent_last_response_time?: number;
+            agent_owner?: {
+                id?: string;
+                avatar_url?: string;
+                name?: string;
+                email?: string;
+                department?: string;
+                city?: string;
+                country?: string;
+            };
+        };
+        user_tenant_key?: string;
     }) => Promise<any> | any;
     /**
      * 工单消息事件
@@ -3954,6 +8998,29 @@ export interface IHandles extends IOtherEventHandles {
         termination_reason?: string;
     }) => Promise<any> | any;
     /**
+     * 背调报告审批状态变更
+     *
+     * 若飞书招聘客户开启背调审批功能，则客户在调用[审批背调报告](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/background_check_order-feedback/update_audit_conclusion)接口对背调结果进行审批后，会触发该事件（审批通过/驳回）。若为审批驳回事件，则服务商应在收到事件后，重新回传更新后的背调报告。
+     */
+    "hire.background_check_order.feedback.audit_conclustion_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        background_check_id?: string;
+        report_id?: string;
+        report_name?: string;
+        old_approval_status?: number;
+        new_approval_status?: number;
+        comments?: string;
+        approval_time?: string;
+    }) => Promise<any> | any;
+    /**
      * 人才进展变更事件
      *
      * 支持单独订阅有指定标签的人才进展，人才进展包括阶段变更、锁定、解锁，需要提前在「飞书招聘」-「设置」- 「候选人标签管理」里对指定标签勾选支持事件订阅
@@ -4018,6 +9085,25 @@ export interface IHandles extends IOtherEventHandles {
         modify_time?: string;
     }) => Promise<any> | any;
     /**
+     * 招聘需求审批状态变更
+     *
+     * 当招聘需求的审批状态发生变更时将触发该事件
+     */
+    "hire.job_requirement.approval_status_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_requirement_id?: string;
+        old_approval_status?: number;
+        new_approval_status?: number;
+    }) => Promise<any> | any;
+    /**
      * 投递阶段变更
      *
      * 当投递阶段发生变更时，会触发此事件。了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)。
@@ -4062,6 +9148,32 @@ export interface IHandles extends IOtherEventHandles {
         };
         talent_id?: string;
         application_id?: string;
+        job_info?: {
+            department?: {
+                id?: string;
+                name?: { zh_cn?: string; en_us?: string };
+            };
+            addresses?: Array<{
+                id?: string;
+                name?: { zh_cn?: string; en_us?: string };
+                district?: {
+                    code?: string;
+                    name?: { zh_cn?: string; en_us?: string };
+                };
+                city?: {
+                    code?: string;
+                    name?: { zh_cn?: string; en_us?: string };
+                };
+                state?: {
+                    code?: string;
+                    name?: { zh_cn?: string; en_us?: string };
+                };
+                country?: {
+                    code?: string;
+                    name?: { zh_cn?: string; en_us?: string };
+                };
+            }>;
+        };
     }) => Promise<any> | any;
     /**
      * 消息已读
@@ -4088,6 +9200,98 @@ export interface IHandles extends IOtherEventHandles {
             tenant_key?: string;
         };
         message_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "im.message.urgent_result_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        message_id?: string;
+        from_id?: { union_id?: string; user_id?: string; open_id?: string };
+        urgent_type?: "sms" | "phone";
+        send_time?: string;
+        notify_status_items?: Array<{
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            notify_status_type?: "no_answer" | "too_frequent";
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 提及已读
+     *
+     * 用户阅读机器人发送的@自己的消息后触发此事件。
+     */
+    "im.message.at_message_read_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        reader?: {
+            reader_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            read_time: string;
+            tenant_key?: string;
+        };
+        message_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * 加急已读
+     *
+     * 用户阅读机器人发送的加急后触发此事件。
+     */
+    "im.message.urgent_message_read_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        reader?: {
+            reader_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            read_time: string;
+            tenant_key?: string;
+        };
+        message_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 用户修改是否接收机器人消息配置
+     *
+     * 用户设置 **不再接收机器人消息** 或 **恢复接收机器人消息** 时，触发事件推送。
+     */
+    "im.message.bot_muted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operator?: { operator_id: string; operator_type: "app" | "user" };
+        bot_muted_status?: boolean;
     }) => Promise<any> | any;
     /**
      * 用户出群
@@ -4419,9 +9623,98 @@ export interface IHandles extends IOtherEventHandles {
         i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
+     * 消息更新
+     *
+     * 用户更新消息后推送事件。
+     */
+    "im.message.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender?: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message?: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            update_time?: string;
+            chat_id: string;
+            thread_id?: string;
+            chat_type: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                mentioned_type?: string;
+                name: string;
+                tenant_key?: string;
+            }>;
+            lark_agent_context?: { active_chat_id?: string };
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "im.message.user_receive_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            update_time?: string;
+            chat_id: string;
+            thread_id?: string;
+            chat_type: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                mentioned_type?: string;
+                name: string;
+                tenant_key?: string;
+            }>;
+            user_agent?: string;
+            lark_agent_context?: { active_chat_id?: string };
+        };
+    }) => Promise<any> | any;
+    /**
      * 接收消息
      *
-     * 机器人接收到用户/机器人发送的消息后触发此事件。
+     * 机器人接收到用户/机器人发送的消息后触发此事件
      */
     "im.message.receive_v1"?: (data: {
         event_id?: string;
@@ -4489,6 +9782,118 @@ export interface IHandles extends IOtherEventHandles {
                 open_id?: string;
             }>;
         };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "mail.enterprise_email_change_event.enterprise_email_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: number;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        open_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 交易方-银行账户变更
+     *
+     * 交易方-银行账户变更
+     */
+    "mdm.vendor_account.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: number;
+        vendor_id?: number;
+        is_deleted?: boolean;
+    }) => Promise<any> | any;
+    /**
+     * 交易方-经营地址变更
+     *
+     * 交易方-经营地址变更
+     */
+    "mdm.vendor_address.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: number;
+        vendor_id?: number;
+        is_deleted?: boolean;
+    }) => Promise<any> | any;
+    /**
+     * 交易方-公司视图变更
+     *
+     * 交易方-公司视图变更
+     */
+    "mdm.vendor_company_view.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: number;
+        vendor_id?: number;
+        is_deleted?: boolean;
+    }) => Promise<any> | any;
+    /**
+     * 交易方-联系人变更
+     *
+     * 交易方-联系人变更
+     */
+    "mdm.vendor_contact.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: number;
+        vendor_id?: number;
+        is_deleted?: boolean;
+    }) => Promise<any> | any;
+    /**
+     * 交易方-基础信息变更
+     *
+     * 交易方-基础信息变更
+     */
+    "mdm.vendor.change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: number;
+        vendor?: string;
+        vendor_text?: string;
+        vendor_type?: string;
+        status?: string;
     }) => Promise<any> | any;
     /**
      * 会议室删除
@@ -4561,6 +9966,28 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         room_name?: string;
         room_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 第三方会议室日程变动
+     *
+     * 当添加了第三方会议室的日程发生变动时（创建/更新/删除）触发此事件。
+     */
+    "meeting_room.meeting_room.third_party_meeting_room_event_changes_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        event_time?: string;
+        uid?: string;
+        start?: { time_stamp: number };
+        end?: { time_stamp: number };
+        meeting_rooms?: Array<string>;
+        organizer?: { open_id: string; user_id: string };
     }) => Promise<any> | any;
     /**
      * 妙记生成
@@ -4683,6 +10110,46 @@ export interface IHandles extends IOtherEventHandles {
         user_type?: number;
     }) => Promise<any> | any;
     /**
+     * 取消点踩
+     *
+     * 公司圈用户取消点踩互动时触发此事件。
+     */
+    "moments.dislike.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_type?: number;
+        entity_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 点踩
+     *
+     * 公司圈用户点踩互动时触发此事件。
+     */
+    "moments.dislike.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_type?: number;
+        entity_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        id?: string;
+    }) => Promise<any> | any;
+    /**
      * 取消表情互动
      *
      * 公司圈用户取消表情互动时触发此事件。
@@ -4725,9 +10192,169 @@ export interface IHandles extends IOtherEventHandles {
         user_type?: number;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "myai.message.regenerate_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            update_time?: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name: string;
+                tenant_key?: string;
+            }>;
+            user_agent?: string;
+        };
+        myai_context: {
+            session_id: string;
+            scene_id: string;
+            verify_token: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "myai.message.receive_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            update_time?: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name: string;
+                tenant_key?: string;
+            }>;
+            user_agent?: string;
+        };
+        myai_context: {
+            session_id: string;
+            scene_id: string;
+            verify_token: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "myai.myai_scene.new_scene_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        myai_context: {
+            session_id: string;
+            scene_id: string;
+            verify_token: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "myai.message.stop_generate_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            update_time?: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name: string;
+                tenant_key?: string;
+            }>;
+            user_agent?: string;
+        };
+        myai_context: {
+            session_id: string;
+            scene_id: string;
+            verify_token: string;
+        };
+    }) => Promise<any> | any;
+    /**
      * 发薪活动封存
      *
-     * 当发薪活动封存后，订阅这个事件的应用会收到事件。;;;一个发薪活动封存后，可能会向事件监听方发送多条 `activity_id` 相同的事件通知，事件监听方需要针对  `activity_id` 做好幂等处理。;
+     * 当发薪活动封存后，订阅这个事件的应用会收到事件。;;;一个发薪活动封存后，可能会向事件监听方发送多条 `activity_id` 相同的事件通知，事件监听方需要针对 `activity_id` 做好幂等处理。;
      */
     "payroll.payment_activity.approved_v1"?: (data: {
         event_id?: string;
@@ -4819,6 +10446,272 @@ export interface IHandles extends IOtherEventHandles {
                     | "custom_review_role";
             }>;
         }>;
+    }) => Promise<any> | any;
+    /**
+     * 项目被评估人范围规则变更
+     *
+     * 当管理员在绩效系统变更项目的被评估人范围规则时，订阅这个事件的应用会收到该事件。
+     */
+    "performance.activity.scope_rule_changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        activity_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 周期删除
+     *
+     * 当管理员在绩效系统删除周期时，订阅这个事件的应用会收到该事件。;;
+     */
+    "performance.semester.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 周期创建
+     *
+     * 当管理员在绩效系统创建周期时，订阅这个事件的应用会收到该事件。;;
+     */
+    "performance.semester.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 项目创建
+     *
+     * 当管理员在绩效系统创建项目时，订阅这个事件的应用会收到该事件。
+     */
+    "performance.activity.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        activity_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 项目删除
+     *
+     * 当管理员在绩效系统删除项目时，订阅这个事件的应用会收到该事件。
+     */
+    "performance.activity.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        activity_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 周期更新
+     *
+     * 当管理员在绩效系统编辑周期信息时，订阅这个事件的应用会收到该事件。;;
+     */
+    "performance.semester.changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 项目更新
+     *
+     * 当项目的名称、描述或者状态发生变更时，订阅这个事件的应用会收到该事件。
+     */
+    "performance.activity.changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        activity_id?: string;
+        semester_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * 设备申报
+     *
+     * 订阅此事件后，成员提交设备自主申报后会收到通知，通知包含申报设备的参数以及申报人等信息
+     */
+    "security_and_compliance.device_apply_record.apply_event_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        device_apply_record?: {
+            apply_id?: string;
+            device_terminal_type?: "Unknown" | "PC" | "Mobile";
+            model?: string;
+            serial_number?: string;
+            uuid?: string;
+            mac_address?: string;
+            imei?: string;
+            android_id?: string;
+            google_aid?: string;
+            idfa?: string;
+            idfv?: string;
+            apply_status?:
+                | "Unknown"
+                | "NoApply"
+                | "Processing"
+                | "Pass"
+                | "Reject";
+            operator?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            apply_time?: string;
+            disk_serial_number?: string;
+            device_ownership?: "Unknown" | "Personal" | "Company";
+            device_system?:
+                | "Android"
+                | "Harmony"
+                | "iOS"
+                | "Windows"
+                | "Linux"
+                | "MacOS"
+                | "OpenHarmony";
+            device_name?: string;
+            device_record_id?: string;
+            aaid?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "security_and_compliance.log.auditlog_packed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        audit_logs?: Array<{
+            file_id?: string;
+            file_url?: string;
+            file_url_expire_time?: number;
+            file_size?: number;
+            start_time?: number;
+            end_time?: number;
+        }>;
+    }) => Promise<any> | any;
+    /**
+     * 文件送检事件
+     *
+     * 文件送检事件
+     */
+    "security_and_compliance.file_risk_detection_record.file_risk_detection_event_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_risk_detection_record?: {
+            record_id: string;
+            file_url: string;
+            file_url_expire_time: string;
+            file_size: string;
+            trigger_reason: number;
+        };
+        file_risk_detection_record_user?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * 错误日志
+     *
+     * 员工访问飞书发生错误时将触发此事件
+     */
+    "security_and_compliance.log.error_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        request?: {
+            host?: string;
+            path?: string;
+            path_params?: Array<{ key?: string; value?: string }>;
+            query?: string;
+            method?: string;
+            user_agent?: string;
+            client_ip?: string;
+            referer?: string;
+            origin?: string;
+            header?: string;
+        };
+        response?: { status_code?: number; header?: string };
+        common?: {
+            locale?: string;
+            report_time?: string;
+            session_uuid?: string;
+            terminal_type?: "0" | "1" | "2" | "3" | "4";
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            openplatform_app_id?: string;
+            request_id?: string;
+            log_id?: string;
+        };
     }) => Promise<any> | any;
     /**
      * 设备申报事件
@@ -4947,6 +10840,27 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "spark.app.record_change_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        workspace?: string;
+        app?: string;
+        table?: string;
+        operator?: string;
+        before?: string;
+        after?: string;
+        branch?: string;
+    }) => Promise<any> | any;
+    /**
      * 任务信息变更
      *
      * APP 订阅此事件后可接收到该 APP 所在租户的所有来源接口创建的任务的变更事件。事件体为发生变更任务的相关用户的 open_id，可用此 open_id ，通过 获取任务列表接口获取与该用户相关的所有任务。
@@ -4994,7 +10908,7 @@ export interface IHandles extends IOtherEventHandles {
     /**
      * 任务信息变更
      *
-     * 当 APP 订阅此事件后可以接收到由该 APP 创建的任务发生的变更，包括任务标题、描述、截止时间、协作者、关注者、提醒时间、状态（完成或取消完成）。;;;;**特别注意**: 订阅该事件只能接收到该 APP 创建的任务发生的变更，如果订阅后未收到事件，可以检查是否是下面几种不会推送的情况:;  - 任务是user_access_token方式创建或者其他应用创建的。;  - 任务是通过客户端或者文档创建的。;
+     * 当 APP 订阅此事件后可以接收到由该 APP 创建的任务发生的变更，包括任务标题、描述、截止时间、协作者、关注者、提醒时间、状态（完成或取消完成）。;;;;**特别注意**: 订阅该事件只能接收到该 APP 创建的任务发生的变更，如果订阅后未收到事件，可以检查是否是下面几种不会推送的情况:; - 任务是user_access_token方式创建或者其他应用创建的。; - 任务是通过客户端或者文档创建的。;
      */
     "task.task.updated_v1"?: (data: {
         event_id?: string;
@@ -5026,6 +10940,165 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         event_types?: Array<string>;
         task_guid?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "tenant.company_info.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        after_change?: {
+            name?: string;
+            id?: string;
+            industry?: string;
+            scale?: string;
+            domain?: string;
+            contact?: {
+                name?: string;
+                email?: string;
+                mobile?: string;
+                telephone?: string;
+                postcode?: string;
+                address?: string;
+            };
+        };
+        before_change?: {
+            name?: string;
+            id?: string;
+            industry?: string;
+            scale?: string;
+            domain?: string;
+            contact?: {
+                name?: string;
+                email?: string;
+                mobile?: string;
+                telephone?: string;
+                postcode?: string;
+                address?: string;
+            };
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "trust_party.trust_party_app.share_updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        from_tenant_key?: string;
+        to_tenant_key?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "trust_party.trust_party_message.receive_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            chat_id: string;
+            thread_id?: string;
+            chat_type: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name: string;
+                tenant_key?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "trust_party.trust_party_chat.member.user.added_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
+        external?: boolean;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        operator_tenant_key?: string;
+        users?: Array<{
+            name?: string;
+            tenant_key?: string;
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "trust_party.trust_party_app.app_shared_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        from_tenant_key?: string;
+        to_tenant_key?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "trust_party.trust_party_app.app_share_stopped_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        from_tenant_key?: string;
+        to_tenant_key?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
     }) => Promise<any> | any;
     /**
      * 企业会议开始
@@ -5079,6 +11152,22 @@ export interface IHandles extends IOtherEventHandles {
             user_role?: number;
             user_type?: number;
         };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.material.review_result_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        results?: Array<{ file_token?: string; result?: number }>;
     }) => Promise<any> | any;
     /**
      * 加入会议
@@ -5546,6 +11635,42 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "vc.meeting.send_meeting_im_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            meeting_source?: number;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_type?: number;
+        };
+        content?: string;
+    }) => Promise<any> | any;
+    /**
      * 删除会议室层级
      *
      * 当删除会议室层级时，会触发该事件。
@@ -5894,5 +12019,427 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: string;
             open_id?: string;
         }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.recording.recording_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        unique_key?: string;
+        source?: string;
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.recording.recording_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        unique_key?: string;
+        source?: string;
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.recording.recording_transcript_generated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        unique_key?: string;
+        source?: string;
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        transcript_items?: Array<{
+            speaker?: {
+                id?: string;
+                user_type?: number;
+                user_role?: number;
+                user_name?: string;
+            };
+            text?: string;
+            language?: string;
+            start_time_ms?: string;
+            end_time_ms?: string;
+            sentence_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.bot.meeting_invited_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: string;
+                user_type?: number;
+                user_role?: number;
+                user_name?: string;
+            };
+        };
+        bot?: {
+            id?: string;
+            user_type?: number;
+            user_role?: number;
+            user_name?: string;
+        };
+        inviter?: {
+            id?: string;
+            user_type?: number;
+            user_role?: number;
+            user_name?: string;
+        };
+        invite_time?: string;
+        call_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.meeting.participant_meeting_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.meeting.participant_meeting_joined_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.bot.meeting_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: string;
+                user_type?: number;
+                user_role?: number;
+                user_name?: string;
+            };
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.bot.meeting_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: string;
+                user_type?: number;
+                user_role?: number;
+                user_name?: string;
+            };
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.bot.meeting_activity_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting_activity_items?: Array<{
+            meeting?: {
+                id?: string;
+                topic?: string;
+                meeting_no?: string;
+                start_time?: string;
+                end_time?: string;
+                host_user?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+            };
+            activity_event_type?: string;
+            participant_joined_items?: Array<{
+                participant?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                join_time?: string;
+            }>;
+            participant_left_items?: Array<{
+                participant?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                leave_reason?: number;
+                leave_time?: string;
+            }>;
+            transcript_received_items?: Array<{
+                speaker?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                text?: string;
+                language?: string;
+                start_time_ms?: string;
+                end_time_ms?: string;
+                sentence_id?: string;
+            }>;
+            chat_received_items?: Array<{
+                operator?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                message_id?: string;
+                message_type?: number;
+                content?: string;
+                send_time?: string;
+            }>;
+            magic_share_started_items?: Array<{
+                operator?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                share_id?: string;
+                share_doc?: { url?: string; title?: string };
+                time?: string;
+            }>;
+            magic_share_ended_items?: Array<{
+                operator?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                share_id?: string;
+                time?: string;
+            }>;
+            document_context_changed_items?: Array<{
+                operator?: {
+                    id?: string;
+                    user_type?: number;
+                    user_role?: number;
+                    user_name?: string;
+                };
+                share_id?: string;
+                share_doc?: { url?: string; title?: string };
+                time?: string;
+                comment_focus?: { comment_id?: string; focused?: boolean };
+                section_location?: {
+                    title?: string;
+                    level?: number;
+                    parent_titles?: Array<string>;
+                };
+                element_preview?: {
+                    action?: string;
+                    element_type?: string;
+                    element_token?: string;
+                    block_id?: string;
+                };
+            }>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "wiki.space.node.move_docs_to_wiki_apply_handled_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        approve?: boolean;
+        file_token?: string;
+        file_type?: string;
+        space_id?: string;
+        code?: number;
+        msg?: string;
     }) => Promise<any> | any;
 }

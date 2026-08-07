@@ -1432,6 +1432,322 @@ export default abstract class Client extends docs {
                     return res?.data || null;
                 },
             },
+            /**
+             * kie
+             */
+            kie: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=kie&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=document_ai&resource=kie&version=v1 document }
+                 *
+                 * 多模态信息提取
+                 *
+                 * 使用豆包视觉模型的文档理解多模态应用，针对各种票据、卡证，无需训练配置，即可提供通用的票证抽取服务，提高企业自动化效率。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            content: Buffer | fs.ReadStream;
+                            target_keys?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    kie?: {
+                                        kies?: Array<{
+                                            key?: string;
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/kies`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * document
+             */
+            document: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=document&apiName=chunking&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=chunking&project=document_ai&resource=document&version=v1 document }
+                 *
+                 * 文档理解
+                 *
+                 * 文档理解接口，支持pdf/docx/doc/xlsx/xls/pptx/ppt/txt/markdown/飞书文档/html/image/多维表格/飞书表格类型的文件根据特定策略拆分成结构化的数据。文件大小支持100MB以内，Excel 类型支持20MB以内。如需更大文件上限请联系客服。
+                 *
+                 * 单租户限流：10QPS，同租户下的应用没有限流，共享本租户的 10QPS 限流，多模态大模型单租户暂时支持1QPM，需要扩容请联系开发人员。
+                 */
+                chunking: async (
+                    payload?: {
+                        data: {
+                            file: Buffer | fs.ReadStream;
+                            strategy: number;
+                            file_type:
+                                | "pdf"
+                                | "docx"
+                                | "doc"
+                                | "txt"
+                                | "markdown"
+                                | "lark_docs"
+                                | "lark_sheet"
+                                | "bitable"
+                                | "html"
+                                | "pptx"
+                                | "image"
+                                | "images_zip"
+                                | "xlsx";
+                            chunk_size: number;
+                            detect_pdf_table?: string;
+                            detect_pdf_img?: string;
+                            page_size_limit?: string;
+                            merge_small_chunks?: string;
+                            pdf_with_ocr?: string;
+                            doctree_with_outline?: string;
+                            custom_splitter?: string;
+                            to_md?: string;
+                            md_collapsed?: string;
+                            detect_header?: string;
+                            slides_full_page_as_image?: string;
+                            chunk_with_vlm?: string;
+                            expected_level?: string;
+                            open_access_token?: string;
+                            file_token?: string;
+                            sub_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    doc_chunks: Array<{
+                                        id?: number;
+                                        type?:
+                                            | "title"
+                                            | "section-title"
+                                            | "section-text"
+                                            | "image"
+                                            | "table"
+                                            | "header"
+                                            | "footer"
+                                            | "footnote"
+                                            | "caption"
+                                            | "toc"
+                                            | "others";
+                                        positions?: {
+                                            page_numbers?: Array<number>;
+                                            bboxes?: Array<{
+                                                bbox_positions?: Array<string>;
+                                            }>;
+                                        };
+                                        text?: string;
+                                        level?: number;
+                                        parent?: number;
+                                        children?: Array<number>;
+                                        label?: string;
+                                        block_id?: string;
+                                        table_detail?: {
+                                            table_idx?: number;
+                                            text?: string;
+                                            cells?: Array<{
+                                                row_cells?: Array<{
+                                                    type?: string;
+                                                    text?: string;
+                                                    x0?: string;
+                                                    y0?: string;
+                                                    x1?: string;
+                                                    y1?: string;
+                                                    row_index?: number;
+                                                    col_index?: number;
+                                                    row_span?: number;
+                                                    col_span?: number;
+                                                    is_merge_cell?: boolean;
+                                                    images?: Array<string>;
+                                                    files?: Array<string>;
+                                                    is_header?: boolean;
+                                                }>;
+                                            }>;
+                                            table_name?: string;
+                                            caption?: string;
+                                            md_text?: string;
+                                            html_text?: string;
+                                            table_img?: {
+                                                type?: string;
+                                                base64?: string;
+                                                url?: string;
+                                            };
+                                            sub_table_idx?: number;
+                                            table_range?: string;
+                                            header_ranges?: Array<string>;
+                                            desc_ranges?: Array<string>;
+                                        };
+                                        llm_detail?: {
+                                            query_id?: number;
+                                            usage?: {
+                                                prompt_tokens?: number;
+                                                completion_tokens?: number;
+                                                total_tokens?: number;
+                                            };
+                                            finish_reason?: string;
+                                        };
+                                        image_detail?: {
+                                            base64?: string;
+                                            caption?: string;
+                                            links?: Array<string>;
+                                            token?: string;
+                                        };
+                                        slide_index?: number;
+                                        md_text?: string;
+                                        html_text?: string;
+                                        file_detail?: {
+                                            token?: string;
+                                            name?: string;
+                                            links?: Array<string>;
+                                        };
+                                        code_detail?: {
+                                            language?:
+                                                | "1"
+                                                | "2"
+                                                | "3"
+                                                | "4"
+                                                | "5"
+                                                | "6"
+                                                | "7"
+                                                | "8"
+                                                | "9"
+                                                | "10"
+                                                | "11"
+                                                | "12"
+                                                | "13"
+                                                | "14"
+                                                | "15"
+                                                | "16"
+                                                | "17"
+                                                | "18"
+                                                | "19"
+                                                | "20"
+                                                | "21"
+                                                | "22"
+                                                | "23"
+                                                | "24"
+                                                | "25"
+                                                | "26"
+                                                | "27"
+                                                | "28"
+                                                | "29"
+                                                | "30"
+                                                | "31"
+                                                | "32"
+                                                | "33"
+                                                | "34"
+                                                | "35"
+                                                | "36"
+                                                | "37"
+                                                | "38"
+                                                | "39"
+                                                | "40"
+                                                | "41"
+                                                | "42"
+                                                | "43"
+                                                | "44"
+                                                | "45"
+                                                | "46"
+                                                | "47"
+                                                | "48"
+                                                | "49"
+                                                | "50"
+                                                | "51"
+                                                | "52"
+                                                | "53"
+                                                | "54"
+                                                | "55"
+                                                | "56"
+                                                | "57"
+                                                | "58"
+                                                | "59"
+                                                | "60"
+                                                | "61"
+                                                | "62"
+                                                | "63"
+                                                | "64"
+                                                | "65"
+                                                | "66"
+                                                | "67"
+                                                | "68"
+                                                | "69"
+                                                | "70"
+                                                | "71"
+                                                | "72"
+                                                | "73"
+                                                | "74"
+                                                | "75";
+                                            language_name?: string;
+                                            content?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/document/chunking`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
         },
     };
 }

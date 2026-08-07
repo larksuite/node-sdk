@@ -34,6 +34,212 @@ export default abstract class Client extends passport {
     payroll = {
         v1: {
             /**
+             * collection_template
+             */
+            collectionTemplate: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            collection_item_types?: Array<number>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/collection_templates`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    collection_templates?: Array<{
+                                                        template_id?: string;
+                                                        template_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        version_id?: string;
+                                                        items?: Array<{
+                                                            template_id?: string;
+                                                            template_version_id?: string;
+                                                            item_id?: string;
+                                                            item_name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            field_type?: number;
+                                                            decimal_places?: number;
+                                                            calc_method?: number;
+                                                            preset?: boolean;
+                                                            is_required?: boolean;
+                                                        }>;
+                                                        country_regions?: Array<{
+                                                            id?: string;
+                                                            alpha3_code?: string;
+                                                        }>;
+                                                        is_active?: boolean;
+                                                        effective_date?: string;
+                                                        created_time?: string;
+                                                        modified_time?: string;
+                                                    }>;
+                                                    total?: number;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=collection_template&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=collection_template&version=v1 document }
+                 *
+                 * 查询填报模板列表
+                 *
+                 * Query the list of filling templates
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            collection_item_types?: Array<number>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    collection_templates?: Array<{
+                                        template_id?: string;
+                                        template_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        version_id?: string;
+                                        items?: Array<{
+                                            template_id?: string;
+                                            template_version_id?: string;
+                                            item_id?: string;
+                                            item_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            field_type?: number;
+                                            decimal_places?: number;
+                                            calc_method?: number;
+                                            preset?: boolean;
+                                            is_required?: boolean;
+                                        }>;
+                                        country_regions?: Array<{
+                                            id?: string;
+                                            alpha3_code?: string;
+                                        }>;
+                                        is_active?: boolean;
+                                        effective_date?: string;
+                                        created_time?: string;
+                                        modified_time?: string;
+                                    }>;
+                                    total?: number;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/collection_templates`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * datasource_record
              */
             datasourceRecord: {
@@ -578,6 +784,632 @@ export default abstract class Client extends passport {
                 },
             },
             /**
+             * calendar
+             */
+            calendar: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/calendars`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        names?: Array<{
+                                                            locale?: string;
+                                                            value?: string;
+                                                            id?: string;
+                                                        }>;
+                                                        region?: string;
+                                                        work_calendar?: string;
+                                                        time_zone?: string;
+                                                        payroll_cycle?: number;
+                                                        status?: number;
+                                                        creator_id?: string;
+                                                        create_time?: string;
+                                                        effective_date?: string;
+                                                        period_years?: Array<string>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=calendar&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=calendar&version=v1 document }
+                 *
+                 * 获取算薪日历列表
+                 *
+                 * 批量获取算薪日历列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        names?: Array<{
+                                            locale?: string;
+                                            value?: string;
+                                            id?: string;
+                                        }>;
+                                        region?: string;
+                                        work_calendar?: string;
+                                        time_zone?: string;
+                                        payroll_cycle?: number;
+                                        status?: number;
+                                        creator_id?: string;
+                                        create_time?: string;
+                                        effective_date?: string;
+                                        period_years?: Array<string>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/calendars`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * collection_detail
+             */
+            collectionDetail: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            country_region_alpha3_codes: Array<string>;
+                            approval_pass_start_time: string;
+                            approval_pass_end_time: string;
+                            page_size: number;
+                            page_token?: string;
+                            template_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/collection_details`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    emp_activity_datas?: Array<{
+                                                        employment_id?: string;
+                                                        activities?: Array<{
+                                                            activity_id?: string;
+                                                            template_id?: string;
+                                                            template_version_id?: string;
+                                                            calendar_period?: {
+                                                                period_start_date?: string;
+                                                                period_end_date?: string;
+                                                                period_key?: string;
+                                                                period_name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                payroll_cycle?: number;
+                                                                time_zone?: string;
+                                                                pay_date?: string;
+                                                                payroll_calendar_id?: string;
+                                                                cut_off_date?: string;
+                                                                taxable_period?: string;
+                                                                manual_modified?: boolean;
+                                                                attendance_start_date?: string;
+                                                                attendance_end_date?: string;
+                                                                cut_off_date_for_paylist?: string;
+                                                            };
+                                                            calendar_effective_date?: string;
+                                                            country_regions?: Array<{
+                                                                id?: string;
+                                                                alpha3_code?: string;
+                                                            }>;
+                                                            collection_employee_datas?: Array<{
+                                                                row_id?: string;
+                                                                activity_id?: string;
+                                                                employee_info?: {
+                                                                    user_id?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    employee_number?: string;
+                                                                    employee_id?: string;
+                                                                };
+                                                                collection_datas?: Array<{
+                                                                    id?: string;
+                                                                    collection_type?: number;
+                                                                    data_period?: {
+                                                                        start_date?: string;
+                                                                        end_date?: string;
+                                                                    };
+                                                                    currency_id?: string;
+                                                                    currency_code?: string;
+                                                                    collection_item_values?: Array<{
+                                                                        item_id?: string;
+                                                                        value?: string;
+                                                                        field_type?: number;
+                                                                        currency_id?: string;
+                                                                        currency_code?: string;
+                                                                    }>;
+                                                                    template_snapshot?: {
+                                                                        template_id?: string;
+                                                                        template_name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        template_version_id?: string;
+                                                                        items?: Array<{
+                                                                            template_id?: string;
+                                                                            template_version_id?: string;
+                                                                            item_id?: string;
+                                                                            item_name?: {
+                                                                                zh_cn?: string;
+                                                                                en_us?: string;
+                                                                            };
+                                                                            field_type?: number;
+                                                                            decimal_places?: number;
+                                                                            calc_method?: number;
+                                                                            preset?: boolean;
+                                                                            is_required?: boolean;
+                                                                        }>;
+                                                                        activity_id?: string;
+                                                                    };
+                                                                    created_at?: string;
+                                                                    modified_at?: string;
+                                                                    creator_info?: {
+                                                                        user_id?: string;
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        employee_number?: string;
+                                                                        employee_id?: string;
+                                                                    };
+                                                                    modifier_info?: {
+                                                                        user_id?: string;
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        employee_number?: string;
+                                                                        employee_id?: string;
+                                                                    };
+                                                                    calendar_period?: {
+                                                                        period_start_date?: string;
+                                                                        period_end_date?: string;
+                                                                        period_key?: string;
+                                                                        period_name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        payroll_cycle?: number;
+                                                                        time_zone?: string;
+                                                                        pay_date?: string;
+                                                                        payroll_calendar_id?: string;
+                                                                        cut_off_date?: string;
+                                                                        taxable_period?: string;
+                                                                        manual_modified?: boolean;
+                                                                        attendance_start_date?: string;
+                                                                        attendance_end_date?: string;
+                                                                        cut_off_date_for_paylist?: string;
+                                                                    };
+                                                                    effective_time?: string;
+                                                                    source_activity_id?: string;
+                                                                    status?: number;
+                                                                    related_data_id?: string;
+                                                                }>;
+                                                            }>;
+                                                            activity_approval_pass_time?: string;
+                                                        }>;
+                                                    }>;
+                                                    activity_template_snapshots?: Array<{
+                                                        template_id?: string;
+                                                        template_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        template_version_id?: string;
+                                                        items?: Array<{
+                                                            template_id?: string;
+                                                            template_version_id?: string;
+                                                            item_id?: string;
+                                                            item_name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            field_type?: number;
+                                                            decimal_places?: number;
+                                                            calc_method?: number;
+                                                            preset?: boolean;
+                                                            is_required?: boolean;
+                                                        }>;
+                                                        activity_id?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    total?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=collection_detail&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=collection_detail&version=v1 document }
+                 *
+                 * 查询填报明细数据列表
+                 *
+                 * 查询填报明细数据列表
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            country_region_alpha3_codes: Array<string>;
+                            approval_pass_start_time: string;
+                            approval_pass_end_time: string;
+                            page_size: number;
+                            page_token?: string;
+                            template_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    emp_activity_datas?: Array<{
+                                        employment_id?: string;
+                                        activities?: Array<{
+                                            activity_id?: string;
+                                            template_id?: string;
+                                            template_version_id?: string;
+                                            calendar_period?: {
+                                                period_start_date?: string;
+                                                period_end_date?: string;
+                                                period_key?: string;
+                                                period_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                payroll_cycle?: number;
+                                                time_zone?: string;
+                                                pay_date?: string;
+                                                payroll_calendar_id?: string;
+                                                cut_off_date?: string;
+                                                taxable_period?: string;
+                                                manual_modified?: boolean;
+                                                attendance_start_date?: string;
+                                                attendance_end_date?: string;
+                                                cut_off_date_for_paylist?: string;
+                                            };
+                                            calendar_effective_date?: string;
+                                            country_regions?: Array<{
+                                                id?: string;
+                                                alpha3_code?: string;
+                                            }>;
+                                            collection_employee_datas?: Array<{
+                                                row_id?: string;
+                                                activity_id?: string;
+                                                employee_info?: {
+                                                    user_id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    employee_number?: string;
+                                                    employee_id?: string;
+                                                };
+                                                collection_datas?: Array<{
+                                                    id?: string;
+                                                    collection_type?: number;
+                                                    data_period?: {
+                                                        start_date?: string;
+                                                        end_date?: string;
+                                                    };
+                                                    currency_id?: string;
+                                                    currency_code?: string;
+                                                    collection_item_values?: Array<{
+                                                        item_id?: string;
+                                                        value?: string;
+                                                        field_type?: number;
+                                                        currency_id?: string;
+                                                        currency_code?: string;
+                                                    }>;
+                                                    template_snapshot?: {
+                                                        template_id?: string;
+                                                        template_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        template_version_id?: string;
+                                                        items?: Array<{
+                                                            template_id?: string;
+                                                            template_version_id?: string;
+                                                            item_id?: string;
+                                                            item_name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            field_type?: number;
+                                                            decimal_places?: number;
+                                                            calc_method?: number;
+                                                            preset?: boolean;
+                                                            is_required?: boolean;
+                                                        }>;
+                                                        activity_id?: string;
+                                                    };
+                                                    created_at?: string;
+                                                    modified_at?: string;
+                                                    creator_info?: {
+                                                        user_id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        employee_number?: string;
+                                                        employee_id?: string;
+                                                    };
+                                                    modifier_info?: {
+                                                        user_id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        employee_number?: string;
+                                                        employee_id?: string;
+                                                    };
+                                                    calendar_period?: {
+                                                        period_start_date?: string;
+                                                        period_end_date?: string;
+                                                        period_key?: string;
+                                                        period_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        payroll_cycle?: number;
+                                                        time_zone?: string;
+                                                        pay_date?: string;
+                                                        payroll_calendar_id?: string;
+                                                        cut_off_date?: string;
+                                                        taxable_period?: string;
+                                                        manual_modified?: boolean;
+                                                        attendance_start_date?: string;
+                                                        attendance_end_date?: string;
+                                                        cut_off_date_for_paylist?: string;
+                                                    };
+                                                    effective_time?: string;
+                                                    source_activity_id?: string;
+                                                    status?: number;
+                                                    related_data_id?: string;
+                                                }>;
+                                            }>;
+                                            activity_approval_pass_time?: string;
+                                        }>;
+                                    }>;
+                                    activity_template_snapshots?: Array<{
+                                        template_id?: string;
+                                        template_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        template_version_id?: string;
+                                        items?: Array<{
+                                            template_id?: string;
+                                            template_version_id?: string;
+                                            item_id?: string;
+                                            item_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            field_type?: number;
+                                            decimal_places?: number;
+                                            calc_method?: number;
+                                            preset?: boolean;
+                                            is_required?: boolean;
+                                        }>;
+                                        activity_id?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    total?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/collection_details`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * cost_allocation_plan
              */
             costAllocationPlan: {
@@ -864,139 +1696,24 @@ export default abstract class Client extends passport {
                 },
             },
             /**
-             * datasource
+             * calendar_period
              */
-            datasource: {
-                listWithIterator: async (
-                    payload?: {
-                        params: { page_size: number; page_token?: string };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/payroll/v1/datasources`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    page_token?: string;
-                                                    has_more: boolean;
-                                                    datasources: Array<{
-                                                        code: string;
-                                                        i18n_names: Array<{
-                                                            locale?: string;
-                                                            value?: string;
-                                                            id?: string;
-                                                        }>;
-                                                        active_status: number;
-                                                        fields: Array<{
-                                                            code: string;
-                                                            i18n_names: Array<{
-                                                                locale?: string;
-                                                                value?: string;
-                                                                id?: string;
-                                                            }>;
-                                                            field_type: number;
-                                                            active_status: number;
-                                                            i18n_description?: Array<{
-                                                                locale?: string;
-                                                                value?: string;
-                                                                id?: string;
-                                                            }>;
-                                                            decimal_places?: number;
-                                                        }>;
-                                                        i18n_description?: Array<{
-                                                            locale?: string;
-                                                            value?: string;
-                                                            id?: string;
-                                                        }>;
-                                                        data_period_type?: number;
-                                                    }>;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
+            calendarPeriod: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=datasource&apiName=list&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=calendar_period&apiName=list&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=datasource&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=calendar_period&version=v1 document }
                  *
-                 * 获取外部数据源配置信息
+                 * 获取日历期间信息
                  *
-                 * 批量查询飞书人事后台：设置->算薪数据设置->外部数据源设置 中的数据源设置列表
-                 *
-                 * 停用的数据源、字段不能保存数据
+                 * 根据算薪日历ID以及年份获取对应的期间信息
                  */
                 list: async (
                     payload?: {
-                        params: { page_size: number; page_token?: string };
+                        params: {
+                            calendar_id: string;
+                            period_years?: Array<string>;
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1010,44 +1727,31 @@ export default abstract class Client extends passport {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    page_token?: string;
-                                    has_more: boolean;
-                                    datasources: Array<{
-                                        code: string;
-                                        i18n_names: Array<{
-                                            locale?: string;
-                                            value?: string;
-                                            id?: string;
-                                        }>;
-                                        active_status: number;
-                                        fields: Array<{
-                                            code: string;
-                                            i18n_names: Array<{
-                                                locale?: string;
-                                                value?: string;
-                                                id?: string;
-                                            }>;
-                                            field_type: number;
-                                            active_status: number;
-                                            i18n_description?: Array<{
-                                                locale?: string;
-                                                value?: string;
-                                                id?: string;
-                                            }>;
-                                            decimal_places?: number;
-                                        }>;
-                                        i18n_description?: Array<{
-                                            locale?: string;
-                                            value?: string;
-                                            id?: string;
-                                        }>;
-                                        data_period_type?: number;
+                                    calendar_id?: string;
+                                    periods?: Array<{
+                                        period_start_date?: string;
+                                        period_end_date?: string;
+                                        period_key?: string;
+                                        period_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        payroll_cycle?: number;
+                                        time_zone?: string;
+                                        pay_date?: string;
+                                        payroll_calendar_id?: string;
+                                        cut_off_date?: string;
+                                        taxable_period?: string;
+                                        manual_modified?: boolean;
+                                        attendance_start_date?: string;
+                                        attendance_end_date?: string;
+                                        cut_off_date_for_paylist?: string;
                                     }>;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/payroll/v1/datasources`,
+                                `${this.domain}/open-apis/payroll/v1/calendar_periods`,
                                 path
                             ),
                             method: "GET",
@@ -1067,6 +1771,71 @@ export default abstract class Client extends passport {
              * cost_allocation_detail
              */
             costAllocationDetail: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=cost_allocation_detail&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=payroll&resource=cost_allocation_detail&version=v1 document }
+                 *
+                 * 写入成本分摊更正数据
+                 *
+                 * 根据报表三元组（方案id，期间，报表类型）写入成本分摊更正数据。若存在未提交的OpenAPI写入数据，会通过（employeeID,维度值,成本项）匹配数据，存在则更正，否则新建。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            cost_plan_id: string;
+                            period: string;
+                            report_type: number;
+                            correct_details: Array<{
+                                employee_id: string;
+                                active_status: number;
+                                dimensions?: Array<{
+                                    obj_api_name: string;
+                                    api_name: string;
+                                    value: string;
+                                }>;
+                                cost_items?: Array<{
+                                    id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    fail_infos?: Array<{
+                                        idx?: number;
+                                        error_code?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/cost_allocation_details`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 listWithIterator: async (
                     payload?: {
                         params: {
@@ -1284,6 +2053,1714 @@ export default abstract class Client extends passport {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/payroll/v1/cost_allocation_details`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * dmp_original_data
+             */
+            dmpOriginalData: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            country: string;
+                            object_name: string;
+                            version_date: string;
+                            page_token?: string;
+                            employee_numbers?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/dmp_original_data`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        employee_number?: string;
+                                                        time_periods?: Array<{
+                                                            from_date?: string;
+                                                            to_date?: string;
+                                                            fields?: Array<{
+                                                                key?: string;
+                                                                value?: string;
+                                                                type?: number;
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                    object_name: string;
+                                                    sub_object_group_by_fields: Array<string>;
+                                                    count: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=dmp_original_data&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=dmp_original_data&version=v1 document }
+                 *
+                 * 获取DMP原始数据
+                 *
+                 * 用于获取字节海外算薪数据，支持获取指定日期的数据
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            country: string;
+                            object_name: string;
+                            version_date: string;
+                            page_token?: string;
+                            employee_numbers?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        employee_number?: string;
+                                        time_periods?: Array<{
+                                            from_date?: string;
+                                            to_date?: string;
+                                            fields?: Array<{
+                                                key?: string;
+                                                value?: string;
+                                                type?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    object_name: string;
+                                    sub_object_group_by_fields: Array<string>;
+                                    count: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/dmp_original_data`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * dmp_change_event
+             */
+            dmpChangeEvent: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            country: string;
+                            object_name: string;
+                            change_date: string;
+                            page_token?: string;
+                            employee_numbers?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/dmp_change_events`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        employee_number?: string;
+                                                        old_version_data?: Array<{
+                                                            from_date?: string;
+                                                            to_date?: string;
+                                                            fields?: Array<{
+                                                                key?: string;
+                                                                value?: string;
+                                                                type?: number;
+                                                            }>;
+                                                        }>;
+                                                        new_version_data?: Array<{
+                                                            from_date?: string;
+                                                            to_date?: string;
+                                                            fields?: Array<{
+                                                                key?: string;
+                                                                value?: string;
+                                                                type?: number;
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                    object_name: string;
+                                                    sub_object_group_by_fields: Array<string>;
+                                                    count: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=dmp_change_event&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=dmp_change_event&version=v1 document }
+                 *
+                 * 获取 DMP 变更事件
+                 *
+                 * 用于获取字节海外算薪数据变更事件，支持按指定日期获取
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            country: string;
+                            object_name: string;
+                            change_date: string;
+                            page_token?: string;
+                            employee_numbers?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        employee_number?: string;
+                                        old_version_data?: Array<{
+                                            from_date?: string;
+                                            to_date?: string;
+                                            fields?: Array<{
+                                                key?: string;
+                                                value?: string;
+                                                type?: number;
+                                            }>;
+                                        }>;
+                                        new_version_data?: Array<{
+                                            from_date?: string;
+                                            to_date?: string;
+                                            fields?: Array<{
+                                                key?: string;
+                                                value?: string;
+                                                type?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    object_name: string;
+                                    sub_object_group_by_fields: Array<string>;
+                                    count: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/dmp_change_events`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * donations_tax_data
+             */
+            donationsTaxData: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=donations_tax_data&apiName=fetch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=fetch&project=payroll&resource=donations_tax_data&version=v1 document }
+                 *
+                 * 拉取员工捐赠报税数据
+                 *
+                 * 根据月份和工号拉取员工的捐赠报税数据
+                 */
+                fetch: async (
+                    payload?: {
+                        data?: {
+                            employee_ids?: Array<string>;
+                            year?: string;
+                            month?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    results?: Array<{
+                                        employee_id?: number;
+                                        legal_name?: string;
+                                        identity_type?: string;
+                                        identity_number?: string;
+                                        issuing_company?: string;
+                                        non_tax_residence?: string;
+                                        total_donation_amount?: string;
+                                        tax_free_donation_amount30?: string;
+                                        tax_free_donation_amount100?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/donations_tax_data/fetch`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * datasource
+             */
+            datasource: {
+                listWithIterator: async (
+                    payload?: {
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/datasources`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more: boolean;
+                                                    datasources: Array<{
+                                                        code: string;
+                                                        i18n_names: Array<{
+                                                            locale?: string;
+                                                            value?: string;
+                                                            id?: string;
+                                                        }>;
+                                                        active_status: number;
+                                                        fields: Array<{
+                                                            code: string;
+                                                            i18n_names: Array<{
+                                                                locale?: string;
+                                                                value?: string;
+                                                                id?: string;
+                                                            }>;
+                                                            field_type: number;
+                                                            active_status: number;
+                                                            i18n_description?: Array<{
+                                                                locale?: string;
+                                                                value?: string;
+                                                                id?: string;
+                                                            }>;
+                                                            decimal_places?: number;
+                                                        }>;
+                                                        i18n_description?: Array<{
+                                                            locale?: string;
+                                                            value?: string;
+                                                            id?: string;
+                                                        }>;
+                                                        data_period_type?: number;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=datasource&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=datasource&version=v1 document }
+                 *
+                 * 获取外部数据源配置信息
+                 *
+                 * 批量查询飞书人事后台：设置->算薪数据设置->外部数据源设置 中的数据源设置列表
+                 *
+                 * 停用的数据源、字段不能保存数据
+                 */
+                list: async (
+                    payload?: {
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more: boolean;
+                                    datasources: Array<{
+                                        code: string;
+                                        i18n_names: Array<{
+                                            locale?: string;
+                                            value?: string;
+                                            id?: string;
+                                        }>;
+                                        active_status: number;
+                                        fields: Array<{
+                                            code: string;
+                                            i18n_names: Array<{
+                                                locale?: string;
+                                                value?: string;
+                                                id?: string;
+                                            }>;
+                                            field_type: number;
+                                            active_status: number;
+                                            i18n_description?: Array<{
+                                                locale?: string;
+                                                value?: string;
+                                                id?: string;
+                                            }>;
+                                            decimal_places?: number;
+                                        }>;
+                                        i18n_description?: Array<{
+                                            locale?: string;
+                                            value?: string;
+                                            id?: string;
+                                        }>;
+                                        data_period_type?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/datasources`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * verification_activity_row
+             */
+            verificationActivityRow: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            activity_id?: string;
+                            employment_ids?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            need_total?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/verification_activity_rows`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    total?: number;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    activity_rows?: Array<{
+                                                        row_id?: string;
+                                                        employment_id?: string;
+                                                        activity_id?: string;
+                                                        employee_number?: string;
+                                                        employee_id?: string;
+                                                        working_hours_type?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                        pay_group?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                        start_date?: string;
+                                                        end_date?: string;
+                                                        cutoff_date?: string;
+                                                        item_values?: Array<{
+                                                            item_id?: string;
+                                                            value?: string;
+                                                            is_ref?: boolean;
+                                                            name?: {
+                                                                id?: string;
+                                                                zh_name?: string;
+                                                                en_name?: string;
+                                                            };
+                                                        }>;
+                                                        prorations?: Array<{
+                                                            start_date?: string;
+                                                            end_date?: string;
+                                                            cutoff_date?: string;
+                                                            item_values?: Array<{
+                                                                item_id?: string;
+                                                                value?: string;
+                                                                is_ref?: boolean;
+                                                                name?: {
+                                                                    id?: string;
+                                                                    zh_name?: string;
+                                                                    en_name?: string;
+                                                                };
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=verification_activity_row&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=verification_activity_row&version=v1 document }
+                 *
+                 * 获取核对活动结果数据
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            activity_id?: string;
+                            employment_ids?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            need_total?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total?: number;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    activity_rows?: Array<{
+                                        row_id?: string;
+                                        employment_id?: string;
+                                        activity_id?: string;
+                                        employee_number?: string;
+                                        employee_id?: string;
+                                        working_hours_type?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        pay_group?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        cutoff_date?: string;
+                                        item_values?: Array<{
+                                            item_id?: string;
+                                            value?: string;
+                                            is_ref?: boolean;
+                                            name?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                        }>;
+                                        prorations?: Array<{
+                                            start_date?: string;
+                                            end_date?: string;
+                                            cutoff_date?: string;
+                                            item_values?: Array<{
+                                                item_id?: string;
+                                                value?: string;
+                                                is_ref?: boolean;
+                                                name?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/verification_activity_rows`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * verification_activity
+             */
+            verificationActivity: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            plan_ids?: Array<string>;
+                            activity_ids?: Array<string>;
+                            pay_period_seqs?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            need_total?: boolean;
+                            update_time_greate_than?: string;
+                            update_time_greate_equal_than?: string;
+                            update_time_less_than?: string;
+                            update_time_less_equal_than?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/verification_activities`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    total?: number;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    activities?: Array<{
+                                                        activity_id?: string;
+                                                        plan_id?: string;
+                                                        version_id?: string;
+                                                        name?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                        activity_status?: number;
+                                                        pay_period_seq?: string;
+                                                        retro_period_seq?: string;
+                                                        plan_snapshot?: {
+                                                            is_retro?: boolean;
+                                                            is_collect?: boolean;
+                                                            is_proration?: boolean;
+                                                            country_region?: {
+                                                                id?: string;
+                                                                zh_name?: string;
+                                                                en_name?: string;
+                                                            };
+                                                            currency?: {
+                                                                id?: string;
+                                                                zh_name?: string;
+                                                                en_name?: string;
+                                                            };
+                                                            calendar_type?: number;
+                                                            pay_calendars?: Array<{
+                                                                id?: string;
+                                                                zh_name?: string;
+                                                                en_name?: string;
+                                                                calendar_source?: number;
+                                                            }>;
+                                                            scope_type?: number;
+                                                            pay_groups?: Array<{
+                                                                id?: string;
+                                                                zh_name?: string;
+                                                                en_name?: string;
+                                                            }>;
+                                                            filter_type?: number;
+                                                            filter_rule?: {
+                                                                filter_conditions?: Array<{
+                                                                    left_value?: {
+                                                                        api_name?: string;
+                                                                        field_type?: number;
+                                                                        value?: string;
+                                                                        ref_id?: string;
+                                                                        currency?: {
+                                                                            id?: string;
+                                                                            zh_name?: string;
+                                                                            en_name?: string;
+                                                                        };
+                                                                    };
+                                                                    operator_type?: number;
+                                                                    right_values?: Array<{
+                                                                        api_name?: string;
+                                                                        field_type?: number;
+                                                                        value?: string;
+                                                                        ref_id?: string;
+                                                                        currency?: {
+                                                                            id?: string;
+                                                                            zh_name?: string;
+                                                                            en_name?: string;
+                                                                        };
+                                                                    }>;
+                                                                }>;
+                                                                filter_relationship?: string;
+                                                            };
+                                                            approval_type?: number;
+                                                            items?: Array<{
+                                                                item_id?: string;
+                                                                item_name?: {
+                                                                    id?: string;
+                                                                    zh_name?: string;
+                                                                    en_name?: string;
+                                                                };
+                                                                field_type?: number;
+                                                                decimal_places?: number;
+                                                                aggregation_type?: number;
+                                                                seq?: number;
+                                                                source_type?: number;
+                                                                source_config?: {
+                                                                    formula_config?: {
+                                                                        formula_id?: string;
+                                                                        formula_item_id?: string;
+                                                                        formula_text?: string;
+                                                                        api_name?: string;
+                                                                        source_aggregation_type?: number;
+                                                                        ref_type?: number;
+                                                                    };
+                                                                    ref_source_config?: {
+                                                                        formula_id?: string;
+                                                                        formula_item_id?: string;
+                                                                        formula_text?: string;
+                                                                        api_name?: string;
+                                                                        source_aggregation_type?: number;
+                                                                        ref_type?: number;
+                                                                    };
+                                                                };
+                                                                status?: number;
+                                                            }>;
+                                                            data_source_rule?: {
+                                                                api_name?: string;
+                                                                datasource_name?: {
+                                                                    id?: string;
+                                                                    zh_name?: string;
+                                                                    en_name?: string;
+                                                                };
+                                                                object_type?: number;
+                                                                datasource_items?: Array<{
+                                                                    name?: {
+                                                                        id?: string;
+                                                                        zh_name?: string;
+                                                                        en_name?: string;
+                                                                    };
+                                                                    field_id?: string;
+                                                                    field_type?: number;
+                                                                    object_api_name?: string;
+                                                                    field_api_name?: string;
+                                                                    decimal_places?: number;
+                                                                    object_type?: number;
+                                                                    source_type?: number;
+                                                                }>;
+                                                            };
+                                                        };
+                                                        update_time?: number;
+                                                        approve_time?: number;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=verification_activity&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=verification_activity&version=v1 document }
+                 *
+                 * 获取核对活动信息
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            plan_ids?: Array<string>;
+                            activity_ids?: Array<string>;
+                            pay_period_seqs?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            need_total?: boolean;
+                            update_time_greate_than?: string;
+                            update_time_greate_equal_than?: string;
+                            update_time_less_than?: string;
+                            update_time_less_equal_than?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total?: number;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    activities?: Array<{
+                                        activity_id?: string;
+                                        plan_id?: string;
+                                        version_id?: string;
+                                        name?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        activity_status?: number;
+                                        pay_period_seq?: string;
+                                        retro_period_seq?: string;
+                                        plan_snapshot?: {
+                                            is_retro?: boolean;
+                                            is_collect?: boolean;
+                                            is_proration?: boolean;
+                                            country_region?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            currency?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            calendar_type?: number;
+                                            pay_calendars?: Array<{
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                                calendar_source?: number;
+                                            }>;
+                                            scope_type?: number;
+                                            pay_groups?: Array<{
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            }>;
+                                            filter_type?: number;
+                                            filter_rule?: {
+                                                filter_conditions?: Array<{
+                                                    left_value?: {
+                                                        api_name?: string;
+                                                        field_type?: number;
+                                                        value?: string;
+                                                        ref_id?: string;
+                                                        currency?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                    };
+                                                    operator_type?: number;
+                                                    right_values?: Array<{
+                                                        api_name?: string;
+                                                        field_type?: number;
+                                                        value?: string;
+                                                        ref_id?: string;
+                                                        currency?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                filter_relationship?: string;
+                                            };
+                                            approval_type?: number;
+                                            items?: Array<{
+                                                item_id?: string;
+                                                item_name?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                                field_type?: number;
+                                                decimal_places?: number;
+                                                aggregation_type?: number;
+                                                seq?: number;
+                                                source_type?: number;
+                                                source_config?: {
+                                                    formula_config?: {
+                                                        formula_id?: string;
+                                                        formula_item_id?: string;
+                                                        formula_text?: string;
+                                                        api_name?: string;
+                                                        source_aggregation_type?: number;
+                                                        ref_type?: number;
+                                                    };
+                                                    ref_source_config?: {
+                                                        formula_id?: string;
+                                                        formula_item_id?: string;
+                                                        formula_text?: string;
+                                                        api_name?: string;
+                                                        source_aggregation_type?: number;
+                                                        ref_type?: number;
+                                                    };
+                                                };
+                                                status?: number;
+                                            }>;
+                                            data_source_rule?: {
+                                                api_name?: string;
+                                                datasource_name?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                                object_type?: number;
+                                                datasource_items?: Array<{
+                                                    name?: {
+                                                        id?: string;
+                                                        zh_name?: string;
+                                                        en_name?: string;
+                                                    };
+                                                    field_id?: string;
+                                                    field_type?: number;
+                                                    object_api_name?: string;
+                                                    field_api_name?: string;
+                                                    decimal_places?: number;
+                                                    object_type?: number;
+                                                    source_type?: number;
+                                                }>;
+                                            };
+                                        };
+                                        update_time?: number;
+                                        approve_time?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/verification_activities`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * verification_plan
+             */
+            verificationPlan: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            plan_ids?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            need_total?: boolean;
+                            update_time_greate_than?: string;
+                            update_time_greate_equal_than?: string;
+                            update_time_less_than?: string;
+                            update_time_less_equal_than?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/verification_plans`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    plans?: Array<{
+                                                        plan_id?: string;
+                                                        version_id?: string;
+                                                        time_zone?: string;
+                                                        is_active?: boolean;
+                                                        effective_period_seq?: string;
+                                                        name?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                        country_region_id?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                        currency_id?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                        calendar_type?: number;
+                                                        pay_calendars?: Array<{
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                            calendar_source?: number;
+                                                        }>;
+                                                        scope_type?: number;
+                                                        pay_groups?: Array<{
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        }>;
+                                                        datasource_config?: {
+                                                            filter_type?: number;
+                                                            filter_rule?: {
+                                                                filter_conditions?: Array<{
+                                                                    left_value?: {
+                                                                        api_name?: string;
+                                                                        field_type?: number;
+                                                                        value?: string;
+                                                                        ref_id?: string;
+                                                                        currency?: {
+                                                                            id?: string;
+                                                                            zh_name?: string;
+                                                                            en_name?: string;
+                                                                        };
+                                                                    };
+                                                                    operator_type?: number;
+                                                                    right_values?: Array<{
+                                                                        api_name?: string;
+                                                                        field_type?: number;
+                                                                        value?: string;
+                                                                        ref_id?: string;
+                                                                        currency?: {
+                                                                            id?: string;
+                                                                            zh_name?: string;
+                                                                            en_name?: string;
+                                                                        };
+                                                                    }>;
+                                                                }>;
+                                                                filter_relationship?: string;
+                                                            };
+                                                            is_collect?: boolean;
+                                                            is_proration?: boolean;
+                                                            is_retro?: boolean;
+                                                            items?: Array<{
+                                                                item_id?: string;
+                                                                item_name?: {
+                                                                    id?: string;
+                                                                    zh_name?: string;
+                                                                    en_name?: string;
+                                                                };
+                                                                field_type?: number;
+                                                                decimal_places?: number;
+                                                                aggregation_type?: number;
+                                                                seq?: number;
+                                                                source_type?: number;
+                                                                source_config?: {
+                                                                    formula_config?: {
+                                                                        formula_id?: string;
+                                                                        formula_item_id?: string;
+                                                                        formula_text?: string;
+                                                                        api_name?: string;
+                                                                        source_aggregation_type?: number;
+                                                                        ref_type?: number;
+                                                                    };
+                                                                    ref_source_config?: {
+                                                                        formula_id?: string;
+                                                                        formula_item_id?: string;
+                                                                        formula_text?: string;
+                                                                        api_name?: string;
+                                                                        source_aggregation_type?: number;
+                                                                        ref_type?: number;
+                                                                    };
+                                                                };
+                                                                status?: number;
+                                                            }>;
+                                                            data_source_rule?: {
+                                                                api_name?: string;
+                                                                datasource_name?: {
+                                                                    id?: string;
+                                                                    zh_name?: string;
+                                                                    en_name?: string;
+                                                                };
+                                                                object_type?: number;
+                                                                datasource_items?: Array<{
+                                                                    name?: {
+                                                                        id?: string;
+                                                                        zh_name?: string;
+                                                                        en_name?: string;
+                                                                    };
+                                                                    field_id?: string;
+                                                                    field_type?: number;
+                                                                    object_api_name?: string;
+                                                                    field_api_name?: string;
+                                                                    decimal_places?: number;
+                                                                    object_type?: number;
+                                                                    source_type?: number;
+                                                                }>;
+                                                            };
+                                                        };
+                                                        approval_type?: number;
+                                                        ovbservers?: Array<string>;
+                                                        admins?: Array<string>;
+                                                        reviewers?: Array<string>;
+                                                        plan_type?: number;
+                                                        update_time?: number;
+                                                    }>;
+                                                    total?: number;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=verification_plan&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=verification_plan&version=v1 document }
+                 *
+                 * 获取核对方案信息
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            plan_ids?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            need_total?: boolean;
+                            update_time_greate_than?: string;
+                            update_time_greate_equal_than?: string;
+                            update_time_less_than?: string;
+                            update_time_less_equal_than?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    plans?: Array<{
+                                        plan_id?: string;
+                                        version_id?: string;
+                                        time_zone?: string;
+                                        is_active?: boolean;
+                                        effective_period_seq?: string;
+                                        name?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        country_region_id?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        currency_id?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        calendar_type?: number;
+                                        pay_calendars?: Array<{
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            calendar_source?: number;
+                                        }>;
+                                        scope_type?: number;
+                                        pay_groups?: Array<{
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        }>;
+                                        datasource_config?: {
+                                            filter_type?: number;
+                                            filter_rule?: {
+                                                filter_conditions?: Array<{
+                                                    left_value?: {
+                                                        api_name?: string;
+                                                        field_type?: number;
+                                                        value?: string;
+                                                        ref_id?: string;
+                                                        currency?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                    };
+                                                    operator_type?: number;
+                                                    right_values?: Array<{
+                                                        api_name?: string;
+                                                        field_type?: number;
+                                                        value?: string;
+                                                        ref_id?: string;
+                                                        currency?: {
+                                                            id?: string;
+                                                            zh_name?: string;
+                                                            en_name?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                filter_relationship?: string;
+                                            };
+                                            is_collect?: boolean;
+                                            is_proration?: boolean;
+                                            is_retro?: boolean;
+                                            items?: Array<{
+                                                item_id?: string;
+                                                item_name?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                                field_type?: number;
+                                                decimal_places?: number;
+                                                aggregation_type?: number;
+                                                seq?: number;
+                                                source_type?: number;
+                                                source_config?: {
+                                                    formula_config?: {
+                                                        formula_id?: string;
+                                                        formula_item_id?: string;
+                                                        formula_text?: string;
+                                                        api_name?: string;
+                                                        source_aggregation_type?: number;
+                                                        ref_type?: number;
+                                                    };
+                                                    ref_source_config?: {
+                                                        formula_id?: string;
+                                                        formula_item_id?: string;
+                                                        formula_text?: string;
+                                                        api_name?: string;
+                                                        source_aggregation_type?: number;
+                                                        ref_type?: number;
+                                                    };
+                                                };
+                                                status?: number;
+                                            }>;
+                                            data_source_rule?: {
+                                                api_name?: string;
+                                                datasource_name?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                                object_type?: number;
+                                                datasource_items?: Array<{
+                                                    name?: {
+                                                        id?: string;
+                                                        zh_name?: string;
+                                                        en_name?: string;
+                                                    };
+                                                    field_id?: string;
+                                                    field_type?: number;
+                                                    object_api_name?: string;
+                                                    field_api_name?: string;
+                                                    decimal_places?: number;
+                                                    object_type?: number;
+                                                    source_type?: number;
+                                                }>;
+                                            };
+                                        };
+                                        approval_type?: number;
+                                        ovbservers?: Array<string>;
+                                        admins?: Array<string>;
+                                        reviewers?: Array<string>;
+                                        plan_type?: number;
+                                        update_time?: number;
+                                    }>;
+                                    total?: number;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/verification_plans`,
                                 path
                             ),
                             method: "GET",
@@ -1520,6 +3997,166 @@ export default abstract class Client extends passport {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/payroll/v1/cost_allocation_reports`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * pay_group
+             */
+            payGroup: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/pay_groups`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        pay_group_id: string;
+                                                        name: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        code: string;
+                                                        status: string;
+                                                        country_region?: {
+                                                            id?: string;
+                                                            alpha3_code?: string;
+                                                        };
+                                                        is_global_region?: boolean;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=pay_group&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=pay_group&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        pay_group_id: string;
+                                        name: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        code: string;
+                                        status: string;
+                                        country_region?: {
+                                            id?: string;
+                                            alpha3_code?: string;
+                                        };
+                                        is_global_region?: boolean;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/pay_groups`,
                                 path
                             ),
                             method: "GET",

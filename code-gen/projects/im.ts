@@ -33,9 +33,1186 @@ export default abstract class Client extends human_authentication {
          */
     im = {
         /**
+         * url_preview
+         */
+        urlPreview: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=url_preview&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=url_preview&version=v1 document }
+             *
+             * 更新 URL 预览
+             *
+             * 主动更新 URL 预览，调用后会重新触发一次客户端拉取，需要回调服务返回更新后的数据。
+             */
+            batchUpdate: async (
+                payload?: {
+                    data?: { preview_tokens?: Array<string>; version?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/url_previews/batch_update`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * im_usage_data
+         */
+        imUsageData: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=im_usage_data&apiName=msg_process_data&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=msg_process_data&project=im&resource=im_usage_data&version=v1 document }
+             */
+            msgProcessData: async (
+                payload?: {
+                    params: { p_date: string; department_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    p_date?: string;
+                                    department_id?: string;
+                                    department_path?: string;
+                                    avg_imp_msg_read_rate_12h?: number;
+                                    msg_read_rate_12h?: number;
+                                    avg_receive_msg_cnt?: number;
+                                    avg_read_msg_cnt?: number;
+                                    avg_imp_read_msg_cnt?: number;
+                                    avg_imp_receive_msg_cnt?: number;
+                                    high_load_rate?: number;
+                                    big_group_msg_rate?: number;
+                                    big_group_topic_msg_rate?: number;
+                                    avg_receive_bot_msg_cnt?: number;
+                                    avg_bot_imp_msg_read_rate_12h?: number;
+                                    receive_bot_msg_rate?: number;
+                                    use_chat_box_rate?: number;
+                                    receive_mute_msg_rate?: number;
+                                    read_mute_msg_rate?: number;
+                                    avg_receive_imp_msg_chat_cnt?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/im_usage_data/msg_process_data`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=im_usage_data&apiName=im_depth_data&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=im_depth_data&project=im&resource=im_usage_data&version=v1 document }
+             */
+            imDepthData: async (
+                payload?: {
+                    params: { p_date: string; department_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    p_date?: string;
+                                    department_id?: string;
+                                    department_path?: string;
+                                    send_msg_rate?: number;
+                                    avg_send_msg_cnt?: number;
+                                    pc_send_msg_rate?: number;
+                                    pc_avg_send_msg_cnt?: number;
+                                    mobile_send_msg_rate?: number;
+                                    mobile_avg_send_msg_cnt?: number;
+                                    meeting_group_send_msg_rate?: number;
+                                    tenant_group_send_msg_rate?: number;
+                                    dept_group_send_msg_rate?: number;
+                                    topic_group_send_msg_rate?: number;
+                                    group_at_msg_rate?: number;
+                                    group_reply_msg_rate?: number;
+                                    reaction_rate?: number;
+                                    p2p_send_msg_rate?: number;
+                                    img_send_msg_rate?: number;
+                                    file_send_msg_rate?: number;
+                                    sticker_send_msg_rate?: number;
+                                    post_send_msg_rate?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/im_usage_data/im_depth_data`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * toolkit
+         */
+        toolkit: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/toolkits`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    toolkit_id?: string;
+                                                    image_key?: string;
+                                                    toolkit_name: string;
+                                                    i18n_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                        ja_jp?: string;
+                                                    };
+                                                    toolkit_type:
+                                                        | "redirect_link"
+                                                        | "call_back";
+                                                    redirect_link?: {
+                                                        url?: string;
+                                                    };
+                                                    callback?: {
+                                                        webhook?: string;
+                                                        action_key?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=toolkit&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=toolkit&version=v1 document }
+             *
+             * 获取快捷组件列表
+             *
+             * 获取应用自己创建的快捷组件列表。
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    toolkit_id?: string;
+                                    image_key?: string;
+                                    toolkit_name: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    toolkit_type: "redirect_link" | "call_back";
+                                    redirect_link?: { url?: string };
+                                    callback?: {
+                                        webhook?: string;
+                                        action_key?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/toolkits`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=toolkit&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=toolkit&version=v1 document }
+             *
+             * 创建快捷组件
+             *
+             * 创建自定义快捷组件。
+             *
+             * 注意事项：;;- 创建时不需要设置toolkit_id
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        toolkit_id?: string;
+                        image_key?: string;
+                        toolkit_name: string;
+                        i18n_name?: {
+                            zh_cn?: string;
+                            en_us?: string;
+                            ja_jp?: string;
+                        };
+                        toolkit_type: "redirect_link" | "call_back";
+                        redirect_link?: { url?: string };
+                        callback?: { webhook?: string; action_key?: string };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                toolkit?: {
+                                    toolkit_id?: string;
+                                    image_key?: string;
+                                    toolkit_name: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    toolkit_type: "redirect_link" | "call_back";
+                                    redirect_link?: { url?: string };
+                                    callback?: {
+                                        webhook?: string;
+                                        action_key?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/toolkits`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat_custom_bot
+         */
+        chatCustomBot: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat_custom_bot&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        chat_id?: string;
+                        avatar_key?: string;
+                        name?: string;
+                        description?: string;
+                        allow_ips?: Array<string>;
+                        key_words?: Array<string>;
+                        signature_status?: boolean;
+                        uuid?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                bot_id?: string;
+                                chat_id?: string;
+                                avatar_key?: string;
+                                name?: string;
+                                description?: string;
+                                i18n_names?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                                i18n_descriptions?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                                webhook?: string;
+                                allow_ips?: Array<string>;
+                                key_words?: Array<string>;
+                                signature_status?: boolean;
+                                signature?: string;
+                                enable?: boolean;
+                                invitor_id?: string;
+                                invitor_id_type?: string;
+                                version?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_custom_bots`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat_custom_bot&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path?: { bot_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_custom_bots/:bot_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat_custom_bot&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        avatar_key?: string;
+                        name?: string;
+                        description?: string;
+                        allow_ips?: Array<string>;
+                        key_words?: Array<string>;
+                        signature_status?: boolean;
+                        change_signature?: boolean;
+                        enable?: boolean;
+                    };
+                    path?: { bot_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_custom_bots/:bot_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat_custom_bot&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    path?: { bot_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                bot_id?: string;
+                                chat_id?: string;
+                                avatar_key?: string;
+                                name?: string;
+                                description?: string;
+                                i18n_names?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                                i18n_descriptions?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                    ja_jp?: string;
+                                };
+                                webhook?: string;
+                                allow_ips?: Array<string>;
+                                key_words?: Array<string>;
+                                signature_status?: boolean;
+                                signature?: string;
+                                enable?: boolean;
+                                invitor_id?: string;
+                                invitor_id_type?: string;
+                                version?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_custom_bots/:bot_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * file
+         */
+        file: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=upload_prepare&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_prepare&project=im&resource=file&version=v1 document }
+             */
+            uploadPrepare: async (
+                payload?: {
+                    data: {
+                        file_type:
+                            | "opus"
+                            | "mp4"
+                            | "pdf"
+                            | "doc"
+                            | "xls"
+                            | "ppt"
+                            | "stream";
+                        file_name: string;
+                        duration?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { upload_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files/upload_prepare`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=upload_part&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=im&resource=file&version=v1 document }
+             */
+            uploadPart: async (
+                payload?: {
+                    data: {
+                        part_id: string;
+                        file_key: string;
+                        file: Buffer | fs.ReadStream;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { part_id?: string; crc32?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files/upload_part`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=upload_finish&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=im&resource=file&version=v1 document }
+             */
+            uploadFinish: async (
+                payload?: {
+                    data: {
+                        file_key: string;
+                        file_name: string;
+                        items?: Array<{ part_id: string; crc32: string }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_key?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files/upload_finish`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=sharding&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sharding&project=im&resource=file&version=v1 document }
+             */
+            sharding: async (
+                payload?: {
+                    params: { range: string };
+                    path: { file_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files/:file_key/sharding`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=file&version=v1 document }
+             *
+             * 下载文件
+             *
+             * 通过已上传文件的 Key 下载文件。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的文件。;- 下载的资源大小不能超过 100 MB。 ;- 该接口仅适用于通过文件的 Key 下载文件。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。;- 如果需要 Content-Disposition header，发起请求时需要在 header 中设置 Content-Type 为 application/json。
+             */
+            get: async (
+                payload?: {
+                    path: { file_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files/:file_key`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=file&version=v1 document }
+             *
+             * 上传文件
+             *
+             * 调用该接口将本地文件上传至开放平台，支持上传音频、视频、文档等文件类型。上传后接口会返回文件的 Key，使用该 Key 值可以调用其他 OpenAPI。例如，调用[发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)接口，发送文件。
+             *
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;文件大小不得超过 30 MB，且不允许上传空文件。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        file_type:
+                            | "opus"
+                            | "mp4"
+                            | "pdf"
+                            | "doc"
+                            | "xls"
+                            | "ppt"
+                            | "stream";
+                        file_name: string;
+                        duration?: number;
+                        file: Buffer | fs.ReadStream;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_key?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/files`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+                return res?.data || null;
+            },
+        },
+        /**
+         * message.resource
+         */
+        messageResource: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=sharding&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sharding&project=im&resource=message.resource&version=v1 document }
+             */
+            sharding: async (
+                payload?: {
+                    params: { range: string };
+                    path: { message_id: string; file_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key/sharding`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message.resource&version=v1 document }
+             *
+             * 获取消息中的资源文件
+             *
+             * 获取指定消息内包含的资源文件，包括音频、视频、图片和文件。成功调用后，返回二进制文件流下载文件。
+             *
+             * ## 前提条件; ;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人和待操作的消息需要在同一会话内。;;## 使用限制;- 仅支持下载 100 MB 以内的资源文件。;- 暂不支持获取表情包资源。;- 暂不支持获取合并转发消息中的子消息、卡片消息中的资源文件。如果请求时传入了合并转发消息或子消息的 ID、卡片消息 ID，则会返回错误码 234043。;- 不支持在当前接口内调整文件格式，你可以获取资源文件后，在本地自行调整。
+             */
+            get: async (
+                payload?: {
+                    params: { type: string };
+                    path: { message_id: string; file_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                        $return_headers: true,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.data.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        checkIsReadable();
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.data.pipe(writableStream);
+                        });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res.data as Readable;
+                    },
+                    headers: res.headers,
+                };
+            },
+        },
+        /**
          * message
          */
         message: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_read_users&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_read_users&project=im&resource=message&version=v1 document }
+             */
+            urgentReadUsers: async (
+                payload?: {
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    user_id_type: string;
+                                    user_id: string;
+                                    timestamp: string;
+                                    tenant_key?: string;
+                                }>;
+                                has_more: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_read_users`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=delete&version=v1 click to debug }
              *
@@ -83,7 +1260,7 @@ export default abstract class Client extends human_authentication {
              *
              * 调用该接口在最新一条消息下方添加气泡样式的内容，当消息接收者点击气泡或者新消息到达后，气泡消失。
              *
-             * ![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/05f992f251e9949661370b6c73aa6eda_DseiZlt09t.png?height=278&maxWidth=450&width=1383);;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 跟随气泡的效果在飞书客户端 v7.20 及以上版本生效。;- 仅支持在当前机器人与用户单聊的消息上添加跟随气泡，且消息需要符合：;;    - 消息是机器人发送的。;    - 消息是会话内最新的消息。;    - 消息发送后未超过 600 秒。;;## 注意事项;;添加跟随气泡后，会话内的用户点击气泡会自动转换为该用户发送的一条消息，你可以为应用订阅[接收消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive)事件，接收用户发送的消息并判断是否为跟随气泡的内容。
+             * ![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/05f992f251e9949661370b6c73aa6eda_DseiZlt09t.png?height=278&maxWidth=450&width=1383);;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 跟随气泡的效果在飞书客户端 v7.20 及以上版本生效。;- 仅支持在当前机器人与用户单聊的消息上添加跟随气泡，且消息需要符合：;; - 消息是机器人发送的。; - 消息是会话内最新的消息。; - 消息发送后未超过 600 秒。;;## 注意事项;;添加跟随气泡后，会话内的用户点击气泡会自动转换为该用户发送的一条消息，你可以为应用订阅[接收消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive)事件，接收用户发送的消息并判断是否为跟随气泡的内容。
              */
             pushFollowUp: async (
                 payload?: {
@@ -242,7 +1419,7 @@ export default abstract class Client extends human_authentication {
              *
              * 调用该接口把指定消息加急给目标用户，加急将通过飞书客户端和短信进行通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
              *
-             * **注意**：短信加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** >  **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
+             * **注意**：短信加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** > **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
              */
             urgentSms: async (
                 payload?: {
@@ -271,6 +1448,42 @@ export default abstract class Client extends human_authentication {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=p2p_message&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=p2p_message&project=im&resource=message&version=v1 document }
+             *
+             * 删除单聊消息;
+             *
+             * 删除单聊消息，仅支持删除机器人通过单聊发送给用户消息。
+             */
+            p2pMessage: async (
+                payload?: {
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/p2p_message`,
+                            path
+                        ),
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -319,192 +1532,20 @@ export default abstract class Client extends human_authentication {
                         throw e;
                     });
             },
-            searchWithIterator: async (
-                payload?: {
-                    data?: {
-                        query?: string;
-                        filter?: {
-                            from_ids?: Array<string>;
-                            chat_ids?: Array<string>;
-                            time_range?: {
-                                start_time?: string;
-                                end_time?: string;
-                            };
-                            include_attachment_types?: Array<
-                                "image" | "video" | "file" | "link"
-                            >;
-                            from_types?: Array<"user" | "bot">;
-                            at_chatter_ids?: Array<string>;
-                            chat_type?: "group" | "p2p";
-                            is_at_me?: boolean;
-                            exclude_from_types?: Array<"user" | "bot">;
-                        };
-                    };
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/search`,
-                                path
-                            ),
-                            method: "POST",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items: Array<{
-                                                    id: string;
-                                                    display_info?: string;
-                                                    meta_data?: {
-                                                        message_id: string;
-                                                        type?:
-                                                            | "unknown"
-                                                            | "post"
-                                                            | "file"
-                                                            | "text"
-                                                            | "image"
-                                                            | "system"
-                                                            | "audio"
-                                                            | "email"
-                                                            | "share_group_chat"
-                                                            | "sticker"
-                                                            | "merge_forward"
-                                                            | "calendar"
-                                                            | "cloud_file"
-                                                            | "card"
-                                                            | "media"
-                                                            | "share_calendar_event"
-                                                            | "hongbao"
-                                                            | "general_calendar"
-                                                            | "video_chat"
-                                                            | "location"
-                                                            | "commercialized_hongbao"
-                                                            | "share_user_card"
-                                                            | "todo"
-                                                            | "folder"
-                                                            | "diagnose"
-                                                            | "vote"
-                                                            | "link";
-                                                        create_time?: string;
-                                                        update_time?: string;
-                                                        position?: number;
-                                                        chat_id?: string;
-                                                        from_id?: string;
-                                                        thread_id?: string;
-                                                        thread_position?: number;
-                                                        is_p2p_chat?: boolean;
-                                                    };
-                                                }>;
-                                                total?: number;
-                                                has_more: boolean;
-                                                page_token?: string;
-                                                notice?: string;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=search&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=batch_get_read_status&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_read_status&project=im&resource=message&version=v1 document }
              *
-             * 搜索消息
+             * 【暂不对外】消息接收者批量获取消息的已读状态
              *
-             * 用户可以通过关键字搜索可见消息，可见性和套件内搜索一致。
+             * 批量获取消息接收者视角下消息的阅读状态
+             *
+             * ## 前提条件;- 查询消息的阅读状态时，用户需要在待查询消息所在的会话内。
              */
-            search: async (
+            batchGetReadStatus: async (
                 payload?: {
-                    data?: {
-                        query?: string;
-                        filter?: {
-                            from_ids?: Array<string>;
-                            chat_ids?: Array<string>;
-                            time_range?: {
-                                start_time?: string;
-                                end_time?: string;
-                            };
-                            include_attachment_types?: Array<
-                                "image" | "video" | "file" | "link"
-                            >;
-                            from_types?: Array<"user" | "bot">;
-                            at_chatter_ids?: Array<string>;
-                            chat_type?: "group" | "p2p";
-                            is_at_me?: boolean;
-                            exclude_from_types?: Array<"user" | "bot">;
-                        };
-                    };
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
+                    data?: { message_ids?: Array<string> };
                 },
                 options?: IRequestOptions
             ) => {
@@ -518,58 +1559,16 @@ export default abstract class Client extends human_authentication {
                             code?: number;
                             msg?: string;
                             data?: {
-                                items: Array<{
-                                    id: string;
-                                    display_info?: string;
-                                    meta_data?: {
-                                        message_id: string;
-                                        type?:
-                                            | "unknown"
-                                            | "post"
-                                            | "file"
-                                            | "text"
-                                            | "image"
-                                            | "system"
-                                            | "audio"
-                                            | "email"
-                                            | "share_group_chat"
-                                            | "sticker"
-                                            | "merge_forward"
-                                            | "calendar"
-                                            | "cloud_file"
-                                            | "card"
-                                            | "media"
-                                            | "share_calendar_event"
-                                            | "hongbao"
-                                            | "general_calendar"
-                                            | "video_chat"
-                                            | "location"
-                                            | "commercialized_hongbao"
-                                            | "share_user_card"
-                                            | "todo"
-                                            | "folder"
-                                            | "diagnose"
-                                            | "vote"
-                                            | "link";
-                                        create_time?: string;
-                                        update_time?: string;
-                                        position?: number;
-                                        chat_id?: string;
-                                        from_id?: string;
-                                        thread_id?: string;
-                                        thread_position?: number;
-                                        is_p2p_chat?: boolean;
-                                    };
+                                read_statuses?: Array<{
+                                    message_id: string;
+                                    read_status: string;
+                                    unexpected_reason?: string;
                                 }>;
-                                total?: number;
-                                has_more: boolean;
-                                page_token?: string;
-                                notice?: string;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/search`,
+                            `${this.domain}/open-apis/im/v1/messages/batch_query_read_status`,
                             path
                         ),
                         method: "POST",
@@ -593,7 +1592,7 @@ export default abstract class Client extends human_authentication {
              *
              * 调用该接口回复指定消息。回复的内容支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种类型。
              *
-             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。 ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
              */
             reply: async (
                 payload?: {
@@ -897,6 +1896,95 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=mget&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=im&resource=message&version=v1 document }
+             *
+             * 批量获取指定消息的内容
+             *
+             * 调用该接口可以批量通过消息的 message_id 查询消息内容。
+             *
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在消息所属的群组内。
+             */
+            mget: async (
+                payload?: {
+                    params?: {
+                        message_ids?: Array<string>;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        ai_mode?: boolean;
+                        card_msg_content_type?: string;
+                        with_sender_name?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/mget`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=merge_forward&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=merge_forward&project=im&resource=message&version=v1 document }
@@ -1171,6 +2259,221 @@ export default abstract class Client extends human_authentication {
                         throw e;
                     });
             },
+            listForAiWithIterator: async (
+                payload?: {
+                    params: {
+                        container_id_type: string;
+                        container_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/ai`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    message_id?: string;
+                                                    root_id?: string;
+                                                    parent_id?: string;
+                                                    thread_id?: string;
+                                                    msg_type?: string;
+                                                    create_time?: string;
+                                                    update_time?: string;
+                                                    deleted?: boolean;
+                                                    updated?: boolean;
+                                                    chat_id?: string;
+                                                    sender?: {
+                                                        id: string;
+                                                        id_type: string;
+                                                        sender_type: string;
+                                                        tenant_key?: string;
+                                                        sender_name?: string;
+                                                        open_bot_id?: string;
+                                                        sender_i18n_names?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                    };
+                                                    body?: { content: string };
+                                                    mentions?: Array<{
+                                                        key: string;
+                                                        id: string;
+                                                        id_type: string;
+                                                        name: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                    upper_message_id?: string;
+                                                    message_app_link?: string;
+                                                    message_position?: string;
+                                                    thread_message_position?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list_for_ai&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_for_ai&project=im&resource=message&version=v1 document }
+             */
+            listForAi: async (
+                payload?: {
+                    params: {
+                        container_id_type: string;
+                        container_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/ai`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=forward&version=v1 click to debug }
              *
@@ -1342,6 +2645,305 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=mark_read&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mark_read&project=im&resource=message&version=v1 document }
+             *
+             * 以当前用户身份批量将指定消息标记为已读
+             */
+            markRead: async (
+                payload?: {
+                    data: { message_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/mark_read`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        query?: string;
+                        filter?: {
+                            from_ids?: Array<string>;
+                            chat_ids?: Array<string>;
+                            time_range?: {
+                                start_time?: string;
+                                end_time?: string;
+                            };
+                            include_attachment_types?: Array<
+                                "image" | "video" | "file" | "link"
+                            >;
+                            from_types?: Array<"user" | "bot">;
+                            at_chatter_ids?: Array<string>;
+                            chat_type?: "group" | "p2p";
+                            is_at_me?: boolean;
+                            exclude_from_types?: Array<"user" | "bot">;
+                        };
+                    };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items: Array<{
+                                                    id: string;
+                                                    display_info?: string;
+                                                    meta_data?: {
+                                                        message_id: string;
+                                                        type?:
+                                                            | "unknown"
+                                                            | "post"
+                                                            | "file"
+                                                            | "text"
+                                                            | "image"
+                                                            | "system"
+                                                            | "audio"
+                                                            | "email"
+                                                            | "share_group_chat"
+                                                            | "sticker"
+                                                            | "merge_forward"
+                                                            | "calendar"
+                                                            | "cloud_file"
+                                                            | "card"
+                                                            | "media"
+                                                            | "share_calendar_event"
+                                                            | "hongbao"
+                                                            | "general_calendar"
+                                                            | "video_chat"
+                                                            | "location"
+                                                            | "commercialized_hongbao"
+                                                            | "share_user_card"
+                                                            | "todo"
+                                                            | "folder"
+                                                            | "diagnose"
+                                                            | "vote"
+                                                            | "link";
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                        position?: number;
+                                                        chat_id?: string;
+                                                        from_id?: string;
+                                                        thread_id?: string;
+                                                        thread_position?: number;
+                                                        is_p2p_chat?: boolean;
+                                                    };
+                                                }>;
+                                                total?: number;
+                                                has_more: boolean;
+                                                page_token?: string;
+                                                notice?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
+             *
+             * 搜索消息
+             *
+             * 用户可以通过关键字搜索可见消息，可见性和套件内搜索一致。
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        query?: string;
+                        filter?: {
+                            from_ids?: Array<string>;
+                            chat_ids?: Array<string>;
+                            time_range?: {
+                                start_time?: string;
+                                end_time?: string;
+                            };
+                            include_attachment_types?: Array<
+                                "image" | "video" | "file" | "link"
+                            >;
+                            from_types?: Array<"user" | "bot">;
+                            at_chatter_ids?: Array<string>;
+                            chat_type?: "group" | "p2p";
+                            is_at_me?: boolean;
+                            exclude_from_types?: Array<"user" | "bot">;
+                        };
+                    };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    id: string;
+                                    display_info?: string;
+                                    meta_data?: {
+                                        message_id: string;
+                                        type?:
+                                            | "unknown"
+                                            | "post"
+                                            | "file"
+                                            | "text"
+                                            | "image"
+                                            | "system"
+                                            | "audio"
+                                            | "email"
+                                            | "share_group_chat"
+                                            | "sticker"
+                                            | "merge_forward"
+                                            | "calendar"
+                                            | "cloud_file"
+                                            | "card"
+                                            | "media"
+                                            | "share_calendar_event"
+                                            | "hongbao"
+                                            | "general_calendar"
+                                            | "video_chat"
+                                            | "location"
+                                            | "commercialized_hongbao"
+                                            | "share_user_card"
+                                            | "todo"
+                                            | "folder"
+                                            | "diagnose"
+                                            | "vote"
+                                            | "link";
+                                        create_time?: string;
+                                        update_time?: string;
+                                        position?: number;
+                                        chat_id?: string;
+                                        from_id?: string;
+                                        thread_id?: string;
+                                        thread_position?: number;
+                                        is_p2p_chat?: boolean;
+                                    };
+                                }>;
+                                total?: number;
+                                has_more: boolean;
+                                page_token?: string;
+                                notice?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_users&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_users&project=im&resource=message&version=v1 document }
@@ -1350,7 +2952,7 @@ export default abstract class Client extends human_authentication {
              *
              * 作为消息发送者，查询指定消息是否已读。接口只返回已读用户的信息，不返回未读用户的信息。
              *
-             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  。;- 查询消息已读信息时，机器人需要在待查询消息所在的会话内。;;## 使用限制;- 只能查询由当前机器人自己发送的、发送时间不超过 7 天的消息已读信息。;- 一次请求只能查询一条消息，不支持批量查询。
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 查询消息已读信息时，机器人需要在待查询消息所在的会话内。;;## 使用限制;- 只能查询由当前机器人自己发送的、发送时间不超过 7 天的消息已读信息。;- 一次请求只能查询一条消息，不支持批量查询。
              */
             readUsers: async (
                 payload?: {
@@ -1401,13 +3003,60 @@ export default abstract class Client extends human_authentication {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_status&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_status&project=im&resource=message&version=v1 document }
+             *
+             * 批量查询当前用户对消息的已读状态
+             */
+            readStatus: async (
+                payload?: {
+                    data: { message_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    message_id: string;
+                                    is_read: boolean;
+                                }>;
+                                invalid_message_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/read_status`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=im&resource=message&version=v1 document }
              *
              * 通过模版消息卡片回复消息
              *
-             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
+             * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。 ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
              */
             replyByCard: async (
                 payload?: {
@@ -1685,6 +3334,227 @@ export default abstract class Client extends human_authentication {
                         ),
                         method: "PUT",
                         data: targetData,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * special_focus
+         */
+        specialFocus: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=special_focus&apiName=unread&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unread&project=im&resource=special_focus&version=v1 document }
+             *
+             * 获取星标联系人未读信息数
+             *
+             * 按照单聊类型或群聊类型获取星标联系人未读信息的数量。消息 API 仅提供查询接口，如何使用星标联系人功能参见[星标联系人](https://www.feishu.cn/hc/zh-CN/articles/370278739280)。
+             */
+            unread: async (
+                payload?: {
+                    data?: {
+                        id_list?: Array<string>;
+                        chat_mode?: "group" | "p2p";
+                    };
+                    params?: {
+                        member_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                special_focus_unread?: Array<{
+                                    id: string;
+                                    id_type?:
+                                        | "user_id"
+                                        | "union_id"
+                                        | "open_id"
+                                        | "app_id";
+                                    unread_count?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/special_focus/unread`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        member_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/special_focus`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id: string;
+                                                    id_type?:
+                                                        | "user_id"
+                                                        | "union_id"
+                                                        | "open_id"
+                                                        | "app_id";
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=special_focus&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=special_focus&version=v1 document }
+             *
+             * 获取星标联系人列表
+             *
+             * 获取用户的星标联系人列表。消息 API 仅提供查询接口，如何使用星标联系人功能参见[星标联系人](https://www.feishu.cn/hc/zh-CN/articles/370278739280)。
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        member_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id: string;
+                                    id_type?:
+                                        | "user_id"
+                                        | "union_id"
+                                        | "open_id"
+                                        | "app_id";
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/special_focus`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
                         params,
                         headers,
                         paramsSerializer: (params) =>
@@ -2011,7 +3881,7 @@ export default abstract class Client extends human_authentication {
              *
              * 将当前调用接口的操作者（用户或机器人）加入指定群聊。
              *
-             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口仅支持加入公开群。;;    公开群是指的群类型，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_type ` 参数取值是否为 `public`。;;- 操作内部群时，操作者必须与相应的群组在同一租户内。;;    内部群是指的群标签，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_tag ` 参数取值是否为 `inner `。
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口仅支持加入公开群。;; 公开群是指的群类型，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_type ` 参数取值是否为 `public`。;;- 操作内部群时，操作者必须与相应的群组在同一租户内。;; 内部群是指的群标签，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_tag ` 参数取值是否为 `inner `。
              */
             meJoin: async (
                 payload?: {
@@ -2187,6 +4057,225 @@ export default abstract class Client extends human_authentication {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=bots&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bots&project=im&resource=chat.members&version=v1 document }
+             *
+             * 获取群内机器人列表
+             */
+            bots: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    bot_id?: string;
+                                    bot_name?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members/bots`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listMembersWithIterator: async (
+                payload?: {
+                    params?: {
+                        member_types?: string;
+                        member_id_type?: "open_id" | "union_id" | "user_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/list`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                users?: Array<{
+                                                    member_id?: string;
+                                                    name?: string;
+                                                    tenant_key?: string;
+                                                }>;
+                                                bots?: Array<{
+                                                    member_id?: string;
+                                                    app_id?: string;
+                                                    name?: string;
+                                                    tenant_key?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                user_total?: number;
+                                                truncations?: Array<{
+                                                    member_type?: string;
+                                                    limit?: number;
+                                                }>;
+                                                bot_total?: number;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=list_members&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_members&project=im&resource=chat.members&version=v1 document }
+             *
+             * 获取群成员列表（支持 member_types 过滤）
+             */
+            listMembers: async (
+                payload?: {
+                    params?: {
+                        member_types?: string;
+                        member_id_type?: "open_id" | "union_id" | "user_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                users?: Array<{
+                                    member_id?: string;
+                                    name?: string;
+                                    tenant_key?: string;
+                                }>;
+                                bots?: Array<{
+                                    member_id?: string;
+                                    app_id?: string;
+                                    name?: string;
+                                    tenant_key?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                user_total?: number;
+                                truncations?: Array<{
+                                    member_type?: string;
+                                    limit?: number;
+                                }>;
+                                bot_total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/members/list`,
                             path
                         ),
                         method: "GET",
@@ -2462,7 +4551,7 @@ export default abstract class Client extends human_authentication {
              *
              * 通过 chat_id 解散指定群组。通过 API 解散群组后，群聊天记录将不会保存。
              *
-             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以应用身份（tenant_access_token）解散群，则应用机器人需要符合以下任一情况。;;    - 应用机器人是群主。;    - 应用机器人是群的创建者，且应用已开通 **更新应用所创建群的群信息**（im:chat:operate_as_owner）权限。;;- 如果以用户身份（user_access_token）解散群，需要该用户是群主。;;
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以应用身份（tenant_access_token）解散群，则应用机器人需要符合以下任一情况。;; - 应用机器人是群主。; - 应用机器人是群的创建者，且应用已开通 **更新应用所创建群的群信息**（im:chat:operate_as_owner）权限。;;- 如果以用户身份（user_access_token）解散群，需要该用户是群主。;;
              */
             delete: async (
                 payload?: {
@@ -2611,6 +4700,73 @@ export default abstract class Client extends human_authentication {
                             path
                         ),
                         method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=chat&version=v1 document }
+             *
+             * 批量查询群组信息
+             */
+            batchQuery: async (
+                payload?: {
+                    data: { chat_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                invalid_ids?: Array<{
+                                    id?: string;
+                                    msg?: string;
+                                }>;
+                                items?: Array<{
+                                    chat_id?: string;
+                                    avatar?: string;
+                                    name?: string;
+                                    description?: string;
+                                    owner_id?: string;
+                                    owner_id_type?: string;
+                                    external?: boolean;
+                                    tenant_key?: string;
+                                    labels?: Array<string>;
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
+                                    chat_mode?: string;
+                                    p2p_target_id?: string;
+                                    p2p_target_type?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/batch_query`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3171,7 +5327,7 @@ export default abstract class Client extends human_authentication {
              *
              * 获取 [access_token](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-choose-which-type-of-token-to-use) 所代表的用户或者机器人所在的群列表。
              *
-             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL。;- 获取到的群列表中，不包含单聊（群模式为 `p2p`）。;- 查询参数  **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填。;
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL。;- 获取到的群列表中，不包含单聊（群模式为 `p2p`）。;- 查询参数 **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填。;
              */
             list: async (
                 payload?: {
@@ -3401,7 +5557,7 @@ export default abstract class Client extends human_authentication {
              *
              * 更新指定群组的发言权限，可设置为所有群成员可发言、仅群主或管理员可发言、指定群成员可发言。
              *
-             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以用户身份（user_access_token）调用本接口，则该用户必须是群组的群主，才可以更新群发言权限。;- 如果以应用身份（tenant_access_token）调用本接口，则该应用机器人需要符合以下任一情况才可以更新群发言权限。;    - 机器人是群组的群主。;    - 机器人是群组的创建者、具备==更新应用所创建群的群信息（im:chat:operate_as_owner）== 权限，且仍在群组内。
+             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以用户身份（user_access_token）调用本接口，则该用户必须是群组的群主，才可以更新群发言权限。;- 如果以应用身份（tenant_access_token）调用本接口，则该应用机器人需要符合以下任一情况才可以更新群发言权限。; - 机器人是群组的群主。; - 机器人是群组的创建者、具备==更新应用所创建群的群信息（im:chat:operate_as_owner）== 权限，且仍在群组内。
              */
             update: async (
                 payload?: {
@@ -4578,6 +6734,259 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
+         * chat.widget
+         */
+        chatWidget: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    widget_id?: string;
+                                                    widget_type?: "URL";
+                                                    widget_url?: {
+                                                        url?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.widget&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat.widget&version=v1 document }
+             *
+             * 获取小组件
+             *
+             * 获取指定群组内的小组件信息，包括小组件的 ID、类型以及链接信息。
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    widget_id?: string;
+                                    widget_type?: "URL";
+                                    widget_url?: { url?: string };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.widget&apiName=batch_delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=im&resource=chat.widget&version=v1 document }
+             *
+             * 删除小组件
+             *
+             * 在指定群组内删除一个或多个小组件。
+             */
+            batchDelete: async (
+                payload?: {
+                    data: { widget_ids: Array<string> };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                widgets?: Array<{
+                                    widget_id?: string;
+                                    widget_type?: "URL";
+                                    widget_url?: { url?: string };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets/batch_delete`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.widget&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=im&resource=chat.widget&version=v1 document }
+             *
+             * 添加小组件
+             *
+             * 向群内添加小组件。目前仅支持添加 URL 类型小组件。
+             */
+            batchCreate: async (
+                payload?: {
+                    data?: {
+                        widgets?: Array<{
+                            widget_type?: "URL";
+                            widget_url?: { url?: string };
+                        }>;
+                    };
+                    path?: { chat_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                widgets?: Array<{
+                                    widget_id?: string;
+                                    widget_type?: "URL";
+                                    widget_url?: { url?: string };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * chat.menu_item
          */
         chatMenuItem: {
@@ -5157,105 +7566,58 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * file
+         * user_message_subscription
          */
-        file: {
+        userMessageSubscription: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=user_message_subscription&apiName=batch_delete&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=file&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=im&resource=user_message_subscription&version=v1 document }
              *
-             * 下载文件
-             *
-             * 通过已上传文件的 Key 下载文件。
-             *
-             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的文件。;- 下载的资源大小不能超过 100 MB。 ;- 该接口仅适用于通过文件的 Key 下载文件。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。;- 如果需要 Content-Disposition header，发起请求时需要在 header 中设置 Content-Type 为 application/json。
+             * 批量删除用户订阅资源关系
              */
-            get: async (
+            batchDelete: async (
                 payload?: {
-                    path: { file_key: string };
+                    data: { subscription_ids: Array<string> };
                 },
                 options?: IRequestOptions
             ) => {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await this.httpInstance
-                    .request<any, any>({
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/files/:file_key`,
+                            `${this.domain}/open-apis/im/v1/user_message_subscriptions/batch_delete`,
                             path
                         ),
-                        method: "GET",
-                        headers,
+                        method: "POST",
                         data,
                         params,
-                        responseType: "stream",
+                        headers,
                         paramsSerializer: (params) =>
                             stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
-                        });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
-                };
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=user_message_subscription&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=file&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=user_message_subscription&version=v1 document }
              *
-             * 上传文件
-             *
-             * 调用该接口将本地文件上传至开放平台，支持上传音频、视频、文档等文件类型。上传后接口会返回文件的 Key，使用该 Key 值可以调用其他 OpenAPI。例如，调用[发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)接口，发送文件。
-             *
-             * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;文件大小不得超过 30 MB，且不允许上传空文件。
+             * 创建用户和资源订阅关系
              */
             create: async (
                 payload?: {
-                    data: {
-                        file_type:
-                            | "opus"
-                            | "mp4"
-                            | "pdf"
-                            | "doc"
-                            | "xls"
-                            | "ppt"
-                            | "stream";
-                        file_name: string;
-                        duration?: number;
-                        file: Buffer | fs.ReadStream;
+                    data?: {
+                        resource_type?: number;
+                        resource_ids?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -5263,26 +7625,34 @@ export default abstract class Client extends human_authentication {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await this.httpInstance
+                return this.httpInstance
                     .request<
                         any,
                         {
                             code?: number;
                             msg?: string;
-                            data?: { file_key?: string };
+                            data?: {
+                                subscriptions?: Array<{
+                                    subscription_id?: string;
+                                    subscriber_id?: string;
+                                    resource_type?: number;
+                                    resource_id?: string;
+                                    status?: number;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    version?: string;
+                                }>;
+                            };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/files`,
+                            `${this.domain}/open-apis/im/v1/user_message_subscriptions`,
                             path
                         ),
                         method: "POST",
                         data,
                         params,
-                        headers: {
-                            ...headers,
-                            "Content-Type": "multipart/form-data",
-                        },
+                        headers,
                         paramsSerializer: (params) =>
                             stringify(params, { arrayFormat: "repeat" }),
                     })
@@ -5290,84 +7660,1617 @@ export default abstract class Client extends human_authentication {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-                return res?.data || null;
             },
-        },
-        /**
-         * message.resource
-         */
-        messageResource: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=user_message_subscription&apiName=batch_query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message.resource&version=v1 document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=user_message_subscription&version=v1 document }
              *
-             * 获取消息中的资源文件
-             *
-             * 获取指定消息内包含的资源文件，包括音频、视频、图片和文件。成功调用后，返回二进制文件流下载文件。
-             *
-             * ## 前提条件; ;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人和待操作的消息需要在同一会话内。;;## 使用限制;- 仅支持下载 100 MB 以内的资源文件。;- 暂不支持获取表情包资源。;- 暂不支持获取合并转发消息中的子消息、卡片消息中的资源文件。如果请求时传入了合并转发消息或子消息的 ID、卡片消息 ID，则会返回错误码 234043。;- 不支持在当前接口内调整文件格式，你可以获取资源文件后，在本地自行调整。
+             * 批量查询用户订阅资源关系
              */
-            get: async (
+            batchQuery: async (
                 payload?: {
-                    params: { type: string };
-                    path: { message_id: string; file_key: string };
+                    data?: {
+                        resource_type?: number;
+                        resource_id?: string;
+                        status?: number;
+                        page_size?: string;
+                        page_token?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await this.httpInstance
-                    .request<any, any>({
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                page_token?: string;
+                                has_more?: boolean;
+                                subscriptions?: Array<{
+                                    subscription_id?: string;
+                                    subscriber_id?: string;
+                                    resource_type?: number;
+                                    resource_id?: string;
+                                    status?: number;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    version?: string;
+                                }>;
+                            };
+                        }
+                    >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
+                            `${this.domain}/open-apis/im/v1/user_message_subscriptions/batch_query`,
                             path
                         ),
-                        method: "GET",
-                        headers,
+                        method: "POST",
                         data,
                         params,
-                        responseType: "stream",
+                        headers,
                         paramsSerializer: (params) =>
                             stringify(params, { arrayFormat: "repeat" }),
-                        $return_headers: true,
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
+            },
+        },
+        /**
+         * chat_p2p
+         */
+        chatP2p: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_p2p&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=chat_p2p&version=v1 document }
+             *
+             * 根据用户ID批量获取P2P群
+             */
+            batchQuery: async (
+                payload?: {
+                    data: { chatter_ids: Array<string> };
+                    params?: {
+                        chatter_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
 
-                const checkIsReadable = () => {
-                    const consumedError =
-                        "The stream has already been consumed";
-                    if (!res.data.readable) {
-                        this.logger.error(consumedError);
-                        throw new Error(consumedError);
-                    }
-                };
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                p2p_chats?: Array<{
+                                    chatter_id1?: string;
+                                    chatter_id2?: string;
+                                    chat_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_p2p/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * feed_flag
+         */
+        feedFlag: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_flag&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=feed_flag&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        flag_items?: Array<{
+                            item_id?: string;
+                            item_type?: string;
+                            flag_type?: string;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
 
-                return {
-                    writeFile: async (filePath: string) => {
-                        checkIsReadable();
-                        return new Promise((resolve, reject) => {
-                            const writableStream =
-                                fs.createWriteStream(filePath);
-                            writableStream.on("finish", () => {
-                                resolve(filePath);
-                            });
-                            writableStream.on("error", (e) => {
-                                reject(e);
-                            });
-                            res.data.pipe(writableStream);
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/flags`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_flag&apiName=cancel&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel&project=im&resource=feed_flag&version=v1 document }
+             */
+            cancel: async (
+                payload?: {
+                    data?: {
+                        flag_items?: Array<{
+                            item_id?: string;
+                            item_type?: string;
+                            flag_type?: string;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/flags/cancel`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/flags`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
                         });
-                    },
-                    getReadableStream: () => {
-                        checkIsReadable();
-                        return res.data as Readable;
-                    },
-                    headers: res.headers,
+                    return res;
                 };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                flag_items?: Array<{
+                                                    item_id?: string;
+                                                    item_type?: string;
+                                                    flag_type?: string;
+                                                    create_time?: string;
+                                                    update_time?: string;
+                                                }>;
+                                                delete_flag_items?: Array<{
+                                                    item_id?: string;
+                                                    item_type?: string;
+                                                    flag_type?: string;
+                                                    create_time?: string;
+                                                    update_time?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                messages?: Array<{
+                                                    message_id?: string;
+                                                    root_id?: string;
+                                                    parent_id?: string;
+                                                    thread_id?: string;
+                                                    msg_type?: string;
+                                                    create_time?: string;
+                                                    update_time?: string;
+                                                    deleted?: boolean;
+                                                    updated?: boolean;
+                                                    chat_id?: string;
+                                                    sender?: {
+                                                        id: string;
+                                                        id_type: string;
+                                                        sender_type: string;
+                                                        tenant_key?: string;
+                                                        sender_name?: string;
+                                                        open_bot_id?: string;
+                                                        sender_i18n_names?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                    };
+                                                    body?: { content: string };
+                                                    mentions?: Array<{
+                                                        key: string;
+                                                        id: string;
+                                                        id_type: string;
+                                                        name: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                    upper_message_id?: string;
+                                                    message_app_link?: string;
+                                                    message_position?: string;
+                                                    thread_message_position?: string;
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_flag&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=feed_flag&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                flag_items?: Array<{
+                                    item_id?: string;
+                                    item_type?: string;
+                                    flag_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                }>;
+                                delete_flag_items?: Array<{
+                                    item_id?: string;
+                                    item_type?: string;
+                                    flag_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                messages?: Array<{
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                        sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/flags`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * message_cot
+         */
+        messageCot: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=complete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=complete&project=im&resource=message_cot&version=v1 document }
+             *
+             * 关闭 COT 写入状态
+             *
+             * 该接口主要用于将COT写入状态结束。当COT状态为写入完成态，将无法继续追加COT事件。
+             *
+             * TIPS: 写入COT消息的接口，如果传入的是event_type是RUN_FINISHED，程序将自动执行COT消息状态流转，无需再次调用本接口。;;[event_type介绍](https://lark-oapi-tools-console.bytedance.net/document-mod/index?fullPath=%2FuAjLw4CM%2FukTMukTMukTM%2Freference%2Fim-v1%2Fmessage_cot%2Fcot-message-brief)
+             */
+            complete: async (
+                payload?: {
+                    params: { message_id: string; reason?: string };
+                    path: { cot_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/message_cot/complete/:cot_id`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message_cot&version=v1 document }
+             *
+             * 写入 COT事件
+             *
+             * 该接口用于持续写入COT(思考过程)事件，写入后客户端可以流式开始思考过程。
+             *
+             * 写入事件的格式需要按照[AG-UI event](https://docs.ag-ui.com/concepts/events) JSON格式传入。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        events: Array<{
+                            event_type: string;
+                            content: string;
+                            timestamp: string;
+                        }>;
+                        message_id: string;
+                        cot_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/message_cot`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_cot&version=v1 document }
+             *
+             * 创建 COT 消息
+             *
+             * 调用该接口支持创建一条COT消息，用于与Agent交互时展示Agent的思考过程。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        receive_id: string;
+                        origin_message_id?: string;
+                        reply_in_thread?: boolean;
+                        enable_badge?: boolean;
+                        update_feed_rank?: boolean;
+                        cot_hidden?: boolean;
+                    };
+                    params: { receive_id_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { cot_id?: string; message_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/message_cot`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * feed_group
+         */
+        feedGroup: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=feed_group&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/:feed_group_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listItemWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        start_time?: string;
+                        end_time?: string;
+                    };
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id/list_item`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    feed_id?: string;
+                                                    feed_type?: string;
+                                                    update_time?: string;
+                                                }>;
+                                                deleted_items?: Array<{
+                                                    feed_id?: string;
+                                                    feed_type?: string;
+                                                    update_time?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=list_item&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_item&project=im&resource=feed_group&version=v1 document }
+             */
+            listItem: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        start_time?: string;
+                        end_time?: string;
+                    };
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    feed_id?: string;
+                                    feed_type?: string;
+                                    update_time?: string;
+                                }>;
+                                deleted_items?: Array<{
+                                    feed_id?: string;
+                                    feed_type?: string;
+                                    update_time?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/:feed_group_id/list_item`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_remove_item&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove_item&project=im&resource=feed_group&version=v1 document }
+             */
+            batchRemoveItem: async (
+                payload?: {
+                    data: {
+                        items: Array<{ feed_id?: string; feed_type?: string }>;
+                    };
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                failed_items?: Array<{
+                                    item?: {
+                                        feed_id?: string;
+                                        feed_type?: string;
+                                    };
+                                    error_code?: number;
+                                    error_message?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/:feed_group_id/batch_remove_item`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=feed_group&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        feed_group_creator: {
+                            type: string;
+                            name: string;
+                            rules?: {
+                                rules: Array<{
+                                    condition: {
+                                        match_type: string;
+                                        condition_items: Array<{
+                                            type: string;
+                                            operator: string;
+                                            keyword?: string;
+                                            user_id?: string;
+                                            chat_type?: string;
+                                        }>;
+                                    };
+                                    action: string;
+                                }>;
+                            };
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { group_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=feed_group&version=v1 document }
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        feed_group_updater: {
+                            name?: string;
+                            rules?: {
+                                rules: Array<{
+                                    condition: {
+                                        match_type: string;
+                                        condition_items: Array<{
+                                            type: string;
+                                            operator: string;
+                                            keyword?: string;
+                                            user_id?: string;
+                                            chat_type?: string;
+                                        }>;
+                                    };
+                                    action: string;
+                                }>;
+                            };
+                            update_fields?: Array<number>;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/:feed_group_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=feed_group&version=v1 document }
+             */
+            batchQuery: async (
+                payload?: {
+                    data: { group_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                groups?: Array<{
+                                    group_id?: string;
+                                    type?: "normal" | "rule";
+                                    name?: string;
+                                    rules?: {
+                                        rules: Array<{
+                                            condition: {
+                                                match_type: string;
+                                                condition_items: Array<{
+                                                    type: string;
+                                                    operator: string;
+                                                    keyword?: string;
+                                                    user_id?: string;
+                                                    chat_type?: string;
+                                                }>;
+                                            };
+                                            action: string;
+                                        }>;
+                                    };
+                                }>;
+                                deleted_groups?: Array<{
+                                    group_id?: string;
+                                    type?: "normal" | "rule";
+                                    name?: string;
+                                    rules?: {
+                                        rules: Array<{
+                                            condition: {
+                                                match_type: string;
+                                                condition_items: Array<{
+                                                    type: string;
+                                                    operator: string;
+                                                    keyword?: string;
+                                                    user_id?: string;
+                                                    chat_type?: string;
+                                                }>;
+                                            };
+                                            action: string;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_add_item&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_add_item&project=im&resource=feed_group&version=v1 document }
+             */
+            batchAddItem: async (
+                payload?: {
+                    data: {
+                        items: Array<{ feed_id?: string; feed_type?: string }>;
+                    };
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                failed_items?: Array<{
+                                    item?: {
+                                        feed_id?: string;
+                                        feed_type?: string;
+                                    };
+                                    error_code?: number;
+                                    error_message?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/:feed_group_id/batch_add_item`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_query_item&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query_item&project=im&resource=feed_group&version=v1 document }
+             */
+            batchQueryItem: async (
+                payload?: {
+                    data: {
+                        items: Array<{ feed_id?: string; feed_type?: string }>;
+                    };
+                    path: { feed_group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    feed_id?: string;
+                                    feed_type?: string;
+                                    update_time?: string;
+                                }>;
+                                deleted_items?: Array<{
+                                    feed_id?: string;
+                                    feed_type?: string;
+                                    update_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups/:feed_group_id/batch_query_item`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        start_time?: string;
+                        end_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                groups?: Array<{
+                                                    group_id?: string;
+                                                    type?: "normal" | "rule";
+                                                    name?: string;
+                                                    rules?: {
+                                                        rules: Array<{
+                                                            condition: {
+                                                                match_type: string;
+                                                                condition_items: Array<{
+                                                                    type: string;
+                                                                    operator: string;
+                                                                    keyword?: string;
+                                                                    user_id?: string;
+                                                                    chat_type?: string;
+                                                                }>;
+                                                            };
+                                                            action: string;
+                                                        }>;
+                                                    };
+                                                }>;
+                                                deleted_groups?: Array<{
+                                                    group_id?: string;
+                                                    type?: "normal" | "rule";
+                                                    name?: string;
+                                                    rules?: {
+                                                        rules: Array<{
+                                                            condition: {
+                                                                match_type: string;
+                                                                condition_items: Array<{
+                                                                    type: string;
+                                                                    operator: string;
+                                                                    keyword?: string;
+                                                                    user_id?: string;
+                                                                    chat_type?: string;
+                                                                }>;
+                                                            };
+                                                            action: string;
+                                                        }>;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=feed_group&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        start_time?: string;
+                        end_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                groups?: Array<{
+                                    group_id?: string;
+                                    type?: "normal" | "rule";
+                                    name?: string;
+                                    rules?: {
+                                        rules: Array<{
+                                            condition: {
+                                                match_type: string;
+                                                condition_items: Array<{
+                                                    type: string;
+                                                    operator: string;
+                                                    keyword?: string;
+                                                    user_id?: string;
+                                                    chat_type?: string;
+                                                }>;
+                                            };
+                                            action: string;
+                                        }>;
+                                    };
+                                }>;
+                                deleted_groups?: Array<{
+                                    group_id?: string;
+                                    type?: "normal" | "rule";
+                                    name?: string;
+                                    rules?: {
+                                        rules: Array<{
+                                            condition: {
+                                                match_type: string;
+                                                condition_items: Array<{
+                                                    type: string;
+                                                    operator: string;
+                                                    keyword?: string;
+                                                    user_id?: string;
+                                                    chat_type?: string;
+                                                }>;
+                                            };
+                                            action: string;
+                                        }>;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/groups`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat_user_setting
+         */
+        chatUserSetting: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_user_setting&apiName=batch_get_mute_status&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_mute_status&project=im&resource=chat_user_setting&version=v1 document }
+             *
+             * 批量获取调用 user 自己在多个群里的免打扰状态。
+             */
+            batchGetMuteStatus: async (
+                payload?: {
+                    data: { chat_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    chat_id?: string;
+                                    is_muted?: boolean;
+                                }>;
+                                invalid_id_list?: Array<{
+                                    id?: string;
+                                    msg?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_user_setting/batch_get_mute_status`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_user_setting&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=chat_user_setting&version=v1 document }
+             *
+             * 批量更新当前用户在群内的个人偏好设置（如：`is_muted` 对普通消息免打扰，`is_mute_at_all` 对 @所有人 消息免打扰）；单次最多 10 个群
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        chat_settings: Array<{
+                            chat_id?: string;
+                            is_muted?: boolean;
+                            is_mute_at_all?: boolean;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                invalid_ids?: Array<{
+                                    id?: string;
+                                    msg?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_user_setting/batch_update`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_user_setting&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=chat_user_setting&version=v1 document }
+             *
+             * 批量查询当前用户在群内的个人偏好设置（如：`is_muted` 对普通消息免打扰，`is_mute_at_all` 对 @所有人 消息免打扰）；单次最多 10 个群
+             */
+            batchQuery: async (
+                payload?: {
+                    data: { chat_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    chat_id?: string;
+                                    is_muted?: boolean;
+                                    is_mute_at_all?: boolean;
+                                }>;
+                                invalid_ids?: Array<{
+                                    id?: string;
+                                    msg?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chat_user_setting/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.nickname
+         */
+        chatNickname: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.nickname&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat.nickname&version=v1 document }
+             *
+             * 清空调用 user 自己在群里的群昵称（self-only）；后端会同时清掉群昵称-用户反查索引。
+             */
+            delete: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/nickname`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.nickname&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.nickname&version=v1 document }
+             *
+             * 获取调用 user 自己在群里的群昵称（self-only）。未设置时返空串。
+             */
+            get: async (
+                payload?: {
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { nickname?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/nickname`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.nickname&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat.nickname&version=v1 document }
+             *
+             * 设置或更新调用 user 自己在群里的群昵称（self-only，非空字符串；清空请用 DELETE）。
+             */
+            update: async (
+                payload?: {
+                    data: { nickname: string };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/nickname`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
             },
         },
         /**
@@ -5465,11 +9368,1564 @@ export default abstract class Client extends human_authentication {
                     });
             },
         },
+        /**
+         * draft
+         */
+        draft: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=draft&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=draft&version=v1 document }
+             *
+             * 写入草稿
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        scene: number;
+                        chat_id?: string;
+                        thread_id?: string;
+                        msg_type: string;
+                        content: string;
+                        reply_message_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                code?: number;
+                                msg?: string;
+                                update_time?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/draft`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=draft&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=draft&version=v1 document }
+             *
+             * 通过模版消息卡片
+             */
+            createByCard: async (
+                payload?: {
+                    data: {
+                        scene: number;
+                        chat_id?: string;
+                        thread_id?: string;
+                        reply_message_id?: string;
+                        template_id: string;
+                        template_variable?: Record<string, any>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const { template_id, template_variable, ...rest } = data;
+                const targetData = {
+                    msg_type: "interactive",
+                    content: JSON.stringify({
+                        type: "template",
+                        data: {
+                            template_id: template_id,
+                            template_variable: template_variable,
+                        },
+                    }),
+                    ...rest,
+                };
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                code?: number;
+                                msg?: string;
+                                update_time?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/draft`,
+                            path
+                        ),
+                        method: "POST",
+                        data: targetData,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * chat.membership_application
+         */
+        chatMembershipApplication: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.membership_application&apiName=handle&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=handle&project=im&resource=chat.membership_application&version=v1 document }
+             *
+             * 批量审批入群申请（approve/reject，仅群主/管理员，user_access_token）
+             */
+            handle: async (
+                payload?: {
+                    data: {
+                        items: Array<{ member_id: string; action: string }>;
+                    };
+                    params?: {
+                        member_id_type?: "open_id" | "union_id" | "user_id";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                results?: Array<{
+                                    member_id?: string;
+                                    action?: string;
+                                    result?: string;
+                                    error_code?: string;
+                                    error_message?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/membership_applications/handle`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        member_id_type?: "open_id" | "union_id" | "user_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/membership_applications`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    applicant?: {
+                                                        member_id?: string;
+                                                        member_type?: string;
+                                                        app_id?: string;
+                                                        name?: string;
+                                                    };
+                                                    inviter?: {
+                                                        member_id?: string;
+                                                        member_type?: string;
+                                                        app_id?: string;
+                                                        name?: string;
+                                                    };
+                                                    reason?: string;
+                                                    apply_source?: string;
+                                                    apply_time?: number;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                total?: number;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.membership_application&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat.membership_application&version=v1 document }
+             *
+             * 列出群的待审批入群申请（仅群主/管理员，user_access_token）
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        member_id_type?: "open_id" | "union_id" | "user_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    applicant?: {
+                                        member_id?: string;
+                                        member_type?: string;
+                                        app_id?: string;
+                                        name?: string;
+                                    };
+                                    inviter?: {
+                                        member_id?: string;
+                                        member_type?: string;
+                                        app_id?: string;
+                                        name?: string;
+                                    };
+                                    reason?: string;
+                                    apply_source?: string;
+                                    apply_time?: number;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/membership_applications`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
+            /**
+             * url_preview
+             */
+            urlPreview: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=url_preview&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=url_preview&version=v1 document }
+                 *
+                 * 更新 URL 预览
+                 *
+                 * 主动更新 URL 预览，调用后会重新触发一次客户端拉取，需要回调服务返回更新后的数据。
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data?: {
+                            preview_tokens?: Array<string>;
+                            version?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/url_previews/batch_update`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * im_usage_data
+             */
+            imUsageData: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=im_usage_data&apiName=msg_process_data&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=msg_process_data&project=im&resource=im_usage_data&version=v1 document }
+                 */
+                msgProcessData: async (
+                    payload?: {
+                        params: { p_date: string; department_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        p_date?: string;
+                                        department_id?: string;
+                                        department_path?: string;
+                                        avg_imp_msg_read_rate_12h?: number;
+                                        msg_read_rate_12h?: number;
+                                        avg_receive_msg_cnt?: number;
+                                        avg_read_msg_cnt?: number;
+                                        avg_imp_read_msg_cnt?: number;
+                                        avg_imp_receive_msg_cnt?: number;
+                                        high_load_rate?: number;
+                                        big_group_msg_rate?: number;
+                                        big_group_topic_msg_rate?: number;
+                                        avg_receive_bot_msg_cnt?: number;
+                                        avg_bot_imp_msg_read_rate_12h?: number;
+                                        receive_bot_msg_rate?: number;
+                                        use_chat_box_rate?: number;
+                                        receive_mute_msg_rate?: number;
+                                        read_mute_msg_rate?: number;
+                                        avg_receive_imp_msg_chat_cnt?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/im_usage_data/msg_process_data`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=im_usage_data&apiName=im_depth_data&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=im_depth_data&project=im&resource=im_usage_data&version=v1 document }
+                 */
+                imDepthData: async (
+                    payload?: {
+                        params: { p_date: string; department_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        p_date?: string;
+                                        department_id?: string;
+                                        department_path?: string;
+                                        send_msg_rate?: number;
+                                        avg_send_msg_cnt?: number;
+                                        pc_send_msg_rate?: number;
+                                        pc_avg_send_msg_cnt?: number;
+                                        mobile_send_msg_rate?: number;
+                                        mobile_avg_send_msg_cnt?: number;
+                                        meeting_group_send_msg_rate?: number;
+                                        tenant_group_send_msg_rate?: number;
+                                        dept_group_send_msg_rate?: number;
+                                        topic_group_send_msg_rate?: number;
+                                        group_at_msg_rate?: number;
+                                        group_reply_msg_rate?: number;
+                                        reaction_rate?: number;
+                                        p2p_send_msg_rate?: number;
+                                        img_send_msg_rate?: number;
+                                        file_send_msg_rate?: number;
+                                        sticker_send_msg_rate?: number;
+                                        post_send_msg_rate?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/im_usage_data/im_depth_data`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * toolkit
+             */
+            toolkit: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/toolkits`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        toolkit_id?: string;
+                                                        image_key?: string;
+                                                        toolkit_name: string;
+                                                        i18n_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                        toolkit_type:
+                                                            | "redirect_link"
+                                                            | "call_back";
+                                                        redirect_link?: {
+                                                            url?: string;
+                                                        };
+                                                        callback?: {
+                                                            webhook?: string;
+                                                            action_key?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=toolkit&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=toolkit&version=v1 document }
+                 *
+                 * 获取快捷组件列表
+                 *
+                 * 获取应用自己创建的快捷组件列表。
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        toolkit_id?: string;
+                                        image_key?: string;
+                                        toolkit_name: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                        toolkit_type:
+                                            | "redirect_link"
+                                            | "call_back";
+                                        redirect_link?: { url?: string };
+                                        callback?: {
+                                            webhook?: string;
+                                            action_key?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/toolkits`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=toolkit&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=toolkit&version=v1 document }
+                 *
+                 * 创建快捷组件
+                 *
+                 * 创建自定义快捷组件。
+                 *
+                 * 注意事项：;;- 创建时不需要设置toolkit_id
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            toolkit_id?: string;
+                            image_key?: string;
+                            toolkit_name: string;
+                            i18n_name?: {
+                                zh_cn?: string;
+                                en_us?: string;
+                                ja_jp?: string;
+                            };
+                            toolkit_type: "redirect_link" | "call_back";
+                            redirect_link?: { url?: string };
+                            callback?: {
+                                webhook?: string;
+                                action_key?: string;
+                            };
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    toolkit?: {
+                                        toolkit_id?: string;
+                                        image_key?: string;
+                                        toolkit_name: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                        toolkit_type:
+                                            | "redirect_link"
+                                            | "call_back";
+                                        redirect_link?: { url?: string };
+                                        callback?: {
+                                            webhook?: string;
+                                            action_key?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/toolkits`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat_custom_bot
+             */
+            chatCustomBot: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=chat_custom_bot&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            chat_id?: string;
+                            avatar_key?: string;
+                            name?: string;
+                            description?: string;
+                            allow_ips?: Array<string>;
+                            key_words?: Array<string>;
+                            signature_status?: boolean;
+                            uuid?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    bot_id?: string;
+                                    chat_id?: string;
+                                    avatar_key?: string;
+                                    name?: string;
+                                    description?: string;
+                                    i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    i18n_descriptions?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    webhook?: string;
+                                    allow_ips?: Array<string>;
+                                    key_words?: Array<string>;
+                                    signature_status?: boolean;
+                                    signature?: string;
+                                    enable?: boolean;
+                                    invitor_id?: string;
+                                    invitor_id_type?: string;
+                                    version?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_custom_bots`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat_custom_bot&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { bot_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_custom_bots/:bot_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat_custom_bot&version=v1 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            avatar_key?: string;
+                            name?: string;
+                            description?: string;
+                            allow_ips?: Array<string>;
+                            key_words?: Array<string>;
+                            signature_status?: boolean;
+                            change_signature?: boolean;
+                            enable?: boolean;
+                        };
+                        path?: { bot_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_custom_bots/:bot_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_custom_bot&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat_custom_bot&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        path?: { bot_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    bot_id?: string;
+                                    chat_id?: string;
+                                    avatar_key?: string;
+                                    name?: string;
+                                    description?: string;
+                                    i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    i18n_descriptions?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    webhook?: string;
+                                    allow_ips?: Array<string>;
+                                    key_words?: Array<string>;
+                                    signature_status?: boolean;
+                                    signature?: string;
+                                    enable?: boolean;
+                                    invitor_id?: string;
+                                    invitor_id_type?: string;
+                                    version?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_custom_bots/:bot_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * file
+             */
+            file: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=upload_prepare&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_prepare&project=im&resource=file&version=v1 document }
+                 */
+                uploadPrepare: async (
+                    payload?: {
+                        data: {
+                            file_type:
+                                | "opus"
+                                | "mp4"
+                                | "pdf"
+                                | "doc"
+                                | "xls"
+                                | "ppt"
+                                | "stream";
+                            file_name: string;
+                            duration?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { upload_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files/upload_prepare`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=upload_part&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_part&project=im&resource=file&version=v1 document }
+                 */
+                uploadPart: async (
+                    payload?: {
+                        data: {
+                            part_id: string;
+                            file_key: string;
+                            file: Buffer | fs.ReadStream;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { part_id?: string; crc32?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files/upload_part`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=upload_finish&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_finish&project=im&resource=file&version=v1 document }
+                 */
+                uploadFinish: async (
+                    payload?: {
+                        data: {
+                            file_key: string;
+                            file_name: string;
+                            items?: Array<{ part_id: string; crc32: string }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_key?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files/upload_finish`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=sharding&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sharding&project=im&resource=file&version=v1 document }
+                 */
+                sharding: async (
+                    payload?: {
+                        params: { range: string };
+                        path: { file_key: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files/:file_key/sharding`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=file&version=v1 document }
+                 *
+                 * 下载文件
+                 *
+                 * 通过已上传文件的 Key 下载文件。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的文件。;- 下载的资源大小不能超过 100 MB。 ;- 该接口仅适用于通过文件的 Key 下载文件。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。;- 如果需要 Content-Disposition header，发起请求时需要在 header 中设置 Content-Type 为 application/json。
+                 */
+                get: async (
+                    payload?: {
+                        path: { file_key: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files/:file_key`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=file&version=v1 document }
+                 *
+                 * 上传文件
+                 *
+                 * 调用该接口将本地文件上传至开放平台，支持上传音频、视频、文档等文件类型。上传后接口会返回文件的 Key，使用该 Key 值可以调用其他 OpenAPI。例如，调用[发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)接口，发送文件。
+                 *
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;文件大小不得超过 30 MB，且不允许上传空文件。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            file_type:
+                                | "opus"
+                                | "mp4"
+                                | "pdf"
+                                | "doc"
+                                | "xls"
+                                | "ppt"
+                                | "stream";
+                            file_name: string;
+                            duration?: number;
+                            file: Buffer | fs.ReadStream;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { file_key?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/files`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * message.resource
+             */
+            messageResource: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=sharding&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sharding&project=im&resource=message.resource&version=v1 document }
+                 */
+                sharding: async (
+                    payload?: {
+                        params: { range: string };
+                        path: { message_id: string; file_key: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key/sharding`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message.resource&version=v1 document }
+                 *
+                 * 获取消息中的资源文件
+                 *
+                 * 获取指定消息内包含的资源文件，包括音频、视频、图片和文件。成功调用后，返回二进制文件流下载文件。
+                 *
+                 * ## 前提条件; ;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人和待操作的消息需要在同一会话内。;;## 使用限制;- 仅支持下载 100 MB 以内的资源文件。;- 暂不支持获取表情包资源。;- 暂不支持获取合并转发消息中的子消息、卡片消息中的资源文件。如果请求时传入了合并转发消息或子消息的 ID、卡片消息 ID，则会返回错误码 234043。;- 不支持在当前接口内调整文件格式，你可以获取资源文件后，在本地自行调整。
+                 */
+                get: async (
+                    payload?: {
+                        params: { type: string };
+                        path: { message_id: string; file_key: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.data.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            checkIsReadable();
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.data.pipe(writableStream);
+                            });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res.data as Readable;
+                        },
+                        headers: res.headers,
+                    };
+                },
+            },
             /**
              * message
              */
             message: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=urgent_read_users&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=urgent_read_users&project=im&resource=message&version=v1 document }
+                 */
+                urgentReadUsers: async (
+                    payload?: {
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        user_id_type: string;
+                                        user_id: string;
+                                        timestamp: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_read_users`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=delete&version=v1 click to debug }
                  *
@@ -5520,7 +10976,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 调用该接口在最新一条消息下方添加气泡样式的内容，当消息接收者点击气泡或者新消息到达后，气泡消失。
                  *
-                 * ![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/05f992f251e9949661370b6c73aa6eda_DseiZlt09t.png?height=278&maxWidth=450&width=1383);;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 跟随气泡的效果在飞书客户端 v7.20 及以上版本生效。;- 仅支持在当前机器人与用户单聊的消息上添加跟随气泡，且消息需要符合：;;    - 消息是机器人发送的。;    - 消息是会话内最新的消息。;    - 消息发送后未超过 600 秒。;;## 注意事项;;添加跟随气泡后，会话内的用户点击气泡会自动转换为该用户发送的一条消息，你可以为应用订阅[接收消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive)事件，接收用户发送的消息并判断是否为跟随气泡的内容。
+                 * ![image.png](//sf3-cn.feishucdn.com/obj/open-platform-opendoc/05f992f251e9949661370b6c73aa6eda_DseiZlt09t.png?height=278&maxWidth=450&width=1383);;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 跟随气泡的效果在飞书客户端 v7.20 及以上版本生效。;- 仅支持在当前机器人与用户单聊的消息上添加跟随气泡，且消息需要符合：;; - 消息是机器人发送的。; - 消息是会话内最新的消息。; - 消息发送后未超过 600 秒。;;## 注意事项;;添加跟随气泡后，会话内的用户点击气泡会自动转换为该用户发送的一条消息，你可以为应用订阅[接收消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive)事件，接收用户发送的消息并判断是否为跟随气泡的内容。
                  */
                 pushFollowUp: async (
                     payload?: {
@@ -5682,7 +11138,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 调用该接口把指定消息加急给目标用户，加急将通过飞书客户端和短信进行通知。了解加急可参见[加急功能](https://www.feishu.cn/hc/zh-CN/articles/360024757913)。
                  *
-                 * **注意**：短信加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** >  **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
+                 * **注意**：短信加急将消耗企业的加急额度（可通过[管理后台](https://admin.feishu.cn/) > **费用中心** > **权益数据** > **短信/电话加急** 查看当前额度），请慎重调用。;;## 前提条件;;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 确保机器人在被加急消息所属会话中。如果是群组，还需要确保群管理中设置了 **所有群成员可以加急**，或者设置了 **仅群主或管理员可以加急** 且机器人是管理员。;;## 使用限制;;- 只能加急当前机器人自己发送的消息。;- 加急用户的未读加急总数不能超过 200 条。;- 不支持加急[批量发送的消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)。;- 加急[折叠会话](https://www.feishu.cn/hc/zh-CN/articles/360025267393)内的消息时，仅会在应用内推送提醒通知。
                  */
                 urgentSms: async (
                     payload?: {
@@ -5711,6 +11167,45 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=p2p_message&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=p2p_message&project=im&resource=message&version=v1 document }
+                 *
+                 * 删除单聊消息;
+                 *
+                 * 删除单聊消息，仅支持删除机器人通过单聊发送给用户消息。
+                 */
+                p2pMessage: async (
+                    payload?: {
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/p2p_message`,
+                                path
+                            ),
+                            method: "DELETE",
                             data,
                             params,
                             headers,
@@ -5762,194 +11257,20 @@ export default abstract class Client extends human_authentication {
                             throw e;
                         });
                 },
-                searchWithIterator: async (
-                    payload?: {
-                        data?: {
-                            query?: string;
-                            filter?: {
-                                from_ids?: Array<string>;
-                                chat_ids?: Array<string>;
-                                time_range?: {
-                                    start_time?: string;
-                                    end_time?: string;
-                                };
-                                include_attachment_types?: Array<
-                                    "image" | "video" | "file" | "link"
-                                >;
-                                from_types?: Array<"user" | "bot">;
-                                at_chatter_ids?: Array<string>;
-                                chat_type?: "group" | "p2p";
-                                is_at_me?: boolean;
-                                exclude_from_types?: Array<"user" | "bot">;
-                            };
-                        };
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/im/v1/messages/search`,
-                                    path
-                                ),
-                                method: "POST",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    items: Array<{
-                                                        id: string;
-                                                        display_info?: string;
-                                                        meta_data?: {
-                                                            message_id: string;
-                                                            type?:
-                                                                | "unknown"
-                                                                | "post"
-                                                                | "file"
-                                                                | "text"
-                                                                | "image"
-                                                                | "system"
-                                                                | "audio"
-                                                                | "email"
-                                                                | "share_group_chat"
-                                                                | "sticker"
-                                                                | "merge_forward"
-                                                                | "calendar"
-                                                                | "cloud_file"
-                                                                | "card"
-                                                                | "media"
-                                                                | "share_calendar_event"
-                                                                | "hongbao"
-                                                                | "general_calendar"
-                                                                | "video_chat"
-                                                                | "location"
-                                                                | "commercialized_hongbao"
-                                                                | "share_user_card"
-                                                                | "todo"
-                                                                | "folder"
-                                                                | "diagnose"
-                                                                | "vote"
-                                                                | "link";
-                                                            create_time?: string;
-                                                            update_time?: string;
-                                                            position?: number;
-                                                            chat_id?: string;
-                                                            from_id?: string;
-                                                            thread_id?: string;
-                                                            thread_position?: number;
-                                                            is_p2p_chat?: boolean;
-                                                        };
-                                                    }>;
-                                                    total?: number;
-                                                    has_more: boolean;
-                                                    page_token?: string;
-                                                    notice?: string;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=search&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=batch_get_read_status&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_read_status&project=im&resource=message&version=v1 document }
                  *
-                 * 搜索消息
+                 * 【暂不对外】消息接收者批量获取消息的已读状态
                  *
-                 * 用户可以通过关键字搜索可见消息，可见性和套件内搜索一致。
+                 * 批量获取消息接收者视角下消息的阅读状态
+                 *
+                 * ## 前提条件;- 查询消息的阅读状态时，用户需要在待查询消息所在的会话内。
                  */
-                search: async (
+                batchGetReadStatus: async (
                     payload?: {
-                        data?: {
-                            query?: string;
-                            filter?: {
-                                from_ids?: Array<string>;
-                                chat_ids?: Array<string>;
-                                time_range?: {
-                                    start_time?: string;
-                                    end_time?: string;
-                                };
-                                include_attachment_types?: Array<
-                                    "image" | "video" | "file" | "link"
-                                >;
-                                from_types?: Array<"user" | "bot">;
-                                at_chatter_ids?: Array<string>;
-                                chat_type?: "group" | "p2p";
-                                is_at_me?: boolean;
-                                exclude_from_types?: Array<"user" | "bot">;
-                            };
-                        };
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
+                        data?: { message_ids?: Array<string> };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5963,58 +11284,16 @@ export default abstract class Client extends human_authentication {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    items: Array<{
-                                        id: string;
-                                        display_info?: string;
-                                        meta_data?: {
-                                            message_id: string;
-                                            type?:
-                                                | "unknown"
-                                                | "post"
-                                                | "file"
-                                                | "text"
-                                                | "image"
-                                                | "system"
-                                                | "audio"
-                                                | "email"
-                                                | "share_group_chat"
-                                                | "sticker"
-                                                | "merge_forward"
-                                                | "calendar"
-                                                | "cloud_file"
-                                                | "card"
-                                                | "media"
-                                                | "share_calendar_event"
-                                                | "hongbao"
-                                                | "general_calendar"
-                                                | "video_chat"
-                                                | "location"
-                                                | "commercialized_hongbao"
-                                                | "share_user_card"
-                                                | "todo"
-                                                | "folder"
-                                                | "diagnose"
-                                                | "vote"
-                                                | "link";
-                                            create_time?: string;
-                                            update_time?: string;
-                                            position?: number;
-                                            chat_id?: string;
-                                            from_id?: string;
-                                            thread_id?: string;
-                                            thread_position?: number;
-                                            is_p2p_chat?: boolean;
-                                        };
+                                    read_statuses?: Array<{
+                                        message_id: string;
+                                        read_status: string;
+                                        unexpected_reason?: string;
                                     }>;
-                                    total?: number;
-                                    has_more: boolean;
-                                    page_token?: string;
-                                    notice?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/search`,
+                                `${this.domain}/open-apis/im/v1/messages/batch_query_read_status`,
                                 path
                             ),
                             method: "POST",
@@ -6038,7 +11317,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 调用该接口回复指定消息。回复的内容支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种类型。
                  *
-                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。 ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
                  */
                 reply: async (
                     payload?: {
@@ -6346,6 +11625,95 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=mget&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=im&resource=message&version=v1 document }
+                 *
+                 * 批量获取指定消息的内容
+                 *
+                 * 调用该接口可以批量通过消息的 message_id 查询消息内容。
+                 *
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人必须在消息所属的群组内。
+                 */
+                mget: async (
+                    payload?: {
+                        params?: {
+                            message_ids?: Array<string>;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            ai_mode?: boolean;
+                            card_msg_content_type?: string;
+                            with_sender_name?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        message_id?: string;
+                                        root_id?: string;
+                                        parent_id?: string;
+                                        thread_id?: string;
+                                        msg_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        deleted?: boolean;
+                                        updated?: boolean;
+                                        chat_id?: string;
+                                        sender?: {
+                                            id: string;
+                                            id_type: string;
+                                            sender_type: string;
+                                            tenant_key?: string;
+                                            sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        body?: { content: string };
+                                        mentions?: Array<{
+                                            key: string;
+                                            id: string;
+                                            id_type: string;
+                                            name: string;
+                                            tenant_key?: string;
+                                        }>;
+                                        upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/mget`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=merge_forward&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=merge_forward&project=im&resource=message&version=v1 document }
@@ -6620,6 +11988,225 @@ export default abstract class Client extends human_authentication {
                             throw e;
                         });
                 },
+                listForAiWithIterator: async (
+                    payload?: {
+                        params: {
+                            container_id_type: string;
+                            container_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                            sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/messages/ai`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        message_id?: string;
+                                                        root_id?: string;
+                                                        parent_id?: string;
+                                                        thread_id?: string;
+                                                        msg_type?: string;
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                        deleted?: boolean;
+                                                        updated?: boolean;
+                                                        chat_id?: string;
+                                                        sender?: {
+                                                            id: string;
+                                                            id_type: string;
+                                                            sender_type: string;
+                                                            tenant_key?: string;
+                                                            sender_name?: string;
+                                                            open_bot_id?: string;
+                                                            sender_i18n_names?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                                ja_jp?: string;
+                                                            };
+                                                        };
+                                                        body?: {
+                                                            content: string;
+                                                        };
+                                                        mentions?: Array<{
+                                                            key: string;
+                                                            id: string;
+                                                            id_type: string;
+                                                            name: string;
+                                                            tenant_key?: string;
+                                                        }>;
+                                                        upper_message_id?: string;
+                                                        message_app_link?: string;
+                                                        message_position?: string;
+                                                        thread_message_position?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list_for_ai&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_for_ai&project=im&resource=message&version=v1 document }
+                 */
+                listForAi: async (
+                    payload?: {
+                        params: {
+                            container_id_type: string;
+                            container_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                            sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        message_id?: string;
+                                        root_id?: string;
+                                        parent_id?: string;
+                                        thread_id?: string;
+                                        msg_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        deleted?: boolean;
+                                        updated?: boolean;
+                                        chat_id?: string;
+                                        sender?: {
+                                            id: string;
+                                            id_type: string;
+                                            sender_type: string;
+                                            tenant_key?: string;
+                                            sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        body?: { content: string };
+                                        mentions?: Array<{
+                                            key: string;
+                                            id: string;
+                                            id_type: string;
+                                            name: string;
+                                            tenant_key?: string;
+                                        }>;
+                                        upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/ai`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=forward&version=v1 click to debug }
                  *
@@ -6791,6 +12378,310 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=mark_read&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mark_read&project=im&resource=message&version=v1 document }
+                 *
+                 * 以当前用户身份批量将指定消息标记为已读
+                 */
+                markRead: async (
+                    payload?: {
+                        data: { message_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/mark_read`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                from_ids?: Array<string>;
+                                chat_ids?: Array<string>;
+                                time_range?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                include_attachment_types?: Array<
+                                    "image" | "video" | "file" | "link"
+                                >;
+                                from_types?: Array<"user" | "bot">;
+                                at_chatter_ids?: Array<string>;
+                                chat_type?: "group" | "p2p";
+                                is_at_me?: boolean;
+                                exclude_from_types?: Array<"user" | "bot">;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/messages/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        id: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            message_id: string;
+                                                            type?:
+                                                                | "unknown"
+                                                                | "post"
+                                                                | "file"
+                                                                | "text"
+                                                                | "image"
+                                                                | "system"
+                                                                | "audio"
+                                                                | "email"
+                                                                | "share_group_chat"
+                                                                | "sticker"
+                                                                | "merge_forward"
+                                                                | "calendar"
+                                                                | "cloud_file"
+                                                                | "card"
+                                                                | "media"
+                                                                | "share_calendar_event"
+                                                                | "hongbao"
+                                                                | "general_calendar"
+                                                                | "video_chat"
+                                                                | "location"
+                                                                | "commercialized_hongbao"
+                                                                | "share_user_card"
+                                                                | "todo"
+                                                                | "folder"
+                                                                | "diagnose"
+                                                                | "vote"
+                                                                | "link";
+                                                            create_time?: string;
+                                                            update_time?: string;
+                                                            position?: number;
+                                                            chat_id?: string;
+                                                            from_id?: string;
+                                                            thread_id?: string;
+                                                            thread_position?: number;
+                                                            is_p2p_chat?: boolean;
+                                                        };
+                                                    }>;
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                    notice?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
+                 *
+                 * 搜索消息
+                 *
+                 * 用户可以通过关键字搜索可见消息，可见性和套件内搜索一致。
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                from_ids?: Array<string>;
+                                chat_ids?: Array<string>;
+                                time_range?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                include_attachment_types?: Array<
+                                    "image" | "video" | "file" | "link"
+                                >;
+                                from_types?: Array<"user" | "bot">;
+                                at_chatter_ids?: Array<string>;
+                                chat_type?: "group" | "p2p";
+                                is_at_me?: boolean;
+                                exclude_from_types?: Array<"user" | "bot">;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        id: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            message_id: string;
+                                            type?:
+                                                | "unknown"
+                                                | "post"
+                                                | "file"
+                                                | "text"
+                                                | "image"
+                                                | "system"
+                                                | "audio"
+                                                | "email"
+                                                | "share_group_chat"
+                                                | "sticker"
+                                                | "merge_forward"
+                                                | "calendar"
+                                                | "cloud_file"
+                                                | "card"
+                                                | "media"
+                                                | "share_calendar_event"
+                                                | "hongbao"
+                                                | "general_calendar"
+                                                | "video_chat"
+                                                | "location"
+                                                | "commercialized_hongbao"
+                                                | "share_user_card"
+                                                | "todo"
+                                                | "folder"
+                                                | "diagnose"
+                                                | "vote"
+                                                | "link";
+                                            create_time?: string;
+                                            update_time?: string;
+                                            position?: number;
+                                            chat_id?: string;
+                                            from_id?: string;
+                                            thread_id?: string;
+                                            thread_position?: number;
+                                            is_p2p_chat?: boolean;
+                                        };
+                                    }>;
+                                    total?: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    notice?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_users&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_users&project=im&resource=message&version=v1 document }
@@ -6799,7 +12690,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 作为消息发送者，查询指定消息是否已读。接口只返回已读用户的信息，不返回未读用户的信息。
                  *
-                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  。;- 查询消息已读信息时，机器人需要在待查询消息所在的会话内。;;## 使用限制;- 只能查询由当前机器人自己发送的、发送时间不超过 7 天的消息已读信息。;- 一次请求只能查询一条消息，不支持批量查询。
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability) 。;- 查询消息已读信息时，机器人需要在待查询消息所在的会话内。;;## 使用限制;- 只能查询由当前机器人自己发送的、发送时间不超过 7 天的消息已读信息。;- 一次请求只能查询一条消息，不支持批量查询。
                  */
                 readUsers: async (
                     payload?: {
@@ -6850,13 +12741,60 @@ export default abstract class Client extends human_authentication {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=read_status&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=read_status&project=im&resource=message&version=v1 document }
+                 *
+                 * 批量查询当前用户对消息的已读状态
+                 */
+                readStatus: async (
+                    payload?: {
+                        data: { message_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        message_id: string;
+                                        is_read: boolean;
+                                    }>;
+                                    invalid_message_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/read_status`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=im&resource=message&version=v1 document }
                  *
                  * 通过模版消息卡片回复消息
                  *
-                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。  ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
+                 * ## 前提条件;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。 ;- 回复用户消息（即单聊消息）时，用户需要在机器人的[可用范围](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability)内。;- 回复群消息时，机器人需要在群中，且拥有发言权限。;;## 使用限制;为避免消息发送频繁对用户造成打扰，向同一用户发送消息的限频为 ==5 QPS==、向同一群组发送消息的限频为群内机器人共享 ==5 QPS==。
                  */
                 replyByCard: async (
                     payload?: {
@@ -7134,6 +13072,229 @@ export default abstract class Client extends human_authentication {
                             ),
                             method: "PUT",
                             data: targetData,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * special_focus
+             */
+            specialFocus: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=special_focus&apiName=unread&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unread&project=im&resource=special_focus&version=v1 document }
+                 *
+                 * 获取星标联系人未读信息数
+                 *
+                 * 按照单聊类型或群聊类型获取星标联系人未读信息的数量。消息 API 仅提供查询接口，如何使用星标联系人功能参见[星标联系人](https://www.feishu.cn/hc/zh-CN/articles/370278739280)。
+                 */
+                unread: async (
+                    payload?: {
+                        data?: {
+                            id_list?: Array<string>;
+                            chat_mode?: "group" | "p2p";
+                        };
+                        params?: {
+                            member_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "app_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    special_focus_unread?: Array<{
+                                        id: string;
+                                        id_type?:
+                                            | "user_id"
+                                            | "union_id"
+                                            | "open_id"
+                                            | "app_id";
+                                        unread_count?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/special_focus/unread`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            member_id_type?: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/special_focus`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id: string;
+                                                        id_type?:
+                                                            | "user_id"
+                                                            | "union_id"
+                                                            | "open_id"
+                                                            | "app_id";
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=special_focus&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=special_focus&version=v1 document }
+                 *
+                 * 获取星标联系人列表
+                 *
+                 * 获取用户的星标联系人列表。消息 API 仅提供查询接口，如何使用星标联系人功能参见[星标联系人](https://www.feishu.cn/hc/zh-CN/articles/370278739280)。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            member_id_type?: "user_id" | "union_id" | "open_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id: string;
+                                        id_type?:
+                                            | "user_id"
+                                            | "union_id"
+                                            | "open_id"
+                                            | "app_id";
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/special_focus`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
                             params,
                             headers,
                             paramsSerializer: (params) =>
@@ -7463,7 +13624,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 将当前调用接口的操作者（用户或机器人）加入指定群聊。
                  *
-                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口仅支持加入公开群。;;    公开群是指的群类型，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_type ` 参数取值是否为 `public`。;;- 操作内部群时，操作者必须与相应的群组在同一租户内。;;    内部群是指的群标签，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_tag ` 参数取值是否为 `inner `。
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 调用该接口仅支持加入公开群。;; 公开群是指的群类型，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_type ` 参数取值是否为 `public`。;;- 操作内部群时，操作者必须与相应的群组在同一租户内。;; 内部群是指的群标签，你可以调用[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)接口，在返回结果中查看 `chat_tag ` 参数取值是否为 `inner `。
                  */
                 meJoin: async (
                     payload?: {
@@ -7644,6 +13805,227 @@ export default abstract class Client extends human_authentication {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=bots&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bots&project=im&resource=chat.members&version=v1 document }
+                 *
+                 * 获取群内机器人列表
+                 */
+                bots: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        bot_id?: string;
+                                        bot_name?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/bots`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listMembersWithIterator: async (
+                    payload?: {
+                        params?: {
+                            member_types?: string;
+                            member_id_type?: "open_id" | "union_id" | "user_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/members/list`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    users?: Array<{
+                                                        member_id?: string;
+                                                        name?: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                    bots?: Array<{
+                                                        member_id?: string;
+                                                        app_id?: string;
+                                                        name?: string;
+                                                        tenant_key?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    user_total?: number;
+                                                    truncations?: Array<{
+                                                        member_type?: string;
+                                                        limit?: number;
+                                                    }>;
+                                                    bot_total?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.members&apiName=list_members&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_members&project=im&resource=chat.members&version=v1 document }
+                 *
+                 * 获取群成员列表（支持 member_types 过滤）
+                 */
+                listMembers: async (
+                    payload?: {
+                        params?: {
+                            member_types?: string;
+                            member_id_type?: "open_id" | "union_id" | "user_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    users?: Array<{
+                                        member_id?: string;
+                                        name?: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    bots?: Array<{
+                                        member_id?: string;
+                                        app_id?: string;
+                                        name?: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    user_total?: number;
+                                    truncations?: Array<{
+                                        member_type?: string;
+                                        limit?: number;
+                                    }>;
+                                    bot_total?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/members/list`,
                                 path
                             ),
                             method: "GET",
@@ -7924,7 +14306,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 通过 chat_id 解散指定群组。通过 API 解散群组后，群聊天记录将不会保存。
                  *
-                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以应用身份（tenant_access_token）解散群，则应用机器人需要符合以下任一情况。;;    - 应用机器人是群主。;    - 应用机器人是群的创建者，且应用已开通 **更新应用所创建群的群信息**（im:chat:operate_as_owner）权限。;;- 如果以用户身份（user_access_token）解散群，需要该用户是群主。;;
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以应用身份（tenant_access_token）解散群，则应用机器人需要符合以下任一情况。;; - 应用机器人是群主。; - 应用机器人是群的创建者，且应用已开通 **更新应用所创建群的群信息**（im:chat:operate_as_owner）权限。;;- 如果以用户身份（user_access_token）解散群，需要该用户是群主。;;
                  */
                 delete: async (
                     payload?: {
@@ -8081,6 +14463,73 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=chat&version=v1 document }
+                 *
+                 * 批量查询群组信息
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: { chat_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invalid_ids?: Array<{
+                                        id?: string;
+                                        msg?: string;
+                                    }>;
+                                    items?: Array<{
+                                        chat_id?: string;
+                                        avatar?: string;
+                                        name?: string;
+                                        description?: string;
+                                        owner_id?: string;
+                                        owner_id_type?: string;
+                                        external?: boolean;
+                                        tenant_key?: string;
+                                        labels?: Array<string>;
+                                        chat_status?:
+                                            | "normal"
+                                            | "dissolved"
+                                            | "dissolved_save";
+                                        chat_mode?: string;
+                                        p2p_target_id?: string;
+                                        p2p_target_type?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/batch_query`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -8651,7 +15100,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 获取 [access_token](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-choose-which-type-of-token-to-use) 所代表的用户或者机器人所在的群列表。
                  *
-                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL。;- 获取到的群列表中，不包含单聊（群模式为 `p2p`）。;- 查询参数  **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填。;
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 注意事项;;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL。;- 获取到的群列表中，不包含单聊（群模式为 `p2p`）。;- 查询参数 **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填。;
                  */
                 list: async (
                     payload?: {
@@ -8883,7 +15332,7 @@ export default abstract class Client extends human_authentication {
                  *
                  * 更新指定群组的发言权限，可设置为所有群成员可发言、仅群主或管理员可发言、指定群成员可发言。
                  *
-                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以用户身份（user_access_token）调用本接口，则该用户必须是群组的群主，才可以更新群发言权限。;- 如果以应用身份（tenant_access_token）调用本接口，则该应用机器人需要符合以下任一情况才可以更新群发言权限。;    - 机器人是群组的群主。;    - 机器人是群组的创建者、具备==更新应用所创建群的群信息（im:chat:operate_as_owner）== 权限，且仍在群组内。
+                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 如果以用户身份（user_access_token）调用本接口，则该用户必须是群组的群主，才可以更新群发言权限。;- 如果以应用身份（tenant_access_token）调用本接口，则该应用机器人需要符合以下任一情况才可以更新群发言权限。; - 机器人是群组的群主。; - 机器人是群组的创建者、具备==更新应用所创建群的群信息（im:chat:operate_as_owner）== 权限，且仍在群组内。
                  */
                 update: async (
                     payload?: {
@@ -10074,6 +16523,261 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
+             * chat.widget
+             */
+            chatWidget: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        widget_id?: string;
+                                                        widget_type?: "URL";
+                                                        widget_url?: {
+                                                            url?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.widget&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat.widget&version=v1 document }
+                 *
+                 * 获取小组件
+                 *
+                 * 获取指定群组内的小组件信息，包括小组件的 ID、类型以及链接信息。
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        widget_id?: string;
+                                        widget_type?: "URL";
+                                        widget_url?: { url?: string };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.widget&apiName=batch_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=im&resource=chat.widget&version=v1 document }
+                 *
+                 * 删除小组件
+                 *
+                 * 在指定群组内删除一个或多个小组件。
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data: { widget_ids: Array<string> };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    widgets?: Array<{
+                                        widget_id?: string;
+                                        widget_type?: "URL";
+                                        widget_url?: { url?: string };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets/batch_delete`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.widget&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=im&resource=chat.widget&version=v1 document }
+                 *
+                 * 添加小组件
+                 *
+                 * 向群内添加小组件。目前仅支持添加 URL 类型小组件。
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            widgets?: Array<{
+                                widget_type?: "URL";
+                                widget_url?: { url?: string };
+                            }>;
+                        };
+                        path?: { chat_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    widgets?: Array<{
+                                        widget_id?: string;
+                                        widget_type?: "URL";
+                                        widget_url?: { url?: string };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/widgets/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * chat.menu_item
              */
             chatMenuItem: {
@@ -10655,105 +17359,61 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * file
+             * user_message_subscription
              */
-            file: {
+            userMessageSubscription: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=user_message_subscription&apiName=batch_delete&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=file&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=im&resource=user_message_subscription&version=v1 document }
                  *
-                 * 下载文件
-                 *
-                 * 通过已上传文件的 Key 下载文件。
-                 *
-                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;- 只能下载由当前机器人上传的文件。;- 下载的资源大小不能超过 100 MB。 ;- 该接口仅适用于通过文件的 Key 下载文件。如果你需要下载用户发送消息内的资源文件，可使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口。;- 如果需要 Content-Disposition header，发起请求时需要在 header 中设置 Content-Type 为 application/json。
+                 * 批量删除用户订阅资源关系
                  */
-                get: async (
+                batchDelete: async (
                     payload?: {
-                        path: { file_key: string };
+                        data: { subscription_ids: Array<string> };
                     },
                     options?: IRequestOptions
                 ) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    const res = await this.httpInstance
-                        .request<any, any>({
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/files/:file_key`,
+                                `${this.domain}/open-apis/im/v1/user_message_subscriptions/batch_delete`,
                                 path
                             ),
-                            method: "GET",
-                            headers,
+                            method: "POST",
                             data,
                             params,
-                            responseType: "stream",
+                            headers,
                             paramsSerializer: (params) =>
                                 stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
-
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
-                            });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
-                    };
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=create&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=user_message_subscription&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=file&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=user_message_subscription&version=v1 document }
                  *
-                 * 上传文件
-                 *
-                 * 调用该接口将本地文件上传至开放平台，支持上传音频、视频、文档等文件类型。上传后接口会返回文件的 Key，使用该 Key 值可以调用其他 OpenAPI。例如，调用[发送消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create)接口，发送文件。
-                 *
-                 * ## 前提条件;;应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;;## 使用限制;;文件大小不得超过 30 MB，且不允许上传空文件。
+                 * 创建用户和资源订阅关系
                  */
                 create: async (
                     payload?: {
-                        data: {
-                            file_type:
-                                | "opus"
-                                | "mp4"
-                                | "pdf"
-                                | "doc"
-                                | "xls"
-                                | "ppt"
-                                | "stream";
-                            file_name: string;
-                            duration?: number;
-                            file: Buffer | fs.ReadStream;
+                        data?: {
+                            resource_type?: number;
+                            resource_ids?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
                     options?: IRequestOptions
@@ -10761,26 +17421,34 @@ export default abstract class Client extends human_authentication {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    const res = await this.httpInstance
+                    return this.httpInstance
                         .request<
                             any,
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { file_key?: string };
+                                data?: {
+                                    subscriptions?: Array<{
+                                        subscription_id?: string;
+                                        subscriber_id?: string;
+                                        resource_type?: number;
+                                        resource_id?: string;
+                                        status?: number;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        version?: string;
+                                    }>;
+                                };
                             }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/files`,
+                                `${this.domain}/open-apis/im/v1/user_message_subscriptions`,
                                 path
                             ),
                             method: "POST",
                             data,
                             params,
-                            headers: {
-                                ...headers,
-                                "Content-Type": "multipart/form-data",
-                            },
+                            headers,
                             paramsSerializer: (params) =>
                                 stringify(params, { arrayFormat: "repeat" }),
                         })
@@ -10788,84 +17456,1662 @@ export default abstract class Client extends human_authentication {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-                    return res?.data || null;
                 },
-            },
-            /**
-             * message.resource
-             */
-            messageResource: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=user_message_subscription&apiName=batch_query&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=message.resource&version=v1 document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=user_message_subscription&version=v1 document }
                  *
-                 * 获取消息中的资源文件
-                 *
-                 * 获取指定消息内包含的资源文件，包括音频、视频、图片和文件。成功调用后，返回二进制文件流下载文件。
-                 *
-                 * ## 前提条件; ;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)。;- 机器人和待操作的消息需要在同一会话内。;;## 使用限制;- 仅支持下载 100 MB 以内的资源文件。;- 暂不支持获取表情包资源。;- 暂不支持获取合并转发消息中的子消息、卡片消息中的资源文件。如果请求时传入了合并转发消息或子消息的 ID、卡片消息 ID，则会返回错误码 234043。;- 不支持在当前接口内调整文件格式，你可以获取资源文件后，在本地自行调整。
+                 * 批量查询用户订阅资源关系
                  */
-                get: async (
+                batchQuery: async (
                     payload?: {
-                        params: { type: string };
-                        path: { message_id: string; file_key: string };
+                        data?: {
+                            resource_type?: number;
+                            resource_id?: string;
+                            status?: number;
+                            page_size?: string;
+                            page_token?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
                     const { headers, params, data, path } =
                         await this.formatPayload(payload, options);
 
-                    const res = await this.httpInstance
-                        .request<any, any>({
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    subscriptions?: Array<{
+                                        subscription_id?: string;
+                                        subscriber_id?: string;
+                                        resource_type?: number;
+                                        resource_id?: string;
+                                        status?: number;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        version?: string;
+                                    }>;
+                                };
+                            }
+                        >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
+                                `${this.domain}/open-apis/im/v1/user_message_subscriptions/batch_query`,
                                 path
                             ),
-                            method: "GET",
-                            headers,
+                            method: "POST",
                             data,
                             params,
-                            responseType: "stream",
+                            headers,
                             paramsSerializer: (params) =>
                                 stringify(params, { arrayFormat: "repeat" }),
-                            $return_headers: true,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
+                },
+            },
+            /**
+             * chat_p2p
+             */
+            chatP2p: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_p2p&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=chat_p2p&version=v1 document }
+                 *
+                 * 根据用户ID批量获取P2P群
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: { chatter_ids: Array<string> };
+                        params?: {
+                            chatter_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "app_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
 
-                    const checkIsReadable = () => {
-                        const consumedError =
-                            "The stream has already been consumed";
-                        if (!res.data.readable) {
-                            this.logger.error(consumedError);
-                            throw new Error(consumedError);
-                        }
-                    };
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    p2p_chats?: Array<{
+                                        chatter_id1?: string;
+                                        chatter_id2?: string;
+                                        chat_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_p2p/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_flag
+             */
+            feedFlag: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_flag&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=feed_flag&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            flag_items?: Array<{
+                                item_id?: string;
+                                item_type?: string;
+                                flag_type?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
 
-                    return {
-                        writeFile: async (filePath: string) => {
-                            checkIsReadable();
-                            return new Promise((resolve, reject) => {
-                                const writableStream =
-                                    fs.createWriteStream(filePath);
-                                writableStream.on("finish", () => {
-                                    resolve(filePath);
-                                });
-                                writableStream.on("error", (e) => {
-                                    reject(e);
-                                });
-                                res.data.pipe(writableStream);
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/flags`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_flag&apiName=cancel&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=cancel&project=im&resource=feed_flag&version=v1 document }
+                 */
+                cancel: async (
+                    payload?: {
+                        data?: {
+                            flag_items?: Array<{
+                                item_id?: string;
+                                item_type?: string;
+                                flag_type?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/flags/cancel`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/flags`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
                             });
-                        },
-                        getReadableStream: () => {
-                            checkIsReadable();
-                            return res.data as Readable;
-                        },
-                        headers: res.headers,
+                        return res;
                     };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    flag_items?: Array<{
+                                                        item_id?: string;
+                                                        item_type?: string;
+                                                        flag_type?: string;
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                    }>;
+                                                    delete_flag_items?: Array<{
+                                                        item_id?: string;
+                                                        item_type?: string;
+                                                        flag_type?: string;
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    messages?: Array<{
+                                                        message_id?: string;
+                                                        root_id?: string;
+                                                        parent_id?: string;
+                                                        thread_id?: string;
+                                                        msg_type?: string;
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                        deleted?: boolean;
+                                                        updated?: boolean;
+                                                        chat_id?: string;
+                                                        sender?: {
+                                                            id: string;
+                                                            id_type: string;
+                                                            sender_type: string;
+                                                            tenant_key?: string;
+                                                            sender_name?: string;
+                                                            open_bot_id?: string;
+                                                            sender_i18n_names?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                                ja_jp?: string;
+                                                            };
+                                                        };
+                                                        body?: {
+                                                            content: string;
+                                                        };
+                                                        mentions?: Array<{
+                                                            key: string;
+                                                            id: string;
+                                                            id_type: string;
+                                                            name: string;
+                                                            tenant_key?: string;
+                                                        }>;
+                                                        upper_message_id?: string;
+                                                        message_app_link?: string;
+                                                        message_position?: string;
+                                                        thread_message_position?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_flag&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=feed_flag&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    flag_items?: Array<{
+                                        item_id?: string;
+                                        item_type?: string;
+                                        flag_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    }>;
+                                    delete_flag_items?: Array<{
+                                        item_id?: string;
+                                        item_type?: string;
+                                        flag_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    messages?: Array<{
+                                        message_id?: string;
+                                        root_id?: string;
+                                        parent_id?: string;
+                                        thread_id?: string;
+                                        msg_type?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        deleted?: boolean;
+                                        updated?: boolean;
+                                        chat_id?: string;
+                                        sender?: {
+                                            id: string;
+                                            id_type: string;
+                                            sender_type: string;
+                                            tenant_key?: string;
+                                            sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        body?: { content: string };
+                                        mentions?: Array<{
+                                            key: string;
+                                            id: string;
+                                            id_type: string;
+                                            name: string;
+                                            tenant_key?: string;
+                                        }>;
+                                        upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/flags`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * message_cot
+             */
+            messageCot: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=complete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=complete&project=im&resource=message_cot&version=v1 document }
+                 *
+                 * 关闭 COT 写入状态
+                 *
+                 * 该接口主要用于将COT写入状态结束。当COT状态为写入完成态，将无法继续追加COT事件。
+                 *
+                 * TIPS: 写入COT消息的接口，如果传入的是event_type是RUN_FINISHED，程序将自动执行COT消息状态流转，无需再次调用本接口。;;[event_type介绍](https://lark-oapi-tools-console.bytedance.net/document-mod/index?fullPath=%2FuAjLw4CM%2FukTMukTMukTM%2Freference%2Fim-v1%2Fmessage_cot%2Fcot-message-brief)
+                 */
+                complete: async (
+                    payload?: {
+                        params: { message_id: string; reason?: string };
+                        path: { cot_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/message_cot/complete/:cot_id`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message_cot&version=v1 document }
+                 *
+                 * 写入 COT事件
+                 *
+                 * 该接口用于持续写入COT(思考过程)事件，写入后客户端可以流式开始思考过程。
+                 *
+                 * 写入事件的格式需要按照[AG-UI event](https://docs.ag-ui.com/concepts/events) JSON格式传入。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            events: Array<{
+                                event_type: string;
+                                content: string;
+                                timestamp: string;
+                            }>;
+                            message_id: string;
+                            cot_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/message_cot`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_cot&version=v1 document }
+                 *
+                 * 创建 COT 消息
+                 *
+                 * 调用该接口支持创建一条COT消息，用于与Agent交互时展示Agent的思考过程。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            receive_id: string;
+                            origin_message_id?: string;
+                            reply_in_thread?: boolean;
+                            enable_badge?: boolean;
+                            update_feed_rank?: boolean;
+                            cot_hidden?: boolean;
+                        };
+                        params: { receive_id_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { cot_id?: string; message_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/message_cot`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_group
+             */
+            feedGroup: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=feed_group&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listItemWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            start_time?: string;
+                            end_time?: string;
+                        };
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/groups/:feed_group_id/list_item`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        feed_id?: string;
+                                                        feed_type?: string;
+                                                        update_time?: string;
+                                                    }>;
+                                                    deleted_items?: Array<{
+                                                        feed_id?: string;
+                                                        feed_type?: string;
+                                                        update_time?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=list_item&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_item&project=im&resource=feed_group&version=v1 document }
+                 */
+                listItem: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            start_time?: string;
+                            end_time?: string;
+                        };
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        feed_id?: string;
+                                        feed_type?: string;
+                                        update_time?: string;
+                                    }>;
+                                    deleted_items?: Array<{
+                                        feed_id?: string;
+                                        feed_type?: string;
+                                        update_time?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id/list_item`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_remove_item&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove_item&project=im&resource=feed_group&version=v1 document }
+                 */
+                batchRemoveItem: async (
+                    payload?: {
+                        data: {
+                            items: Array<{
+                                feed_id?: string;
+                                feed_type?: string;
+                            }>;
+                        };
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{
+                                        item?: {
+                                            feed_id?: string;
+                                            feed_type?: string;
+                                        };
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id/batch_remove_item`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=feed_group&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            feed_group_creator: {
+                                type: string;
+                                name: string;
+                                rules?: {
+                                    rules: Array<{
+                                        condition: {
+                                            match_type: string;
+                                            condition_items: Array<{
+                                                type: string;
+                                                operator: string;
+                                                keyword?: string;
+                                                user_id?: string;
+                                                chat_type?: string;
+                                            }>;
+                                        };
+                                        action: string;
+                                    }>;
+                                };
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { group_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=feed_group&version=v1 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            feed_group_updater: {
+                                name?: string;
+                                rules?: {
+                                    rules: Array<{
+                                        condition: {
+                                            match_type: string;
+                                            condition_items: Array<{
+                                                type: string;
+                                                operator: string;
+                                                keyword?: string;
+                                                user_id?: string;
+                                                chat_type?: string;
+                                            }>;
+                                        };
+                                        action: string;
+                                    }>;
+                                };
+                                update_fields?: Array<number>;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=feed_group&version=v1 document }
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: { group_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    groups?: Array<{
+                                        group_id?: string;
+                                        type?: "normal" | "rule";
+                                        name?: string;
+                                        rules?: {
+                                            rules: Array<{
+                                                condition: {
+                                                    match_type: string;
+                                                    condition_items: Array<{
+                                                        type: string;
+                                                        operator: string;
+                                                        keyword?: string;
+                                                        user_id?: string;
+                                                        chat_type?: string;
+                                                    }>;
+                                                };
+                                                action: string;
+                                            }>;
+                                        };
+                                    }>;
+                                    deleted_groups?: Array<{
+                                        group_id?: string;
+                                        type?: "normal" | "rule";
+                                        name?: string;
+                                        rules?: {
+                                            rules: Array<{
+                                                condition: {
+                                                    match_type: string;
+                                                    condition_items: Array<{
+                                                        type: string;
+                                                        operator: string;
+                                                        keyword?: string;
+                                                        user_id?: string;
+                                                        chat_type?: string;
+                                                    }>;
+                                                };
+                                                action: string;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_add_item&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_add_item&project=im&resource=feed_group&version=v1 document }
+                 */
+                batchAddItem: async (
+                    payload?: {
+                        data: {
+                            items: Array<{
+                                feed_id?: string;
+                                feed_type?: string;
+                            }>;
+                        };
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{
+                                        item?: {
+                                            feed_id?: string;
+                                            feed_type?: string;
+                                        };
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id/batch_add_item`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=batch_query_item&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query_item&project=im&resource=feed_group&version=v1 document }
+                 */
+                batchQueryItem: async (
+                    payload?: {
+                        data: {
+                            items: Array<{
+                                feed_id?: string;
+                                feed_type?: string;
+                            }>;
+                        };
+                        path: { feed_group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        feed_id?: string;
+                                        feed_type?: string;
+                                        update_time?: string;
+                                    }>;
+                                    deleted_items?: Array<{
+                                        feed_id?: string;
+                                        feed_type?: string;
+                                        update_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups/:feed_group_id/batch_query_item`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            start_time?: string;
+                            end_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/groups`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    groups?: Array<{
+                                                        group_id?: string;
+                                                        type?:
+                                                            | "normal"
+                                                            | "rule";
+                                                        name?: string;
+                                                        rules?: {
+                                                            rules: Array<{
+                                                                condition: {
+                                                                    match_type: string;
+                                                                    condition_items: Array<{
+                                                                        type: string;
+                                                                        operator: string;
+                                                                        keyword?: string;
+                                                                        user_id?: string;
+                                                                        chat_type?: string;
+                                                                    }>;
+                                                                };
+                                                                action: string;
+                                                            }>;
+                                                        };
+                                                    }>;
+                                                    deleted_groups?: Array<{
+                                                        group_id?: string;
+                                                        type?:
+                                                            | "normal"
+                                                            | "rule";
+                                                        name?: string;
+                                                        rules?: {
+                                                            rules: Array<{
+                                                                condition: {
+                                                                    match_type: string;
+                                                                    condition_items: Array<{
+                                                                        type: string;
+                                                                        operator: string;
+                                                                        keyword?: string;
+                                                                        user_id?: string;
+                                                                        chat_type?: string;
+                                                                    }>;
+                                                                };
+                                                                action: string;
+                                                            }>;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=feed_group&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            start_time?: string;
+                            end_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    groups?: Array<{
+                                        group_id?: string;
+                                        type?: "normal" | "rule";
+                                        name?: string;
+                                        rules?: {
+                                            rules: Array<{
+                                                condition: {
+                                                    match_type: string;
+                                                    condition_items: Array<{
+                                                        type: string;
+                                                        operator: string;
+                                                        keyword?: string;
+                                                        user_id?: string;
+                                                        chat_type?: string;
+                                                    }>;
+                                                };
+                                                action: string;
+                                            }>;
+                                        };
+                                    }>;
+                                    deleted_groups?: Array<{
+                                        group_id?: string;
+                                        type?: "normal" | "rule";
+                                        name?: string;
+                                        rules?: {
+                                            rules: Array<{
+                                                condition: {
+                                                    match_type: string;
+                                                    condition_items: Array<{
+                                                        type: string;
+                                                        operator: string;
+                                                        keyword?: string;
+                                                        user_id?: string;
+                                                        chat_type?: string;
+                                                    }>;
+                                                };
+                                                action: string;
+                                            }>;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/groups`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat_user_setting
+             */
+            chatUserSetting: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_user_setting&apiName=batch_get_mute_status&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get_mute_status&project=im&resource=chat_user_setting&version=v1 document }
+                 *
+                 * 批量获取调用 user 自己在多个群里的免打扰状态。
+                 */
+                batchGetMuteStatus: async (
+                    payload?: {
+                        data: { chat_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        chat_id?: string;
+                                        is_muted?: boolean;
+                                    }>;
+                                    invalid_id_list?: Array<{
+                                        id?: string;
+                                        msg?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_user_setting/batch_get_mute_status`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_user_setting&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=chat_user_setting&version=v1 document }
+                 *
+                 * 批量更新当前用户在群内的个人偏好设置（如：`is_muted` 对普通消息免打扰，`is_mute_at_all` 对 @所有人 消息免打扰）；单次最多 10 个群
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            chat_settings: Array<{
+                                chat_id?: string;
+                                is_muted?: boolean;
+                                is_mute_at_all?: boolean;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invalid_ids?: Array<{
+                                        id?: string;
+                                        msg?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_user_setting/batch_update`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_user_setting&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=chat_user_setting&version=v1 document }
+                 *
+                 * 批量查询当前用户在群内的个人偏好设置（如：`is_muted` 对普通消息免打扰，`is_mute_at_all` 对 @所有人 消息免打扰）；单次最多 10 个群
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: { chat_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        chat_id?: string;
+                                        is_muted?: boolean;
+                                        is_mute_at_all?: boolean;
+                                    }>;
+                                    invalid_ids?: Array<{
+                                        id?: string;
+                                        msg?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chat_user_setting/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.nickname
+             */
+            chatNickname: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.nickname&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=chat.nickname&version=v1 document }
+                 *
+                 * 清空调用 user 自己在群里的群昵称（self-only）；后端会同时清掉群昵称-用户反查索引。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/nickname`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.nickname&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=chat.nickname&version=v1 document }
+                 *
+                 * 获取调用 user 自己在群里的群昵称（self-only）。未设置时返空串。
+                 */
+                get: async (
+                    payload?: {
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { nickname?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/nickname`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.nickname&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat.nickname&version=v1 document }
+                 *
+                 * 设置或更新调用 user 自己在群里的群昵称（self-only，非空字符串；清空请用 DELETE）。
+                 */
+                update: async (
+                    payload?: {
+                        data: { nickname: string };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/nickname`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
                 },
             },
             /**
@@ -10963,8 +19209,862 @@ export default abstract class Client extends human_authentication {
                         });
                 },
             },
+            /**
+             * draft
+             */
+            draft: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=draft&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=draft&version=v1 document }
+                 *
+                 * 写入草稿
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            scene: number;
+                            chat_id?: string;
+                            thread_id?: string;
+                            msg_type: string;
+                            content: string;
+                            reply_message_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    code?: number;
+                                    msg?: string;
+                                    update_time?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/draft`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=draft&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=draft&version=v1 document }
+                 *
+                 * 通过模版消息卡片
+                 */
+                createByCard: async (
+                    payload?: {
+                        data: {
+                            scene: number;
+                            chat_id?: string;
+                            thread_id?: string;
+                            reply_message_id?: string;
+                            template_id: string;
+                            template_variable?: Record<string, any>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const { template_id, template_variable, ...rest } = data;
+                    const targetData = {
+                        msg_type: "interactive",
+                        content: JSON.stringify({
+                            type: "template",
+                            data: {
+                                template_id: template_id,
+                                template_variable: template_variable,
+                            },
+                        }),
+                        ...rest,
+                    };
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    code?: number;
+                                    msg?: string;
+                                    update_time?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/draft`,
+                                path
+                            ),
+                            method: "POST",
+                            data: targetData,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat.membership_application
+             */
+            chatMembershipApplication: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.membership_application&apiName=handle&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=handle&project=im&resource=chat.membership_application&version=v1 document }
+                 *
+                 * 批量审批入群申请（approve/reject，仅群主/管理员，user_access_token）
+                 */
+                handle: async (
+                    payload?: {
+                        data: {
+                            items: Array<{ member_id: string; action: string }>;
+                        };
+                        params?: {
+                            member_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    results?: Array<{
+                                        member_id?: string;
+                                        action?: string;
+                                        result?: string;
+                                        error_code?: string;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/membership_applications/handle`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            member_id_type?: "open_id" | "union_id" | "user_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/chats/:chat_id/membership_applications`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        applicant?: {
+                                                            member_id?: string;
+                                                            member_type?: string;
+                                                            app_id?: string;
+                                                            name?: string;
+                                                        };
+                                                        inviter?: {
+                                                            member_id?: string;
+                                                            member_type?: string;
+                                                            app_id?: string;
+                                                            name?: string;
+                                                        };
+                                                        reason?: string;
+                                                        apply_source?: string;
+                                                        apply_time?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    total?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.membership_application&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat.membership_application&version=v1 document }
+                 *
+                 * 列出群的待审批入群申请（仅群主/管理员，user_access_token）
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            member_id_type?: "open_id" | "union_id" | "user_id";
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        applicant?: {
+                                            member_id?: string;
+                                            member_type?: string;
+                                            app_id?: string;
+                                            name?: string;
+                                        };
+                                        inviter?: {
+                                            member_id?: string;
+                                            member_type?: string;
+                                            app_id?: string;
+                                            name?: string;
+                                        };
+                                        reason?: string;
+                                        apply_source?: string;
+                                        apply_time?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    total?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/chats/:chat_id/membership_applications`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
         },
         v2: {
+            /**
+             * chat.chat_pin
+             */
+            chatChatPin: {
+                listWithIterator: async (
+                    payload?: {
+                        data?: { chat_common_header?: { bot_id?: string } };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v2/chats/:chat_id/chat_pins`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    chat_pins?: Array<{
+                                                        chat_pin_id?: string;
+                                                        chat_id?: string;
+                                                        chat_pin_type?:
+                                                            | "message_pin"
+                                                            | "url_pin"
+                                                            | "announcement_pin";
+                                                        create_time?: string;
+                                                        chatter_id?: string;
+                                                        is_fixed?: boolean;
+                                                        operate_fix_chatter_id?: string;
+                                                        message_pin_data?: {
+                                                            message_id?: string;
+                                                        };
+                                                        url_pin_data?: {
+                                                            url?: string;
+                                                            icon?: {
+                                                                chat_pin_icon_type?:
+                                                                    | "0"
+                                                                    | "1";
+                                                                icon_key?: string;
+                                                            };
+                                                            title?: string;
+                                                            i18n_title?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                                ja_jp?: string;
+                                                            };
+                                                            title_dynamic_update?: boolean;
+                                                            icon_dynamic_update?: boolean;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.chat_pin&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=chat.chat_pin&version=v2 document }
+                 *
+                 * 获取置顶
+                 *
+                 * 获取群内置顶。
+                 *
+                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户**必须在群**
+                 */
+                list: async (
+                    payload?: {
+                        data?: { chat_common_header?: { bot_id?: string } };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_pins?: Array<{
+                                        chat_pin_id?: string;
+                                        chat_id?: string;
+                                        chat_pin_type?:
+                                            | "message_pin"
+                                            | "url_pin"
+                                            | "announcement_pin";
+                                        create_time?: string;
+                                        chatter_id?: string;
+                                        is_fixed?: boolean;
+                                        operate_fix_chatter_id?: string;
+                                        message_pin_data?: {
+                                            message_id?: string;
+                                        };
+                                        url_pin_data?: {
+                                            url?: string;
+                                            icon?: {
+                                                chat_pin_icon_type?: "0" | "1";
+                                                icon_key?: string;
+                                            };
+                                            title?: string;
+                                            i18n_title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                            title_dynamic_update?: boolean;
+                                            icon_dynamic_update?: boolean;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chats/:chat_id/chat_pins`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.chat_pin&apiName=batch_create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=im&resource=chat.chat_pin&version=v2 document }
+                 *
+                 * 创建置顶
+                 *
+                 * 添加群内置顶。
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            chat_common_header?: { bot_id?: string };
+                            chat_pins?: Array<{
+                                chat_pin_type?:
+                                    | "message_pin"
+                                    | "url_pin"
+                                    | "announcement_pin";
+                                message_pin_data?: { message_id?: string };
+                                url_pin_data?: {
+                                    url?: string;
+                                    icon?: { icon_key?: string };
+                                    title?: string;
+                                    i18n_title?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                    title_dynamic_update?: boolean;
+                                    icon_dynamic_update?: boolean;
+                                };
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            uuid?: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_pins?: Array<{
+                                        chat_pin_id?: string;
+                                        chat_id?: string;
+                                        chat_pin_type?:
+                                            | "message_pin"
+                                            | "url_pin"
+                                            | "announcement_pin";
+                                        create_time?: string;
+                                        chatter_id?: string;
+                                        is_fixed?: boolean;
+                                        operate_fix_chatter_id?: string;
+                                        message_pin_data?: {
+                                            message_id?: string;
+                                        };
+                                        url_pin_data?: {
+                                            url?: string;
+                                            icon?: {
+                                                chat_pin_icon_type?: "0" | "1";
+                                                icon_key?: string;
+                                            };
+                                            title?: string;
+                                            i18n_title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                            title_dynamic_update?: boolean;
+                                            icon_dynamic_update?: boolean;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chats/:chat_id/chat_pins/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.chat_pin&apiName=move&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=move&project=im&resource=chat.chat_pin&version=v2 document }
+                 *
+                 * 移动置顶
+                 *
+                 * 移动群内置顶。
+                 *
+                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户**必须在群**;- **不能把非固定的置顶移动到固定的置顶前。**;- 什么是固定一个置顶：固定是指把某个置顶固定到置顶列表的最前面，目前群内支持最多将三个置顶被固定。
+                 */
+                move: async (
+                    payload?: {
+                        data: {
+                            chat_common_header?: { bot_id?: string };
+                            pin_id: string;
+                            prev_pin_id: string;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chats/:chat_id/chat_pins/move`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.chat_pin&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=chat.chat_pin&version=v2 document }
+                 *
+                 * 编辑置顶
+                 *
+                 * 修改群内置顶信息，该接口可以将置顶固定到最前、将置顶取消固定、修改url置顶的name等字段。
+                 *
+                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户**必须在群**;- **字段更新策略**：传入对应字段则进行更新，不传入的字段则忽略更新;- **什么是固定置顶**：可以将最多三个置顶内容固定在置顶列表最前方。群成员添加新置顶时默认排序在前，但不会影响已固定置顶的展示顺序。;- **如何设置固定**：可以通过本接口设置is_fixed为true来实现固定，也可以本接口设置is_fixed为false来取消固定。如果群内已有三个固定，调用本api将一个未固定的置顶is_fixed设置为true，接口表现是会显示固定成功，且历史最早被固定的置顶会被取消固定。
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            chat_common_header?: { bot_id?: string };
+                            chat_pin: {
+                                is_fixed?: boolean;
+                                update_url_pin?: {
+                                    icon?: { icon_key?: string };
+                                    title?: string;
+                                    i18n_title?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
+                                };
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { chat_id: string; chat_pin_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    chat_pin?: {
+                                        chat_pin_id?: string;
+                                        chat_id?: string;
+                                        chat_pin_type?:
+                                            | "message_pin"
+                                            | "url_pin"
+                                            | "announcement_pin";
+                                        create_time?: string;
+                                        chatter_id?: string;
+                                        is_fixed?: boolean;
+                                        operate_fix_chatter_id?: string;
+                                        message_pin_data?: {
+                                            message_id?: string;
+                                        };
+                                        url_pin_data?: {
+                                            url?: string;
+                                            icon?: {
+                                                chat_pin_icon_type?: "0" | "1";
+                                                icon_key?: string;
+                                            };
+                                            title?: string;
+                                            i18n_title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                            title_dynamic_update?: boolean;
+                                            icon_dynamic_update?: boolean;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chats/:chat_id/chat_pins/:chat_pin_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.chat_pin&apiName=batch_delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=im&resource=chat.chat_pin&version=v2 document }
+                 *
+                 * 移除置顶
+                 *
+                 * 删除群内置顶。
+                 *
+                 * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);- 机器人或授权用户**必须在群**
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data?: {
+                            chat_common_header?: { bot_id?: string };
+                            pin_ids?: Array<string>;
+                        };
+                        path: { chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chats/:chat_id/chat_pins/batch_delete`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * biz_entity_tag_relation
              */
@@ -11108,6 +20208,592 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * unread_urgent
+             */
+            unreadUrgent: {
+                listWithIterator: async (
+                    payload?: {
+                        data?: { bot_id?: string };
+                        params?: {
+                            chatter_id?: string;
+                            chat_id?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v2/unread_urgents`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    unread_urgents?: Array<{
+                                                        id?: string;
+                                                        message_id?: string;
+                                                        chatter_id?: string;
+                                                        status?: number;
+                                                        confirm_time?: string;
+                                                        send_time?: string;
+                                                        type?: number;
+                                                        from_id?: string;
+                                                        chat_id?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=unread_urgent&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=unread_urgent&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        data?: { bot_id?: string };
+                        params?: {
+                            chatter_id?: string;
+                            chat_id?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    unread_urgents?: Array<{
+                                        id?: string;
+                                        message_id?: string;
+                                        chatter_id?: string;
+                                        status?: number;
+                                        confirm_time?: string;
+                                        send_time?: string;
+                                        type?: number;
+                                        from_id?: string;
+                                        chat_id?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/unread_urgents`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_display_rule
+             */
+            feedDisplayRule: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_display_rule&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=feed_display_rule&version=v2 document }
+                 *
+                 * 修改消息展示设置
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            display_feed_rules: Array<{
+                                id: string;
+                                display_feed_rule: {
+                                    main_rule:
+                                        | "always_display"
+                                        | "display_new_msgs"
+                                        | "display_new_important_msgs"
+                                        | "never_display";
+                                    msg_types?: Array<
+                                        "at_me" | "at_all" | "star_contacts"
+                                    >;
+                                };
+                                display_feed_rule_update_type:
+                                    | "filter"
+                                    | "group";
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_display_rules?: Array<{
+                                        id?: string;
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_display_rule`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * unread_at_message
+             */
+            unreadAtMessage: {
+                listWithIterator: async (
+                    payload?: {
+                        data?: { bot_id?: string };
+                        params?: {
+                            chatter_id?: string;
+                            chat_id?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v2/unread_at_messages`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    unread_at_messages?: Array<{
+                                                        message_id?: string;
+                                                        from_id?: string;
+                                                        chat_id?: string;
+                                                        create_time?: string;
+                                                        create_time_ms?: string;
+                                                        update_time_ms?: string;
+                                                        type?:
+                                                            | "1"
+                                                            | "2"
+                                                            | "3"
+                                                            | "4"
+                                                            | "5"
+                                                            | "6"
+                                                            | "7"
+                                                            | "8"
+                                                            | "9"
+                                                            | "10"
+                                                            | "11"
+                                                            | "12"
+                                                            | "13"
+                                                            | "14"
+                                                            | "15"
+                                                            | "16"
+                                                            | "17"
+                                                            | "18"
+                                                            | "19"
+                                                            | "20"
+                                                            | "21"
+                                                            | "22"
+                                                            | "23"
+                                                            | "24"
+                                                            | "25"
+                                                            | "26"
+                                                            | "27";
+                                                        is_at_all?: boolean;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=unread_at_message&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=unread_at_message&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        data?: { bot_id?: string };
+                        params?: {
+                            chatter_id?: string;
+                            chat_id?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    unread_at_messages?: Array<{
+                                        message_id?: string;
+                                        from_id?: string;
+                                        chat_id?: string;
+                                        create_time?: string;
+                                        create_time_ms?: string;
+                                        update_time_ms?: string;
+                                        type?:
+                                            | "1"
+                                            | "2"
+                                            | "3"
+                                            | "4"
+                                            | "5"
+                                            | "6"
+                                            | "7"
+                                            | "8"
+                                            | "9"
+                                            | "10"
+                                            | "11"
+                                            | "12"
+                                            | "13"
+                                            | "14"
+                                            | "15"
+                                            | "16"
+                                            | "17"
+                                            | "18"
+                                            | "19"
+                                            | "20"
+                                            | "21"
+                                            | "22"
+                                            | "23"
+                                            | "24"
+                                            | "25"
+                                            | "26"
+                                            | "27";
+                                        is_at_all?: boolean;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/unread_at_messages`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_card_setting
+             */
+            feedCardSetting: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card_setting&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=feed_card_setting&version=v2 document }
+                 *
+                 * 修改消息流卡片设置
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            feed_cards: Array<{
+                                feed_card_id: string;
+                                read_timestamp?: string;
+                                mute_with_system_message?: boolean;
+                            }>;
+                            user_id: string;
+                            update_setting_type:
+                                | "mute"
+                                | "un_mute"
+                                | "clear_unread"
+                                | "add_to_box"
+                                | "remove_from_box"
+                                | "done"
+                                | "un_done";
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_cards?: Array<{
+                                        feed_card_id?: string;
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_card_setting`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * urgent
+             */
+            urgent: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=urgent&apiName=batch_cancel&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_cancel&project=im&resource=urgent&version=v2 document }
+                 *
+                 * 取消消息的加急状态
+                 *
+                 * 调用该接口会取消用户消息的加急状态(加急卡片的加急计数、加急卡片)。
+                 */
+                batchCancel: async (
+                    payload?: {
+                        data: {
+                            message_id: string;
+                            receiver_user_ids: Array<string>;
+                            bot_id?: string;
+                        };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/urgent/batch_cancel`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -11340,6 +21026,64 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
+             * message_link
+             */
+            messageLink: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_link&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_link&version=v2 document }
+                 *
+                 * 创建消息链接
+                 *
+                 * 创建消息链接
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            link_from?: "1" | "3";
+                            chat_id?: string;
+                            thread_id?: string;
+                            message_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_link?: {
+                                        token?: string;
+                                        token_url?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/message_links`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * feed_card
              */
             feedCard: {
@@ -11507,6 +21251,61 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=tag&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            ids?: Array<string>;
+                            names?: Array<string>;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tag_infos?: Array<{
+                                        id?: string;
+                                        tag_type?: string;
+                                        name?: string;
+                                        i18n_names?: Array<{
+                                            locale?: string;
+                                            name?: string;
+                                        }>;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/tags`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -11751,6 +21550,681 @@ export default abstract class Client extends human_authentication {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v2/app_feed_card`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_group.batch
+             */
+            feedGroupBatch: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group.batch&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=feed_group.batch&version=v2 document }
+                 *
+                 * 删除标签
+                 */
+                delete: async (
+                    payload?: {
+                        data: { user_id: string; group_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_groups?: Array<{
+                                        group_id?: string;
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_group/batch`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group.batch&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=feed_group.batch&version=v2 document }
+                 *
+                 * 更新标签
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            updated_groups: Array<{
+                                group_id: string;
+                                name?: string;
+                                rules?: {
+                                    rules: Array<{
+                                        condition: {
+                                            match_type:
+                                                | "match_all"
+                                                | "match_any";
+                                            condition_items: Array<{
+                                                type:
+                                                    | "keyword"
+                                                    | "chatter"
+                                                    | "chat_type";
+                                                operator:
+                                                    | "contain"
+                                                    | "not_contain"
+                                                    | "is"
+                                                    | "is_not";
+                                                keyword?: string;
+                                                user_id?: string;
+                                                chat_type?:
+                                                    | "p2p"
+                                                    | "group"
+                                                    | "thread_group"
+                                                    | "helpdesk"
+                                                    | "bot"
+                                                    | "mute"
+                                                    | "flag"
+                                                    | "cross_tenant"
+                                                    | "any";
+                                            }>;
+                                        };
+                                        action: "add" | "remove";
+                                    }>;
+                                };
+                                update_fields: Array<"0" | "1" | "2">;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_groups?: Array<{
+                                        group_id?: string;
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_group/batch`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_group
+             */
+            feedGroup: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=feed_group&version=v2 document }
+                 *
+                 * 获取标签
+                 */
+                get: async (
+                    payload?: {
+                        data: { user_id: string; group_ids?: Array<string> };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    groups?: Array<{
+                                        group_id?: string;
+                                        type?: "normal" | "rule";
+                                        name?: string;
+                                        rules?: {
+                                            rules?: Array<{
+                                                condition?: {
+                                                    match_type?:
+                                                        | "match_all"
+                                                        | "match_any";
+                                                    condition_items?: Array<{
+                                                        type?:
+                                                            | "keyword"
+                                                            | "chatter"
+                                                            | "chat_type";
+                                                        operator?:
+                                                            | "contain"
+                                                            | "not_contain"
+                                                            | "is"
+                                                            | "is_not";
+                                                        keyword?: string;
+                                                        user_id?: string;
+                                                        chat_type?:
+                                                            | "p2p"
+                                                            | "group"
+                                                            | "thread_group"
+                                                            | "helpdesk"
+                                                            | "bot"
+                                                            | "mute"
+                                                            | "flag"
+                                                            | "cross_tenant"
+                                                            | "any";
+                                                    }>;
+                                                };
+                                                action?: "add" | "remove";
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_group`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=add_items&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_items&project=im&resource=feed_group&version=v2 document }
+                 *
+                 * 向标签中添加内容
+                 */
+                addItems: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            group_id: string;
+                            items?: Array<{ feed_id: string; feed_type: "3" }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{
+                                        item?: {
+                                            feed_id?: string;
+                                            feed_type?: "3";
+                                        };
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_group/add_items`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=feed_group&version=v2 document }
+                 *
+                 * 创建标签
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            feed_group: {
+                                type: "normal" | "rule";
+                                name: string;
+                                rules?: {
+                                    rules: Array<{
+                                        condition: {
+                                            match_type:
+                                                | "match_all"
+                                                | "match_any";
+                                            condition_items: Array<{
+                                                type:
+                                                    | "keyword"
+                                                    | "chatter"
+                                                    | "chat_type";
+                                                operator:
+                                                    | "contain"
+                                                    | "not_contain"
+                                                    | "is"
+                                                    | "is_not";
+                                                keyword?: string;
+                                                user_id?: string;
+                                                chat_type?:
+                                                    | "p2p"
+                                                    | "group"
+                                                    | "thread_group"
+                                                    | "helpdesk"
+                                                    | "bot"
+                                                    | "mute"
+                                                    | "flag"
+                                                    | "cross_tenant"
+                                                    | "any";
+                                            }>;
+                                        };
+                                        action: "add" | "remove";
+                                    }>;
+                                };
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { group_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_group`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_group&apiName=remove_items&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_items&project=im&resource=feed_group&version=v2 document }
+                 *
+                 * 从标签中删除内容
+                 */
+                removeItems: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            group_id: string;
+                            items: Array<{ feed_id: string; feed_type: "3" }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_items?: Array<{
+                                        item?: {
+                                            feed_id?: string;
+                                            feed_type?: "3";
+                                        };
+                                        error_code?: number;
+                                        error_message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_group/remove_items`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_shortcut
+             */
+            feedShortcut: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v2/feed_shortcuts`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    shortcuts?: Array<{
+                                                        feed_card_id?: string;
+                                                        type?: number;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_shortcut&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=im&resource=feed_shortcut&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    shortcuts?: Array<{
+                                        feed_card_id?: string;
+                                        type?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_shortcuts`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_shortcut&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=feed_shortcut&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            shortcuts?: Array<{
+                                feed_card_id?: string;
+                                type?: number;
+                            }>;
+                            is_header?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_shortcuts?: Array<{
+                                        shortcut?: {
+                                            feed_card_id?: string;
+                                            type?: number;
+                                        };
+                                        reason?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_shortcuts`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_shortcut&apiName=remove&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove&project=im&resource=feed_shortcut&version=v2 document }
+                 */
+                remove: async (
+                    payload?: {
+                        data?: {
+                            shortcuts?: Array<{
+                                feed_card_id?: string;
+                                type?: number;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_shortcuts?: Array<{
+                                        shortcut?: {
+                                            feed_card_id?: string;
+                                            type?: number;
+                                        };
+                                        reason?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_shortcuts/remove`,
                                 path
                             ),
                             method: "POST",

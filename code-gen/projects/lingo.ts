@@ -155,9 +155,224 @@ export default abstract class Client extends laps {
                 },
             },
             /**
+             * statistical_report
+             */
+            statisticalReport: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=statistical_report&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=lingo&resource=statistical_report&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params: { date_interval: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    statistical_report?: {
+                                        date_interval: number;
+                                        word_info?: {
+                                            input_total?: number;
+                                            dedup_input_total?: number;
+                                            eachday_input?: Array<number>;
+                                            eachday_dedup_input?: Array<number>;
+                                            send_message_total?: number;
+                                            send_en_message_total?: number;
+                                            receive_message_total?: number;
+                                            receive_en_message_total?: number;
+                                            history_words_total?: number;
+                                            new_words_total?: number;
+                                            eachday_send_en_message?: Array<number>;
+                                            eachday_send_message?: Array<number>;
+                                            eachday_receive_en_message?: Array<number>;
+                                            eachday_receive_message?: Array<number>;
+                                            send_eng_message_rate_ring_growth?: number;
+                                            send_eng_words_ring_growth?: number;
+                                        };
+                                        correct_info?: {
+                                            correct_total?: number;
+                                            eachday_correct?: Array<number>;
+                                            grammar_error?: {
+                                                type?: number;
+                                                total?: number;
+                                                correct_pairs?: Array<{
+                                                    source_text?: string;
+                                                    target_text?: string;
+                                                    total?: number;
+                                                }>;
+                                            };
+                                            spell_error?: {
+                                                type?: number;
+                                                total?: number;
+                                                correct_pairs?: Array<{
+                                                    source_text?: string;
+                                                    target_text?: string;
+                                                    total?: number;
+                                                }>;
+                                            };
+                                            noun_error?: {
+                                                type?: number;
+                                                total?: number;
+                                                correct_pairs?: Array<{
+                                                    source_text?: string;
+                                                    target_text?: string;
+                                                    total?: number;
+                                                }>;
+                                            };
+                                            verb_tense_error?: {
+                                                type?: number;
+                                                total?: number;
+                                                correct_pairs?: Array<{
+                                                    source_text?: string;
+                                                    target_text?: string;
+                                                    total?: number;
+                                                }>;
+                                            };
+                                        };
+                                        update_date: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/statistical_report`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=statistical_report&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=lingo&resource=statistical_report&version=v1 document }
+                 */
+                create: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/statistical_report`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=statistical_report&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=lingo&resource=statistical_report&version=v1 document }
+                 */
+                delete: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/statistical_report`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * entity
              */
             entity: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=entity&apiName=extract&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=extract&project=lingo&resource=entity&version=v1 document }
+                 *
+                 * 提取潜在的词条
+                 *
+                 * 提取文本中可能成为词条的词语，且不会过滤已经成为词条的词语。同时返回推荐的别名。
+                 */
+                extract: async (
+                    payload?: {
+                        data?: { text?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    entity_word: Array<{
+                                        name: string;
+                                        aliases?: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/entities/extract`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=entity&apiName=match&version=v1 click to debug }
                  *
@@ -368,6 +583,60 @@ export default abstract class Client extends laps {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/lingo/v1/entities/highlight`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=entity&apiName=batch_highlight&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_highlight&project=lingo&resource=entity&version=v1 document }
+                 *
+                 * 批量高亮词条
+                 *
+                 * 通过这个接口，可以传入一段文本，获取这段文本中所有词条的 ID
+                 */
+                batchHighlight: async (
+                    payload?: {
+                        data: { texts: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    phrases?: Array<
+                                        Array<{
+                                            name: string;
+                                            entity_ids: Array<string>;
+                                            span: {
+                                                start: number;
+                                                end: number;
+                                            };
+                                        }>
+                                    >;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/entities/batch_highlight`,
                                 path
                             ),
                             method: "POST",
@@ -1408,6 +1677,137 @@ export default abstract class Client extends laps {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * entity_card
+             */
+            entityCard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=entity_card&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=lingo&resource=entity_card&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            entity_ids?: Array<string>;
+                            key?: string;
+                            is_group?: boolean;
+                            render_type?: number;
+                            biz?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    cards?: Array<{
+                                        card: string;
+                                        id: string;
+                                        key?: string;
+                                        card_type?: number;
+                                        template_name?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/entity_card`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * aigc
+             */
+            aigc: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=aigc&apiName=generate_entity&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=generate_entity&project=lingo&resource=aigc&version=v1 document }
+                 */
+                generateEntity: async (
+                    payload?: {
+                        data?: {
+                            data_type?: number;
+                            config?: {
+                                need_review?: boolean;
+                                repo_id?: string;
+                            };
+                            doc_data?: {
+                                doc_token?: string;
+                                created_at?: string;
+                                updated_at?: string;
+                                doc_contents?: Array<{
+                                    id: string;
+                                    children?: Array<string>;
+                                    content_type: number;
+                                    text?: { text?: string };
+                                    heading?: {
+                                        text?: string;
+                                        heading_level?: number;
+                                    };
+                                    bullet?: { text?: string };
+                                    ordered?: { text?: string };
+                                    code?: { text?: string };
+                                    link?: { title?: string; url?: string };
+                                    image?: { image_key?: string };
+                                    user?: { user_id?: string };
+                                    divider?: {};
+                                    container?: {};
+                                }>;
+                                root_content_id?: string;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/aigc/generate_entity`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
