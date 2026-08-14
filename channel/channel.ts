@@ -116,7 +116,7 @@ export class LarkChannel {
 
         const transport = this.opts.transport ?? 'websocket';
         if (transport === 'websocket') {
-            await this.connectWebSocket(15000);
+            await this.connectWebSocket(this.opts.connectTimeoutMs ?? 15000);
         }
         // webhook transport wiring is external: user plugs this.dispatcher into
         // their HTTP handler via the existing adaptor modules.
@@ -138,6 +138,15 @@ export class LarkChannel {
             const timer = setTimeout(() => {
                 if (settled) return;
                 settled = true;
+                // Tear down the still-handshaking WSClient: the caller now
+                // treats this connect attempt as failed (and may immediately
+                // start a new one), so leaving the client running would leak
+                // sockets/timers, keep retrying in the background, and let its
+                // late failures surface as unhandled exceptions.
+                // See https://github.com/larksuite/node-sdk/issues/197
+                try {
+                    this.rawWsClient?.close({ force: true });
+                } catch { /* best effort */ }
                 reject(new LarkChannelError(
                     'not_connected',
                     `WebSocket handshake did not complete within ${timeoutMs}ms`,

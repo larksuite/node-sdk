@@ -272,5 +272,5 @@ const msg = await normalize(rawEvent, { botIdentity, stripBotMentions: true });
 3. **Card buttons not firing** is usually either a missing `card.action.trigger` subscription or a v1 card schema. V2 uses `column_set` → `column` → `button` with `behaviors: [{ type: 'callback', value }]`.
 4. **Use `stream()`** for streaming output; don't loop `send()` / `updateCard()` by hand.
 5. **Media upload** supports Buffer / local path / URL interchangeably; audio/video `duration` is auto-parsed from binary headers when possible.
-6. **`connect()` waits for the real handshake** — 15-second timeout throws `not_connected`; runtime disconnects are auto-retried with corresponding events emitted.
+6. **`connect()` waits for the real handshake** — default 15-second timeout (configurable via `connectTimeoutMs`) throws `not_connected` and tears down the abandoned WSClient (issue #197); runtime disconnects are auto-retried with corresponding events emitted.
 7. **`reject` only fires on policy rejections.** Duplicate dedup, stale detection, and concurrency locks drop silently by design.

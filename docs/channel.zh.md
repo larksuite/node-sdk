@@ -272,5 +272,5 @@ const msg = await normalize(rawEvent, { botIdentity, stripBotMentions: true });
 3. **卡片按钮不响应**通常是：没加 `card.action.trigger` 订阅 / 卡片用了 V1 schema（需要 V2：`column_set` → `column` → `button` 的 `behaviors: [{ type: 'callback', value }]` 结构）
 4. **流式用 `stream()`**，不要手动反复 `send()` / `updateCard()` 模拟
 5. **媒体上传**：Buffer / 本地路径 / URL 三种都支持；音视频 `duration` 不传会从二进制头部尝试解析
-6. **`connect()` 会等真实握手**，15 秒超时抛 `not_connected`；运行期断连自动重连 + emit 相应事件
+6. **`connect()` 会等真实握手**，默认 15 秒超时（可通过 `connectTimeoutMs` 配置）抛 `not_connected`，并会清理被放弃的 WSClient（issue #197）；运行期断连自动重连 + emit 相应事件
 7. **`reject` 事件只在策略拦截时触发**；去重 / 过期 / 并发锁是静默丢弃，不走 reject

@@ -258,6 +258,15 @@ export interface LarkChannelOptions {
     handshakeTimeoutMs?: number;
 
     /**
+     * Maximum time (ms) to wait for the first WebSocket handshake to succeed
+     * inside `connect()`. When the handshake does not complete within this
+     * window, `connect()` rejects with `not_connected` and the still-connecting
+     * WSClient is torn down so it cannot leak sockets/timers or fire callbacks
+     * after the attempt has been abandoned (see issue #197). Defaults to 15000.
+     */
+    connectTimeoutMs?: number;
+
+    /**
      * Optional Node http(s) agent forwarded to the underlying WSClient for
      * the WebSocket transport. Useful for routing the WS through an HTTP(S)
      * proxy or for customizing TLS / keepalive.
