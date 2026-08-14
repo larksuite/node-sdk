@@ -29,6 +29,15 @@ export class DataCache {
   }) {
     const { message_id, sum, seq, trace_id, data } = params;
 
+    // Guard against malformed fragment metadata: an invalid `sum` makes
+    // `new Array(sum)` throw (RangeError), and a `seq` outside [0, sum)
+    // would create sparse holes that silently corrupt the merged buffer
+    // (JSON.parse then fails and the event is lost).
+    // See https://github.com/larksuite/node-sdk/issues/201
+    if (!Number.isInteger(sum) || sum <= 0 || !Number.isInteger(seq) || seq < 0 || seq >= sum) {
+      throw new Error(`invalid event fragment metadata (message_id: ${message_id}, sum: ${sum}, seq: ${seq})`);
+    }
+
     const cache = this.cache.get(message_id);    
     if (!cache) {
       const buffer = new Array(sum).fill(undefined);

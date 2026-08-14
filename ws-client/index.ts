@@ -324,6 +324,12 @@ export class WSClient {
         timer = setTimeout(() => {
           this.logger.error('[ws]', `handshake timeout after ${this.handshakeTimeoutMs}ms`);
           wsInstance!.removeAllListeners();
+          // A CONNECTING socket emits a late 'error' ("WebSocket was closed
+          // before the connection was established") when terminated; with every
+          // listener removed that event becomes an uncaught exception and can
+          // crash the process. Keep a no-op listener so the abort stays silent.
+          // See https://github.com/larksuite/node-sdk/issues/197
+          wsInstance!.on('error', () => {});
           try { wsInstance!.terminate(); } catch { /* best effort */ }
           settleOnce(false);
         }, this.handshakeTimeoutMs);
@@ -524,15 +530,22 @@ export class WSClient {
       // Any inbound frame proves the connection is alive — cancel the pong
       // watchdog (but don't re-arm; it'll be armed again on the next ping).
       this.clearLiveness();
-      const data = protoBuf.decode(buffer);
-      const { method } = data;
+      try {
+        const data = protoBuf.decode(buffer);
+        const { method } = data;
 
-      if (method === FrameType.control) {
-        await this.handleControlData(data);
-      }
+        if (method === FrameType.control) {
+          await this.handleControlData(data);
+        }
 
-      if (method === FrameType.data) {
-        await this.handleEventData(data);
+        if (method === FrameType.data) {
+          await this.handleEventData(data);
+        }
+      } catch (err) {
+        // A frame that fails to decode/parse must never be dropped silently or
+        // become an unhandled rejection that can crash the process: log it so
+        // operators can reconcile the loss. See https://github.com/larksuite/node-sdk/issues/201
+        this.logger.error('[ws]', `failed to handle inbound frame: ${(err as Error)?.message ?? err}`);
       }
     });
 
@@ -558,13 +571,22 @@ export class WSClient {
 
     if (type === MessageType.pong && payload) {
       this.logger.trace('[ws]', 'receive pong');
-      const dataString = new TextDecoder("utf-8").decode(payload);
+      let pong;
+      try {
+        const dataString = new TextDecoder("utf-8").decode(payload);
+        pong = JSON.parse(dataString);
+      } catch (err) {
+        // A malformed pong must not drop the frame silently or crash the
+        // process. See https://github.com/larksuite/node-sdk/issues/201
+        this.logger.error('[ws]', `invalid pong payload: ${(err as Error)?.message ?? err}`);
+        return;
+      }
       const {
         PingInterval,
         ReconnectCount,
         ReconnectInterval,
         ReconnectNonce
-      } = JSON.parse(dataString);
+      } = pong;
 
       this.wsConfig.updateWs({
         pingInterval: PingInterval * 1000,
@@ -589,13 +611,22 @@ export class WSClient {
       return;
     }
 
-    const mergedData = this.dataCache.mergeData({
-      message_id,
-      sum: Number(sum),
-      seq: Number(seq),
-      trace_id,
-      data: payload
-    });
+    let mergedData;
+    try {
+      mergedData = this.dataCache.mergeData({
+        message_id,
+        sum: Number(sum),
+        seq: Number(seq),
+        trace_id,
+        data: payload
+      });
+    } catch (err) {
+      // Malformed fragment metadata must not be dropped silently: log the
+      // metadata so operators can reconcile.
+      // See https://github.com/larksuite/node-sdk/issues/201
+      this.logger.error('[ws]', `failed to merge event fragments, message_id: ${message_id}; trace_id: ${trace_id}; error: ${(err as Error)?.message ?? err}`);
+      return;
+    }
 
     if (!mergedData) {
       return;
@@ -688,6 +719,10 @@ export class WSClient {
     const wsInstance = this.wsConfig.getWSInstance();
     if (wsInstance) {
       wsInstance.removeAllListeners();
+      // Same guard as the handshake watchdog: closing/terminating a CONNECTING
+      // socket makes the ws library emit a late 'error', which would otherwise
+      // become an uncaught exception. See https://github.com/larksuite/node-sdk/issues/197
+      wsInstance.on('error', () => {});
       if (force) {
         wsInstance.terminate();
       } else {
