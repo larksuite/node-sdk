@@ -87,7 +87,7 @@ export class OutboundSender {
             const id = await this.sendOneWithFallback({
                 to, idType,
                 msgType: 'post', content: post,
-                replyTo: i === 0 ? opts.replyTo : undefined,
+                replyTo: opts.replyTo,
                 replyInThread: opts.replyInThread,
             });
             ids.push(id);
@@ -110,7 +110,7 @@ export class OutboundSender {
                 to, idType,
                 msgType: 'text',
                 content: { text: chunks[i] },
-                replyTo: i === 0 ? opts.replyTo : undefined,
+                replyTo: opts.replyTo,
                 replyInThread: opts.replyInThread,
             });
             ids.push(id);
