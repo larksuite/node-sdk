@@ -12,31 +12,31 @@ export class LoggerProxy {
 
     error(...msg: any[]) {
         if (this.level >= LoggerLevel.error) {
-            this.logger.error(msg);
+            this.logger.error(...msg);
         }
     }
 
     warn(...msg: any[]) {
         if (this.level >= LoggerLevel.warn) {
-            this.logger.warn(msg);
+            this.logger.warn(...msg);
         }
     }
 
     info(...msg: any[]) {
         if (this.level >= LoggerLevel.info) {
-            this.logger.info(msg);
+            this.logger.info(...msg);
         }
     }
 
     debug(...msg: any[]) {
         if (this.level >= LoggerLevel.debug) {
-            this.logger.debug(msg);
+            this.logger.debug(...msg);
         }
     }
 
     trace(...msg: any[]) {
         if (this.level >= LoggerLevel.trace) {
-            this.logger.trace(msg);
+            this.logger.trace(...msg);
         }
     }
 }
