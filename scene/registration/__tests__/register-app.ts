@@ -238,3 +238,40 @@ describe('registerApp createOnly', () => {
         expect(url.searchParams.has('createOnly')).toBe(false);
     });
 });
+
+describe('registerApp cancellation', () => {
+    test('does not resume polling when an in-flight request resolves after abort', async () => {
+        mockedPost.mockReset();
+
+        let resolvePoll!: (value: unknown) => void;
+        const inFlightPoll = new Promise((resolve) => {
+            resolvePoll = resolve;
+        });
+        mockedPost
+            .mockResolvedValueOnce({ ...FAKE_BEGIN, interval: 0 })
+            .mockReturnValueOnce(inFlightPoll)
+            .mockResolvedValueOnce({ error: 'expired_token' });
+
+        const controller = new AbortController();
+        const registration = registerApp({
+            signal: controller.signal,
+            onQRCodeReady: () => { /* no-op */ },
+        });
+
+        await new Promise((resolve) => setImmediate(resolve));
+        expect(mockedPost).toHaveBeenCalledTimes(2);
+
+        controller.abort();
+        await expect(registration).rejects.toMatchObject({
+            code: 'abort',
+            description: 'Registration was aborted',
+        });
+
+        resolvePoll({ error: 'authorization_pending' });
+        await Promise.resolve();
+        await Promise.resolve();
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        expect(mockedPost).toHaveBeenCalledTimes(2);
+    });
+});

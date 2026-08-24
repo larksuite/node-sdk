@@ -90,6 +90,7 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
         let domainSwitched = false;
         let pollTimer: ReturnType<typeof setTimeout> | null = null;
         let expireTimer: ReturnType<typeof setTimeout> | null = null;
+        let settled = false;
 
         const cleanup = () => {
             if (pollTimer !== null) {
@@ -104,6 +105,7 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
         };
 
         const onAbort = () => {
+            settled = true;
             cleanup();
             reject(createError('abort', 'Registration was aborted'));
         };
@@ -114,16 +116,23 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
         ctx.signal?.addEventListener('abort', onAbort, { once: true });
 
         expireTimer = setTimeout(() => {
+            settled = true;
             cleanup();
             reject(createError('expired_token', 'Polling timed out'));
         }, ctx.expireIn);
 
         const poll = async () => {
+            if (settled) {
+                return;
+            }
             try {
                 const pollRes = await requestRegistration<PollResponse>(baseUrl, {
                     action: 'poll',
                     device_code: ctx.deviceCode,
                 });
+                if (settled) {
+                    return;
+                }
 
                 // Lark domain switch (once only)
                 if (pollRes.user_info?.tenant_brand === 'lark' && !domainSwitched) {
@@ -136,6 +145,7 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
 
                 // Success
                 if (pollRes.client_id && pollRes.client_secret) {
+                    settled = true;
                     cleanup();
                     resolve({
                         client_id: pollRes.client_id,
@@ -156,11 +166,13 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
                         break;
                     case 'access_denied':
                     case 'expired_token':
+                        settled = true;
                         cleanup();
                         reject(createError(pollRes.error, pollRes.error_description ?? 'Unknown error'));
                         return;
                     default:
                         if (pollRes.error) {
+                            settled = true;
                             cleanup();
                             reject(createError(pollRes.error, pollRes.error_description ?? 'Unknown error'));
                             return;
@@ -170,6 +182,10 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
 
                 pollTimer = setTimeout(poll, interval);
             } catch (e) {
+                if (settled) {
+                    return;
+                }
+                settled = true;
                 cleanup();
                 reject(e);
             }
