@@ -104,21 +104,48 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
             ctx.signal?.removeEventListener('abort', onAbort);
         };
 
-        const onAbort = () => {
+        // Every terminal transition goes through succeed() / fail(): they flip
+        // `settled`, drop the timers and the abort listener, and ignore any later
+        // call. Keeping that bookkeeping in one place is what stops a cancelled
+        // run from resuming — see issue #211.
+        const succeed = (result: RegisterAppResult) => {
+            if (settled) {
+                return;
+            }
             settled = true;
             cleanup();
-            reject(createError('abort', 'Registration was aborted'));
+            resolve(result);
+        };
+
+        const fail = (err: unknown) => {
+            if (settled) {
+                return;
+            }
+            settled = true;
+            cleanup();
+            reject(err);
+        };
+
+        // Scheduling is guarded too: a status callback may abort the run
+        // synchronously, and a timer armed after cleanup() would never be cleared.
+        const scheduleNextPoll = () => {
+            if (settled) {
+                return;
+            }
+            pollTimer = setTimeout(poll, interval);
+        };
+
+        const onAbort = () => {
+            fail(createError('abort', 'Registration was aborted'));
         };
 
         if (ctx.signal?.aborted) {
-            return reject(createError('abort', 'Registration was aborted'));
+            return fail(createError('abort', 'Registration was aborted'));
         }
         ctx.signal?.addEventListener('abort', onAbort, { once: true });
 
         expireTimer = setTimeout(() => {
-            settled = true;
-            cleanup();
-            reject(createError('expired_token', 'Polling timed out'));
+            fail(createError('expired_token', 'Polling timed out'));
         }, ctx.expireIn);
 
         const poll = async () => {
@@ -130,6 +157,9 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
                     action: 'poll',
                     device_code: ctx.deviceCode,
                 });
+                // The run may have been aborted or have expired while this request
+                // was in flight. Drop the response: no status callback, no next
+                // poll (issue #211).
                 if (settled) {
                     return;
                 }
@@ -145,9 +175,7 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
 
                 // Success
                 if (pollRes.client_id && pollRes.client_secret) {
-                    settled = true;
-                    cleanup();
-                    resolve({
+                    succeed({
                         client_id: pollRes.client_id,
                         client_secret: pollRes.client_secret,
                         user_info: pollRes.user_info,
@@ -166,28 +194,19 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
                         break;
                     case 'access_denied':
                     case 'expired_token':
-                        settled = true;
-                        cleanup();
-                        reject(createError(pollRes.error, pollRes.error_description ?? 'Unknown error'));
+                        fail(createError(pollRes.error, pollRes.error_description ?? 'Unknown error'));
                         return;
                     default:
                         if (pollRes.error) {
-                            settled = true;
-                            cleanup();
-                            reject(createError(pollRes.error, pollRes.error_description ?? 'Unknown error'));
+                            fail(createError(pollRes.error, pollRes.error_description ?? 'Unknown error'));
                             return;
                         }
                         break;
                 }
 
-                pollTimer = setTimeout(poll, interval);
+                scheduleNextPoll();
             } catch (e) {
-                if (settled) {
-                    return;
-                }
-                settled = true;
-                cleanup();
-                reject(e);
+                fail(e);
             }
         };
 
