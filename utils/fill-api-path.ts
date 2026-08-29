@@ -2,10 +2,10 @@ export const fillApiPath = (
     apiPath: string,
     pathSupplement: Record<string, string> = {}
 ) =>
-    apiPath.replace(/:([^/]+)/g, (_, $1) => {
-        if (pathSupplement[$1] !== undefined) {
-            return pathSupplement[$1];
+    apiPath.replace(/(^|\/):([^/]+)/g, (_, pathPrefix, pathKey) => {
+        if (pathSupplement[pathKey] !== undefined) {
+            return `${pathPrefix}${pathSupplement[pathKey]}`;
         }
 
-        throw new Error(`request miss ${$1} path argument`);
+        throw new Error(`request miss ${pathKey} path argument`);
     });
