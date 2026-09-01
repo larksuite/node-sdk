@@ -43,6 +43,15 @@ export class WSClient {
 
   private isConnecting: boolean = false;
 
+  /**
+   * Set by {@link close}, cleared by {@link start}. Distinct from
+   * `reconnectGeneration`, which only invalidates *older* loops: a fresh
+   * `reConnect()` bumps the generation itself, so a closed client could
+   * resurrect its own retry loop. This flag says "this client is done"
+   * until someone starts it again.
+   */
+  private closed = false;
+
   private reconnectInfo = {
     lastConnectTime: 0,
     nextConnectTime: 0,
@@ -174,6 +183,55 @@ export class WSClient {
       clearTimeout(this.livenessTimer);
       this.livenessTimer = undefined;
     }
+  }
+
+  /**
+   * Detach a socket we are about to throw away: drop every listener, but
+   * leave one 'error' sink behind.
+   *
+   * `ws` reports the abort of a non-OPEN socket asynchronously — both
+   * `terminate()` and `close()` route through `abortHandshake()`, which
+   * emits 'error' on a later tick — and a non-force `close()` on an OPEN
+   * socket keeps the connection alive until the peer answers (up to `ws`'s
+   * 30s closeTimeout), during which a TCP reset still surfaces as 'error'.
+   * An EventEmitter with no 'error' listener throws instead of emitting, and
+   * that throw lands outside every try/catch, killing the host process.
+   * See https://github.com/larksuite/node-sdk/issues/197
+   *
+   * NOTE: not for the liveness watchdog — that one terminates *on purpose*
+   * and needs its listeners intact so 'close' drives the reconnect.
+   */
+  private detachSocket(socket: WebSocket): void {
+    socket.removeAllListeners();
+    // `on`, not `once`: the sink must outlive however many errors `ws`
+    // decides to emit, without depending on its internal de-dup latch.
+    socket.on('error', (err?: Error) => {
+      // Message only — the error may carry request details, and connectUrl
+      // is issued by pullConnectConfig and can embed a short-lived ticket.
+      this.logger.debug('[ws]', 'ignored error from discarded socket', err?.message);
+    });
+  }
+
+  /**
+   * Throw away whatever the current attempt established — socket *and* the
+   * timers its 'open' handler armed. A handshake that completes after
+   * `close()` runs `pingLoop()`, and that timer is not unref'd: leaving it
+   * behind keeps the event loop alive forever on a client the caller closed.
+   *
+   * Only safe when {@link closed} is set: otherwise a newer session may
+   * already own `wsConfig`'s instance.
+   */
+  private discardConnection(): void {
+    if (this.pingInterval) {
+      clearTimeout(this.pingInterval);
+      this.pingInterval = undefined;
+    }
+    this.clearLiveness();
+    const socket = this.wsConfig.getWSInstance();
+    if (!socket) return;
+    this.detachSocket(socket);
+    try { socket.terminate(); } catch { /* best effort */ }
+    this.wsConfig.setWSInstance(null);
   }
 
   /**
@@ -323,7 +381,7 @@ export class WSClient {
       if (this.handshakeTimeoutMs && this.handshakeTimeoutMs > 0) {
         timer = setTimeout(() => {
           this.logger.error('[ws]', `handshake timeout after ${this.handshakeTimeoutMs}ms`);
-          wsInstance!.removeAllListeners();
+          this.detachSocket(wsInstance!);
           try { wsInstance!.terminate(); } catch { /* best effort */ }
           settleOnce(false);
         }, this.handshakeTimeoutMs);
@@ -383,6 +441,19 @@ export class WSClient {
       } finally {
         this.isConnecting = false;
       }
+      if (this.closed) {
+        // close() landed while the handshake was still in flight. Drop
+        // whatever this attempt established — nobody holds a reference to it
+        // any more — and bail out, so the reConnect() below cannot resurrect
+        // a client the caller already closed.
+        this.discardConnection();
+        return;
+      }
+      if (currentGeneration !== this.reconnectGeneration) {
+        // Superseded by a newer session, which now owns wsConfig's instance.
+        // Leave the socket alone and just stop.
+        return;
+      }
       if (result.ok) {
         this.hasEverConnected = true;
         this.safeInvoke('onReady', this.onReady);
@@ -438,6 +509,11 @@ export class WSClient {
         count++;
         this.currentReconnectAttempts = count;
         const result = await tryConnect();
+
+        if (this.closed) {
+          this.discardConnection();
+          return;
+        }
 
         // Re-check after async operation in case a new session started
         if (currentGeneration !== this.reconnectGeneration) {
@@ -671,6 +747,7 @@ export class WSClient {
    */
   close(params: { force?: boolean } = {}) {
     const { force = false } = params;
+    this.closed = true;
     // Invalidate any in-flight reconnect loops
     this.reconnectGeneration++;
     if (this.pingInterval) {
@@ -687,7 +764,7 @@ export class WSClient {
     this.currentReconnectAttempts = 0;
     const wsInstance = this.wsConfig.getWSInstance();
     if (wsInstance) {
-      wsInstance.removeAllListeners();
+      this.detachSocket(wsInstance);
       if (force) {
         wsInstance.terminate();
       } else {
@@ -714,6 +791,7 @@ export class WSClient {
     // Clear any terminal-error state left over from a previous session so
     // getConnectionStatus() reflects the fresh start.
     this.terminalError = false;
+    this.closed = false;
     this.currentReconnectAttempts = 0;
     // Re-arm the cache sweep in case the client was previously close()d
     // (which destroys the timer); idempotent when already running.
