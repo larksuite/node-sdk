@@ -25,4 +25,10 @@ describe('fillApiPath', () => {
             fillApiPath('http://s/:aaa/:bbb', { aaa: '1' })
         ).toThrowError('request miss bbb path argument');
     });
+
+    test('miss argument reports the parameter, not the port', () => {
+        expect(() =>
+            fillApiPath('http://localhost:3000/open-apis/items/:item_id')
+        ).toThrowError('request miss item_id path argument');
+    });
 });
