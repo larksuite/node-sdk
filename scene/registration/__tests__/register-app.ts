@@ -238,3 +238,96 @@ describe('registerApp createOnly', () => {
         expect(url.searchParams.has('createOnly')).toBe(false);
     });
 });
+
+describe('registerApp cancellation', () => {
+    /**
+     * Load-bearing: with `interval: 0` the poll a regression would schedule
+     * expires immediately, so it fires inside `advancePastNextPollTick` below.
+     * Raising it silently disables this test — the extra request would be
+     * scheduled but never fire before the assertion, and the case would stay
+     * green with the bug back in place.
+     */
+    const IMMEDIATE_POLL_INTERVAL = 0;
+
+    /** Cross one timers phase — long enough for a `setTimeout(poll, 0)` to fire. */
+    const advancePastNextPollTick = () =>
+        new Promise((resolve) => setTimeout(resolve, 10));
+
+    test('does not resume polling when an in-flight request resolves after abort', async () => {
+        mockedPost.mockReset();
+
+        let resolvePoll!: (value: unknown) => void;
+        const inFlightPoll = new Promise((resolve) => {
+            resolvePoll = resolve;
+        });
+        mockedPost
+            .mockResolvedValueOnce({ ...FAKE_BEGIN, interval: IMMEDIATE_POLL_INTERVAL })
+            .mockReturnValueOnce(inFlightPoll)
+            // Never consumed while the fix holds. If polling does resume, this
+            // terminal response stops the loop, so a regression surfaces as the
+            // assertions below rather than as a runaway of pending requests.
+            .mockResolvedValueOnce({ error: 'expired_token' });
+
+        const controller = new AbortController();
+        const onStatusChange = jest.fn();
+        const registration = registerApp({
+            signal: controller.signal,
+            onStatusChange,
+            onQRCodeReady: () => { /* no-op */ },
+        });
+
+        await new Promise((resolve) => setImmediate(resolve));
+        expect(mockedPost).toHaveBeenCalledTimes(2);
+
+        controller.abort();
+        await expect(registration).rejects.toMatchObject({
+            code: 'abort',
+            description: 'Registration was aborted',
+        });
+
+        // Only activity that happens *after* the abort matters from here on.
+        onStatusChange.mockClear();
+
+        resolvePoll({ error: 'authorization_pending' });
+        await advancePastNextPollTick();
+
+        expect(mockedPost).toHaveBeenCalledTimes(2);
+        expect(onStatusChange).not.toHaveBeenCalled();
+    });
+
+    test('does not arm a poll timer when onStatusChange aborts synchronously', async () => {
+        mockedPost.mockReset();
+        // Fake timers here so the assertion can look at the timer queue itself:
+        // this leak is invisible to a request-count check, because the stray
+        // timer fires into a guard and never reaches the network.
+        // `performance` is read-only on modern Node, and this suite has no use
+        // for a faked one.
+        jest.useFakeTimers({ doNotFake: ['performance'] });
+
+        try {
+            mockedPost
+                .mockResolvedValueOnce({ ...FAKE_BEGIN, interval: IMMEDIATE_POLL_INTERVAL })
+                .mockResolvedValueOnce({ error: 'authorization_pending' });
+
+            const controller = new AbortController();
+            const registration = registerApp({
+                signal: controller.signal,
+                // Aborting from inside the callback runs the whole teardown while
+                // poll() is still on the stack, so anything scheduled afterwards
+                // outlives the cleanup that was supposed to cancel it.
+                onStatusChange: () => controller.abort(),
+                onQRCodeReady: () => { /* no-op */ },
+            });
+
+            await expect(registration).rejects.toMatchObject({
+                code: 'abort',
+                description: 'Registration was aborted',
+            });
+
+            expect(jest.getTimerCount()).toBe(0);
+            expect(mockedPost).toHaveBeenCalledTimes(2);
+        } finally {
+            jest.useRealTimers();
+        }
+    });
+});
