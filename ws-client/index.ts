@@ -24,6 +24,13 @@ import { IConstructorParams, ConnectResult, WSConnectionStatus, WSConnectionStat
 
 export type { WSConfigOverrides, WSConnectionStatus, WSConnectionState } from './types';
 
+// Render a thrown value for an error log: prefer the Error message, fall back
+// to String(err) for non-Error throws and Errors with an empty message.
+const describeError = (err: unknown): string => {
+  const message = (err as Error)?.message;
+  return message ? message : String(err);
+};
+
 export class WSClient {
   private wsConfig = new WSConfig();
 
@@ -615,7 +622,7 @@ export class WSClient {
         // A frame that fails to decode/parse must never be dropped silently or
         // become an unhandled rejection that can crash the process: log it so
         // operators can reconcile the loss. See https://github.com/larksuite/node-sdk/issues/201
-        this.logger.error('[ws]', `failed to handle inbound frame: ${(err as Error)?.message ?? err}`);
+        this.logger.error('[ws]', `failed to handle inbound frame: ${describeError(err)}`);
       }
     });
 
@@ -648,7 +655,7 @@ export class WSClient {
       } catch (err) {
         // A malformed pong must not drop the frame silently or crash the
         // process. See https://github.com/larksuite/node-sdk/issues/201
-        this.logger.error('[ws]', `invalid pong payload: ${(err as Error)?.message ?? err}`);
+        this.logger.error('[ws]', `invalid pong payload: ${describeError(err)}`);
         return;
       }
       const {
@@ -694,7 +701,7 @@ export class WSClient {
       // Malformed fragment metadata must not be dropped silently: log the
       // metadata so operators can reconcile.
       // See https://github.com/larksuite/node-sdk/issues/201
-      this.logger.error('[ws]', `failed to merge event fragments, message_id: ${message_id}; trace_id: ${trace_id}; error: ${(err as Error)?.message ?? err}`);
+      this.logger.error('[ws]', `failed to merge event fragments, message_id: ${message_id}; trace_id: ${trace_id}; error: ${describeError(err)}`);
       return;
     }
 

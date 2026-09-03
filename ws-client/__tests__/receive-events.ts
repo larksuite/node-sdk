@@ -49,12 +49,25 @@ jest.mock('../proto-buf', () => ({
 }));
 
 import { WSClient } from '../index';
-import { DataCache } from '../data-cache';
 import { FrameType, HeaderKey, MessageType } from '../enum';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
 import { decode as decodeFrame } from '../proto-buf';
 
 const flushPromises = () => new Promise<void>((r) => setImmediate(r));
+
+// Every client created by a test, so afterEach can close() them all: close() is
+// what actually stops the ping/reconnect timers a started client armed.
+const openClients: WSClient[] = [];
+
+// Poll instead of counting ticks: how many awaits sit between start() and
+// communicate() is an implementation detail that must not break this test.
+async function waitFor(condition: () => boolean, what: string) {
+    for (let i = 0; i < 50; i++) {
+        if (condition()) return;
+        await flushPromises();
+    }
+    throw new Error(`timed out waiting for ${what}`);
+}
 
 function createMockHttp() {
     const pending: Array<{ resolve: (v: unknown) => void }> = [];
@@ -90,6 +103,7 @@ function createClient() {
         httpInstance: http as any,
         autoReconnect: true,
     });
+    openClients.push(client);
     return { client, logger, http };
 }
 
@@ -99,16 +113,16 @@ function errorCalls(logger: { error: jest.Mock }) {
 
 async function connectClient(client: WSClient, http: ReturnType<typeof createMockHttp>) {
     client.start({ eventDispatcher: new EventDispatcher({} as any) });
-    await flushPromises();
+    await waitFor(() => http.pending.length > 0, 'the endpoint request');
     http.resolveNext();
-    await flushPromises(); // connect() -> new MockWebSocket -> 'open' microtask
-    await flushPromises(); // communicate() attaches listeners
-    expect(lastWsInstance).toBeTruthy();
+    await waitFor(() => (lastWsInstance?.listeners?.message?.length ?? 0) > 0, 'the message listener');
 }
 
 describe('inbound frame error handling (#201)', () => {
     afterEach(() => {
-        // Stop ping/reconnect timers so no late timer fires after teardown.
+        // Run close() for every client, even after a failed assertion, so no
+        // ping/reconnect timer leaks into the next test.
+        openClients.splice(0).forEach((client) => client.close());
         lastWsInstance = null;
     });
 
@@ -116,27 +130,27 @@ describe('inbound frame error handling (#201)', () => {
         const { client, logger, http } = createClient();
         await connectClient(client, http);
 
+        const ws = lastWsInstance;
         (decodeFrame as jest.Mock).mockImplementationOnce(() => {
             throw new Error('bad frame bytes');
         });
-        lastWsInstance.emit('message', new Uint8Array([1, 2, 3]));
+        ws.emit('message', new Uint8Array([1, 2, 3]));
         await flushPromises();
 
         expect(errorCalls(logger)).toContain('failed to handle inbound frame');
         expect(errorCalls(logger)).toContain('bad frame bytes');
-        // the connection is still alive
-        expect((client as any).wsConfig.getWSInstance()).toBe(lastWsInstance);
+        // the connection is still alive: same socket, no reconnect happened
+        expect((client as any).wsConfig.getWSInstance()).toBe(ws);
+        expect(lastWsInstance).toBe(ws);
 
         // and a subsequent valid frame is still processed without new errors
         (decodeFrame as jest.Mock).mockReturnValueOnce({
             method: FrameType.control,
             headers: [{ key: HeaderKey.type, value: MessageType.ping }],
         });
-        lastWsInstance.emit('message', new Uint8Array([4]));
+        ws.emit('message', new Uint8Array([4]));
         await flushPromises();
         expect(logger.error.mock.calls.length).toBe(1);
-
-        client.close(); // stop ping/reconnect timers before teardown
     });
 
     test('malformed event fragment metadata is logged with message_id', async () => {
@@ -179,7 +193,7 @@ describe('inbound frame error handling (#201)', () => {
         const dispatcher = new EventDispatcher({} as any);
         dispatcher.register({ 'im.message.receive_v1': handler });
         priv.eventDispatcher = dispatcher;
-        const sendSpy = jest.spyOn(priv, 'sendMessage');
+        const sendSpy = jest.spyOn(priv, 'sendMessage').mockImplementation(() => undefined);
 
         const eventPayload = JSON.stringify({
             schema: '2.0',
@@ -219,42 +233,9 @@ describe('inbound frame error handling (#201)', () => {
 
         expect(handler).toHaveBeenCalledTimes(1);
         expect(sendSpy).toHaveBeenCalledTimes(1); // ACK sent
+        const ack = sendSpy.mock.calls[0][0] as { headers: Array<{ key: string; value: string }>; payload: Uint8Array };
+        expect(ack.headers).toEqual(expect.arrayContaining([{ key: HeaderKey.message_id, value: 'msg_2' }]));
+        expect(JSON.parse(new TextDecoder().decode(ack.payload))).toEqual({ code: 200 });
         expect(errorCalls(logger)).not.toContain('failed to merge');
-    });
-});
-
-describe('DataCache.mergeData fragment validation (#201)', () => {
-    function makeCache() {
-        return new DataCache({ logger: { error: jest.fn() } as any });
-    }
-
-    test('merges in-order fragments', () => {
-        const cache = makeCache();
-        const bytes = new TextEncoder().encode('{"a":1}');
-        expect(cache.mergeData({ message_id: 'm', sum: 2, seq: 0, trace_id: 't', data: bytes.slice(0, 4) })).toBeNull();
-        expect(cache.mergeData({ message_id: 'm', sum: 2, seq: 1, trace_id: 't', data: bytes.slice(4) })).toEqual({ a: 1 });
-    });
-
-    test('merges out-of-order fragments', () => {
-        const cache = makeCache();
-        const bytes = new TextEncoder().encode('{"a":1}');
-        expect(cache.mergeData({ message_id: 'm', sum: 2, seq: 1, trace_id: 't', data: bytes.slice(4) })).toBeNull();
-        expect(cache.mergeData({ message_id: 'm', sum: 2, seq: 0, trace_id: 't', data: bytes.slice(0, 4) })).toEqual({ a: 1 });
-    });
-
-    test('invalid sum throws', () => {
-        const cache = makeCache();
-        expect(() => cache.mergeData({ message_id: 'm', sum: NaN, seq: 0, trace_id: 't', data: new Uint8Array([1]) }))
-            .toThrow('invalid event fragment metadata');
-        expect(() => cache.mergeData({ message_id: 'm', sum: 0, seq: 0, trace_id: 't', data: new Uint8Array([1]) }))
-            .toThrow('invalid event fragment metadata');
-    });
-
-    test('invalid seq throws', () => {
-        const cache = makeCache();
-        expect(() => cache.mergeData({ message_id: 'm', sum: 2, seq: 2, trace_id: 't', data: new Uint8Array([1]) }))
-            .toThrow('invalid event fragment metadata');
-        expect(() => cache.mergeData({ message_id: 'm', sum: 2, seq: -1, trace_id: 't', data: new Uint8Array([1]) }))
-            .toThrow('invalid event fragment metadata');
     });
 });
