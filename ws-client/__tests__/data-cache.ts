@@ -2,6 +2,9 @@ import { DataCache } from '../data-cache';
 
 describe('DataCache', () => {
   afterEach(() => {
+    // Restore spies before uninstalling fake timers: a spy left on a fake
+    // `setInterval` otherwise survives useRealTimers() and breaks later tests.
+    jest.restoreAllMocks();
     jest.useRealTimers();
   });
 
@@ -162,6 +165,40 @@ describe('DataCache', () => {
     dataCache.destroy();
     dataCache.clearAtInterval();
     expect(setIntervalSpy).toHaveBeenCalledTimes(2);
+  });
+
+  // Fragment metadata validation (issue #201): malformed `sum`/`seq` used to
+  // throw a bare RangeError from `new Array(sum)` or silently corrupt the
+  // merged buffer via sparse holes; both must now fail with a clear error.
+  describe('fragment metadata validation (#201)', () => {
+    const bytes = new TextEncoder().encode('{"a":1}');
+    const fragment = (overrides: Partial<Parameters<DataCache['mergeData']>[0]>) => ({
+      message_id: 'm', sum: 2, seq: 0, trace_id: 't', data: bytes.slice(0, 4), ...overrides,
+    });
+
+    test('merges out-of-order fragments', () => {
+      const cache = new DataCache({});
+      expect(cache.mergeData(fragment({ seq: 1, data: bytes.slice(4) }))).toBeNull();
+      expect(cache.mergeData(fragment({ seq: 0 }))).toEqual({ a: 1 });
+    });
+
+    test.each([NaN, 0, -1, 2.5, Infinity])('invalid sum %p throws', (sum) => {
+      const cache = new DataCache({});
+      expect(() => cache.mergeData(fragment({ sum, seq: 0 }))).toThrow('invalid event fragment metadata');
+    });
+
+    test.each([-1, 2, 1.5, NaN])('invalid seq %p throws for sum = 2', (seq) => {
+      const cache = new DataCache({});
+      expect(() => cache.mergeData(fragment({ seq }))).toThrow('invalid event fragment metadata');
+    });
+
+    test('a later fragment whose sum disagrees with the first one throws', () => {
+      const cache = new DataCache({});
+      expect(cache.mergeData(fragment({ sum: 2, seq: 0 }))).toBeNull();
+      expect(() => cache.mergeData(fragment({ sum: 3, seq: 2 }))).toThrow('invalid event fragment metadata');
+      // the original fragment set is untouched and can still complete
+      expect(cache.mergeData(fragment({ sum: 2, seq: 1, data: bytes.slice(4) }))).toEqual({ a: 1 });
+    });
   });
 
 })
