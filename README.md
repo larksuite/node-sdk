@@ -388,6 +388,26 @@ server.listen(3000);
 > Note: Some events are v1.0 version and are no longer maintained. The SDK retains support for them. It is strongly recommended to use new versions of events that are consistent with their functions. Move the mouse to the corresponding event subscription function to see the relevant documents:
 ![](docs/assets/deprecated.png)
 
+#### Replacing a registered event handler
+
+`unregister(...keys)` removes the handler registered for each of the given event keys. It accepts one or more event keys, returns the dispatcher itself so that calls can be chained, and does nothing for a key that has no handler.
+
+```typescript
+const eventDispatcher = new lark.EventDispatcher({}).register({
+    'im.message.receive_v1': async (data) => {},
+});
+
+eventDispatcher
+    .unregister('im.message.receive_v1')
+    .register({
+        'im.message.receive_v1': async (data) => {},
+    });
+```
+
+Registering a key that already has a handler also replaces it, and logs a warning.
+
+`unregister('app_ticket')` removes the handle the SDK registers internally. Pushed app tickets are then no longer cached, so every app_access_token request of an ISV app misses the cache and triggers an app_ticket resend.
+
 #### Combined with express
 The SDK provides an adapter for experss to convert eventDispatcher into express middleware, which can be seamlessly combined with services written using express (*The use of bodyParser in the example is not necessary, but the community mostly uses it to format body data*):
 ```typescript

@@ -437,6 +437,26 @@ server.listen(3000);
 > 注：有一些事件是v1.0版本且已经不在维护了，SDK保留了对其的支持，强烈建议使用与之功能相一致的新版事件代替。鼠标移动到相应事件订阅函数上即可看到相关文档：
 > ![](docs/assets/deprecated.png)
 
+#### 替换已注册的事件处理器
+
+`unregister(...keys)` 移除给定事件 key 上已注册的处理器。接受一个或多个事件 key，返回 dispatcher 自身以支持链式调用；对没有注册过处理器的 key 不做任何处理。
+
+```typescript
+const eventDispatcher = new lark.EventDispatcher({}).register({
+    'im.message.receive_v1': async (data) => {},
+});
+
+eventDispatcher
+    .unregister('im.message.receive_v1')
+    .register({
+        'im.message.receive_v1': async (data) => {},
+    });
+```
+
+对已注册的 key 再次 `register`，处理器同样会被替换，并打印一条 warn 日志。
+
+`unregister('app_ticket')` 移除 SDK 内部注册的处理器。移除后推送的 app_ticket 不再被缓存，ISV 应用每次获取 app_access_token 都会缓存未命中并触发一次 app_ticket 重发。
+
 #### 和express结合
 
 SDK提供了针对experss的适配器，用于将eventDispatcher转化为express的中间件，可无缝与使用express编写的服务相结合（*示例中的bodyParser的使用不是必须的，但社区大多用其来格式化body数据*）：
