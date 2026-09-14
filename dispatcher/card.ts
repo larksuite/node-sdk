@@ -12,9 +12,9 @@ export class CardActionHandler {
 
     requestHandle?: RequestHandle;
 
-    cardHandler: Function;
+    cardHandler: (data: any) => Promise<any>;
 
-    handles: Map<string, Function> = new Map();
+    handles: Map<string, (data: any) => Promise<any>> = new Map();
 
     cache: Cache;
 
@@ -28,7 +28,7 @@ export class CardActionHandler {
             logger?: Logger;
             loggerLevel?: LoggerLevel;
         },
-        cardHandler: Function
+        cardHandler: (data: any) => Promise<any>
     ) {
         const { verificationToken, encryptKey } = params;
 
@@ -72,7 +72,7 @@ export class CardActionHandler {
         });
     }
 
-    private register(handles: Record<string, Function>) {
+    private register(handles: Record<string, (data: any) => Promise<any>>) {
         Object.keys(handles).forEach((key) => {
             this.handles.set(key, handles[key]);
             this.logger.debug(`register ${key} handle`);
@@ -96,7 +96,7 @@ export class CardActionHandler {
                 return ret;
             } catch (e) {
                 this.logger.error(e);
-                return undefined;
+                throw e;
             }
         }
 
@@ -106,6 +106,7 @@ export class CardActionHandler {
             return result;
         } catch (e) {
             this.logger.error(e);
+            throw e;
         }
 
         return undefined;
