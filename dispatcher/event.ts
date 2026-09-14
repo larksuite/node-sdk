@@ -7,6 +7,12 @@ import { IHandles } from '@node-sdk/code-gen/events-template';
 import RequestHandle from './request-handle';
 
 const CAppTicketHandle = 'app_ticket';
+
+const duplicateHandleWarning = (key: string) =>
+    `${key} handle is already registered and has been replaced, call unregister('${key}') first to replace it explicitly`;
+
+const appTicketUnregisteredWarning = `the built-in ${CAppTicketHandle} handle is unregistered, pushed app tickets are no longer cached and every app_access_token request of an ISV app will miss the cache and trigger an app_ticket resend`;
+
 export class EventDispatcher {
     verificationToken: string = '';
 
@@ -67,14 +73,48 @@ export class EventDispatcher {
         });
     }
 
+    /**
+     * Register a handler for each of the given event keys.
+     *
+     * Registering a key that already has a handler replaces it. That is a
+     * supported operation, but the replacement is easier to spot when it is
+     * announced: call `unregister(key)` first and nothing is logged, otherwise
+     * a warning flags what would otherwise be an unnoticed overwrite.
+     */
     register<T={}>(handles: IHandles & T) {
         Object.keys(handles).forEach((key) => {
             if (this.handles.has(key) && key !== CAppTicketHandle) {
-                this.logger.error(`this ${key} handle is registered`);
+                this.logger.warn(duplicateHandleWarning(key));
             }
 
             this.handles.set(key, handles[key]);
             this.logger.debug(`register ${key} handle`);
+        });
+
+        return this;
+    }
+
+    /**
+     * Remove the handler registered for each of the given event keys, so that
+     * the events are no longer dispatched. Keys without a handler are skipped.
+     *
+     * Removing the built-in `app_ticket` handle stops the SDK from caching
+     * pushed app tickets, which makes every app_access_token request of an ISV
+     * app miss the cache and trigger an app_ticket resend -- hence the warning.
+     */
+    unregister(...keys: string[]) {
+        keys.forEach((key) => {
+            if (!this.handles.has(key)) {
+                this.logger.debug(`no ${key} handle to unregister`);
+                return;
+            }
+
+            this.handles.delete(key);
+            this.logger.debug(`unregister ${key} handle`);
+
+            if (key === CAppTicketHandle) {
+                this.logger.warn(appTicketUnregisteredWarning);
+            }
         });
 
         return this;
