@@ -3,6 +3,7 @@ import { CardActionHandler } from '@node-sdk/dispatcher/card';
 import { pickRequestData } from './pick-request-data';
 import { generateChallenge } from './services/challenge';
 
+/** Adapt HTTP webhook requests, validating automatic challenge responses. */
 export const adaptDefault =
     (
         path: string,
@@ -27,10 +28,19 @@ export const adaptDefault =
         // https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case
         const autoChallenge = options?.autoChallenge || false;
         if (autoChallenge) {
-            const { isChallenge, challenge } = generateChallenge(data, {
-                encryptKey: dispatcher.encryptKey,
-            });
+            let challengeResult;
+            try {
+                challengeResult = generateChallenge(data, {
+                    encryptKey: dispatcher.encryptKey,
+                    verificationToken: dispatcher.verificationToken,
+                });
+            } catch {
+                res.statusCode = 403;
+                res.end(JSON.stringify({ msg: 'webhook verification failed' }));
+                return;
+            }
 
+            const { isChallenge, challenge } = challengeResult;
             if (isChallenge) {
                 res.end(JSON.stringify(challenge));
                 return;

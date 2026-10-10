@@ -5,6 +5,7 @@ import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { pickRequestData } from './pick-request-data';
 import { generateChallenge } from './services/challenge';
 
+/** Adapt HTTP webhook requests, validating automatic challenge responses. */
 export const adaptKoaRouter =
     (
         dispatcher: EventDispatcher | CardActionHandler,
@@ -24,7 +25,7 @@ export const adaptKoaRouter =
                 const incomingdata = await pickRequestData(req);
                 return incomingdata;
             }
-            
+
             (options?.logger || defaultLogger).error(
                 'unable to obtain request body, if parsed it in other middleware, please manually set in ctx.request.body'
             );
@@ -42,10 +43,19 @@ export const adaptKoaRouter =
         // https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case
         const autoChallenge = options?.autoChallenge || false;
         if (autoChallenge) {
-            const { isChallenge, challenge } = generateChallenge(data, {
-                encryptKey: dispatcher.encryptKey,
-            });
+            let challengeResult;
+            try {
+                challengeResult = generateChallenge(data, {
+                    encryptKey: dispatcher.encryptKey,
+                    verificationToken: dispatcher.verificationToken,
+                });
+            } catch {
+                ctx.status = 403;
+                ctx.body = { msg: 'webhook verification failed' };
+                return;
+            }
 
+            const { isChallenge, challenge } = challengeResult;
             if (isChallenge) {
                 ctx.body = challenge;
                 await next();

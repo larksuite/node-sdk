@@ -5,6 +5,7 @@ import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { pickRequestData } from './pick-request-data';
 import { generateChallenge } from './services/challenge';
 
+/** Adapt HTTP webhook requests, validating automatic challenge responses. */
 export const adaptExpress =
     (
         dispatcher: EventDispatcher | CardActionHandler,
@@ -40,10 +41,18 @@ export const adaptExpress =
         // https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case
         const autoChallenge = options?.autoChallenge || false;
         if (autoChallenge) {
-            const { isChallenge, challenge } = generateChallenge(data, {
-                encryptKey: dispatcher.encryptKey,
-            });
+            let challengeResult;
+            try {
+                challengeResult = generateChallenge(data, {
+                    encryptKey: dispatcher.encryptKey,
+                    verificationToken: dispatcher.verificationToken,
+                });
+            } catch {
+                res.status(403).json({ msg: 'webhook verification failed' });
+                return;
+            }
 
+            const { isChallenge, challenge } = challengeResult;
             if (isChallenge) {
                 res.json(challenge);
                 return;

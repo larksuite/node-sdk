@@ -26,11 +26,11 @@ function makeDispatcher() {
      * was never called really means the dispatcher stayed silent rather than
      * that the proxy filtered the call out.
      *
-     * No encryptKey, so signature verification is skipped and invoke accepts
-     * plaintext payloads.
+     * No encryptKey, so plaintext requests authenticate with the fixture token.
      */
     const dispatcher = new EventDispatcher({
         logger,
+        verificationToken: 'audit-fixture',
         loggerLevel: LoggerLevel.trace,
     });
 
@@ -55,7 +55,7 @@ function logTexts(fn: jest.Mock): string[] {
 
 const eventOf = (type: string) => ({
     schema: '2.0',
-    header: { event_type: type },
+    header: { event_type: type, token: 'audit-fixture' },
     event: {},
 });
 

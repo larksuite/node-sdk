@@ -7,9 +7,11 @@ describe('generateChallenge(data, options)', () => {
                 {
                     challenge: 'ajls384kdjx98XX',
                     type: 'url_verification',
+                    token: 'audit-fixture',
                 },
                 {
                     encryptKey: '',
+                    verificationToken: 'audit-fixture',
                 }
             )
         ).toEqual({
@@ -29,6 +31,7 @@ describe('generateChallenge(data, options)', () => {
                 },
                 {
                     encryptKey: 'mazhe.nerd',
+                    verificationToken: 'iRdCP2WwXNBXRM3mGLqhrgch3cn0gbT6',
                 }
             )
         ).toEqual({
