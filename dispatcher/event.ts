@@ -5,6 +5,8 @@ import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { IHandles } from '@node-sdk/code-gen/events-template';
 import RequestHandle from './request-handle';
+import { WebhookCredentialsProvider } from './webhook-credentials';
+import { registerWebhookRequestFactory, resolveRequestHandle } from './webhook-request';
 
 const CAppTicketHandle = 'app_ticket';
 
@@ -20,6 +22,8 @@ export class EventDispatcher {
 
     requestHandle?: RequestHandle;
 
+    private webhookCredentialsProvider?: WebhookCredentialsProvider;
+
     handles: Map<string, Function> = new Map();
 
     cache: Cache;
@@ -27,6 +31,8 @@ export class EventDispatcher {
     logger: Logger;
 
     constructor(params: {
+        /** Resolve both credentials once per webhook; never called during construction. */
+        webhookCredentialsProvider?: WebhookCredentialsProvider;
         verificationToken?: string;
         encryptKey?: string;
         cache?: Cache;
@@ -47,6 +53,23 @@ export class EventDispatcher {
             encryptKey,
             verificationToken,
             logger: this.logger,
+        });
+
+        this.webhookCredentialsProvider = params.webhookCredentialsProvider;
+        registerWebhookRequestFactory(this, async () => {
+            if (this.webhookCredentialsProvider === undefined) {
+                return {
+                    encryptKey: this.encryptKey,
+                    verificationToken: this.verificationToken,
+                    invoke: (data) => this.invoke(data),
+                };
+            }
+            const handle = await this.createRequestHandle();
+            return {
+                encryptKey: handle?.encryptKey || '',
+                verificationToken: handle?.verificationToken,
+                invoke: (data) => this.invokeWithHandle(data, handle),
+            };
         });
 
         this.cache = params.cache || internalCache;
@@ -120,14 +143,27 @@ export class EventDispatcher {
         return this;
     }
 
-    async invoke(data, params?: { needCheck?: boolean }) {
-        const needCheck = params?.needCheck === false ? false : true;
+    private createRequestHandle() {
+        return resolveRequestHandle(
+            this.webhookCredentialsProvider,
+            this.requestHandle,
+            this.logger
+        );
+    }
 
-        if (needCheck && !this.requestHandle?.checkIsEventValidated(data)) {
+    /** Dispatch a webhook using one credential snapshot; trusted WS calls skip providers. */
+    async invoke(data, params?: { needCheck?: boolean }) {
+        const needCheck = params?.needCheck !== false;
+        const handle = needCheck ? await this.createRequestHandle() : this.requestHandle;
+        return this.invokeWithHandle(data, handle, needCheck);
+    }
+
+    private async invokeWithHandle(data, handle?: RequestHandle, needCheck = true) {
+        if (needCheck && !handle?.checkIsEventValidated(data)) {
             this.logger.warn('verification failed event');
             return undefined;
         }
-        const targetData = this.requestHandle?.parse(data);
+        const targetData = handle?.parse(data);
         const type = targetData[CEventType];
         if (this.handles.has(type)) {
             const ret = await this.handles.get(type)!(targetData);

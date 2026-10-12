@@ -4,7 +4,9 @@ import { Logger } from '@node-sdk/typings';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { pickRequestData } from './pick-request-data';
 import { generateChallenge } from './services/challenge';
+import { createWebhookRequest } from '@node-sdk/dispatcher/webhook-request';
 
+/** Adapt HTTP webhook requests, validating automatic challenge responses. */
 export const adaptKoa =
     (
         path: string,
@@ -38,14 +40,32 @@ export const adaptKoa =
                 reqData
             );
 
+            let webhookRequest;
+            try {
+                webhookRequest = await createWebhookRequest(dispatcher);
+            } catch {
+                ctx.status = 403;
+                ctx.body = { msg: 'webhook verification failed' };
+                return;
+            }
+
             // 是否自动响应challange事件：
             // https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case
             const autoChallenge = options?.autoChallenge || false;
             if (autoChallenge) {
-                const { isChallenge, challenge } = generateChallenge(data, {
-                    encryptKey: dispatcher.encryptKey,
-                });
+                let challengeResult;
+                try {
+                    challengeResult = generateChallenge(data, {
+                        encryptKey: webhookRequest.encryptKey,
+                        verificationToken: webhookRequest.verificationToken,
+                    });
+                } catch {
+                    ctx.status = 403;
+                    ctx.body = { msg: 'webhook verification failed' };
+                    return;
+                }
 
+                const { isChallenge, challenge } = challengeResult;
                 if (isChallenge) {
                     ctx.body = challenge;
                     await next();
@@ -53,7 +73,7 @@ export const adaptKoa =
                 }
             }
 
-            const value = await dispatcher.invoke(data);
+            const value = await webhookRequest.invoke(data);
 
             ctx.body = JSON.stringify(value);
         }

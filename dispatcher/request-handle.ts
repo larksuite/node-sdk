@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { isVerificationTokenValid } from './verification-token';
 import { CEventType } from '@node-sdk/consts';
 import { AESCipher } from '@node-sdk/utils';
 import { Logger } from '@node-sdk/typings';
@@ -98,7 +99,17 @@ export default class RequestHandle {
 
     checkIsEventValidated(data: any): boolean {
         if (!this.encryptKey) {
-            return true;
+            if (!this.verificationToken) {
+                return true;
+            }
+            if (!data || typeof data !== 'object') {
+                return false;
+            }
+            const token =
+                'schema' in data || 'header' in data
+                    ? data.header?.token
+                    : data.token;
+            return isVerificationTokenValid(token, this.verificationToken);
         }
 
         const {

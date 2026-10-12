@@ -807,4 +807,30 @@ new lark.AESCipher('encrypt key').decrypt('content');
 MIT
 
 ## Contact Us
-Click [Server SDK](https://open.feishu.cn/document/ukTMukTMukTM/uETO1YjLxkTN24SM5UjN) in the upper right corner of the page 【Is this document helpful to you? 】Submit feedback 
+Click [Server SDK](https://open.feishu.cn/document/ukTMukTMukTM/uETO1YjLxkTN24SM5UjN) in the upper right corner of the page 【Is this document helpful to you? 】Submit feedback
+
+## Webhook authentication
+
+When no EncryptKey is configured and a nonempty VerificationToken is explicitly supplied, the SDK validates the token before invoking event or callback handlers: top-level `token` for v1 and `header.token` for v2. Missing, null, empty, non-string, or mismatched tokens are rejected. Challenge responses also validate explicitly configured verification tokens.
+
+Leaving both credentials empty retains the previous behavior. Encrypted events retain existing decryption and signature checks, and WebSocket clients continue using trusted internal dispatch.
+
+Rollback: reverting this change restores the validation gap for explicitly configured VerificationTokens. Keep independent webhook authentication in place before rolling back.
+
+### Runtime webhook credentials
+
+Both `EventDispatcher` and `CardActionHandler` accept an optional `webhookCredentialsProvider`:
+
+```typescript
+import { EventDispatcher, WebhookCredentials } from '@larksuiteoapi/node-sdk';
+
+// Application-owned local cache, populated by your configuration/KMS integration.
+const readCachedCredentials: () => WebhookCredentials = () => credentialCache.read();
+const dispatcher = new EventDispatcher({
+    webhookCredentialsProvider: readCachedCredentials,
+});
+```
+
+The provider can return `WebhookCredentials` directly or a Promise. Construction does not call it. Each validated direct invocation or HTTP adapter request calls it once before crypto; automatic challenge and ordinary dispatch share that copied snapshot. Subsequent requests see updated values, while in-flight requests retain their snapshot. Trusted WebSocket dispatch (`needCheck: false`) does not call the provider.
+
+When configured, the provider replaces both static credentials. Both fields must be strings; two empty strings retain credential-free legacy behavior. Throws, Promise rejections, and malformed results fail before handlers, without static fallback or exposing provider error details. Direct `invoke` rejects with a sanitized error; adapters return HTTP 403. Keep providers thread safe and prompt; read a local cache and enforce any external I/O timeout/cancellation inside the provider. Remove the provider option to roll back to static configuration without reverting the token validation fix.
