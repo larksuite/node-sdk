@@ -4,6 +4,8 @@ import { internalCache } from '@node-sdk/utils';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import RequestHandle from './request-handle';
+import { WebhookCredentialsProvider } from './webhook-credentials';
+import { registerWebhookRequestFactory, resolveRequestHandle } from './webhook-request';
 
 export class CardActionHandler {
     verificationToken: string = '';
@@ -11,6 +13,8 @@ export class CardActionHandler {
     encryptKey: string = '';
 
     requestHandle?: RequestHandle;
+
+    private webhookCredentialsProvider?: WebhookCredentialsProvider;
 
     cardHandler: Function;
 
@@ -22,6 +26,8 @@ export class CardActionHandler {
 
     constructor(
         params: {
+            /** Resolve both credentials once per webhook; never called during construction. */
+            webhookCredentialsProvider?: WebhookCredentialsProvider;
             verificationToken?: string;
             encryptKey?: string;
             cache?: Cache;
@@ -46,6 +52,23 @@ export class CardActionHandler {
             encryptKey,
             verificationToken,
             logger: this.logger,
+        });
+
+        this.webhookCredentialsProvider = params.webhookCredentialsProvider;
+        registerWebhookRequestFactory(this, async () => {
+            if (this.webhookCredentialsProvider === undefined) {
+                return {
+                    encryptKey: this.encryptKey,
+                    verificationToken: this.verificationToken,
+                    invoke: (data) => this.invoke(data),
+                };
+            }
+            const handle = await this.createRequestHandle();
+            return {
+                encryptKey: handle?.encryptKey || '',
+                verificationToken: handle?.verificationToken,
+                invoke: (data) => this.invokeWithHandle(data, handle),
+            };
         });
 
         this.cache = params.cache || internalCache;
@@ -81,13 +104,26 @@ export class CardActionHandler {
         return this;
     }
 
+    private createRequestHandle() {
+        return resolveRequestHandle(
+            this.webhookCredentialsProvider,
+            this.requestHandle,
+            this.logger
+        );
+    }
+
+    /** Dispatch a card callback using one credential snapshot. */
     async invoke(data) {
-        if (!this.requestHandle?.checkIsCardEventValidated(data)) {
+        return this.invokeWithHandle(data, await this.createRequestHandle());
+    }
+
+    private async invokeWithHandle(data, handle?: RequestHandle) {
+        if (!handle?.checkIsCardEventValidated(data)) {
             this.logger.warn('verification failed event');
             return undefined;
         }
 
-        const targetData = this.requestHandle?.parse(data);
+        const targetData = handle?.parse(data);
 
         const type = targetData[CEventType];
         if (this.handles.has(type)) {

@@ -45,3 +45,5 @@ export type {
     IAuthorizationCodeParams,
     IRefreshParams,
 } from './client/access-token';
+
+export type { WebhookCredentials, WebhookCredentialsProvider } from './dispatcher/webhook-credentials';

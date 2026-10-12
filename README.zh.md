@@ -883,3 +883,21 @@ MIT
 两个凭证都为空时保留原有行为。加密事件继续使用现有解密和签名校验；长连接继续通过内部可信分发路径处理。
 
 回滚：撤销本次修复会恢复已配置 VerificationToken 却未严格校验的缺口；回滚前应确保 Webhook 入口已有独立来源校验。
+
+### 运行中更新 Webhook 凭证
+
+`EventDispatcher` 和 `CardActionHandler` 都支持可选的 `webhookCredentialsProvider`：
+
+```typescript
+import { EventDispatcher, WebhookCredentials } from '@larksuiteoapi/node-sdk';
+
+// 由业务的配置中心/KMS 集成更新本地缓存。
+const readCachedCredentials: () => WebhookCredentials = () => credentialCache.read();
+const dispatcher = new EventDispatcher({
+    webhookCredentialsProvider: readCachedCredentials,
+});
+```
+
+Provider 可以同步返回 `WebhookCredentials`，也可以返回 Promise。构造时不调用；每次需要校验的直接调用或 HTTP adapter 请求，在解密和认证前调用一次。自动 challenge 和普通分发共用同一份复制后的凭证快照；后续请求读取更新后的配置，进行中的请求继续使用自己的快照。长连接可信分发（`needCheck: false`）不调用 Provider。
+
+启用 Provider 后，两个静态凭证都由其返回值替代；`encryptKey` 和 `verificationToken` 必须是字符串，两个空字符串保留无凭证的历史行为。异常、Promise 拒绝或返回值格式错误会在 handler 执行前失败，不回退静态凭证，也不暴露 Provider 的错误详情。直接 `invoke` 返回经过脱敏的拒绝错误；adapter 返回 HTTP 403。Provider 应及时返回并安全支持并发，优先读取本地缓存，外部 I/O 的超时和取消由 Provider 自行控制。移除 Provider 配置即可回退静态配置，无需回滚 token 校验修复。
