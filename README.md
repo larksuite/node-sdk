@@ -834,3 +834,19 @@ const dispatcher = new EventDispatcher({
 The provider can return `WebhookCredentials` directly or a Promise. Construction does not call it. Each validated direct invocation or HTTP adapter request calls it once before crypto; automatic challenge and ordinary dispatch share that copied snapshot. Subsequent requests see updated values, while in-flight requests retain their snapshot. Trusted WebSocket dispatch (`needCheck: false`) does not call the provider.
 
 When configured, the provider replaces both static credentials. Both fields must be strings; two empty strings retain credential-free legacy behavior. Throws, Promise rejections, and malformed results fail before handlers, without static fallback or exposing provider error details. Direct `invoke` rejects with a sanitized error; adapters return HTTP 403. Keep providers thread safe and prompt; read a local cache and enforce any external I/O timeout/cancellation inside the provider. Remove the provider option to roll back to static configuration without reverting the token validation fix.
+
+## WebSocket connection host and handshake headers
+
+`domain` controls HTTP endpoint discovery. The optional connection host replaces only the WebSocket URL `host[:port]`, preserving scheme, path and query. Default DNS and TLS/SNI follow the resulting hostname; existing custom transport settings still apply. Domains below are placeholders.
+
+```typescript
+const client = new Lark.WSClient({
+  appId: process.env.APP_ID!,
+  appSecret: process.env.APP_SECRET!,
+  domain: 'https://bootstrap.example.com',
+  connectionHost: 'websocket.example.com:443',
+  connectionHeaders: { 'X-Route': 'events' },
+});
+```
+
+Handshake headers are copied at initialization and for each handshake, including reconnects, and are never forwarded to endpoint discovery. Omitting both settings preserves existing behavior. Host, Connection, Upgrade and Sec-WebSocket-* cannot be overridden through headers. Basic host checks reject empty values, schemes/paths and query parameters; other address and header settings are passed to the underlying libraries without additional SDK format checks. These basic host and reserved-header checks run before network I/O (Start returns an error in Go; construction/build throws in other SDKs). Use trusted developer configuration, not headers/hosts supplied by an end-user request.

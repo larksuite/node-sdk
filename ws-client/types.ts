@@ -37,6 +37,12 @@ export interface IConstructorParams {
   httpInstance?: HttpInstance;
   autoReconnect?: boolean;
   agent?: any;
+  /** Override the WebSocket URL host[:port], preserving path/query. TLS follows
+   * the resulting host using the existing agent. Invalid settings throw. */
+  connectionHost?: string;
+  /** Handshake-only headers, copied during construction and on reconnect.
+   * Host, Connection, Upgrade and Sec-WebSocket-* are rejected. */
+  connectionHeaders?: Readonly<Record<string, string>>;
   /** Caller tag appended to User-Agent as `source/<name>`. */
   source?: string;
   /** @internal Extra bare tokens appended to User-Agent, set by sub-modules. */

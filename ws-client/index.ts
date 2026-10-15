@@ -20,6 +20,7 @@ import { WSConfig } from './ws-config';
 import { DataCache } from './data-cache';
 import { ErrorCode, FrameType, HeaderKey, HttpStatusCode, MessageType } from './enum';
 import { pbbp2 } from './proto-buf/pbbp2';
+import { buildConnectionUrl, ConnectionConfigError, snapshotConnectionHeaders, validateConnectionHost } from './connection-config';
 import { IConstructorParams, ConnectResult, WSConnectionStatus, WSConnectionState } from './types';
 
 export type { WSConfigOverrides, WSConnectionStatus, WSConnectionState } from './types';
@@ -65,6 +66,8 @@ export class WSClient {
   }
 
   private agent?: any;
+  private readonly connectionHost?: string;
+  private readonly connectionHeaders: Record<string, string>;
 
   /** User-supplied state-transition callbacks. All optional. */
   private onReady?: () => void;
@@ -120,6 +123,10 @@ export class WSClient {
       handshakeTimeoutMs,
       wsConfig: userWsConfig,
     } = params;
+
+    validateConnectionHost(params.connectionHost);
+    this.connectionHost = params.connectionHost;
+    this.connectionHeaders = snapshotConnectionHeaders(params.connectionHeaders);
 
     this.userAgent = buildUserAgent(source, { extraTags: extraUaTags });
 
@@ -332,7 +339,7 @@ export class WSClient {
       } = qs.parse(URL);
 
       this.wsConfig.updateWs({
-        connectUrl: URL,
+        connectUrl: buildConnectionUrl(URL, this.connectionHost),
 
         deviceId: device_id as string,
         serviceId: service_id as string,
@@ -349,7 +356,7 @@ export class WSClient {
     } catch(e) {
       this.logger.error('[ws]', (e as any)?.message || 'system busy');
       // A credential/config problem (e.g. empty assertion) is not retryable.
-      if (e instanceof ClientAssertionError) {
+      if (e instanceof ClientAssertionError || e instanceof ConnectionConfigError) {
         return { ok: false, retryable: false, error: e.message };
       }
       return { ok: false, retryable: true };
@@ -363,7 +370,11 @@ export class WSClient {
 
     try {
       const { agent } = this;
-      wsInstance = new WebSocket(connectUrl, { agent });
+      const options: WebSocket.ClientOptions = { agent };
+      if (Object.keys(this.connectionHeaders).length) {
+        options.headers = { ...this.connectionHeaders };
+      }
+      wsInstance = new WebSocket(connectUrl, options);
     } catch(e) {
       this.logger.error('[ws]', 'new WebSocket error');
     }
