@@ -915,5 +915,3 @@ const client = new Lark.WSClient({
   connectionHeaders: { 'X-Route': 'events' },
 });
 ```
-
-握手 Header 在初始化时复制，每次连接再使用独立副本，首次连接和重连均生效，不发送到 HTTP 获取连接地址的请求。未配置时保留原行为。Host、Connection、Upgrade、Sec-WebSocket-* 不允许通过 Header 覆盖。Host 只检查空值、协议/路径和查询参数；其他地址及 Header 配置直接传入底层库，不增加 SDK 格式校验。上述基础 Host 和保留 Header 检查在创建 `WSClient` 时执行，校验失败会抛出异常，不会发起网络请求。只使用开发者可信配置，不直接透传终端请求中的 Host/Header。

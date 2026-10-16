@@ -848,5 +848,3 @@ const client = new Lark.WSClient({
   connectionHeaders: { 'X-Route': 'events' },
 });
 ```
-
-Handshake headers are copied at initialization and for each handshake, including reconnects, and are never forwarded to endpoint discovery. Omitting both settings preserves existing behavior. Host, Connection, Upgrade and Sec-WebSocket-* cannot be overridden through headers. Basic host checks reject empty values, schemes/paths and query parameters; other address and header settings are passed to the underlying libraries without additional SDK format checks. These basic host and reserved-header checks run when constructing `WSClient`; invalid settings throw an error before any network request. Use trusted developer configuration, not headers/hosts supplied by an end-user request.
