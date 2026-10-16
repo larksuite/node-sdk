@@ -901,3 +901,19 @@ const dispatcher = new EventDispatcher({
 Provider 可以同步返回 `WebhookCredentials`，也可以返回 Promise。构造时不调用；每次需要校验的直接调用或 HTTP adapter 请求，在解密和认证前调用一次。自动 challenge 和普通分发共用同一份复制后的凭证快照；后续请求读取更新后的配置，进行中的请求继续使用自己的快照。长连接可信分发（`needCheck: false`）不调用 Provider。
 
 启用 Provider 后，两个静态凭证都由其返回值替代；`encryptKey` 和 `verificationToken` 必须是字符串，两个空字符串保留无凭证的历史行为。异常、Promise 拒绝或返回值格式错误会在 handler 执行前失败，不回退静态凭证，也不暴露 Provider 的错误详情。直接 `invoke` 返回经过脱敏的拒绝错误；adapter 返回 HTTP 403。Provider 应及时返回并安全支持并发，优先读取本地缓存，外部 I/O 的超时和取消由 Provider 自行控制。移除 Provider 配置即可回退静态配置，无需回滚 token 校验修复。
+
+## WebSocket 连接 Host 与握手 Header
+
+`domain` 用于 HTTP 获取连接地址。新增的连接 Host 只改写 WebSocket URL 的 `host[:port]`，保留协议、路径和查询参数；默认 DNS、TLS/SNI 跟随最终域名，已有自定义传输配置仍然生效。以下域名仅为占位示例。
+
+```typescript
+const client = new Lark.WSClient({
+  appId: process.env.APP_ID!,
+  appSecret: process.env.APP_SECRET!,
+  domain: 'https://bootstrap.example.com',
+  connectionHost: 'websocket.example.com:443',
+  connectionHeaders: { 'X-Route': 'events' },
+});
+```
+
+握手 Header 在初始化时复制，每次连接再使用独立副本，首次连接和重连均生效，不发送到 HTTP 获取连接地址的请求。未配置时保留原行为。Host、Connection、Upgrade、Sec-WebSocket-* 不允许通过 Header 覆盖。Host 只检查空值、协议/路径和查询参数；其他地址及 Header 配置直接传入底层库，不增加 SDK 格式校验。上述基础 Host 和保留 Header 检查在创建 `WSClient` 时执行，校验失败会抛出异常，不会发起网络请求。只使用开发者可信配置，不直接透传终端请求中的 Host/Header。
