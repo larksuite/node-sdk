@@ -171,7 +171,7 @@ for await (const items of await client.contact.user.listWithIterator({
 }
 
 // 也可用next来手动控制迭代，每次取20条数据
-const listIterator = await SDKClient.contact.user.listWithIterator({
+const listIterator = await client.contact.user.listWithIterator({
     params: {
         department_id: '0',
         page_size: 20,

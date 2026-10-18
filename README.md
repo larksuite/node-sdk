@@ -149,7 +149,7 @@ for await (const items of await client.contact.user.listWithIterator({
 }
 
 // You can also use next to manually control the iteration, fetching 20 pieces of data each time
-const listIterator = await SDKClient.contact.user.listWithIterator({
+const listIterator = await client.contact.user.listWithIterator({
     params: {
         department_id: '0',
         page_size: 20,
