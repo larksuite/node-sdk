@@ -7,10 +7,10 @@ import {
     ClientAssertionError,
     ClientAssertionProvider,
     CLIENT_ASSERTION_TYPE_JWT_BEARER,
-    ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
     ERR_CODE_CLIENT_ASSERTION_RETRIEVE_FAILED,
     ERR_CODE_CLIENT_ASSERTION_TOKEN_EMPTY,
     GRANT_TYPE_JWT_BEARER,
+    GRANT_TYPE_CLIENT_CREDENTIALS,
     OAUTH_TOKEN_URI,
     X_TARGET_SERVICE,
     buildProxyUrl,
@@ -87,6 +87,7 @@ export class TokenManager {
             logger: this.logger,
             appType: this.appType,
             httpInstance: this.httpInstance,
+            clientAssertionProvider: this.clientAssertionProvider,
         });
 
         this.logger.debug('token manager is ready');
@@ -167,10 +168,17 @@ export class TokenManager {
 
     /**
      * Exchange a ClientAssertion for a tenant access token at the OAuth token
-     * endpoint (`jwt-bearer` grant). Credential failures are surfaced as
+     * endpoint using the grant for the configured app type. Failures surface as
      * {@link ClientAssertionError} — never swallowed.
      */
-    private async getTenantTokenByClientAssertion(): Promise<string> {
+    private async getTenantTokenByClientAssertion(
+        tenantKey?: string
+    ): Promise<string> {
+        const isMarketplace = this.appType === AppType.ISV;
+        if (isMarketplace && !tenantKey?.trim()) {
+            this.logger.warn('ISV tenant token exchange requires tenant key');
+            throw new Error('tenant key is required for ISV token exchange');
+        }
         const oauthBaseUrl = resolveOauthBaseUrl({
             oauthBaseUrl: this.oauthBaseUrl,
             domain: this.domain,
@@ -180,10 +188,12 @@ export class TokenManager {
             domain: this.domain,
         });
 
-        const cachedTenantAccessToken = await this.cache?.get(
-            CTenantAccessToken,
-            { namespace: this.appId }
-        );
+        const tokenKey = isMarketplace
+            ? `tenant_access_token:client_assertion:${tenantKey}:${oauthBaseUrl}:client_credentials`
+            : CTenantAccessToken;
+        const cachedTenantAccessToken = await this.cache?.get(tokenKey, {
+            namespace: this.appId,
+        });
         if (cachedTenantAccessToken) {
             this.logger.debug('use cache token');
             return cachedTenantAccessToken;
@@ -220,19 +230,53 @@ export class TokenManager {
                 url,
                 headers,
                 data: {
-                    grant_type: GRANT_TYPE_JWT_BEARER,
+                    grant_type: isMarketplace
+                        ? GRANT_TYPE_CLIENT_CREDENTIALS
+                        : GRANT_TYPE_JWT_BEARER,
+                    ...(isMarketplace ? { tenant_key: tenantKey } : {}),
                     client_assertion_type: CLIENT_ASSERTION_TYPE_JWT_BEARER,
                     client_assertion: assertion.value,
                     client_id: this.appId,
                 },
             });
         } catch (e: any) {
-            this.logger.error(e);
+            this.logger.error(
+                `client assertion token exchange failed, aud:${aud}, status:${
+                    e?.response?.status || 0
+                }, code:${e?.response?.data?.code || 0}`
+            );
             throw new ClientAssertionError(
                 e?.response?.data?.code || 0,
                 e?.response?.data?.error_description ||
                     e?.response?.data?.error ||
                     'client assertion token exchange failed'
+            );
+        }
+
+        if (
+            isMarketplace &&
+            ((resp?.code && String(resp.code) !== '0') || resp?.error)
+        ) {
+            this.logger.warn(
+                `ISV tenant token exchange failed, aud:${aud}, code:${
+                    resp.code || 0
+                }`
+            );
+            throw new ClientAssertionError(
+                resp.code || 0,
+                'ISV tenant token exchange failed'
+            );
+        }
+        if (
+            isMarketplace &&
+            (!resp?.access_token ||
+                !(Number(resp.expires_in) > 0) ||
+                resp.token_type?.toLowerCase() !== 'bearer')
+        ) {
+            this.logger.warn(`invalid ISV tenant token response, aud:${aud}`);
+            throw new ClientAssertionError(
+                resp?.code || 0,
+                'invalid ISV tenant token response'
             );
         }
 
@@ -248,7 +292,7 @@ export class TokenManager {
 
         const expiresIn = Number(resp?.expires_in) || 0;
         await this.cache?.set(
-            CTenantAccessToken,
+            tokenKey,
             tenantAccessToken,
             // Expire 180s early to absorb network latency.
             new Date().getTime() + Math.max(expiresIn - 180, 0) * 1000,
@@ -259,13 +303,8 @@ export class TokenManager {
     }
 
     async getMarketTenantAccessToken(tenantKey: string) {
-        // ISV / marketplace apps depend on app_access_token, which is
-        // unavailable in ClientAssertion mode — fail fast.
         if (this.clientAssertionProvider) {
-            throw new ClientAssertionError(
-                ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
-                'ClientAssertion mode is not supported for ISV apps'
-            );
+            return this.getTenantTokenByClientAssertion(tenantKey);
         }
 
         if (!tenantKey) {

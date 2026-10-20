@@ -1,5 +1,7 @@
 # 飞书开放接口SDK
 
+[商店应用 ClientAssertion 认证](docs/isv-client-assertion.md)
+
 ![GitHub Repo stars](https://img.shields.io/github/stars/larksuite/node-sdk)
 ![NPM Downloads](https://img.shields.io/npm/dw/%40larksuiteoapi%2Fnode-sdk)
 ![NPM License](https://img.shields.io/npm/l/%40larksuiteoapi%2Fnode-sdk)

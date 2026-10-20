@@ -31,7 +31,7 @@ export interface IClientParams {
     /**
      * Keyless (ClientAssertion) credential provider. When set, the SDK
      * exchanges the provider's short-lived assertion for tokens instead of
-     * using `appSecret`. Self-build apps only.
+     * using `appSecret`. ISV tenant requests also require a tenant key.
      */
     clientAssertionProvider?: ClientAssertionProvider;
     /**
