@@ -1,3 +1,4 @@
+import json from '@rollup/plugin-json';
 import typescript from "@rollup/plugin-typescript";
 import alias from '@rollup/plugin-alias';
 import dts from 'rollup-plugin-dts';
@@ -13,12 +14,21 @@ export default [{
         format: 'cjs'
     },
     plugins: [
+        json(),
         alias({
             entries: [
                 {find: '@node-sdk', replacement: path.resolve(__dirname)}
             ]
         }),
-        typescript({tsconfig: false, compilerOptions: { target: 'es6' }}),
+        typescript({
+            tsconfig: false,
+            compilerOptions: {
+                target: 'es6',
+                moduleResolution: 'node',
+                resolveJsonModule: true,
+                allowSyntheticDefaultImports: true
+            }
+        }),
         license({
             banner: {
                 content: {
@@ -35,12 +45,21 @@ export default [{
         format: 'es'
     },
     plugins: [
+        json(),
         alias({
             entries: [
                 {find: '@node-sdk', replacement: path.resolve(__dirname)}
             ]
         }),
-        typescript({tsconfig: false, compilerOptions: { target: 'es6' }}),
+        typescript({
+            tsconfig: false,
+            compilerOptions: {
+                target: 'es6',
+                moduleResolution: 'node',
+                resolveJsonModule: true,
+                allowSyntheticDefaultImports: true
+            }
+        }),
         license({
             banner: {
                 content: {
@@ -56,6 +75,7 @@ export default [{
         format: 'es'
     },
     plugins: [
+        json(),
         alias({
             entries: [
                 {find: '@node-sdk', replacement: path.resolve(__dirname)}
@@ -63,7 +83,9 @@ export default [{
         }),
         dts({
             compilerOptions: {
-                noUnusedLocals: false
+                noUnusedLocals: false,
+                resolveJsonModule: true,
+                allowSyntheticDefaultImports: true
             }
         }),
         license({
