@@ -305,41 +305,61 @@ describe('ISV client assertion', () => {
         );
     });
 
-    test.each([
-        { code: 400 },
-        { error: 'invalid_client' },
-        { access_token: '' },
-        { expires_in: 0 },
-        { token_type: 'Other' },
-    ])('rejects failed responses without caching: %j', async (failure) => {
-        const provider = {
-            retrieveToken: jest
-                .fn()
-                .mockResolvedValue({ value: FAKE_ASSERTION }),
-        };
-        const { tm, http, cache, logger } = makeTokenManager({
-            provider,
-            appType: AppType.ISV,
-        });
-        const cacheSet = jest.spyOn(cache, 'set');
-        http.request.mockResolvedValue({
-            access_token: 'test-token',
-            expires_in: 7200,
-            token_type: 'Bearer',
-            ...failure,
-        });
-        await expect(
-            tm.getMarketTenantAccessToken('tenant-A')
-        ).rejects.toBeInstanceOf(ClientAssertionError);
-        expect(cacheSet).not.toHaveBeenCalled();
-        expect(logger.warn).toHaveBeenCalled();
-        expect(JSON.stringify(logger.warn.mock.calls)).not.toContain(
-            FAKE_ASSERTION
-        );
-        expect(JSON.stringify(logger.warn.mock.calls)).not.toContain(
-            'test-token'
-        );
-    });
+    test.each<[Record<string, unknown>, string]>([
+        [
+            {
+                code: 400,
+                error_description: 'assertion rejected',
+                error: 'invalid_client',
+            },
+            'ISV tenant token exchange failed, error: invalid_client, error_description: assertion rejected',
+        ],
+        [
+            { code: 400, error_description: 'assertion rejected' },
+            'ISV tenant token exchange failed, error_description: assertion rejected',
+        ],
+        [
+            { error: 'invalid_client' },
+            'ISV tenant token exchange failed, error: invalid_client',
+        ],
+        [{ code: 400 }, 'ISV tenant token exchange failed'],
+        [{ access_token: '' }, 'access_token is empty'],
+        [{ expires_in: 0 }, 'expires_in must be positive'],
+        [{ token_type: 'Other' }, 'token_type must be Bearer'],
+    ])(
+        'rejects failed responses without caching: %j',
+        async (failure, message) => {
+            const provider = {
+                retrieveToken: jest
+                    .fn()
+                    .mockResolvedValue({ value: FAKE_ASSERTION }),
+            };
+            const { tm, http, cache, logger } = makeTokenManager({
+                provider,
+                appType: AppType.ISV,
+            });
+            const cacheSet = jest.spyOn(cache, 'set');
+            http.request.mockResolvedValue({
+                access_token: 'test-token',
+                expires_in: 7200,
+                token_type: 'Bearer',
+                ...failure,
+            });
+            const result = tm.getMarketTenantAccessToken('tenant-A');
+            await expect(result).rejects.toBeInstanceOf(ClientAssertionError);
+            await expect(result).rejects.toMatchObject({ code: failure.code || 0 });
+            await expect(result).rejects.toThrow(message);
+            expect(cacheSet).not.toHaveBeenCalled();
+            expect(logger.warn).toHaveBeenCalled();
+            expect(JSON.stringify(logger.warn.mock.calls)).toContain(message);
+            expect(JSON.stringify(logger.warn.mock.calls)).not.toContain(
+                FAKE_ASSERTION
+            );
+            expect(JSON.stringify(logger.warn.mock.calls)).not.toContain(
+                'test-token'
+            );
+        }
+    );
 
     test('preserves cache write failure behavior', async () => {
         const provider = {

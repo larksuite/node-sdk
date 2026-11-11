@@ -257,15 +257,19 @@ export class TokenManager {
             isMarketplace &&
             ((resp?.code && String(resp.code) !== '0') || resp?.error)
         ) {
+            let msg = 'ISV tenant token exchange failed';
+            if (resp.error) {
+                msg += `, error: ${resp.error}`;
+            }
+            if (resp.error_description) {
+                msg += `, error_description: ${resp.error_description}`;
+            }
             this.logger.warn(
                 `ISV tenant token exchange failed, aud:${aud}, code:${
                     resp.code || 0
-                }`
+                }, msg:${msg}`
             );
-            throw new ClientAssertionError(
-                resp.code || 0,
-                'ISV tenant token exchange failed'
-            );
+            throw new ClientAssertionError(resp.code || 0, msg);
         }
         if (
             isMarketplace &&
@@ -273,10 +277,18 @@ export class TokenManager {
                 !(Number(resp.expires_in) > 0) ||
                 resp.token_type?.toLowerCase() !== 'bearer')
         ) {
-            this.logger.warn(`invalid ISV tenant token response, aud:${aud}`);
+            let msg = 'token_type must be Bearer';
+            if (!resp?.access_token) {
+                msg = 'access_token is empty';
+            } else if (!(Number(resp.expires_in) > 0)) {
+                msg = 'expires_in must be positive';
+            }
+            this.logger.warn(
+                `invalid ISV tenant token response, aud:${aud}, msg:${msg}`
+            );
             throw new ClientAssertionError(
                 resp?.code || 0,
-                'invalid ISV tenant token response'
+                `invalid ISV tenant token response: ${msg}`
             );
         }
 
