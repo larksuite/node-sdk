@@ -1,6 +1,7 @@
 import { Cache, Logger, AppType } from '@node-sdk/typings';
 import { CAppTicket } from '@node-sdk/consts';
 import { HttpInstance } from '@node-sdk/typings/http';
+import { ClientAssertionProvider } from './client-assertion';
 
 export interface IParams {
     appId: string;
@@ -10,6 +11,7 @@ export interface IParams {
     logger: Logger;
     appType: AppType;
     httpInstance: HttpInstance;
+    clientAssertionProvider?: ClientAssertionProvider;
 }
 export default class AppTicketManager {
     appId: string;
@@ -37,7 +39,9 @@ export default class AppTicketManager {
 
         this.logger.debug('app ticket manager is ready');
 
-        this.checkAppTicket();
+        if (!params.clientAssertionProvider) {
+            this.checkAppTicket();
+        }
     }
 
     async checkAppTicket() {

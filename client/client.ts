@@ -25,7 +25,6 @@ import {
     ClientAssertionError,
     ClientAssertionProvider,
     ERR_CODE_APP_SECRET_AND_CLIENT_ASSERTION_EMPTY,
-    ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
 } from './client-assertion';
 
 export class Client extends RequestTemplate {
@@ -84,17 +83,11 @@ export class Client extends RequestTemplate {
 
         // Credential validation (fail-fast). `appSecret` and
         // `clientAssertionProvider` are mutually exclusive-or: at least one is
-        // required, and ClientAssertion mode is self-build only.
+        // required.
         if (!this.appSecret && !this.clientAssertionProvider) {
             throw new ClientAssertionError(
                 ERR_CODE_APP_SECRET_AND_CLIENT_ASSERTION_EMPTY,
                 'appSecret or clientAssertionProvider is required'
-            );
-        }
-        if (this.clientAssertionProvider && this.appType === AppType.ISV) {
-            throw new ClientAssertionError(
-                ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
-                'ClientAssertion mode is not supported for ISV apps'
             );
         }
 

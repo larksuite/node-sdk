@@ -40,6 +40,8 @@ export const GRANT_TYPE_JWT_BEARER =
     'urn:ietf:params:oauth:grant-type:jwt-bearer';
 export const CLIENT_ASSERTION_TYPE_JWT_BEARER =
     'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+export const GRANT_TYPE_CLIENT_CREDENTIALS = 'client_credentials';
+
 export const GRANT_TYPE_AUTHORIZATION_CODE = 'authorization_code';
 export const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
 export const X_TARGET_SERVICE = 'X-Target-Service';
