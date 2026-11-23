@@ -20,7 +20,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "rm -r lib es types & rollup -c",
+    "build": "node -e \"['lib', 'es', 'types'].forEach((dir) => require('fs').rmSync(dir, { recursive: true, force: true }))\" && rollup -c",
     "test": "jest",
     "test:watch": "jest --watch --testPathPattern=utils/__tests__"
   },
