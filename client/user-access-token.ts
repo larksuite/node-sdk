@@ -103,7 +103,7 @@ export class UserAccessToken {
             refreshToken: refreshAccessInfo.data.refresh_token,
             expiredTime: this.calibrateTime(refreshAccessInfo.data.expires_in)
           }
-        });
+        }, { namespace: options?.namespace });
 
         return refreshAccessInfo.data.access_token;
       } else {
@@ -128,7 +128,7 @@ export class UserAccessToken {
             refreshToken: oidcAccessInfo.data.refresh_token,
             expiredTime: this.calibrateTime(oidcAccessInfo.data.expires_in)
           }
-        })
+        }, { namespace: options?.namespace })
       } else {
         this.client.logger.error('get user access token by code failed.', oidcAccessInfo.msg);
       }
