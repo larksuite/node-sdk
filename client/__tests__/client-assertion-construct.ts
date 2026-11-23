@@ -2,7 +2,7 @@
  * Client construction validation + token injection priority.
  *
  * Covers construct-time credential validation (7104 when neither appSecret nor
- * provider is supplied; 7100 when a provider is paired with the ISV appType)
+ * provider is supplied) and accepts ISV ClientAssertion without app tickets
  * and the assertion provider param.
  *
  * SECURITY: only placeholder fake values. Valid-looking appId matches WS regex
@@ -48,25 +48,49 @@ describe('construct-time validation', () => {
         }
     });
 
-    test('provider + ISV appType → throws ClientAssertionError 7100', () => {
-        expect(
-            () =>
-                new Client({
-                    appId: APP_ID,
-                    clientAssertionProvider: makeProvider(),
-                    appType: AppType.ISV,
-                } as any)
-        ).toThrow(ClientAssertionError);
-        try {
-            // eslint-disable-next-line no-new
-            new Client({
-                appId: APP_ID,
-                clientAssertionProvider: makeProvider(),
-                appType: AppType.ISV,
-            } as any);
-        } catch (e: any) {
-            expect(e.code).toBe(7100);
-        }
+    test('provider + ISV initializes without requesting credentials', async () => {
+        const provider = makeProvider();
+        new Client({
+            appId: APP_ID,
+            clientAssertionProvider: provider,
+            appType: AppType.ISV,
+        });
+        await Promise.resolve();
+        expect(provider.retrieveToken).not.toHaveBeenCalled();
+        expect(mockedPost).not.toHaveBeenCalled();
+    });
+
+    test('ISV uses existing UAT exchange, refresh and explicit user token flow', async () => {
+        const client = new Client({
+            appId: APP_ID,
+            clientAssertionProvider: makeProvider(),
+            appType: AppType.ISV,
+        });
+        const request = httpInstance.request as unknown as jest.Mock;
+        request.mockResolvedValue({
+            access_token: 'test-uat',
+            expires_in: 7200,
+            token_type: 'Bearer',
+        });
+        await client.accessToken.retrieveByAuthorizationCode({ code: 'test-code' });
+        expect(request.mock.calls.at(-1)![0].data).toMatchObject({
+            grant_type: 'authorization_code',
+            code: 'test-code',
+        });
+        expect(request.mock.calls.at(-1)![0].data.tenant_key).toBeUndefined();
+        await client.accessToken.refresh({ refreshToken: 'test-refresh' });
+        expect(request.mock.calls.at(-1)![0].data).toMatchObject({
+            grant_type: 'refresh_token',
+            refresh_token: 'test-refresh',
+        });
+        expect(request.mock.calls.at(-1)![0].data.tenant_key).toBeUndefined();
+        const getTenant = jest.spyOn(client.tokenManager, 'getTenantAccessToken');
+        const out = await client.formatPayload(
+            {},
+            { lark: { [CWithUserAccessToken]: 'test-uat' } }
+        );
+        expect(out.headers.Authorization).toBe('Bearer test-uat');
+        expect(getTenant).not.toHaveBeenCalled();
     });
 
     test('provider-only self-build does not throw', () => {
@@ -77,6 +101,20 @@ describe('construct-time validation', () => {
                     clientAssertionProvider: makeProvider(),
                 } as any)
         ).not.toThrow();
+    });
+
+    test('secret-only ISV still requests an app ticket', async () => {
+        mockedPost.mockResolvedValue(undefined);
+        new Client({
+            appId: APP_ID,
+            appSecret: 'fake-secret-1',
+            appType: AppType.ISV,
+        });
+        await Promise.resolve();
+        expect(mockedPost).toHaveBeenCalledWith(
+            'https://open.feishu.cn/open-apis/auth/v3/app_ticket/resend',
+            { app_id: APP_ID, app_secret: 'fake-secret-1' }
+        );
     });
 
     test('secret-only does not throw (back-compat)', () => {

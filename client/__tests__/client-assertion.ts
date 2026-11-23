@@ -39,9 +39,8 @@ describe('constants', () => {
         expect(X_TARGET_SERVICE).toBe('X-Target-Service');
     });
 
-    test('error classes carry the documented codes (7100–7104)', () => {
+    test('error classes carry the documented codes (7101–7104)', () => {
         // ClientAssertionError(code, msg)
-        expect(new ClientAssertionError(7100, 'm').code).toBe(7100);
         expect(new ClientAssertionError(7101, 'm').code).toBe(7101);
         expect(new ClientAssertionError(7102, 'm').code).toBe(7102);
         expect(new ClientAssertionError(7103, 'm').code).toBe(7103);

@@ -40,12 +40,13 @@ export const GRANT_TYPE_JWT_BEARER =
     'urn:ietf:params:oauth:grant-type:jwt-bearer';
 export const CLIENT_ASSERTION_TYPE_JWT_BEARER =
     'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+export const GRANT_TYPE_CLIENT_CREDENTIALS = 'client_credentials';
+
 export const GRANT_TYPE_AUTHORIZATION_CODE = 'authorization_code';
 export const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
 export const X_TARGET_SERVICE = 'X-Target-Service';
 
 // ClientAssertion error codes.
-export const ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED = 7100;
 export const ERR_CODE_CLIENT_ASSERTION_TOKEN_EMPTY = 7101;
 export const ERR_CODE_CLIENT_ASSERTION_RETRIEVE_FAILED = 7102;
 export const ERR_CODE_CLIENT_ASSERTION_MODE_NOT_SUPPORTED = 7103;
@@ -63,7 +64,7 @@ export const OAUTH_DOMAIN_MAP: Readonly<Record<string, string>> = Object.freeze(
 
 // --- Error classes ---------------------------------------------------------
 
-/** Errors of the assertion chain itself (codes 7100–7104, TAT exchange). */
+/** Errors of the assertion chain itself (codes 7101–7104, TAT exchange). */
 export class ClientAssertionError extends Error {
     code: number;
 
