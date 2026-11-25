@@ -28,6 +28,7 @@ interface IParams {
     httpInstance: HttpInstance;
     clientAssertionProvider?: ClientAssertionProvider;
     oauthBaseUrl?: string;
+    oauthAudience?: string;
 }
 
 interface TokenResponse {
@@ -68,6 +69,8 @@ export class TokenManager {
 
     oauthBaseUrl?: string;
 
+    private readonly oauthAudience?: string;
+
     constructor(params: IParams) {
         this.appId = params.appId;
         this.appSecret = params.appSecret;
@@ -78,6 +81,7 @@ export class TokenManager {
         this.httpInstance = params.httpInstance;
         this.clientAssertionProvider = params.clientAssertionProvider;
         this.oauthBaseUrl = params.oauthBaseUrl;
+        this.oauthAudience = params.oauthAudience;
 
         this.appTicketManager = new AppTicketManager({
             appId: this.appId,
@@ -185,6 +189,7 @@ export class TokenManager {
         });
         const aud = resolveOauthAud({
             oauthBaseUrl: this.oauthBaseUrl,
+            oauthAudience: this.oauthAudience,
             domain: this.domain,
         });
 

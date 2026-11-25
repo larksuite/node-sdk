@@ -13,6 +13,7 @@ import { Client } from '../client';
 import { ClientAssertionError } from '../client-assertion';
 import { AppType } from '@node-sdk/typings';
 import { CWithUserAccessToken } from '@node-sdk/consts';
+import { DefaultCache } from '@node-sdk/utils/default-cache';
 
 jest.mock('@node-sdk/http', () => ({
     __esModule: true,
@@ -101,6 +102,36 @@ describe('construct-time validation', () => {
                     clientAssertionProvider: makeProvider(),
                 } as any)
         ).not.toThrow();
+    });
+
+    test('uses the explicit OAuth audience for proxied tenant and user token exchanges', async () => {
+        const audience = 'accounts.example.com';
+        const provider = {
+            retrieveToken: jest.fn().mockResolvedValue({
+                value: FAKE_ASSERTION,
+                targetInfo: { targetService: 'proxy.example.com', targetPrefix: '/proxy' },
+            }),
+        };
+        const request = httpInstance.request as unknown as jest.Mock;
+        request.mockClear();
+        request.mockResolvedValue({ access_token: 'test-token', expires_in: 7200 });
+        const client = new Client({
+            appId: APP_ID,
+            clientAssertionProvider: provider,
+            oauthBaseUrl: 'http://localhost:18080',
+            oauthAudience: audience,
+            cache: new DefaultCache(),
+        });
+
+        await client.tokenManager.getCustomTenantAccessToken();
+        await client.accessToken.retrieveByAuthorizationCode({ code: 'test-code' });
+
+        expect(provider.retrieveToken.mock.calls).toEqual([[audience], [audience]]);
+        expect(request).toHaveBeenCalledTimes(2);
+        for (const [config] of request.mock.calls) {
+            expect(config.url).toBe('https://proxy.example.com/proxy/oauth/v3/token');
+            expect(config.headers['X-Target-Service']).toBe(audience);
+        }
     });
 
     test('secret-only ISV still requests an app ticket', async () => {

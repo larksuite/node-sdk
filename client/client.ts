@@ -107,6 +107,7 @@ export class Client extends RequestTemplate {
             httpInstance: this.httpInstance,
             clientAssertionProvider: this.clientAssertionProvider,
             oauthBaseUrl: this.oauthBaseUrl,
+            oauthAudience: params.oauthAudience,
         });
 
         this.userAccessToken = new UserAccessToken({client: this});
@@ -116,6 +117,7 @@ export class Client extends RequestTemplate {
             appSecret: this.appSecret,
             clientAssertionProvider: this.clientAssertionProvider,
             oauthBaseUrl: this.oauthBaseUrl,
+            oauthAudience: params.oauthAudience,
             domain: this.domain,
             httpInstance: this.httpInstance,
             logger: this.logger,
