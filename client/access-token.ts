@@ -32,6 +32,7 @@ interface IAccessTokenParams {
     appSecret?: string;
     clientAssertionProvider?: ClientAssertionProvider;
     oauthBaseUrl?: string;
+    oauthAudience?: string;
     domain: string;
     httpInstance: HttpInstance;
     logger: Logger;
@@ -85,6 +86,8 @@ export class AccessToken {
 
     private oauthBaseUrl?: string;
 
+    private readonly oauthAudience?: string;
+
     private domain: string;
 
     private httpInstance: HttpInstance;
@@ -96,6 +99,7 @@ export class AccessToken {
         this.appSecret = params.appSecret;
         this.clientAssertionProvider = params.clientAssertionProvider;
         this.oauthBaseUrl = params.oauthBaseUrl;
+        this.oauthAudience = params.oauthAudience;
         this.domain = params.domain;
         this.httpInstance = params.httpInstance;
         this.logger = params.logger;
@@ -137,6 +141,7 @@ export class AccessToken {
         });
         const aud = resolveOauthAud({
             oauthBaseUrl: this.oauthBaseUrl,
+            oauthAudience: this.oauthAudience,
             domain: this.domain,
         });
 

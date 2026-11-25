@@ -119,6 +119,7 @@ export function extractAudFromUrl(rawUrl: string): string {
 
 interface OAuthConfig {
     oauthBaseUrl?: string;
+    oauthAudience?: string;
     domain: string;
 }
 
@@ -142,8 +143,9 @@ export function resolveOauthBaseUrl(config: OAuthConfig): string {
     );
 }
 
+/** Resolve the ClientAssertion audience, falling back to the OAuth host. */
 export function resolveOauthAud(config: OAuthConfig): string {
-    return extractAudFromUrl(resolveOauthBaseUrl(config));
+    return config.oauthAudience || extractAudFromUrl(resolveOauthBaseUrl(config));
 }
 
 /**

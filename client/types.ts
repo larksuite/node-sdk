@@ -39,6 +39,8 @@ export interface IClientParams {
      * auto-derived and may be omitted; custom domains must set this.
      */
     oauthBaseUrl?: string;
+    /** Overrides the ClientAssertion audience and `X-Target-Service` on proxied OAuth requests. */
+    oauthAudience?: string;
     domain?: Domain | string;
     loggerLevel?: LoggerLevel;
     logger?: Logger;
